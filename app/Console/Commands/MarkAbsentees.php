@@ -14,7 +14,7 @@ class MarkAbsentees extends Command
      *
      * @var string
      */
-    protected $signature = 'app:mark-absentees';
+    protected $signature = 'attendance:mark-absentees';
 
     /**
      * The console command description.

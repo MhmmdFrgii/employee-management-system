@@ -8,4 +8,7 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote')->hourly();
 
-$schedule->command('attendance:mark-absentees')->daily();
+// still does not work
+Schedule::call(function () {
+    $this->command('attendance:mark-absentees')->dailyAt('15:30');
+});
