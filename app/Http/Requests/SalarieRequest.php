@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DepartmentRequest extends FormRequest
+class SalarieRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,18 +22,18 @@ class DepartmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|unique:department,name|max:255',
-            'description' => 'required'
+            'employee' => 'required',
+            'amount' => 'required|numeric',
+            'payment_date' => 'required|date',
         ];
     }
-
 
     public function messages()
     {
         return [
-            'name.required' => 'Nama departemen harus diisi.',
-            'name.unique' => 'Nama departemen sudah ada.',
-            'description.required' => 'Deskripsi harus diisi'
+            'employee.required' => 'Karyawan harus diisi.',
+            'amount.required' => 'Gaji harus diisi.',
+            'payment_date.required' => 'Tanggal harus diisi'
         ];
     }
 }

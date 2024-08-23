@@ -16,11 +16,22 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+                {{-- Department --}}
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('projects.index')" :active="request()->routeIs('projects.index')">
                         {{ __('Project') }}
                     </x-nav-link>
                 </div>
+<<<<<<< Updated upstream
+=======
+                {{-- Salaries --}}
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('salaries.index')" :active="request()->routeIs('salaries.index')">
+                        {{ __('Salaries') }}
+                    </x-nav-link>
+                </div>
+
+>>>>>>> Stashed changes
             </div>
 
             <!-- Settings Dropdown -->

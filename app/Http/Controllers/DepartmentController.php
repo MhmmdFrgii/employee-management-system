@@ -51,6 +51,7 @@ class DepartmentController extends Controller
     public function edit(Department $department)
     {
         return view('department.edit', compact('department'));
+        
     }
 
     
@@ -73,11 +74,11 @@ class DepartmentController extends Controller
         try {
             $department->delete();
 
-            return redirect()->route('department.index')->with('success', 'Hapus Jabatan Success!');
+            return redirect()->route('department.index')->with('success', 'Hapus Department Success!');
 
         } catch (\Throwable $e) {
             
-            return redirect()->route('department.index')->with('success', 'Failed Hapus Jabatan.');
+            return redirect()->route('department.index')->with('success', 'Failed Hapus Departmen.');
         }
     }
 
