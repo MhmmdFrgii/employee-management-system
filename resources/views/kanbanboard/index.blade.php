@@ -25,7 +25,7 @@
                     @error('name')
                     <div class="text-danger">{{ $message }}</div>
                     @enderror
-                    
+
                     <label for="name" class="form-label">Project</label>
                     <select name="projects_id" id="projects_id" class="form-select">
                         <option value="">-- pilih projek --</option>
@@ -34,7 +34,14 @@
                         @endforeach
                     </select>
                     @error('projects_id')
-                        <div class="text-danger">{{ $message }}</div>
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                    <div class="row">
+                        <label for="description" class="form-label mt-2">Description</label>
+                    </div>
+                    <textarea name="description" id="" cols="60" rows="5" class="form-textarea my-2" placeholder="Enter Description">{{ old('description') }}</textarea>
+                    @error('description')
+                    <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <button type="submit" class="btn btn-primary">Create Board</button>
@@ -51,6 +58,7 @@
                         <th>#</th>
                         <th>Board Name</th>
                         <th>Project</th>
+                        <th>Description</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -60,6 +68,7 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $b->name }}</td>
                             <td>{{ $b->projects->name }}</td> <!-- Akses relasi Project -->
+                            <td>{{ $b->description }}</td>
                             <td>
                                 <a href="{{ route('kanbanboard.edit', $b->id) }}" class="btn btn-warning btn-sm">Edit</a>
                                 <form action="{{ route('kanbanboard.destroy', $b->id) }}" method="POST" class="d-inline">

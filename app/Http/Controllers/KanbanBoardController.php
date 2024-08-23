@@ -57,7 +57,7 @@ class KanbanBoardController extends Controller
      * Update the specified resource in storage.
      */
     public function update(StoreKanbanBoardRequest $request, KanbanBoard $kanbanboard)
-    {    
+    {
         $kanbanboard->update($request->validated());
         return redirect()->route('kanbanboard.index')->with('status', 'KanbanBoard berhasil diperbarui.');
     }
