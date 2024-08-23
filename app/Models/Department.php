@@ -15,4 +15,9 @@ class Department extends Model
         'name',
         'description',
     ];
+
+    function employee(): mixed
+    {
+        return $this->hasMany(EmployeeDetails::class);
+    }
 }
