@@ -17,4 +17,9 @@ class Project extends Model
         return $this->hasMany(ProjectAssignment::class);
     }
 
+    public function kanbanboard()
+    {
+        return $this->hasMany(KanbanBoard::class);
+    }
+
 }
