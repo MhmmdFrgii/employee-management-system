@@ -47,6 +47,6 @@ class User extends Authenticatable
 
     function employee(): mixed
     {
-        return $this->hasMany(EmployeeDetails::class);
+        return $this->hasMany(EmployeeDetail::class);
     }
 }

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EmployeeDetails extends Model
+class EmployeeDetail extends Model
 {
     use HasFactory;
 
@@ -14,7 +14,8 @@ class EmployeeDetails extends Model
         'department_id',
         'position_id',
         'phone',
-        'address'
+        'address',
+        'hire_date'
     ];
 
     function user(): mixed

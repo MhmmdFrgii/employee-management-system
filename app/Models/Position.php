@@ -14,6 +14,6 @@ class Position extends Model
 
     function employee(): mixed
     {
-        return $this->hasMany(EmployeeDetails::class);
+        return $this->hasMany(EmployeeDetail::class);
     }
 }
