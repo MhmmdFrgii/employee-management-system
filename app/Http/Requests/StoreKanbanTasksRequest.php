@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreKanbanBoardRequest extends FormRequest
+class StoreKanbanTasksRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,22 +22,26 @@ class StoreKanbanBoardRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:50'],
-            'projects_id' => ['required', 'exists:projects,id'],
+            'title' => ['required', 'string', 'max:50'],
             'description' => ['required', 'max:255'],
+            'status' => ['required'],
+            'kanban_boards_id' => ['required', 'exists:kanban_boards,id'],
+            'date' => ['required'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'name.required' => 'Nama harus diisi!',
-            'name.string' => 'Nama tidak valid!',
-            'name.max' => 'Maximal 50 karakter',
-            'projects_id.required' => 'Projek tidak boleh kosong',
-            'projects_id.exists' => 'Projek tidak valid',
+            'title.required' => 'Title harus diisi!',
+            'title.string'  => 'Title tidak valid!',
+            'title.max' => 'Maximal 50 karakter',
             'description.required' => 'Deskripsi harus diisi',
             'description.max' => 'Maaximal 255 karakter',
+            'status.required' => 'Status tidak boleh kosong',
+            'kanban_boards_id.required' => 'Kanban Board tidak boleh kosong',
+            'kanban_boards_id.exists' => 'Kanban Board tidak valid',
+            'date.required' => 'Tanggal tidak boleh kosong',
         ];
     }
 }

@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kanban_boards', function (Blueprint $table) {
+        Schema::create('kanban_tasks', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('projects_id')->constrained('projects')->onDelete('cascade');
+            $table->string('title');
             $table->text('description');
+            $table->foreignId('kanban_boards_id')->constrained('kanban_boards')->onDelete('cascade');
+            $table->enum('status', ['To Do', 'In Progress', 'Done'])->default('To Do');
+            $table->date('date');
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kanban_boards');
+        Schema::dropIfExists('kanban_tasks');
     }
 };

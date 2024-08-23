@@ -41,10 +41,17 @@
                         @enderror
                     </div>
 
+                    <div class="row">
+                        <label for="description" class="form-label mt-2">Description</label>
+                    </div>
+                    <textarea name="description" id="" cols="60" rows="5" class="form-textarea my-2" placeholder="Enter Description">{{ old('description', $kanbanboard->description) }}</textarea>
+                    @error('description')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
                     <button type="submit" class="btn btn-primary">Update Board</button>
                     <a href="{{ route('kanbanboard.index') }}" class="btn btn-secondary">Cancel</a>
                 </form>
             </div>
-        </div>  
+        </div>
     </div>
 </x-app-layout>
