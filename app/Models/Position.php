@@ -11,4 +11,9 @@ class Position extends Model
 
     protected $table = 'positions';
     protected $guarded = [];
+
+    function employee(): mixed
+    {
+        return $this->hasMany(EmployeeDetail::class);
+    }
 }

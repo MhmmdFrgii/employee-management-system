@@ -44,4 +44,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    function employee(): mixed
+    {
+        return $this->hasMany(EmployeeDetail::class);
+    }
 }
