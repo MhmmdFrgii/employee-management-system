@@ -11,8 +11,9 @@ class Project extends Model
     protected $table = 'projects';
     protected $fillable = ['name', 'description', 'start_date', 'end_date', 'status'];
 
-    public function projects()
+    public function kanbanBoard()
     {
         return $this->hasMany(KanbanBoard::class);
     }
+
 }
