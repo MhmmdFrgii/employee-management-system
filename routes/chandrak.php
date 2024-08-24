@@ -8,6 +8,5 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->group(function () {
     Route::resource('attendance', AttendanceController::class);
     Route::resource('employee', EmployeeDetailsController::class);
+    Route::get('/mark-absentees', [AttendanceController::class, 'markAbsentees']);
 });
-
-Route::get('/mark-absentees', [AttendanceController::class, 'markAbsentees']);
