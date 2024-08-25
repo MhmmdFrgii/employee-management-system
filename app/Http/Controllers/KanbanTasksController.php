@@ -48,18 +48,18 @@ class KanbanTasksController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(KanbanTasks $kanbantasks)
+    public function edit(KanbanTasks $kanbantask)
     {
         $kanbanboard = KanbanBoard::all();
-        return view('kanbantasks.edit', compact('kanbantasks', 'kanbanboard'));
+        return view('kanbantasks.edit', compact('kanbantask', 'kanbanboard'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreKanbanTasksRequest $request, KanbanTasks $kanbantasks)
+    public function update(StoreKanbanTasksRequest $request, KanbanTasks $kanbantask)
     {
-        $kanbantasks->update($request->validated());
+        $kanbantask->update($request->validated());
         return redirect()->route('kanbantasks.index')->with('status','Kanban Tasks berhasil diupdate');
     }
 
