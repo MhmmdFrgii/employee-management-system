@@ -12,13 +12,41 @@ use Illuminate\Http\Request;
 
 class EmployeeDetailsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function search(Request $request)
     {
-        $employees = EmployeeDetail::all();
+        $search = $request->get('search');
+        $sortBy = $request->get('sortBy', 'name');
+        $sortDirection = $request->get('sortDirection', 'asc');
 
+        $employees = EmployeeDetail::select('employee_details.*')
+            ->join('users', 'employee_details.user_id', '=', 'users.id')
+            ->join('departments', 'employee_details.department_id', '=', 'departments.id')
+            ->join('positions', 'employee_details.position_id', '=', 'positions.id')
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('users.name', 'like', "%{$search}%")
+                        ->orWhere('departments.name', 'like', "%{$search}%")
+                        ->orWhere('positions.name', 'like', "%{$search}%");
+                });
+            })
+            ->orWhere('employee_details.phone', 'like', "%{$search}%")
+            ->orderBy(
+                $sortBy === 'department' ? 'departments.name' : ($sortBy === 'name' ? 'users.name' : ($sortBy === 'position' ? 'positions.name' : 'employee_details.' . $sortBy)),
+                $sortDirection
+            )
+            ->paginate(10);
+
+        return response()->json([
+            'html' => view('employee.employee_table', compact('employees'))->render(),
+            'pagination' => view('employee.pagination_links', compact('employees'))->render(),
+        ]);
+    }
+
+
+
+    public function index(Request $request)
+    {
+        $employees = EmployeeDetail::paginate(10);
         return view('employee.index', compact('employees'));
     }
 
