@@ -11,11 +11,26 @@ class LeaveRequestController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $leaveRequest = LeaveRequest::all();
 
-        return view('leave-request.index', compact('leaveRequest'));
+        $query = LeaveRequest::query();
+
+        // Pencarian
+        $search = $request->input('search');
+        if ($search) {
+            $query->search($search); // Menggunakan scope search dari model
+        }
+
+        // Sorting
+        $sortBy = $request->get('sortBy', 'created_at'); // Kolom default yang valid
+        $sortDirection = $request->get('sortDirection', 'asc'); // Arah default
+        $query->orderBy($sortBy, $sortDirection);
+
+        // Ambil data yang telah disortir
+        $leaveRequest = $query->paginate(10);
+
+        return view('leave-request.index', compact('leaveRequest', 'sortBy', 'sortDirection', 'search'));
     }
 
     /**
