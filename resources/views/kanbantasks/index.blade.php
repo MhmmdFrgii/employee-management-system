@@ -90,12 +90,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($kanbantasks as $task)
+                        @forelse ($kanbantasks as $task)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $task->title }}</td>
                                 <td>{{ $task->description }}</td>
-                                <td>{{ $task->kanbanboard   ->name }}</td>
+                                <td>{{ $task->kanbanboard->name ?? 'Board not found' }}</td>
                                 <td>{{ $task->status }}</td>
                                 <td>{{ $task->date }}</td>
                                 <td>
@@ -107,7 +107,11 @@
                                     </form>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="7" class="text-center">No tasks available.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
