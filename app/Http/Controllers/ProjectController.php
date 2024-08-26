@@ -14,15 +14,34 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         $query = Project::query();
-
-        $search = $request->input('search');
-        if ($search) {
-            $query->search($search);
+    
+        // Validasi nilai sortDirection
+        $sortDirection = in_array($request->input('sortDirection'), ['asc', 'desc']) ? $request->input('sortDirection') : 'asc';
+    
+        // Validasi dan tetapkan nilai sortBy
+        $sortBy = $request->input('sortBy', 'status');
+        if (!in_array($sortBy, ['name', 'description', 'start_date', 'end_date', 'status'])) {
+            $sortBy = 'status'; // Atur ke nilai default jika tidak valid
         }
-        
-        $project = $query->orderBy('created_at', 'DESC')->paginate(10);
-        return view('projects.index', compact('project', 'search'));
+    
+        // Filter berdasarkan pencarian
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+    
+        // Filter berdasarkan status
+        if ($request->has('status')) {
+            $statusFilters = $request->input('status');
+            $query->whereIn('status', $statusFilters);
+        }
+    
+        // Filter dan urutkan data
+        $project = $query->orderBy($sortBy, $sortDirection)->paginate(10);
+    
+        return view('projects.index', compact('project'));
     }
+    
+    
 
     /**
      * Show the form for creating a new resource.
