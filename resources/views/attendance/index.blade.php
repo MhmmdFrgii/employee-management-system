@@ -21,20 +21,42 @@
                 <form method="GET" action="{{ route('attendance.index') }}" class="mb-4">
                     <div class="row g-2">
                         <!-- Input Pencarian -->
-                        <div class="col-md-8">
+                        <div class="col-md-9">
                             <input type="text" name="search" class="form-control shadow-sm" placeholder="Cari Data..." value="{{ request('search') }}">
                         </div>
 
-                        <!-- Dropdown Filter Status -->
-                        <div class="col-md-3">
-                            <select name="status" class="form-select shadow-sm">
-                                <option value="">-- Pilih Status --</option>
-                                <option value="present" {{ request('status') == 'present' ? 'selected' : '' }}>Present</option>
-                                <option value="absent" {{ request('status') == 'absent' ? 'selected' : '' }}>Absent</option>
-                                <option value="late" {{ request('status') == 'late' ? 'selected' : '' }}>Late</option>
-                            </select>
+                        <!-- Input Filter -->
+                        <div class="col-md-2">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="statusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Filter Status
+                                </button>
+                                <ul class="dropdown-menu p-2" aria-labelledby="statusDropdown">
+                                    <li>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="status[]" value="present" class="form-check-input" id="status_present"
+                                            {{ is_array(request('status')) && in_array('present', request('status')) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="status_present">Present</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="status[]" value="absent" class="form-check-input" id="status_absent"
+                                            {{ is_array(request('status')) && in_array('absent', request('status')) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="status_absent">Absent</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="status[]" value="late" class="form-check-input" id="status_late"
+                                            {{ is_array(request('status')) && in_array('late', request('status')) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="status_late">Late</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-
+                        
                         <!-- Tombol Cari -->
                         <div class="col-md-1">
                             <button class="btn btn-secondary w-100 shadow-sm" type="submit">Cari</button>
