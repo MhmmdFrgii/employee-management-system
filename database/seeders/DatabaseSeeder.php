@@ -28,5 +28,10 @@ class DatabaseSeeder extends Seeder
             'email' => 'iqbal@gmail.com',
             'password' => bcrypt('password')
         ]);
+
+        Department::create([
+            'name' => 'Keuangan',
+            'description' => 'Keuangan Description'
+        ]);
     }
 }
