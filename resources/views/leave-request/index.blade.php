@@ -15,10 +15,25 @@
                         <h1 class="h3">Permintaan Cuti</h1>
                     </div>
 
-                    <div>
+                    <div class="d-flex justify-content-between mb-3">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
                             Tambah Data
                         </button>
+
+                        <form id="searchForm" action="{{ route('leave.index') }}" method="GET"
+                            class="d-flex align-items-center gap-2">
+                            @csrf
+                            <div class="form-group mb-0 position-relative">
+                                <label for="search" class="sr-only">Search:</label>
+                                <input type="text" id="search" name="search" value="{{ request('search') }}"
+                                    class="form-control">
+                            </div>
+                            <a href="{{ route('leave.index') }}" class="btn btn-primary">Cari</a>
+                        </form>
+                    </div>
+
+                    <div>
+
 
                         <!-- Modal Tambah Data -->
                         <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel"
@@ -84,17 +99,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
-
-                        <form method="GET" action="{{ route('leave.index') }}" class="mt-3">
-                            <div class="input-group mb-3">
-                                <input type="text" name="search" class="form-control mr-2 rounded shadow"
-                                    placeholder="Cari Data..." value="{{ request('search') }}">
-                                <button class="btn btn-outline-secondary rounded shadow" type="submit">Cari</button>
-                            </div>
-                        </form>
                     </div>
                     @if (request()->has('search') && $leaveRequest->isEmpty())
                         <div class="alert alert-warning" role="alert">
@@ -260,7 +264,8 @@
                                             <td>{{ $data->type }}</td>
                                             <td>{{ $data->status }}</td>
                                             <td>
-                                                <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                                <button type="button" class="btn btn-warning btn-sm"
+                                                    data-bs-toggle="modal"
                                                     data-bs-target="#editModal{{ $data->id }}">
                                                     Edit
                                                 </button>
@@ -269,7 +274,7 @@
                                                     style="display: inline" method="POST">
                                                     @method('DELETE')
                                                     @csrf
-                                                    <button type="submit" class="btn btn-danger"
+                                                    <button type="submit" class="btn btn-danger btn-sm"
                                                         onclick="return confirm('Apakah anda yakin inggin menghapus data ini')">Hapus</button>
                                                 </form>
                                             </td>
@@ -279,15 +284,64 @@
                             </table>
                     @endif
 
-                    <!-- Pagination Links -->
+                    {{-- <!-- Pagination Links -->
                     <div class="d-flex justify-content-center">
                         {{ $leaveRequest->appends(request()->query())->links() }}
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
     </div>
     </div>
+    <ul class="pagination my-3">
+        {{-- Previous Page Link --}}
+        @if ($leaveRequest->onFirstPage())
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+        @else
+            <li class="page-item">
+                <a class="page-link" href="{{ $leaveRequest->previousPageUrl() }}" rel="prev">Previous</a>
+            </li>
+        @endif
+
+        {{-- Pagination Elements --}}
+        @foreach ($leaveRequest->links()->elements as $element)
+            {{-- "Three Dots" Separator --}}
+            @if (is_string($element))
+                <li class="page-item disabled"><span class="page-link">{{ $element }}</span></li>
+            @endif
+
+            {{-- Array Of Links --}}
+            @if (is_array($element))
+                @foreach ($element as $page => $url)
+                    @if ($page == $leaveRequest->currentPage())
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="#">{{ $page }}</a>
+                        </li>
+                    @else
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                        </li>
+                    @endif
+                @endforeach
+            @endif
+        @endforeach
+
+        {{-- Next Page Link --}}
+        @if ($leaveRequest->hasMorePages())
+            <li class="page-item">
+                <a class="page-link" href="{{ $leaveRequest->nextPageUrl() }}" rel="next">Next</a>
+            </li>
+        @else
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+            </li>
+        @endif
+    </ul>
+
+
+
 
     <script>
         document.querySelectorAll('.sort-link').forEach(link => {
