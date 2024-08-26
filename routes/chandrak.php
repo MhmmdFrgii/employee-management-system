@@ -10,4 +10,3 @@ Route::middleware('auth')->group(function () {
     Route::resource('employee', EmployeeDetailsController::class);
     Route::get('/mark-absentees', [AttendanceController::class, 'markAbsentees']);
 });
-route::get('/employees/search', [EmployeeDetailsController::class, 'search'])->name('employee.search');
