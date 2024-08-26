@@ -10,15 +10,47 @@ use App\Models\Position;
 use App\Models\User;
 use Illuminate\Http\Request;
 
+use function Laravel\Prompts\search;
+
 class EmployeeDetailsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $employees = EmployeeDetail::all();
+        $search = $request->get('search');
+        $sortBy = $request->get('sortBy', 'name'); // Default sorting by name
+        $sortDirection = $request->get('sortDirection', 'asc'); // Default sorting direction is ascending
 
+        $validSortColumns = ['name', 'phone', 'address', 'department', 'hire_date', 'position'];
+        // Validasi sortBy dan sortDirection
+        if (!in_array($sortBy, $validSortColumns)) {
+            $sortBy = 'name'; // Set default jika kolom tidak valid
+        }
+
+        // Validate sort direction
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'asc';
+        }
+
+        $employees = EmployeeDetail::select('employee_details.*')
+            ->join('users', 'employee_details.user_id', '=', 'users.id')
+            ->join('departments', 'employee_details.department_id', '=', 'departments.id')
+            ->join('positions', 'employee_details.position_id', '=', 'positions.id')
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('users.name', 'like', "%{$search}%")
+                        ->orWhere('employee_details.phone', 'like', "%{$search}%")
+                        ->orWhere('departments.name', 'like', "%{$search}%")
+                        ->orWhere('positions.name', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy(
+                $sortBy === 'department' ? 'departments.name' : ($sortBy === 'name' ? 'users.name' : ($sortBy === 'position' ? 'positions.name' : 'employee_details.' . $sortBy)),
+                $sortDirection
+            )
+            ->paginate(10);
+        return view('employee.index', compact('employees'));
+
+        $employees = EmployeeDetail::paginate(10);
         return view('employee.index', compact('employees'));
     }
 

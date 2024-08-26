@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {
+    public function search()
+    {
+        $department = Department::all();
+
+        return view('department.index', compact('department'));
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -47,14 +54,13 @@ class DepartmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-   
+
     public function edit(Department $department)
     {
         return view('department.edit', compact('department'));
-        
     }
 
-    
+
     /**
      * Update the specified resource in storage.
      */
@@ -63,7 +69,6 @@ class DepartmentController extends Controller
         $department->update($request->validated());
 
         return redirect()->route('department.index')->with('success', 'Departemen berhasil di edit');
-
     }
 
     /**
@@ -75,11 +80,9 @@ class DepartmentController extends Controller
             $department->delete();
 
             return redirect()->route('department.index')->with('success', 'Hapus Department Success!');
-
         } catch (\Throwable $e) {
-            
+
             return redirect()->route('department.index')->with('success', 'Failed Hapus Departmen.');
         }
     }
-
 }

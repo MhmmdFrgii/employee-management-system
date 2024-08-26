@@ -11,10 +11,17 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $project = Project::all();
-        return view('projects.index', compact('project'));
+        $query = Project::query();
+
+        $search = $request->input('search');
+        if ($search) {
+            $query->search($search);
+        }
+        
+        $project = $query->orderBy('created_at', 'DESC')->paginate(10);
+        return view('projects.index', compact('project', 'search'));
     }
 
     /**
