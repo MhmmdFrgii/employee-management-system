@@ -51,29 +51,31 @@
                                             <div class="mb-3">
                                                 <label for="employee_id" class="form-label">Employee ID</label>
                                                 <input type="text" class="form-control" id="employee_id"
-                                                    name="employee_id">
+                                                    name="employee_id" value="{{ old('employee_id') }}">
                                                 @error('employee_id')
                                                     <p>{{ $message }}</p>
                                                 @enderror
                                             </div>
                                             <div class="mb-3">
                                                 <label for="start_date" class="form-label">Mulai Ijin</label>
-                                                <input type="date" class="form-control" id="start_date"
-                                                    name="start_date">
+                                                <input type="date" class="form-control" id="start_date" name="start_date"
+                                                    value="{{ old('start_date') }}">
                                                 @error('start_date')
                                                     <p>{{ $message }}</p>
                                                 @enderror
                                             </div>
                                             <div class="mb-3">
                                                 <label for="end_date" class="form-label">Sampai Tanggal</label>
-                                                <input type="date" class="form-control" id="end_date" name="end_date">
+                                                <input type="date" class="form-control" id="end_date" name="end_date"
+                                                    value="{{ old('end_date') }}">
                                                 @error('end_date')
                                                     <p>{{ $message }}</p>
                                                 @enderror
                                             </div>
                                             <div class="mb-3">
                                                 <label for="type" class="form-label">Type</label>
-                                                <input type="text" class="form-control" id="type" name="type">
+                                                <input type="text" class="form-control" id="type" name="type"
+                                                    value="{{ old('type') }}">
                                                 @error('type')
                                                     <p>{{ $message }}</p>
                                                 @enderror
@@ -185,7 +187,8 @@
                                                                     ID</label>
                                                                 <input type="text" class="form-control"
                                                                     id="employee_id_{{ $data->id }}"
-                                                                    name="employee_id" value="{{ $data->employee_id }}">
+                                                                    name="employee_id"
+                                                                    value="{{ old('employee_id', $data->employee_id) }}">
                                                                 @error('employee_id')
                                                                     <p>{{ $message }}</p>
                                                                 @enderror
@@ -196,7 +199,7 @@
                                                                     Ijin</label>
                                                                 <input type="date" class="form-control"
                                                                     id="start_date_{{ $data->id }}" name="start_date"
-                                                                    value="{{ $data->start_date }}">
+                                                                    value="{{ old('start_date', $data->start_date) }}">
                                                                 @error('start_date')
                                                                     <p>{{ $message }}</p>
                                                                 @enderror
@@ -207,7 +210,7 @@
                                                                     Tanggal</label>
                                                                 <input type="date" class="form-control"
                                                                     id="end_date_{{ $data->id }}" name="end_date"
-                                                                    value="{{ $data->end_date }}">
+                                                                    value="{{ old('end_date', $data->end_date) }}">
                                                                 @error('end_date')
                                                                     <p>{{ $message }}</p>
                                                                 @enderror
@@ -217,7 +220,7 @@
                                                                     class="form-label">Type</label>
                                                                 <input type="text" class="form-control"
                                                                     id="type_{{ $data->id }}" name="type"
-                                                                    value="{{ $data->type }}">
+                                                                    value="{{ old('type', $data->type) }}">
                                                                 @error('type')
                                                                     <p>{{ $message }}</p>
                                                                 @enderror
