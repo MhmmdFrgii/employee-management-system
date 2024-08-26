@@ -12,11 +12,24 @@ class ProjectAssignmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $query = ProjectAssignment::query();
+
+        // Pencarian
+        $search = $request->input('search');
+        if ($search) {
+            $query->search($search); // Menggunakan scope search dari model
+        }
+
+        // Sorting
+        $sortBy = $request->get('sortBy', 'created_at'); // Kolom default yang valid
+        $sortDirection = $request->get('sortDirection', 'asc'); // Arah default
+        $query->orderBy($sortBy, $sortDirection);
+
         $project = Project::all();
-        $projectAssignment = ProjectAssignment::all();
-        return view('projectAssignments.index', compact('project', 'projectAssignment'));
+        $projectAssignment = $query->paginate(5);
+        return view('projectAssignments.index', compact('project', 'projectAssignment', 'sortBy', 'sortDirection', 'search'));
     }
 
     /**
