@@ -23,19 +23,17 @@
                             <div class="col-sm-8 col-md-8 col-xl-12">
                                 <div class="card-body wizard-content">
                                     <h4 class="card-title">Step wizard with validation</h4>
-                                    <p class="card-subtitle mb-3"> You can us the validation like what we did </p>
-                                    <form action="{{ route('register') }}" class="validation-wizard wizard-circle mt-5"
-                                        id="registerForm">
+                                    <form action="{{ route('register') }}" class="validation-wizard wizard-circle mt-5" method="POST" enctype="multipart/form-data">
+                                        @csrf
                                         <!-- Step 1 -->
                                         <h6>Step 1</h6>
                                         <section>
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="fullname"> Nama Lengkap : <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="text" class="form-control " id="fullname"
-                                                            name="fullname" placeholder="Nama Lengkap" required />
+                                                        <label for="fullname"> Nama Lengkap : <span class="danger">*</span></label>
+                                                        <input type="text" class="form-control @error('fullname') is-invalid @enderror" id="fullname"
+                                                            name="fullname" placeholder="Nama Lengkap" value="{{ old('fullname') }}" />
                                                         @error('fullname')
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
@@ -43,10 +41,9 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="nik"> NIK <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="number" class="form-control " id="nik"
-                                                            name="nik" placeholder="NIK" />
+                                                        <label for="nik"> NIK <span class="danger">*</span></label>
+                                                        <input type="number" class="form-control @error('nik') is-invalid @enderror" id="nik"
+                                                            name="nik" placeholder="NIK" value="{{ old('nik') }}" />
                                                         @error('nik')
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
@@ -56,10 +53,9 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="photo"> Foto : <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="file" class="form-control" id="photo"
-                                                            name="photo" />
+                                                        <label for="photo"> Foto : <span class="danger">*</span></label>
+                                                        <input type="file" class="form-control @error('photo') is-invalid @enderror" id="photo" name="photo" />
+                                                        <p class="text-danger">*Foto Harus Berformat .jpg, .jpeg, atau .png</p>
                                                         @error('photo')
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
@@ -67,10 +63,9 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="cv"> CV : <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="file" class="form-control" id="cv"
-                                                            name="cv" />
+                                                        <label for="cv"> CV : <span class="danger">*</span></label>
+                                                        <input type="file" class="form-control @error('cv') is-invalid @enderror" id="cv" name="cv" />
+                                                        <p class="text-danger">*CV Harus Berformat .jpg, .jpeg, atau .png</p>
                                                         @error('cv')
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
@@ -80,14 +75,12 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="department"> Pilih Departemen : <span
-                                                                class="danger">*</span>
-                                                        </label>
-                                                        <select class="form-select " name="department_id" id="department">
+                                                        <label for="department"> Pilih Departemen : <span class="danger">*</span></label>
+                                                        <select class="form-select @error('department_id') is-invalid @enderror" name="department_id" id="department">
                                                             <option disabled selected>Pilih Departemen</option>
-                                                            <option value="1">Tes Departemen</option>
                                                             @foreach ($departments as $item)
-                                                                <option value="{{ $item->id }}">{{ $item->name }}
+                                                                <option value="{{ $item->id }}" {{ old('department_id') == $item->id ? 'selected' : '' }}>
+                                                                    {{ $item->name }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -98,10 +91,9 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="phone">Nomor Telepon : <span
-                                                                class="danger">*</span></label>
-                                                        <input type="tel" class="form-control" name="phone"
-                                                            id="phone" placeholder="Nomor Telepon" />
+                                                        <label for="phone">Nomor Telepon : <span class="danger">*</span></label>
+                                                        <input type="tel" class="form-control @error('phone') is-invalid @enderror" name="phone"
+                                                            id="phone" placeholder="Nomor Telepon" value="{{ old('phone') }}" />
                                                         @error('phone')
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
@@ -111,17 +103,14 @@
 
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <label for="gender">Jenis Kelamin : <span
-                                                            class="danger">*</span></label>
+                                                    <label for="gender">Jenis Kelamin : <span class="danger">*</span></label>
                                                     <div class="form-check">
-                                                        <input type="radio" id="male" name="gender" value="male"
-                                                            class="form-check-input"
+                                                        <input type="radio" id="male" name="gender" value="male" class="form-check-input"
                                                             {{ old('gender') == 'male' ? 'checked' : '' }}>
                                                         <label for="male" class="form-check-label">Laki-laki</label>
                                                     </div>
                                                     <div class="form-check">
-                                                        <input type="radio" id="female" name="gender"
-                                                            value="female" class="form-check-input"
+                                                        <input type="radio" id="female" name="gender" value="female" class="form-check-input"
                                                             {{ old('gender') == 'female' ? 'checked' : '' }}>
                                                         <label for="female" class="form-check-label">Perempuan</label>
                                                     </div>
@@ -131,9 +120,8 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="address">Alamat : <span
-                                                                class="danger">*</span></label>
-                                                        <textarea type="text" class="form-control" id="address" name="address" placeholder="Alamat"></textarea>
+                                                        <label for="address">Alamat : <span class="danger">*</span></label>
+                                                        <textarea type="text" class="form-control @error('address') is-invalid @enderror" id="address" name="address" placeholder="Alamat">{{ old('address') }}</textarea>
                                                         @error('address')
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
@@ -148,40 +136,46 @@
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <label for="name">Username</label>
-                                                        <input type="text" class="form-control required"
-                                                            id="name" name="name" placeholder="Username"
-                                                            value="{{ old('name') }}" />
+                                                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                                                            name="name" placeholder="Username" value="{{ old('name') }}" />
+                                                        @error('name')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <label for="email">Email</label>
-                                                        <input type="email" class="form-control required"
-                                                            id="email" name="email" placeholder="Email"
-                                                            value="{{ old('email') }}" />
+                                                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
+                                                            name="email" placeholder="Email" value="{{ old('email') }}" />
+                                                        @error('email')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                 </div>
-
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="password">Password </label>
-                                                        <input type="password" class="form-control required"
+                                                        <label for="password">Password</label>
+                                                        <input type="password" class="form-control @error('password') is-invalid @enderror"
                                                             id="password" name="password" placeholder="Password" />
+                                                        @error('password')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <label for="password_confirmation">Password Confirmation</label>
-                                                        <input type="password" name="password_confirmation"
-                                                            class="form-control" id="password_confirmation"
-                                                            placeholder="Password Confirmation" />
+                                                        <input type="password" name="password_confirmation" class="form-control"
+                                                            id="password_confirmation" placeholder="Password Confirmation" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </section>
                                     </form>
+
                                 </div>
                             </div>
                         </div>
