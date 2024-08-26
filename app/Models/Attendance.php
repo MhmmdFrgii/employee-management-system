@@ -14,4 +14,5 @@ class Attendance extends Model
         'date',
         'status'
     ];
+
 }
