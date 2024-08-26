@@ -5,8 +5,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SalarieController;
 use Illuminate\Support\Facades\Route;
 
-Route::resource('department', DepartmentController::class);
-Route::resource('salaries', SalarieController::class);
 
-
-
+Route::middleware('auth')->group(function () {
+    Route::resource('department', DepartmentController::class);
+    Route::resource('salaries', SalarieController::class);
+});

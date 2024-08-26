@@ -9,6 +9,7 @@ use App\Models\EmployeeDetails;
 use App\Models\Position;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use function Laravel\Prompts\search;
 
@@ -71,41 +72,16 @@ class EmployeeDetailsController extends Controller
      */
     public function store(EmployeeDetailRequest $request)
     {
-        $validatedData = $request->validated();
-        EmployeeDetail::create($validatedData);
+        $cv = $request->file('cv')->store('cv', 'public');
+        $photo = $request->file('photo')->store('photo', 'public');
 
+        $validatedData = $request->validated();
+        $validatedData['cv'] = $cv;
+        $validatedData['photo'] = $photo;
+        // dd($validatedData);
+
+        EmployeeDetail::create($validatedData);
         return redirect()->route('employee.index')->with('success', 'Berhasil menambahkan data employee.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(EmployeeDetail $employeeDetails)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(EmployeeDetail $employee)
-    {
-        $departments = Department::all();
-        $positions = Position::all();
-
-        return view('employee.edit', compact('departments', 'positions', 'employee'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(EmployeeDetailRequest $request, EmployeeDetail $employee)
-    {
-        $validatedData = $request->validated();
-        EmployeeDetail::create($validatedData);
-
-        $employee->update($validatedData);
-        return redirect()->route('employee.index')->with('success', 'Berhasil mengubah data employee.');
     }
 
     /**
@@ -115,9 +91,15 @@ class EmployeeDetailsController extends Controller
     {
         try {
             $employee->delete();
-            return redirect()->route('employee.index')->with('success', 'Hapus Karyawan Success!');
+            if ($employee->cv) {
+                Storage::disk('public')->delete($employee->cv);
+            }
+            if ($employee->photo) {
+                Storage::disk('public')->delete($employee->photo);
+            }
+            return redirect()->route('employee.index')->with('success', 'Berhasil menghapus data karyawan!');
         } catch (\Throwable $e) {
-            return redirect()->route('employee.index')->with('success', 'Failed Hapus Karyawan.');
+            return redirect()->route('employee.index')->with('success', 'Gagal Menghapus data Karyawan.');
         }
     }
 }

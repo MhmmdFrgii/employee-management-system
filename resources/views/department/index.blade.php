@@ -1,25 +1,31 @@
-<x-app-layout>
-    <a href="{{ route('department.create') }}">Create</a>
-    <table>
-        <tr>
-            <td>Department</td>
-            <th>Description</th>
-            <th>Action</th>
-        </tr>
-        @foreach ($department as $data)
-        <tr>
-            <td>{{ $data->name }}</td>
-            <td>{{ $data->description }}</td>
-            <td>
-                <a href="{{ route('department.edit', $data->id) }}">Edit</a>
+@extends('dashboard.layouts.main')
 
-                <form action="{{ route('department.destroy', $data->id) }}" method="post">
-                    @method('DELETE')
-                    @csrf
-                    <button type="submit">Hapus</button>
-                </form>
-            </td>
-        </tr>
-        @endforeach
-    </table>
-</x-app-layout>
+@section('content')
+    <div class="table-responsive">
+        <table id="zero_config" class="table border table-striped table-bordered">
+            <thead>
+                <!-- start row -->
+                <tr>
+                    <th>No</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+                <!-- end row -->
+            </thead>
+            <tbody>
+                @foreach ($department as $item)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $item->name }}</td>
+                        <td>{{ $item->description }}</td>
+                        <td>
+                            <a href=""></a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+
+        </table>
+    </div>
+@endsection

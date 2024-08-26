@@ -14,7 +14,7 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         $query = Project::query();
-
+ 
         // Pencarian
         $search = $request->input('search');
         if ($search) {
@@ -41,8 +41,8 @@ class ProjectController extends Controller
 
         return view('projects.index', compact('projects'));
     }
-    
-    
+
+
 
     /**
      * Show the form for creating a new resource.

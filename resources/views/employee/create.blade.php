@@ -1,9 +1,9 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
-    <form action="{{ route('employee.store') }}" method="post" class="p-4 bg-light rounded">
+    <form action="{{ route('employee.store') }}" method="post" class="p-4 bg-light rounded" enctype="multipart/form-data">
         @csrf
-
+        @method('post')
         <div class="mb-3">
             <label for="user_id" class="form-label">User</label>
             <select name="user_id" id="user_id" class="form-select">
@@ -71,6 +71,35 @@
             @error('hire_date')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
+        </div>
+        <div class="mb-3">
+            <label for="nik" class="form-label">Nik</label>
+            <input type="text" name="nik" id="nik" class="form-control" value="{{ old('nik') }}">
+            @error('nik')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="mb-3">
+            <label for="fullname" class="form-label">fullname</label>
+            <input type="text" name="fullname" id="fullname" class="form-control" value="{{ old('fullname') }}">
+            @error('fullname')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        photo
+        <input type="file" name="photo">
+        cv
+        <input type="file" name="cv">
+        gender
+        <div class="form-check">
+            <input type="radio" id="male" name="gender" value="male"
+                {{ old('gender') == 'male' ? 'checked' : '' }} class="form-check-input">
+            <label for="male" class="form-check-label">Male</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" id="female" name="gender" value="female"
+                {{ old('gender') == 'female' ? 'checked' : '' }} class="form-check-input">
+            <label for="female" class="form-check-label">Female</label>
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>

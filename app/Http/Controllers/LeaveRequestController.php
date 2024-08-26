@@ -22,15 +22,21 @@ class LeaveRequestController extends Controller
             $query->search($search); // Menggunakan scope search dari model
         }
 
+        // Filter Status
+        $statuses = $request->input('status');
+        if ($statuses) {
+            $query->whereIn('status', $statuses);
+        }
+
         // Sorting
         $sortBy = $request->get('sortBy', 'created_at'); // Kolom default yang valid
         $sortDirection = $request->get('sortDirection', 'asc'); // Arah default
         $query->orderBy($sortBy, $sortDirection);
 
-        // Ambil data yang telah disortir
-        $leaveRequest = $query->paginate(10);
+        // Ambil data yang telah disortir dan difilter
+        $leaveRequest = $query->paginate(5);
 
-        return view('leave-request.index', compact('leaveRequest', 'sortBy', 'sortDirection', 'search'));
+        return view('leave-request.index', compact('leaveRequest', 'sortBy', 'sortDirection', 'search', 'statuses'));
     }
 
     /**

@@ -13,6 +13,11 @@ class EmployeeDetail extends Model
         'user_id',
         'department_id',
         'position_id',
+        'fullname',
+        'nik',
+        'photo',
+        'cv',
+        'gender',
         'phone',
         'address',
         'hire_date'
