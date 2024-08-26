@@ -41,30 +41,57 @@ class AttendanceController extends Controller
      * Display a listing of the resource.
      */
 
+    // public function index(Request $request)
+    // {
+    //     $search = $request->input('search');
+    //     $statusFilter = $request->input('status'); 
+    //     $sortBy = $request->input('sortBy', 'created_at'); 
+    //     $sortDirection = $request->input('sortDirection', 'desc'); 
+
+    //     $query = Attendance::query();
+
+    //     if ($search) {
+    //         $query->where('employee_id', 'like', '%' . $search . '%')
+    //         ->orWhere('date', 'like', '%' . $search . '%');
+    //     }
+
+    //     if ($statusFilter) {
+    //         $query->where('status', $statusFilter);
+    //     }
+
+    //     $attendances = $query->orderBy($sortBy, $sortDirection);
+    //     $attendances = Attendance::paginate(10);
+
+    //     return view('attendance.index', compact('attendances', 'search', 'sortBy', 'sortDirection','statusFilter'));
+    // }
     public function index(Request $request)
     {
-        $search = $request->input('search');
-        $statusFilter = $request->input('status'); 
-        $sortBy = $request->input('sortBy', 'created_at'); 
-        $sortDirection = $request->input('sortDirection', 'desc'); 
-
         $query = Attendance::query();
 
-        if ($search) {
-            $query->where('employee_id', 'like', '%' . $search . '%')
-            ->orWhere('date', 'like', '%' . $search . '%');
-            // ->orWhere('status', 'like', '%' . $search . '%')
+        // Terapkan filter pencarian
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('employee_id', 'like', '%' . $request->search . '%')
+                ->orWhere('date', 'like', '%' . $request->search . '%');
+            });
         }
 
-        if ($statusFilter) {
-            $query->where('status', $statusFilter);
+        // Terapkan filter status
+        if ($request->has('status') && is_array($request->status)) {
+            $query->whereIn('status', $request->status);
         }
 
-        $attendances = $query->orderBy($sortBy, $sortDirection);
-        $attendances = Attendance::paginate(10);
+        // Terapkan sorting
+        if ($request->has('sortBy')) {
+            $direction = $request->sortDirection === 'desc' ? 'desc' : 'asc';
+            $query->orderBy($request->sortBy, $direction);
+        }
 
-        return view('attendance.index', compact('attendances', 'search', 'sortBy', 'sortDirection','statusFilter'));
+        $attendances = $query->paginate(10); // Sesuaikan pagination sesuai kebutuhan
+
+        return view('attendance.index', compact('attendances'));
     }
+
 
 
     /**
