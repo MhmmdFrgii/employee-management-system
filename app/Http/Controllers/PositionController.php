@@ -11,9 +11,17 @@ class PositionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $positions = Position::all();
+        $query = Position::query();
+ 
+        // Pencarian
+        $search = $request->input('search');
+        if ($search) {
+            $query->search($search);
+        }
+
+        $positions = $query->orderBy('created_at', 'DESC')->paginate(10)->withQueryString();
 
         return view('positions.index',compact('positions'));
     }
