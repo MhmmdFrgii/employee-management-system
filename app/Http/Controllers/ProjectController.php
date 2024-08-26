@@ -13,6 +13,7 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
+        
         $query = Project::query();
 
         // Pencarian
@@ -49,7 +50,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
