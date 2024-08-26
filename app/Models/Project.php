@@ -11,6 +11,16 @@ class Project extends Model
     protected $table = 'projects';
     protected $fillable = ['name', 'description', 'start_date', 'end_date', 'status'];
 
+    public function scopeSearch($query, $search)
+    {
+    
+        return $query->where('name', 'like', '%' . $search . '%')
+        ->orWhere('description', 'like', '%' . $search . '%')
+        ->orWhere('start_date', 'like', '%' . $search . '%')
+        ->orWhere('end_date', 'like', '%' . $search . '%')
+        ->orWhere('status', 'like', '%' . $search . '%')
+        ;
+    }
 
     public function project_assignments()
     {
