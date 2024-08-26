@@ -60,7 +60,8 @@ class AttendanceController extends Controller
             $query->where('status', $statusFilter);
         }
 
-        $attendances = $query->orderBy($sortBy, $sortDirection)->paginate(10);
+        $attendances = $query->orderBy($sortBy, $sortDirection);
+        $attendances = Attendance::paginate(10);
 
         return view('attendance.index', compact('attendances', 'search', 'sortBy', 'sortDirection','statusFilter'));
     }
