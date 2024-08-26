@@ -28,7 +28,7 @@ class LeaveRequestController extends Controller
         $query->orderBy($sortBy, $sortDirection);
 
         // Ambil data yang telah disortir
-        $leaveRequest = $query->paginate(10);
+        $leaveRequest = $query->paginate(5);
 
         return view('leave-request.index', compact('leaveRequest', 'sortBy', 'sortDirection', 'search'));
     }
