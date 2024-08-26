@@ -14,31 +14,32 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         $query = Project::query();
-
-        // Validasi nilai sortDirection
-        $sortDirection = in_array($request->input('sortDirection'), ['asc', 'desc']) ? $request->input('sortDirection') : 'asc';
-
-        // Validasi dan tetapkan nilai sortBy
-        $sortBy = $request->input('sortBy', 'status');
-        if (!in_array($sortBy, ['name', 'description', 'start_date', 'end_date', 'status'])) {
-            $sortBy = 'status'; // Atur ke nilai default jika tidak valid
+ 
+        // Pencarian
+        $search = $request->input('search');
+        if ($search) {
+            $query->search($search);
         }
 
-        // Filter berdasarkan pencarian
-        if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+        // Filter Status
+        $statuses = $request->input('status');
+        if ($statuses) {
+            $query->whereIn('status', $statuses);
         }
 
-        // Filter berdasarkan status
-        if ($request->has('status')) {
-            $statusFilters = $request->input('status');
-            $query->whereIn('status', $statusFilters);
-        }
+        // Validasi Sort Direction
+        $request->validate([
+            'sortDirection' => 'in:asc,desc',
+        ]);
 
-        // Filter dan urutkan data
-        $project = $query->orderBy($sortBy, $sortDirection)->paginate(10);
+        // Sorting
+        $sortBy = $request->input('sortBy', 'id'); // Default sort by 'id'
+        $sortDirection = $request->input('sortDirection', 'asc'); // Default sort direction 'asc'
 
-        return view('projects.index', compact('project'));
+        // Dapatkan hasil query dengan pagination
+        $projects = $query->orderBy($sortBy, $sortDirection)->paginate(10);
+
+        return view('projects.index', compact('projects'));
     }
 
 
