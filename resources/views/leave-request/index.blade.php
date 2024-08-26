@@ -25,11 +25,54 @@
                             @csrf
                             <div class="form-group mb-0 position-relative">
                                 <label for="search" class="sr-only">Search:</label>
-                                <input type="text" id="search" name="search" value="{{ request('search') }}"
-                                    class="form-control">
+                                <input type="text" id="search" placeholder="Cari data..." name="search"
+                                    value="{{ request('search') }}" class="form-control">
                             </div>
-                            <a href="{{ route('leave.index') }}" class="btn btn-primary">Cari</a>
+                            <div class="form-group mb-0 position-relative">
+                                <label class="sr-only">Filter Status:</label>
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="statusDropdown"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Filter Status
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="statusDropdown">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="status[]"
+                                                    value="pending" id="statusPending"
+                                                    {{ in_array('pending', request('status', [])) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="statusPending">
+                                                    Pending
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="status[]"
+                                                    value="approved" id="statusApproved"
+                                                    {{ in_array('approved', request('status', [])) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="statusApproved">
+                                                    Approved
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="status[]"
+                                                    value="rejected" id="statusRejected"
+                                                    {{ in_array('rejected', request('status', [])) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="statusRejected">
+                                                    Rejected
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Cari</button>
                         </form>
+
+
                     </div>
 
                     <div>
