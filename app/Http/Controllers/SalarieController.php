@@ -2,23 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Salarie;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\SalarieRequest;
-use App\Http\Requests\StoreSalarieRequest;
-use App\Http\Requests\UpdateSalarieRequest;
 
 class SalarieController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    // public function index()
+    // {
+    //     $salarie = Salarie::all();
+    //     return view('salaries.index', compact('salarie'));
+    // }
+
+
+
+    public function index(Request $request)
     {
-        $salarie = Salarie::all();
+        $query = Salarie::query();
+
+        // Menambahkan filter pencarian jika ada
+        if ($request->has('search')) {
+            $query->where('employee', 'like', '%' . $request->search . '%')
+            ->orWhere('amount', 'like', '%' . $request->search . '%')
+            ->orWhere('payment_date', 'like', '%' . $request->search . '%');
+        }
+
+        // Menambahkan sorting jika ada
+        if ($request->has('sortBy') && $request->has('sortDirection')) {
+            $query->orderBy($request->sortBy, $request->sortDirection);
+        }
+
+        // Paginasi
+        $salarie = $query->paginate(10); // Menentukan jumlah item per halaman
+
         return view('salaries.index', compact('salarie'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -80,16 +103,9 @@ class SalarieController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Salarie $salarie)
+    public function destroy(Salarie $salary)
     {
-        try {
-            $salarie->delete();
-
-            return redirect()->route('salaries.index')->with('success', 'Hapus Salarie Success!');
-
-        } catch (\Throwable $e) {
-            
-            return redirect()->route('salaries.index')->with('success', 'Failed Hapus Salarie.');
-        }
+        $salary->delete();
+        return redirect()->route('salaries.index')->with('danger', 'Data berhasil dihapus');
     }
 }

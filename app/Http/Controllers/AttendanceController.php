@@ -41,29 +41,6 @@ class AttendanceController extends Controller
      * Display a listing of the resource.
      */
 
-    // public function index(Request $request)
-    // {
-    //     $search = $request->input('search');
-    //     $statusFilter = $request->input('status'); 
-    //     $sortBy = $request->input('sortBy', 'created_at'); 
-    //     $sortDirection = $request->input('sortDirection', 'desc'); 
-
-    //     $query = Attendance::query();
-
-    //     if ($search) {
-    //         $query->where('employee_id', 'like', '%' . $search . '%')
-    //         ->orWhere('date', 'like', '%' . $search . '%');
-    //     }
-
-    //     if ($statusFilter) {
-    //         $query->where('status', $statusFilter);
-    //     }
-
-    //     $attendances = $query->orderBy($sortBy, $sortDirection);
-    //     $attendances = Attendance::paginate(10);
-
-    //     return view('attendance.index', compact('attendances', 'search', 'sortBy', 'sortDirection','statusFilter'));
-    // }
     public function index(Request $request)
     {
         $query = Attendance::query();

@@ -59,7 +59,8 @@
                         
                         <!-- Tombol Cari -->
                         <div class="col-md-1">
-                            <button class="btn btn-secondary w-100 shadow-sm" type="submit">Cari</button>
+                            {{-- <button class="btn btn-secondary w-100 shadow-sm" type="submit">Cari</button> --}}
+                            <button class="btn btn-outline-secondary rounded shadow-sm" type="submit">Cari</button>
                         </div>
                     </div>
                 </form>
