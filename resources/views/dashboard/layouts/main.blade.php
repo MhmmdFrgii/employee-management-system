@@ -23,6 +23,10 @@
 
     <!-- Core Css -->
     <link id="themeColors" rel="stylesheet" href="{{ asset('dist/css/style.min.css') }}" />
+
+    {{-- BoxIcons --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
 </head>
 
 <body>
@@ -288,8 +292,8 @@
                                                 <form action="{{ route('logout') }}" method="post">
                                                     @csrf
 
-                                                    <button type="submit"
-                                                    class="btn btn-outline-primary">Log Out</button>
+                                                    <button type="submit" class="btn btn-outline-primary">Log
+                                                        Out</button>
                                                 </form>
                                             </div>
                                         </div>
