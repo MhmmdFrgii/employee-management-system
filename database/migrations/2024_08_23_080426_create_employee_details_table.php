@@ -15,10 +15,15 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users', 'id')->restrictOnDelete();
             $table->foreignId('department_id')->constrained('departments', 'id')->restrictOnDelete();
-            $table->foreignId('position_id')->constrained('positions', 'id')->restrictOnDelete();
-            $table->date('hire_date');
-            $table->string('phone', 15);
+            $table->foreignId('position_id')->nullable()->constrained('positions', 'id')->restrictOnDelete();
+            $table->string('fullname');
+            $table->string('nik', 16)->unique();
+            $table->string('photo');
+            $table->string('cv');
+            $table->string('phone', 15)->unique();
+            $table->enum('gender', ['male', 'female']);
             $table->string('address');
+            $table->date('hire_date')->nullable();
             $table->timestamps();
         });
     }
