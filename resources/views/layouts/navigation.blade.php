@@ -18,16 +18,32 @@
                 </div>
                 {{-- Department --}}
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('department.index')" :active="request()->routeIs('department.index')">
+                        {{ __('Departments') }}
+                    </x-nav-link>
+                </div>
+
+                {{-- Projects --}}
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('projects.index')" :active="request()->routeIs('projects.index')">
                         {{ __('Project') }}
                     </x-nav-link>
                 </div>
+
                 {{-- Salaries --}}
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('salaries.index')" :active="request()->routeIs('salaries.index')">
                         {{ __('Salaries') }}
                     </x-nav-link>
                 </div>
+
+                {{-- Attendance --}}
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('attendance.index')" :active="request()->routeIs('attendance.index')">
+                        {{ __('Attendances') }}
+                    </x-nav-link>
+                </div>
+
             </div>
 
             <!-- Settings Dropdown -->
