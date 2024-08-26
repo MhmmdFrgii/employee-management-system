@@ -4,25 +4,42 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DepartmentRequest;
 use App\Models\Department;
+use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {
     public function search()
     {
-        $department = Department::all();
+        $departments = Department::all();
 
-        return view('department.index', compact('department'));
+        return view('department.index', compact('departments'));
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $department = Department::all();
+        $query = Department::query();
 
-        return view('department.index', compact('department'));
+        // Pencarian
+        $search = $request->input('search');
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%'); // Menggunakan scope search dari model
+        }
+
+        // Sorting
+        $sortBy = $request->get('sortBy', 'created_at'); // Kolom default yang valid
+        $sortDirection = $request->get('sortDirection', 'asc'); // Arah default
+        $query->orderBy($sortBy, $sortDirection);
+
+        // Ambil data yang telah disortir dan difilter
+        $departments = $query->paginate(5);
+        $departments->appends($request->all());
+
+        return view('department.index', compact('departments'));
     }
 
     /**
@@ -44,24 +61,6 @@ class DepartmentController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Department $department)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-
-    public function edit(Department $department)
-    {
-        return view('department.edit', compact('department'));
-    }
-
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(DepartmentRequest $request, Department $department)
@@ -78,11 +77,16 @@ class DepartmentController extends Controller
     {
         try {
             $department->delete();
-
             return redirect()->route('department.index')->with('success', 'Hapus Department Success!');
-        } catch (\Throwable $e) {
+        } catch (QueryException $e) {
+            // Cek jika kesalahan disebabkan oleh foreign key constraint
+            if ($e->getCode() === '23000') { // 23000 adalah kode untuk pelanggaran constraint
+                return redirect()->route('department.index')->with('danger', 'Tidak dapat menghapus department karena terkait dengan data lain.');
+            }
 
-            return redirect()->route('department.index')->with('success', 'Failed Hapus Departmen.');
+            return redirect()->route('department.index')->with('danger', 'Terjadi kesalahan saat menghapus department.');
+        } catch (Exception $e) {
+            return redirect()->route('department.index')->with('danger', 'Terjadi kesalahan tak terduga.');
         }
     }
 }

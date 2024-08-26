@@ -205,12 +205,6 @@
                                 <i class="ti ti-menu-2"></i>
                             </a>
                         </li>
-                        <li class="nav-item d-none d-lg-block">
-                            <a class="nav-link nav-icon-hover" href="javascript:void(0)" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">
-                                <i class="ti ti-search"></i>
-                            </a>
-                        </li>
                     </ul>
                     <div class="d-block d-lg-none">
                         <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/dark-logo.svg"
@@ -314,19 +308,6 @@
         </div>
     </div>
 
-    <!--  Search Bar -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg">
-            <div class="modal-content rounded-1">
-                <div class="modal-header border-bottom">
-                    <input type="search" class="form-control fs-3" placeholder="Search here" id="search" />
-                    <span data-bs-dismiss="modal" class="lh-1 cursor-pointer">
-                        <i class="ti ti-x fs-5 ms-3"></i>
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
     <!--  Customizer -->
     <!--  Import Js Files -->
     <script src="{{ asset('dist/libs/jquery/dist/jquery.min.js') }}"></script>
@@ -352,6 +333,13 @@
             iziToast.success({
                 title: 'Sukses!',
                 message: "{{ session('success') }}",
+                position: 'topRight'
+            });
+        @endif
+        @if (session('danger'))
+            iziToast.error({
+                title: 'Sukses!',
+                message: "{{ session('danger') }}",
                 position: 'topRight'
             });
         @endif
