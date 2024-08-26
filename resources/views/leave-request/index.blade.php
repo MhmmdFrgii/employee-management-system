@@ -93,45 +93,60 @@
                                         <div class="modal-body">
                                             <div class="mb-3">
                                                 <label for="employee_id" class="form-label">Employee ID</label>
-                                                <input type="text" class="form-control" id="employee_id"
-                                                    name="employee_id" value="{{ old('employee_id') }}">
+                                                <input type="text"
+                                                    class="form-control  @error('employee_id') is-invalid @enderror"
+                                                    id="employee_id" name="employee_id" value="{{ old('employee_id') }}">
                                                 @error('employee_id')
-                                                    <p>{{ $message }}</p>
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
                                                 @enderror
                                             </div>
                                             <div class="mb-3">
                                                 <label for="start_date" class="form-label">Mulai Ijin</label>
-                                                <input type="date" class="form-control" id="start_date" name="start_date"
-                                                    value="{{ old('start_date') }}">
+                                                <input type="date"
+                                                    class="form-control  @error('start_date') is-invalid @enderror"
+                                                    id="start_date" name="start_date" value="{{ old('start_date') }}">
                                                 @error('start_date')
-                                                    <p>{{ $message }}</p>
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
                                                 @enderror
                                             </div>
                                             <div class="mb-3">
                                                 <label for="end_date" class="form-label">Sampai Tanggal</label>
-                                                <input type="date" class="form-control" id="end_date" name="end_date"
-                                                    value="{{ old('end_date') }}">
+                                                <input type="date"
+                                                    class="form-control  @error('end_date') is-invalid @enderror"
+                                                    id="end_date" name="end_date" value="{{ old('end_date') }}">
                                                 @error('end_date')
-                                                    <p>{{ $message }}</p>
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
                                                 @enderror
                                             </div>
                                             <div class="mb-3">
                                                 <label for="type" class="form-label">Type</label>
-                                                <input type="text" class="form-control" id="type" name="type"
-                                                    value="{{ old('type') }}">
+                                                <input type="text"
+                                                    class="form-control  @error('type') is-invalid @enderror"
+                                                    id="type" name="type" value="{{ old('type') }}">
                                                 @error('type')
-                                                    <p>{{ $message }}</p>
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
                                                 @enderror
                                             </div>
                                             <div class="mb-3">
                                                 <label for="status" class="form-label">Status</label>
-                                                <select class="form-control" id="status" name="status">
+                                                <select class="form-control  @error('status') is-invalid @enderror"
+                                                    id="status" name="status">
                                                     <option value="pending">Pending</option>
                                                     <option value="approved">Approved</option>
                                                     <option value="rejected">Rejected</option>
                                                 </select>
                                                 @error('status')
-                                                    <p>{{ $message }}</p>
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
                                                 @enderror
                                             </div>
                                         </div>
@@ -228,50 +243,68 @@
                                                                 <label for="employee_id_{{ $data->id }}"
                                                                     class="form-label">Employee
                                                                     ID</label>
-                                                                <input type="text" class="form-control"
+                                                                <input type="text"
+                                                                    class="form-control  @error('employee_id') is-invalid @enderror"
                                                                     id="employee_id_{{ $data->id }}"
                                                                     name="employee_id"
                                                                     value="{{ old('employee_id', $data->employee_id) }}">
+
                                                                 @error('employee_id')
-                                                                    <p>{{ $message }}</p>
+                                                                    <div class="invalid-feedback">
+                                                                        {{ $message }}
+                                                                    </div>
                                                                 @enderror
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="start_date_{{ $data->id }}"
                                                                     class="form-label">Mulai
                                                                     Ijin</label>
-                                                                <input type="date" class="form-control"
+                                                                <input type="date"
+                                                                    class="form-control  @error('start_date') is-invalid @enderror"
                                                                     id="start_date_{{ $data->id }}" name="start_date"
                                                                     value="{{ old('start_date', $data->start_date) }}">
+
                                                                 @error('start_date')
-                                                                    <p>{{ $message }}</p>
+                                                                    <div class="invalid-feedback">
+                                                                        {{ $message }}
+                                                                    </div>
                                                                 @enderror
+
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="end_date_{{ $data->id }}"
                                                                     class="form-label">Sampai
                                                                     Tanggal</label>
-                                                                <input type="date" class="form-control"
+                                                                <input type="date"
+                                                                    class="form-control  @error('end_date') is-invalid @enderror"
                                                                     id="end_date_{{ $data->id }}" name="end_date"
                                                                     value="{{ old('end_date', $data->end_date) }}">
+
                                                                 @error('end_date')
-                                                                    <p>{{ $message }}</p>
+                                                                    <div class="invalid-feedback">
+                                                                        {{ $message }}
+                                                                    </div>
                                                                 @enderror
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="type_{{ $data->id }}"
                                                                     class="form-label">Type</label>
-                                                                <input type="text" class="form-control"
+                                                                <input type="text"
+                                                                    class="form-control  @error('type') is-invalid @enderror"
                                                                     id="type_{{ $data->id }}" name="type"
                                                                     value="{{ old('type', $data->type) }}">
+
                                                                 @error('type')
-                                                                    <p>{{ $message }}</p>
+                                                                    <div class="invalid-feedback">
+                                                                        {{ $message }}
+                                                                    </div>
                                                                 @enderror
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="status_{{ $data->id }}"
                                                                     class="form-label">Status</label>
-                                                                <select class="form-control"
+                                                                <select
+                                                                    class="form-control  @error('status') is-invalid @enderror"
                                                                     id="status_{{ $data->id }}" name="status">
                                                                     <option value="pending"
                                                                         {{ $data->status === 'pending' ? 'selected' : '' }}>
