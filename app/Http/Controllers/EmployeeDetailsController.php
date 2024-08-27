@@ -55,6 +55,17 @@ class EmployeeDetailsController extends Controller
         return view('employee.index', compact('employees'));
     }
 
+    public function userKaryawan()
+{
+    $employees = EmployeeDetail::select('employee_details.*', 'users.name as user_name', 'departments.name as department_name')
+        ->join('users', 'employee_details.user_id', '=', 'users.id')
+        ->join('departments', 'employee_details.department_id', '=', 'departments.id')
+        ->paginate(6);
+
+    return view('userKaryawan.index', compact('employees'));
+}
+
+
     /**
      * Show the form for creating a new resource.
      */
