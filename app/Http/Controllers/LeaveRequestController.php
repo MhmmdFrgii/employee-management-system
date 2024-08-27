@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LeaveRequest as RequestsLeaveRequest;
+use App\Models\EmployeeDetail;
 use App\Models\LeaveRequest;
 use Illuminate\Http\Request;
 
@@ -34,9 +35,10 @@ class LeaveRequestController extends Controller
         $query->orderBy($sortBy, $sortDirection);
 
         // Ambil data yang telah disortir dan difilter
+        $employee = EmployeeDetail::all();
         $leaveRequest = $query->paginate(5);
 
-        return view('leave-request.index', compact('leaveRequest', 'sortBy', 'sortDirection', 'search', 'statuses'));
+        return view('leave-request.index', compact('employee', 'leaveRequest', 'sortBy', 'sortDirection', 'search', 'statuses'));
     }
 
     /**
@@ -54,7 +56,7 @@ class LeaveRequestController extends Controller
     {
         LeaveRequest::create($request->validated());
 
-        return to_route('leave.index');
+        return redirect()->route('leave.index')->with('success', 'Berhasil menambahkan data.');
     }
 
     /**

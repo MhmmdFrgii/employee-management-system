@@ -5,11 +5,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="container py-4">
-                    @if (session()->has('success'))
-                        <div class="alert alert-success mt-3" role="alert">
-                            {{ session('success') }}
-                        </div>
-                    @endif
+
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h1 class="h3">Penugasan Project</h1>
 
@@ -68,10 +64,19 @@
                                                 @enderror
                                             </div>
                                             <div class="mb-3">
-                                                <label for="employee_id" class="form-label">employee_id</label>
-                                                <input type="text" name="employee_id"
-                                                    class="form-control @error('employee_id') is-invalid @enderror"
-                                                    value="{{ old('employee_id') }}" id="employee_id">
+
+                                                {{--  --}}
+                                                <label for="employee_id" class="form-label">Employee ID</label>
+                                                <select name="employee_id" id="employee_id"
+                                                    class="form-control @error('employee_id') is-invalid @enderror">
+                                                    <option value="">--Employee ID--</option>
+                                                    @foreach ($employee as $item)
+                                                        <option value="{{ $item->id }}"
+                                                            {{ old('employee_id') == $item->id ? 'selected' : '' }}>
+                                                            {{ $item->id }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
                                                 @error('employee_id')
                                                     <div class="invalid-feedback">
                                                         {{ $message }}
@@ -201,12 +206,19 @@
                                                                 @enderror
                                                             </div>
                                                             <div class="mb-3">
+
                                                                 <label for="employee_id{{ $data->id }}"
                                                                     class="form-label">Employee ID</label>
-                                                                <input type="text" name="employee_id"
-                                                                    class="form-control @error('employee_id') is-invalid @enderror"
+                                                                <select name="employee_id"
                                                                     id="employee_id{{ $data->id }}"
-                                                                    value="{{ old('employee_id', $data->employee_id) }}">
+                                                                    class="form-control @error('employee_id') is-invalid @enderror">
+                                                                    @foreach ($employee as $item)
+                                                                        <option value="{{ $item->id }}"
+                                                                            {{ old('employee_id', $data->employee_id) == $item->id ? 'selected' : '' }}>
+                                                                            {{ $item->id }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
                                                                 @error('employee_id')
                                                                     <div class="invalid-feedback">
                                                                         {{ $message }}

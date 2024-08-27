@@ -5,11 +5,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="container py-4">
-                    @if (session()->has('success'))
-                        <div class="alert alert-success mt-3" role="alert">
-                            {{ session('success') }}
-                        </div>
-                    @endif
+
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h1 class="h3">Permintaan Cuti</h1>
@@ -93,9 +89,16 @@
                                         <div class="modal-body">
                                             <div class="mb-3">
                                                 <label for="employee_id" class="form-label">Employee ID</label>
-                                                <input type="text"
-                                                    class="form-control  @error('employee_id') is-invalid @enderror"
-                                                    id="employee_id" name="employee_id" value="{{ old('employee_id') }}">
+                                                <select name="employee_id" id="employee_id"
+                                                    class="form-control @error('employee_id') is-invalid @enderror">
+                                                    <option value="">--Employee ID--</option>
+                                                    @foreach ($employee as $item)
+                                                        <option value="{{ $item->id }}"
+                                                            {{ old('employee_id') == $item->id ? 'selected' : '' }}>
+                                                            {{ $item->id }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
                                                 @error('employee_id')
                                                     <div class="invalid-feedback">
                                                         {{ $message }}
@@ -240,21 +243,25 @@
                                                         <div class="modal-body">
                                                             <!-- Input fields for Edit -->
                                                             <div class="mb-3">
-                                                                <label for="employee_id_{{ $data->id }}"
-                                                                    class="form-label">Employee
-                                                                    ID</label>
-                                                                <input type="text"
-                                                                    class="form-control  @error('employee_id') is-invalid @enderror"
-                                                                    id="employee_id_{{ $data->id }}"
-                                                                    name="employee_id"
-                                                                    value="{{ old('employee_id', $data->employee_id) }}">
-
-                                                                @error('employee_id')
+                                                                <label for="employee_id{{ $data->id }}"
+                                                                    class="form-label">Employee ID</label>
+                                                                <select name="employee_id"
+                                                                    id="employee_id{{ $data->id }}"
+                                                                    class="form-control @error('employee_id') is-invalid @enderror">
+                                                                    @foreach ($employee as $item)
+                                                                        <option value="{{ $item->id }}"
+                                                                            {{ old('employee_id', $data->employee_id) == $item->id ? 'selected' : '' }}>
+                                                                            {{ $item->id }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                @error('project_id')
                                                                     <div class="invalid-feedback">
                                                                         {{ $message }}
                                                                     </div>
                                                                 @enderror
                                                             </div>
+
                                                             <div class="mb-3">
                                                                 <label for="start_date_{{ $data->id }}"
                                                                     class="form-label">Mulai
