@@ -33,34 +33,12 @@ class ProjectAssignmentController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(AssignmentRequest $request)
     {
         ProjectAssignment::create($request->validated());
         return redirect()->route('projectAssignments.index')->with('success', 'Berhasil menambah data');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(ProjectAssignment $projectAssignment) {}
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ProjectAssignment $projectAssignment)
-    {
-        $project = Project::all();
-        return view('projectAssignments.edit', compact('project', 'projectAssignment'));
     }
 
     /**

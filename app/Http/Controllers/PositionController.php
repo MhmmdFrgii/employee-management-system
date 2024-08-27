@@ -14,7 +14,7 @@ class PositionController extends Controller
     public function index(Request $request)
     {
         $query = Position::query();
- 
+
         // Pencarian
         $search = $request->input('search');
         if ($search) {
@@ -23,15 +23,7 @@ class PositionController extends Controller
 
         $positions = $query->orderBy('created_at', 'DESC')->paginate(10)->withQueryString();
 
-        return view('positions.index',compact('positions'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('positions.create');
+        return view('positions.index', compact('positions'));
     }
 
     /**
@@ -45,22 +37,6 @@ class PositionController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Position $position)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Position $position)
-    {
-        return view('positions.edit', compact('position'));
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(PositionRequest $request, Position $position)
@@ -68,7 +44,6 @@ class PositionController extends Controller
         $position->update($request->validated());
 
         return redirect()->route('positions.index')->with('success', 'Edit Jabatan Success!');
-
     }
 
     /**
@@ -80,7 +55,6 @@ class PositionController extends Controller
             $position->delete();
 
             return redirect()->route('positions.index')->with('success', 'Hapus Jabatan Success!');
-
         } catch (\Throwable $e) {
             # code...
             return redirect()->route('positions.index')->with('success', 'Failed Hapus Jabatan.');
