@@ -36,7 +36,9 @@ class LeaveRequestController extends Controller
 
         // Ambil data yang telah disortir dan difilter 
         $employee = EmployeeDetail::all();
-        $leaveRequest = $query->paginate(5); 
+        $leaveRequest = $query->paginate(5);
+        $leaveRequest->appends($request->all());
+
         return view('leave-request.index', compact('employee', 'leaveRequest', 'sortBy', 'sortDirection', 'search', 'statuses'));
     }
 

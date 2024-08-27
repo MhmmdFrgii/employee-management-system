@@ -39,6 +39,7 @@ class ProjectController extends Controller
 
         // Dapatkan hasil query dengan pagination
         $projects = $query->orderBy($sortBy, $sortDirection)->paginate(10);
+        $projects->appends($request->all());
 
         return view('projects.index', compact('projects'));
     }
