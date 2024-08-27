@@ -40,4 +40,57 @@
             </div>
         </div>
     </div>
-@endsection
+    <div class="row gx-3">
+        <div class="col-md-6 col-lg-3 col-6">
+            <div class="card text-white bg-primary rounded">
+                <div class="card-body p-4">
+                    <span>
+                        <i class="ti ti-layout-grid fs-8"></i>
+                    </span>
+                    <h3 class="card-title mt-3 mb-0 text-white">{{ $project_count }}</h3>
+                    <p class="card-text text-white-50 fs-3 fw-normal">
+                        Total Project
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-3 col-6">
+            <div class="card text-white bg-secondary rounded">
+                <div class="card-body p-4">
+                    <span>
+                        <i class="ti ti-users fs-8"></i>
+                    </span>
+                    <h3 class="card-title mt-3 mb-0 text-white">{{ $employee_count }}</h3>
+                    <p class="card-text text-white-50 fs-3 fw-normal">
+                        Total Karyawan
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-3 col-6">
+            <div class="card text-white bg-warning rounded">
+                <div class="card-body p-4">
+                    <span>
+                        <i class="ti ti-category-2 fs-8"></i>
+                    </span>
+                    <h3 class="card-title mt-3 mb-0 text-white">{{ $department_count }}</h3>
+                    <p class="card-text text-white-50 fs-3 fw-normal">
+                        Total Departemen
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-3 col-6">
+            <div class="card text-white bg-danger rounded">
+                <div class="card-body p-4">
+                    <span>
+                        <i class="ti ti-user-cog fs-8"></i>
+                    </span>
+                    <h3 class="card-title mt-3 mb-0 text-white">15</h3>
+                    <p class="card-text text-white-50 fs-3 fw-normal">
+                        Menunggu Konfirmasi
+                    </p>
+                </div>
+            </div>
+        </div>
+    @endsection

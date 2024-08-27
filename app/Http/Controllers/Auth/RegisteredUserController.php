@@ -35,7 +35,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'department_id' => ['required', 'exists:departments,id'],
             'fullname' => ['required', 'string', 'max:255'],
@@ -56,7 +56,7 @@ class RegisteredUserController extends Controller
         $cv = $request->file('cv')->store('cv');
         $photo = $request->file('photo')->store('photo');
 
-        $employee = EmployeeDetail::create([
+        EmployeeDetail::create([
             'user_id' => $user->id,
             'department_id' => $request->department_id,
             'fullname' => $request->fullname,
