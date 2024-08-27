@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AssignmentRequest;
+use App\Models\EmployeeDetail;
 use App\Models\Project;
 use App\Models\ProjectAssignment;
 use Illuminate\Http\Request;
@@ -28,8 +29,9 @@ class ProjectAssignmentController extends Controller
         $query->orderBy($sortBy, $sortDirection);
 
         $project = Project::all();
+        $employee = EmployeeDetail::all();
         $projectAssignment = $query->paginate(5);
-        return view('projectAssignments.index', compact('project', 'projectAssignment', 'sortBy', 'sortDirection', 'search'));
+        return view('projectAssignments.index', compact('project', 'employee', 'projectAssignment', 'sortBy', 'sortDirection', 'search'));
     }
 
     /**
