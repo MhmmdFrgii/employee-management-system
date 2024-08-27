@@ -34,19 +34,10 @@ class LeaveRequestController extends Controller
         $sortDirection = $request->get('sortDirection', 'asc'); // Arah default
         $query->orderBy($sortBy, $sortDirection);
 
-        // Ambil data yang telah disortir dan difilter
+        // Ambil data yang telah disortir dan difilter 
         $employee = EmployeeDetail::all();
-        $leaveRequest = $query->paginate(5);
-
+        $leaveRequest = $query->paginate(5); 
         return view('leave-request.index', compact('employee', 'leaveRequest', 'sortBy', 'sortDirection', 'search', 'statuses'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('leave-request.create');
     }
 
     /**
@@ -57,32 +48,6 @@ class LeaveRequestController extends Controller
         LeaveRequest::create($request->validated());
 
         return redirect()->route('leave.index')->with('success', 'Berhasil menambahkan data.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(LeaveRequest $leaveRequest)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(LeaveRequest $leaveRequest)
-    {
-        return view('leave-request.edit', compact('leaveRequest'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(RequestsLeaveRequest $request, LeaveRequest $leaveRequest)
-    {
-        $leaveRequest->update($request->validated());
-
-        return to_route('leave.index')->with('success', 'Berhasil Update leave request!');
     }
 
     /**

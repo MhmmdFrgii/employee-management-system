@@ -30,6 +30,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -206,6 +207,20 @@
                 position: 'topRight'
             });
         @endif
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Show the clear button only if there's input
+            $('.search-input').on('input', function() {
+                if ($(this).val().length > 0) {
+                    $(this).siblings('.clear-search').show();
+                } else {
+                    $(this).siblings('.clear-search').hide();
+                }
+            });
+
+            $('.search-input').trigger('input');
+        });
     </script>
 
 </body>

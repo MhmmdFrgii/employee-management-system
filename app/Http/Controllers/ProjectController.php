@@ -13,9 +13,9 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        
+
         $query = Project::query();
- 
+
         // Pencarian
         $search = $request->input('search');
         if ($search) {
@@ -43,16 +43,6 @@ class ProjectController extends Controller
         return view('projects.index', compact('projects'));
     }
 
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        
-    }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -61,14 +51,6 @@ class ProjectController extends Controller
         Project::create($request->validated());
 
         return redirect()->route('projects.index')->with('success', 'Project berhasil ditambah');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Project $project)
-    {
-        //
     }
 
     /**
@@ -94,6 +76,6 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         $project->delete();
-        return redirect()->route('projects.index')->with('danger', 'Data berhasil dihapus');
+        return redirect()->route('projects.index')->with('success', 'Data berhasil dihapus');
     }
 }
