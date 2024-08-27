@@ -84,13 +84,7 @@ class SalarieController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update(SalarieRequest $request, Salarie $salarie)
-    // {
-        
-    //     $salarie->update($request->validated()); 
-
-    //     return redirect()->route('salaries.index')->with('success', 'Salaries berhasil di edit');
-    // }
+    
 
     public function update(SalarieRequest $request, $id)
     {
