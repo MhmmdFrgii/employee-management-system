@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MyprojectController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectAssignmentController;
@@ -14,6 +15,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('projects', ProjectController::class);
     Route::resource('projectAssignments', ProjectAssignmentController::class);
     Route::resource('notifikasi', NotificationController::class);
+    Route::resource('myproject', MyprojectController::class);
 
     // Absensi user
     Route::resource('absensi', UserAbsenController::class);
