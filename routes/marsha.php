@@ -6,8 +6,9 @@ use App\Http\Controllers\SalarieController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/applicants', [UserController::class, 'index']);
+Route::get('/applicants', [UserController::class, 'index'])->name('applicant.index');
 Route::get('/applicant/detail/{id}', [UserController::class, 'detail'])->name('applicant.detail');
+Route::patch('/applicant/{applicant}', [UserController::class, 'update'])->name('applicant.update');
 
 Route::middleware('auth')->group(function () {
     Route::resource('department', DepartmentController::class);
