@@ -52,6 +52,15 @@ class LeaveRequestController extends Controller
         return redirect()->route('leave.index')->with('success', 'Berhasil menambahkan data.');
     }
 
+    public function update(RequestsLeaveRequest $request, LeaveRequest $leaveRequest)
+    {
+        // Perbarui data dengan data yang divalidasi
+        $leaveRequest->update($request->validated());
+
+        // Redirect atau kembalikan respons
+        return redirect()->route('leave.index')->with('success', 'Data berhasil diperbarui!');
+    }
+
     /**
      * Remove the specified resource from storage.
      */

@@ -70,7 +70,7 @@
                                 <th>
                                     <a
                                         href="{{ route('leave.index', array_merge(request()->query(), ['sortBy' => 'employee_id', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
-                                        Employee ID
+                                        Nama Karyawan
                                         @if (request('sortBy') === 'employee_id')
                                             @if (request('sortDirection') === 'asc')
                                                 &#9650; <!-- Unicode character for upward arrow -->
@@ -141,7 +141,7 @@
                             @forelse($leaveRequest as $data)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $data->employee_id }}</td>
+                                    <td>{{ $data->employe->fullname }}</td>
                                     <td>{{ $data->start_date }}</td>
                                     <td>{{ $data->end_date }}</td>
                                     <td>{{ $data->type }}</td>
@@ -162,6 +162,96 @@
                                         </form>
                                     </td>
                                 </tr>
+
+                                <div class="modal fade" id="editModal{{ $data->id }}" tabindex="-1"
+                                    aria-labelledby="editModalLabel{{ $data->id }}" aria-hidden="true"
+                                    data-bs-backdrop="static">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form action="{{ route('leave.update', $data->id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="editModalLabel{{ $data->id }}">Edit
+                                                        Permintaan Cuti</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <label for="employee_id" class="form-label">Karyawan</label>
+                                                        <select name="employee_id" id="employee_id"
+                                                            class="form-control @error('employee_id') is-invalid @enderror">
+                                                            <option value="">--Karyawan--</option>
+                                                            @foreach ($employee as $item)
+                                                                <option value="{{ $item->id }}"
+                                                                    {{ old('employee_id', $data->employee_id) == $item->id ? 'selected' : '' }}>
+                                                                    {{ $item->fullname }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                        @error('employee_id')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="start_date" class="form-label">Mulai Ijin</label>
+                                                        <input type="date"
+                                                            class="form-control @error('start_date') is-invalid @enderror"
+                                                            id="start_date" name="start_date"
+                                                            value="{{ old('start_date', $data->start_date) }}">
+                                                        @error('start_date')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="end_date" class="form-label">Sampai Tanggal</label>
+                                                        <input type="date"
+                                                            class="form-control @error('end_date') is-invalid @enderror"
+                                                            id="end_date" name="end_date"
+                                                            value="{{ old('end_date', $data->end_date) }}">
+                                                        @error('end_date')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="type" class="form-label">Type</label>
+                                                        <input type="text"
+                                                            class="form-control @error('type') is-invalid @enderror"
+                                                            id="type" name="type"
+                                                            value="{{ old('type', $data->type) }}">
+                                                        @error('type')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="status" class="form-label">Status</label>
+                                                        <select class="form-control @error('status') is-invalid @enderror"
+                                                            id="status" name="status">
+                                                            <option value="pending"
+                                                                {{ old('status', $data->status) == 'pending' ? 'selected' : '' }}>
+                                                                Pending</option>
+                                                            <option value="approved"
+                                                                {{ old('status', $data->status) == 'approved' ? 'selected' : '' }}>
+                                                                Approved</option>
+                                                            <option value="rejected"
+                                                                {{ old('status', $data->status) == 'rejected' ? 'selected' : '' }}>
+                                                                Rejected</option>
+                                                        </select>
+                                                        @error('status')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Batal</button>
+                                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <!-- Modal Delete -->
                                 <div class="modal fade" id="deleteSalariesModal{{ $data->id }}" tabindex="-1"
@@ -225,9 +315,17 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="employee_id" class="form-label">Employee ID</label>
-                            <input type="text" class="form-control @error('employee_id') is-invalid @enderror"
-                                id="employee_id" name="employee_id" value="{{ old('employee_id') }}">
+                            <label for="employee_id" class="form-label">Karyawan</label>
+                            <select name="employee_id" id="employee_id"
+                                class="form-control @error('employee_id') is-invalid @enderror">
+                                <option value="">--Karyawan--</option>
+                                @foreach ($employee as $item)
+                                    <option value="{{ $item->id }}"
+                                        {{ old('employee_id') == $item->id ? 'selected' : '' }}>
+                                        {{ $item->fullname }}
+                                    </option>
+                                @endforeach
+                            </select>
                             @error('employee_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

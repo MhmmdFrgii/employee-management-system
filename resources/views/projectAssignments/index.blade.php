@@ -52,7 +52,7 @@
                                         <th>
                                             <a
                                                 href="{{ route('projectAssignments.index', array_merge(request()->query(), ['sortBy' => 'employee_id', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
-                                                Employee ID
+                                                Nama Karyawan
                                                 @if (request('sortBy') === 'employee_id')
                                                     @if (request('sortDirection') === 'asc')
                                                         &#9650;
@@ -96,7 +96,7 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $data->project->name }}</td>
-                                            <td>{{ $data->employee_id }}</td>
+                                            <td>{{ $data->employe->fullname }}</td>
                                             <td>{{ $data->role }}</td>
                                             <td>{{ $data->assigned_at }}</td>
                                             <td class="d-flex gap-1">
@@ -151,14 +151,14 @@
                                                             <div class="mb-3">
 
                                                                 <label for="employee_id{{ $data->id }}"
-                                                                    class="form-label">Employee ID</label>
+                                                                    class="form-label">Karyawan</label>
                                                                 <select name="employee_id"
                                                                     id="employee_id{{ $data->id }}"
                                                                     class="form-control @error('employee_id') is-invalid @enderror">
                                                                     @foreach ($employee as $item)
                                                                         <option value="{{ $item->id }}"
                                                                             {{ old('employee_id', $data->employee_id) == $item->id ? 'selected' : '' }}>
-                                                                            {{ $item->id }}
+                                                                            {{ $item->fullname }}
                                                                         </option>
                                                                     @endforeach
                                                                 </select>
@@ -286,14 +286,14 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <label for="employee_id" class="form-label">Employee ID</label>
+                                <label for="employee_id" class="form-label">Karyawan</label>
                                 <select name="employee_id" id="employee_id"
                                     class="form-control @error('employee_id') is-invalid @enderror">
-                                    <option value="">--Employee ID--</option>
+                                    <option value="">--Karyawan--</option>
                                     @foreach ($employee as $item)
                                         <option value="{{ $item->id }}"
                                             {{ old('employee_id') == $item->id ? 'selected' : '' }}>
-                                            {{ $item->id }}
+                                            {{ $item->fullname }}
                                         </option>
                                     @endforeach
                                 </select>
