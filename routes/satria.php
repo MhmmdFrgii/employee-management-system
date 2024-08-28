@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectAssignmentController;
 use App\Http\Controllers\ProjectController;
@@ -13,4 +14,14 @@ Route::middleware('auth')->group(function () {
 
     // Absensi user
     Route::resource('absensi', UserAbsenController::class);
+
+    // Route Dashboard untuk Manager
+    Route::middleware('role:manager')->group(function () {
+        Route::get('/manager/dashboard', [DashboardController::class, 'managerDashboard'])->name('manager.dashboard');
+    });
+
+    // Route Dashboard untuk Karyawan
+    Route::middleware('role:karyawan')->group(function () {
+        Route::get('/karyawan/dashboard', [DashboardController::class, 'karyawanDashboard'])->name('karyawan.dashboard');
+    });
 });
