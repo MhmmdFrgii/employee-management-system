@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KanbanBoard;
+use App\Models\KanbanTasks;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
@@ -12,8 +14,8 @@ class MyprojectController extends Controller
      */
     public function index()
     {
-        $project = Project::with(['project_assignments.employe'])->get();
-        return view('myproject.index', compact('project'));
+        $kanbanboard = KanbanBoard::with(['project', 'kanbantasks'])->get();
+        return view('myproject.index', compact('kanbanboard'));
     }
 
     /**

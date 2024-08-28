@@ -15,10 +15,10 @@ class Project extends Model
     {
         return $query->where(function ($query) use ($search) {
             $query->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('description', 'like', '%' . $search . '%')
-                  ->orWhere('start_date', 'like', '%' . $search . '%')
-                  ->orWhere('end_date', 'like', '%' . $search . '%')
-                  ->orWhere('status', 'like', '%' . $search . '%');
+                ->orWhere('description', 'like', '%' . $search . '%')
+                ->orWhere('start_date', 'like', '%' . $search . '%')
+                ->orWhere('end_date', 'like', '%' . $search . '%')
+                ->orWhere('status', 'like', '%' . $search . '%');
         });
     }
 
