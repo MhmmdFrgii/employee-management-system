@@ -23,15 +23,15 @@ class EmployeeDetail extends Model
         'hire_date'
     ];
 
-    function user(): mixed
+    function user()
     {
         return $this->belongsTo(User::class);
     }
-    function department(): mixed
+    function department()
     {
         return $this->belongsTo(Department::class);
     }
-    function position(): mixed
+    function position()
     {
         return $this->belongsTo(Position::class);
     }
