@@ -287,41 +287,47 @@
                             </div>
                             <div class="mb-3">
                                 <label for="employee_id" class="form-label">Employee ID</label>
-                                <input type="text" name="employee_id"
-                                    class="form-control @error('employee_id') is-invalid @enderror"
-                                    value="{{ old('employee_id') }}" id="employee_id">
+                                <select name="employee_id" id="employee_id"
+                                    class="form-control @error('employee_id') is-invalid @enderror">
+                                    <option value="">--Employee ID--</option>
+                                    @foreach ($employee as $item)
+                                        <option value="{{ $item->id }}"
+                                            {{ old('employee_id') == $item->id ? 'selected' : '' }}>
+                                            {{ $item->id }}
+                                        </option>
+                                    @endforeach
+                                </select>
                                 @error('employee_id')
                                     <div class="invalid-feedback">
                                         {{ $message }}
-                                    </div>
-                                @enderror
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="role" class="form-label">Role</label>
+                                    <input type="text" name="role"
+                                        class="form-control @error('role') is-invalid @enderror" id="role"
+                                        value="{{ old('role') }}">
+                                    @error('role')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="assigned_at" class="form-label">Tanggal Penugasan</label>
+                                    <input type="date" name="assigned_at" value="{{ old('assigned_at') }}"
+                                        class="form-control @error('assigned_at') is-invalid @enderror" id="assigned_at">
+                                    @error('assigned_at')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="role" class="form-label">Role</label>
-                                <input type="text" name="role"
-                                    class="form-control @error('role') is-invalid @enderror" id="role"
-                                    value="{{ old('role') }}">
-                                @error('role')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
                             </div>
-                            <div class="mb-3">
-                                <label for="assigned_at" class="form-label">Tanggal Penugasan</label>
-                                <input type="date" name="assigned_at" value="{{ old('assigned_at') }}"
-                                    class="form-control @error('assigned_at') is-invalid @enderror" id="assigned_at">
-                                @error('assigned_at')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-primary">Simpan</button>
-                        </div>
                     </form>
                 </div>
             </div>
