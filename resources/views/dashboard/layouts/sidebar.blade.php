@@ -27,7 +27,7 @@
                 <!-- =================== -->
 
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="/dashboard" aria-expanded="false">
+                    <a class="sidebar-link" href="/administrator/dashboard" aria-expanded="false">
                         <span>
                             <i class="ti ti-aperture"></i>
                         </span>
@@ -43,7 +43,7 @@
                     </a>
                     <ul aria-expanded="false" class="collapse first-level">
                         <li class="sidebar-item">
-                            <a href="/projects" class="sidebar-link">
+                            <a href="{{ route('projects.index') }}" class="sidebar-link">
                                 <div class="round-16 d-flex align-items-center justify-content-center">
                                     <i class="ti ti-circle"></i>
                                 </div>
@@ -51,7 +51,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="/projectAssignments" class="sidebar-link">
+                            <a href="{{ route('projectAssignments.index') }}" class="sidebar-link">
                                 <div class="round-16 d-flex align-items-center justify-content-center">
                                     <i class="ti ti-circle"></i>
                                 </div>
@@ -61,7 +61,7 @@
                     </ul>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="/positions" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('positions.index') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-archive"></i>
                         </span>
@@ -69,7 +69,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="/department" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('department.index') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-category-2"></i>
                         </span>
@@ -77,7 +77,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="/employee" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('employee.index') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-users"></i>
                         </span>
@@ -85,7 +85,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="/applicants" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('applicant.index') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-user-up"></i>
                         </span>
@@ -101,7 +101,7 @@
                     </a>
                     <ul aria-expanded="false" class="collapse first-level">
                         <li class="sidebar-item">
-                            <a href="/salaries" class="sidebar-link">
+                            <a href="{{ route('salaries.index') }}" class="sidebar-link">
                                 <div class="round-16 d-flex align-items-center justify-content-center">
                                     <i class="ti ti-circle"></i>
                                 </div>
@@ -109,7 +109,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="/leave-request" class="sidebar-link">
+                            <a href="{{ route('leave.index') }}" class="sidebar-link">
                                 <div class="round-16 d-flex align-items-center justify-content-center">
                                     <i class="ti ti-circle"></i>
                                 </div>
@@ -127,7 +127,7 @@
                     </a>
                     <ul aria-expanded="false" class="collapse first-level">
                         <li class="sidebar-item">
-                            <a href="/kanbanboard" class="sidebar-link">
+                            <a href="{{ route('kanbanboard.index') }}" class="sidebar-link">
                                 <div class="round-16 d-flex align-items-center justify-content-center">
                                     <i class="ti ti-circle"></i>
                                 </div>
@@ -135,7 +135,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="/kanbantasks" class="sidebar-link">
+                            <a href="{{ route('kanbantasks.index') }}" class="sidebar-link">
                                 <div class="round-16 d-flex align-items-center justify-content-center">
                                     <i class="ti ti-circle"></i>
                                 </div>

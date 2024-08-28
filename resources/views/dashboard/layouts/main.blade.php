@@ -53,7 +53,14 @@
     <div class="page-wrapper" id="main-wrapper" data-theme="blue_theme" data-layout="vertical" data-sidebartype="full"
         data-sidebar-position="fixed" data-header-position="fixed">
         <!-- Sidebar Start -->
-        @include('dashboard.layouts.sidebar')
+
+        @if (Auth::user()->hasRole('manajer'))
+            @include('dashboard.layouts.sidebar')
+        @else
+            @include('dashboard.layouts.sidebar-user')
+        @endif
+
+
         <!--  Sidebar End -->
 
         <!--  Main wrapper -->

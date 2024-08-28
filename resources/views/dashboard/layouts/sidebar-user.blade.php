@@ -35,7 +35,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="/my-project" aria-expanded="false">
+                    <a class="sidebar-link" href="/employee/myproject" aria-expanded="false">
                         <span class="d-flex">
                             <i class="ti ti-category"></i>
                         </span>
@@ -69,7 +69,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="/kanban" aria-expanded="false">
+                    <a class="sidebar-link" href="/userKaryawan" aria-expanded="false">
                         <span>
                             <i class="ti ti-users"></i>
                         </span>

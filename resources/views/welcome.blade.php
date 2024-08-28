@@ -66,9 +66,23 @@
                             <li class="nav-item">
                                 <a class="nav-link scroll" href="#projects">Proyek</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">Masuk</a>
-                            </li>
+
+                            @auth
+
+                                @if (Auth::user()->hasRole('manajer'))
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('admin.dashboard') }}">Home</a>
+                                    </li>
+                                @elseif(Auth::user()->hasRole('karyawan'))
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('employee.dashboard') }}">Home</a>
+                                    </li>
+                                @endif
+                            @else
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('login') }}">Masuk</a>
+                                </li>
+                            @endauth
                         </ul>
                     </nav>
                 </div>
@@ -96,7 +110,9 @@
                         <!-- Welcome Thumb -->
                         <div class="welcome-thumb mx-auto" data-aos="fade-left" data-aos-delay="500"
                             data-aos-duration="1000">
-                            <img class="img-fluid" src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/landingpage/dist/images/backgrounds/business-woman-checking-her-mail.png" alt="">
+                            <img class="img-fluid"
+                                src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/landingpage/dist/images/backgrounds/business-woman-checking-her-mail.png"
+                                alt="">
                         </div>
                     </div>
                 </div>
@@ -300,8 +316,11 @@
                         <!-- Work Content -->
                         <div class="work-content text-center">
                             <h2 class="text-white">Bagaimana Employee Management System Bekerja?</h2>
-                            <p class="d-none d-sm-block text-white my-3 mt-sm-4 mb-sm-5">Sistem ini memudahkan Anda dalam mengelola karyawan, melacak proyek, dan mengatur alur kerja tim secara efisien. Semua data karyawan terintegrasi dalam satu platform yang mudah digunakan.</p>
-                            <p class="d-block d-sm-none text-white my-3">Sistem ini memudahkan Anda dalam mengelola karyawan, melacak proyek, dan mengatur alur kerja tim secara efisien.</p>
+                            <p class="d-none d-sm-block text-white my-3 mt-sm-4 mb-sm-5">Sistem ini memudahkan Anda
+                                dalam mengelola karyawan, melacak proyek, dan mengatur alur kerja tim secara efisien.
+                                Semua data karyawan terintegrasi dalam satu platform yang mudah digunakan.</p>
+                            <p class="d-block d-sm-none text-white my-3">Sistem ini memudahkan Anda dalam mengelola
+                                karyawan, melacak proyek, dan mengatur alur kerja tim secara efisien.</p>
                         </div>
                     </div>
                 </div>
@@ -311,10 +330,14 @@
                         <div class="text-center p-3">
                             <!-- Work Icon -->
                             <div class="work-icon">
-                                <img class="avatar-md" src="{{ asset('assets/landing-page/img/icon/work/download.png') }}" alt="Download Icon">
+                                <img class="avatar-md"
+                                    src="{{ asset('assets/landing-page/img/icon/work/download.png') }}"
+                                    alt="Download Icon">
                             </div>
                             <h3 class="text-white py-3">Buat Akun Karyawan</h3>
-                            <p class="text-white">Mulailah dengan membuat akun untuk setiap karyawan Anda. Dengan akun ini, karyawan dapat mengakses informasi mereka sendiri dan mengikuti perkembangan proyek secara real-time.</p>
+                            <p class="text-white">Mulailah dengan membuat akun untuk setiap karyawan Anda. Dengan akun
+                                ini, karyawan dapat mengakses informasi mereka sendiri dan mengikuti perkembangan proyek
+                                secara real-time.</p>
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
@@ -322,10 +345,13 @@
                         <div class="text-center p-3">
                             <!-- Work Icon -->
                             <div class="work-icon">
-                                <img class="avatar-md" src="{{ asset('assets/landing-page/img/icon/work/settings.png') }}" alt="Settings Icon">
+                                <img class="avatar-md"
+                                    src="{{ asset('assets/landing-page/img/icon/work/settings.png') }}"
+                                    alt="Settings Icon">
                             </div>
                             <h3 class="text-white py-3">Kelola Proyek</h3>
-                            <p class="text-white">Atur dan distribusikan tugas di antara tim. Sistem ini membantu Anda mengawasi kemajuan proyek, memastikan semua tugas diselesaikan tepat waktu.</p>
+                            <p class="text-white">Atur dan distribusikan tugas di antara tim. Sistem ini membantu Anda
+                                mengawasi kemajuan proyek, memastikan semua tugas diselesaikan tepat waktu.</p>
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
@@ -333,10 +359,13 @@
                         <div class="text-center p-3">
                             <!-- Work Icon -->
                             <div class="work-icon">
-                                <img class="avatar-md" src="{{ asset('assets/landing-page/img/icon/work/app.png') }}" alt="App Icon">
+                                <img class="avatar-md" src="{{ asset('assets/landing-page/img/icon/work/app.png') }}"
+                                    alt="App Icon">
                             </div>
                             <h3 class="text-white py-3">Pantau Performa</h3>
-                            <p class="text-white">Lihat rekap pekerjaan karyawan untuk mengidentifikasi performa individu dan tim. Analisis ini membantu Anda mengambil keputusan strategis untuk pengembangan lebih lanjut.</p>
+                            <p class="text-white">Lihat rekap pekerjaan karyawan untuk mengidentifikasi performa
+                                individu dan tim. Analisis ini membantu Anda mengambil keputusan strategis untuk
+                                pengembangan lebih lanjut.</p>
                         </div>
                     </div>
                 </div>
@@ -366,7 +395,9 @@
                                         src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/dark-logo.svg"
                                         alt="logo-brand">
                                 </a>
-                                <p class="mt-2 mb-3">Employee Management System adalah platform untuk mengelola karyawan, mengawasi proyek, dan memfasilitasi komunikasi tim secara efisien. Mulai kelola karyawan Anda dengan sistem kami sekarang!</p>
+                                <p class="mt-2 mb-3">Employee Management System adalah platform untuk mengelola
+                                    karyawan, mengawasi proyek, dan memfasilitasi komunikasi tim secara efisien. Mulai
+                                    kelola karyawan Anda dengan sistem kami sekarang!</p>
                                 <!-- Social Icons -->
                                 <div class="social-icons d-flex">
                                     <a class="facebook" href="#">
@@ -447,7 +478,8 @@
                             <div
                                 class="copyright-area d-flex flex-wrap justify-content-center justify-content-sm-between text-center py-4">
                                 <!-- Copyright Left -->
-                                <div class="copyright-left">&copy; Copyrights 2024 Employee Management System. All rights reserved.</div>
+                                <div class="copyright-left">&copy; Copyrights 2024 Employee Management System. All
+                                    rights reserved.</div>
                                 <!-- Copyright Right -->
                                 <div class="copyright-right">Made with <i class="fas fa-heart"></i></div>
                             </div>

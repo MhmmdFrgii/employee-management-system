@@ -26,34 +26,48 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::middleware('role:manajer')->group(function () {
 
-    // Route Project
-    Route::resource('projects', ProjectController::class);
-    Route::patch('/projects/{id}/complete', [ProjectController::class, 'markAsCompleted'])->name('projects.complete');
+        Route::prefix('administrator')->group(function () {
+            Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    // Route Project Assignments
-    Route::resource('projectAssignments', ProjectAssignmentController::class);
+            Route::resource('projects', ProjectController::class);
+            Route::patch('/projects/{id}/complete', [ProjectController::class, 'markAsCompleted'])->name('projects.complete');
 
-    // Route notification
-    Route::resource('notifikasi', NotificationController::class);
+            Route::resource('projectAssignments', ProjectAssignmentController::class);
 
-    // Route Department
-    Route::resource('department', DepartmentController::class);
+            Route::resource('department', DepartmentController::class);
 
-    //Route salaries
-    Route::resource('salaries', SalarieController::class);
+            Route::resource('salaries', SalarieController::class);
 
-    // Absensi user
+            Route::resource('positions', PositionController::class);
+
+            Route::resource('employee', EmployeeDetailsController::class)->except('show');
+
+            // route attendence
+            Route::resource('attendance', AttendanceController::class);
+            Route::get('/mark-absentees', [AttendanceController::class, 'markAbsentees']);
+
+            // Route applicants
+            Route::get('/applicants', [UserController::class, 'index'])->name('applicant.index');
+            Route::get('/applicant/detail/{id}', [UserController::class, 'detail'])->name('applicant.detail');
+            Route::patch('/applicant/{applicant}', [UserController::class, 'update'])->name('applicant.update');
+        });
+    });
+
+    Route::middleware('role:karyawan')->group(function () {
+
+        Route::prefix('employee')->group(function () {
+            Route::get('dashboard', [DashboardController::class, 'userDashboard'])->name('employee.dashboard');
+
+            Route::resource('notifikasi', NotificationController::class);
+
+            Route::resource('myproject', MyprojectController::class);
+        });
+    });
+
+
     Route::resource('absensi', UserAbsenController::class);
-
-    // Route applicants 
-    Route::get('/applicants', [UserController::class, 'index'])->name('applicant.index');
-    Route::get('/applicant/detail/{id}', [UserController::class, 'detail'])->name('applicant.detail');
-    Route::patch('/applicant/{applicant}', [UserController::class, 'update'])->name('applicant.update');
-
-    // Route positions
-    Route::resource('positions', PositionController::class);
 
     Route::prefix('leave-request')->group(function () {
         Route::get('', [LeaveRequestController::class, 'index'])->name('leave.index');
@@ -67,19 +81,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('kanbanboard', KanbanBoardController::class);
     Route::resource('kanbantasks', KanbanTasksController::class);
 
-    // route employee
-    Route::resource('employee', EmployeeDetailsController::class)->except('show');
     Route::get('/userKaryawan', [EmployeeDetailsController::class, 'userKaryawan']);
 
-    // route attendence
-    Route::resource('attendance', AttendanceController::class);
-    Route::get('/mark-absentees', [AttendanceController::class, 'markAbsentees']);
-
-    Route::resource('myproject', MyprojectController::class);
-
-    Route::prefix('employee')->group(function () {
-        Route::get('dashboard', [DashboardController::class, 'userDashboard'])->name('employee.dashboard');
-    });
 });
 
 require __DIR__ . '/auth.php';
