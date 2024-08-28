@@ -65,7 +65,6 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::resource('kanbanboard', KanbanBoardController::class);
-
     Route::resource('kanbantasks', KanbanTasksController::class);
 
     // route employee
