@@ -59,7 +59,7 @@
                                 <th>
                                     <a
                                         href="{{ route('employee.index', array_merge(request()->query(), ['sortBy' => 'address', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
-                                        Phone
+                                        Address
                                         @if (request('sortBy') === 'address')
                                             @if (request('sortDirection') === 'asc')
                                                 &#9650;
@@ -84,9 +84,9 @@
                                 </th>
                                 <th>
                                     <a
-                                        href="{{ route('employee.index', array_merge(request()->query(), ['sortBy' => 'hire_date', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
-                                        Hire Date
-                                        @if (request('sortBy') === 'hire_date')
+                                        href="{{ route('employee.index', array_merge(request()->query(), ['sortBy' => 'position', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        Position
+                                        @if (request('sortBy') === 'position')
                                             @if (request('sortDirection') === 'asc')
                                                 &#9650;
                                             @else
@@ -97,9 +97,9 @@
                                 </th>
                                 <th>
                                     <a
-                                        href="{{ route('employee.index', array_merge(request()->query(), ['sortBy' => 'position', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
-                                        Position
-                                        @if (request('sortBy') === 'position')
+                                        href="{{ route('employee.index', array_merge(request()->query(), ['sortBy' => 'hire_date', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        Hire Date
+                                        @if (request('sortBy') === 'hire_date')
                                             @if (request('sortDirection') === 'asc')
                                                 &#9650;
                                             @else
@@ -119,8 +119,8 @@
                                     <td>{{ $employee->phone }}</td>
                                     <td>{{ $employee->address }}</td>
                                     <td>{{ $employee->department->name }}</td>
-                                    <td>{{ $employee->hire_date }}</td>
                                     <td>{{ $employee->position->name }}</td>
+                                    <td>{{ $employee->hire_date }}</td>
                                     <td>
                                         <a href="{{ route('employee.edit', $employee->id) }}"
                                             class="btn btn-warning">Edit</a>

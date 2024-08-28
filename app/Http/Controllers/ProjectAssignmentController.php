@@ -31,6 +31,8 @@ class ProjectAssignmentController extends Controller
         $project = Project::all();
         $employee = EmployeeDetail::all();
         $projectAssignment = $query->paginate(5);
+        $projectAssignment->appends($request->all());
+
         return view('projectAssignments.index', compact('project', 'employee', 'projectAssignment', 'sortBy', 'sortDirection', 'search'));
     }
 

@@ -27,6 +27,7 @@ class SalarieController extends Controller
 
         // Paginasi
         $salaries = $query->paginate(10); // Menentukan jumlah item per halaman
+        $salaries->appends($request->all());
 
         return view('salaries.index', compact('salaries'));
     }

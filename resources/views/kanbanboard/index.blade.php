@@ -1,87 +1,153 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
-<div class="container">
-    {{-- Form Create Board --}}
-    <div class="card mb-4 my-5">
-        <div class="card-header">
-            <h4>Create Board</h4>
+@extends('dashboard.layouts.main')
+
+@section('content')
+    <div class="container py-2">
+        <div class="d-flex justify-content-between mb-4">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Pilih Kanban
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    @forelse ($kanbanboards as $board)
+                        <li><a class="dropdown-item" href="{{ route('kanbanboard.index', ['id' => $board->id]) }}">
+                                {{ $board->name }}
+                            </a>
+                        </li>
+                    @empty
+                    @endforelse
+                </ul>
+            </div>
+            <h1 class="text-center m-0">{{ $kanbanboard->name }}</h1>
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                data-bs-target="#createTaskModal{{ $kanbanboard->id }}">
+                Create
+            </button>
         </div>
-        <div class="card-body">
-            @if (session('status'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('status') }}
-                </div>
-                @endif
-
-            <form action="{{ route('kanbanboard.store') }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label for="name" class="form-label">Board Name</label>
-                    <input type="text" name="name" class="form-control" id="name" placeholder="Enter board name" value="{{ old('name') }}">
-                    @error('name')
-                    <div class="text-danger">{{ $message }}</div>
-                    @enderror
-
-                    <label for="name" class="form-label">Project</label>
-                    <select name="projects_id" id="projects_id" class="form-select">
-                        <option value="">-- pilih projek --</option>
-                        @foreach ($projects as $p)
-                            <option value="{{ $p->id }}" {{ old('projects') == $p->id ? 'selected' : '' }}>{{ $p->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('projects_id')
-                    <div class="text-danger">{{ $message }}</div>
-                    @enderror
-                    <div class="row">
-                        <label for="description" class="form-label mt-2">Description</label>
+        <div class="row g-4">
+            <!-- To Do Column -->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        To Do
                     </div>
-                    <textarea name="description" id="" cols="60" rows="5" class="form-textarea my-2" placeholder="Enter Description">{{ old('description') }}</textarea>
-                    @error('description')
-                    <div class="text-danger">{{ $message }}</div>
-                    @enderror
+                    <div class="card-body">
+                        @forelse ($todo as $task)
+                            <div class="card mb-3 bg-{{ $task->color }} text-white">
+                                <div
+                                    class="p-2
+                                card-body d-flex justify-content-between align-items-center">
+                                    <p class="m-0">{{ $task->title }}</p>
+                                    <form action="{{ route('kanbantasks.update', $task->id) }}" method="post"
+                                        class="m-1">
+                                        @method('patch')
+                                        @csrf
+                                        <input type="hidden" name="status" value="progress">
+                                        <button class="btn">
+                                            <i class='bx bx-check-circle'></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @empty
+                        @endforelse
+                    </div>
+                    <div class="card-footer text-center">
+                        <button class="btn btn-sm btn-outline-primary">+ Add Task</button>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Create Board</button>
-            </form>
+            </div>
+
+            <!-- In Progress Column -->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header bg-warning text-white">
+                        In Progress
+                    </div>
+                    <div class="card-body">
+                        @forelse ($progress as $task)
+                            <div class="card mb-3 bg-danger text-white">
+                                <div class="p-2 card-body  d-flex justify-content-between align-items-center">
+                                    <p class="m-0">{{ $task->title }}</p>
+                                    <form action="{{ route('kanbantasks.update', $task->id) }}" method="post"
+                                        class="m-1">
+                                        @method('patch')
+                                        @csrf
+                                        <input type="hidden" name="status" value="done">
+                                        <button class="btn">
+                                            <i class='bx bx-check-circle'></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @empty
+                        @endforelse
+                    </div>
+                    <div class="card-footer text-center">
+                        <button class="btn btn-sm btn-outline-warning">+ Add Task</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Done Column -->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        Done
+                    </div>
+                    <div class="card-body">
+                        @forelse ($done as $task)
+                            <div class="card mb-3 bg-primary text-white">
+                                <div class="p-2 card-body  d-flex justify-content-between align-items-center">
+                                    <p class="m-0">{{ $task->title }}</p>
+                                    <form action="{{ route('kanbantasks.update', $task->id) }}" method="post"
+                                        class="m-1">
+                                        @method('patch')
+                                        @csrf
+                                        <input type="hidden" name="status" value="progress">
+                                        <button class="btn">
+                                            <i class='bx bx-check-circle'></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @empty
+                        @endforelse
+                    </div>
+                    <div class="card-footer text-center">
+                        <button class="btn btn-sm btn-outline-success">+ Add Task</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    {{-- Tabel List Boards --}}
-    <div class="row">
-        <div class="col-12">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Board Name</th>
-                        <th>Project</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($kanbanboard as $b)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $b->name }}</td>
-                            <td>{{ $b->projects->name }}</td> <!-- Akses relasi Project -->
-                            <td>{{ $b->description }}</td>
-                            <td>
-                                <a href="{{ route('kanbanboard.edit', $b->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('kanbanboard.destroy', $b->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus board ini?');">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+
+    <div class="modal fade" id="createTaskModal{{ $kanbanboard->id }}" tabindex="-1"
+        aria-labelledby="createTaskModalLabel{{ $kanbanboard->id }}" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createTaskModalLabel{{ $kanbanboard->id }}">Create New Task</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('kanbantasks.store') }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="hidden" name="kanban_boards_id" value="{{ $kanbanboard->id }}">
+                            <input type="hidden" name="color" value="primary">
+                            <input type="text" name="title" class="form-control @error('title') is-invalid @enderror"
+                                id="title" value="{{ old('title') }}">
+                            @error('title')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</x-app-layout>
+@endsection

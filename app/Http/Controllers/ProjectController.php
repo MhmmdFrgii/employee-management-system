@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProjectRequest;
+use App\Models\KanbanBoard;
 use App\Models\Project;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -55,6 +56,7 @@ class ProjectController extends Controller
 
         // Dapatkan hasil query dengan pagination
         $projects = $query->orderBy($sortBy, $sortDirection)->paginate(10);
+        $projects->appends($request->all());
 
         return view('projects.index', compact('projects'));
     }
@@ -64,8 +66,11 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        Project::create($request->validated());
-
+        $project = Project::create($request->validated());
+        KanbanBoard::create([
+            'name' => $project->name,
+            'project_id' => $project->id
+        ]);
         return redirect()->route('projects.index')->with('success', 'Project berhasil ditambah');
     }
 
