@@ -13,18 +13,18 @@ class SalarieController extends Controller
     public function index(Request $request)
     {
         $query = Salarie::with('employeeDetails');
-        $employee = EmployeeDetail::all();
+        $employees = EmployeeDetail::all();
 
-        
+
         if ($request->has('search')) {
             $query->whereHas('employeeDetails', function ($q) use ($request) {
                 $q->where('fullname', 'like', '%' . $request->search . '%');
             })
-            ->orWhere('amount', 'like', '%' . $request->search . '%')
-            ->orWhere('payment_date', 'like', '%' . $request->search . '%');
+                ->orWhere('amount', 'like', '%' . $request->search . '%')
+                ->orWhere('payment_date', 'like', '%' . $request->search . '%');
         }
 
-        
+
         if ($request->has('sortBy') && $request->has('sortDirection')) {
             $query->orderBy($request->sortBy, $request->sortDirection);
         }
@@ -33,7 +33,7 @@ class SalarieController extends Controller
 
         $salaries->appends($request->all());
 
-        return view('salaries.index', compact('salaries', 'employee'));
+        return view('salaries.index', compact('salaries', 'employees'));
     }
 
     /**

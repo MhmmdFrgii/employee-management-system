@@ -22,7 +22,7 @@ class SalarieRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'employee' => 'required',
+            'employee_id' => 'required',
             'amount' => 'required|numeric',
             'payment_date' => 'required|date',
         ];
@@ -31,7 +31,7 @@ class SalarieRequest extends FormRequest
     public function messages()
     {
         return [
-            'employee.required' => 'Karyawan harus diisi.',
+            'employee_id.required' => 'Karyawan harus diisi.',
             'amount.required' => 'Gaji harus diisi.',
             'payment_date.required' => 'Tanggal harus diisi'
         ];

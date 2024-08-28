@@ -1,4 +1,4 @@
-{{-- @extends('dashboard.layouts.main')
+@extends('dashboard.layouts.main')
 
 @section('content')
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -76,6 +76,7 @@
                         <tbody>
                             @forelse ($salaries as $salary)
                                 <tr>
+
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $salary->employeeDetails->fullname }}</td>
                                     <td>Rp {{ number_format($salary->amount, 2, ',', '.') }}</td>
@@ -204,14 +205,18 @@
                     <form action="{{ route('salaries.store') }}" method="POST">
                         @csrf
                         <div class="mb-3">
-                            <label for="employee" class="form-label">Employee</label>
-                            <input type="text" name="employee"
-                                class="form-control @error('employee') is-invalid @enderror" id="employee"
-                                value="{{ old('employee') }}">
-                            @error('employee')
+                            <label for="employee_id" class="form-label">Employee</label>
+                            <select name="employee_id" id="employee_id" class="form-control">
+                                @foreach ($employees as $employee)
+                                    <option value="{{ $employee->id }}" {{ $employee->id == old('employee_id', $employee->id) ? 'selected' : '' }}>
+                                        {{ $employee->fullname }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('employee_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                        </div>
+                        </div>        
                         <div class="mb-3">
                             <label for="amount" class="form-label">Amount</label>
                             <input type="text" name="amount"
@@ -236,9 +241,9 @@
             </div>
         </div>
     </div>
-@endsection --}}
+@endsection
 
-
+{{-- 
 @extends('dashboard.layouts.main')
 
 @section('content')
@@ -447,9 +452,9 @@
                         <div class="mb-3">
                             <label for="employee_id" class="form-label">Employee</label>
                             <select name="employee_id" id="employee_id" class="form-control">
-                                @foreach ($employee as $employees)
-                                    <option value="{{ $employees->id }}">
-                                        {{ $employees->fullname }}
+                                @foreach ($employees $employee)
+                                    <option value="{{ $employee->id }}">
+                                        {{ $employee->fullname }}
                                     </option>
                                 @endforeach
                             </select>
@@ -481,4 +486,4 @@
             </div>
         </div>
     </div>
-@endsection
+@endsection --}}
