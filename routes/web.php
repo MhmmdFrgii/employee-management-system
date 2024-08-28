@@ -47,9 +47,10 @@ Route::middleware('auth')->group(function () {
     // Absensi user
     Route::resource('absensi', UserAbsenController::class);
 
-    // Route applicants
-    Route::get('/applicants', [UserController::class, 'index']);
+    // Route applicants 
+    Route::get('/applicants', [UserController::class, 'index'])->name('applicant.index');
     Route::get('/applicant/detail/{id}', [UserController::class, 'detail'])->name('applicant.detail');
+    Route::patch('/applicant/{applicant}', [UserController::class, 'update'])->name('applicant.update');
 
     // Route positions
     Route::resource('positions', PositionController::class);
