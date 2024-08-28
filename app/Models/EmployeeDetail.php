@@ -25,7 +25,7 @@ class EmployeeDetail extends Model
 
     function user(): mixed
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
     function department(): mixed
     {
@@ -35,8 +35,8 @@ class EmployeeDetail extends Model
     {
         return $this->belongsTo(Position::class);
     }
-    function attendance(): mixed
+    function attendances(): mixed
     {
-        return $this->hasMany(Attendance::class);
+        return $this->hasMany(Attendance::class, 'employee_id');
     }
 }

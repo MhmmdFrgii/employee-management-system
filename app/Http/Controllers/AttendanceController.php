@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Redis;
 
 class AttendanceController extends Controller
 {
-    // Mark Absentees today 
+    // Mark Absentees today
     public function markAbsentees()
     {
         $today = Carbon::today()->toDateString();
