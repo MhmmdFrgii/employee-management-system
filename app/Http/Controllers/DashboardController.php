@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendance;
 use App\Models\Department;
 use App\Models\EmployeeDetail;
 use App\Models\Project;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-
     public function index()
     {
         $employee_count = EmployeeDetail::count();
         $project_count = Project::count();
         $department_count = Department::count();
-
 
         return view('dashboard.index', compact('employee_count', 'project_count', 'department_count'));
     }
@@ -56,13 +56,34 @@ class DashboardController extends Controller
                 ->count();
         }
 
+        // Mendapatkan user yang sedang login
+        $user = Auth::user();
+
+        // Ambil data attendance dengan relasi ke employee_detail dan user
+        $attendanceData = Attendance::selectRaw('status, COUNT(*) as count')
+            ->whereHas('employeeDetail', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->groupBy('status')
+            ->pluck('count', 'status')
+            ->toArray();
+
+        // Mendefinisikan status yang akan ditampilkan
+        $statuses = ['present', 'absent', 'late', 'alpha'];
+        $attendanceCounts = [];
+
+        // Mengisi array attendanceCounts berdasarkan status yang telah didefinisikan
+        foreach ($statuses as $status) {
+            $attendanceCounts[] = $attendanceData[$status] ?? 0;
+        }
+
         return view('dashboard.employee.index', [
             'activeProjects' => $activeProjects,
             'completedProjects' => $completedProjects,
             'months' => $months,
             'activeCounts' => $activeCounts,
-            'completedCounts' => $completedCounts
+            'completedCounts' => $completedCounts,
+            'attendanceCounts' => $attendanceCounts,
         ]);
     }
-
 }
