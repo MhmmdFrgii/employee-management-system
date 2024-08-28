@@ -35,4 +35,8 @@ class EmployeeDetail extends Model
     {
         return $this->belongsTo(Position::class);
     }
+    function attendance(): mixed
+    {
+        return $this->hasMany(Attendance::class);
+    }
 }

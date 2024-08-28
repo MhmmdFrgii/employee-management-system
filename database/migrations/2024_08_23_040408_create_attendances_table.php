@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
             // dummy column from employeDetail
-            $table->string('employee_id')->default('user');
+            $table->foreignId('employee_id')->constrained('employee_details')->onDelete('cascade');
             $table->date('date');
             $table->enum('status', ['present', 'absent', 'late'])->default('present');
             $table->timestamps();
