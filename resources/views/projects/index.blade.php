@@ -94,6 +94,19 @@
                                         @endif
                                     </a>
                                 </th>
+                                <th class="text-center">
+                                    <a
+                                        href="{{ route('projects.index', array_merge(request()->query(), ['sortBy' => 'completed_at', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        Complated
+                                        @if (request('sortBy') === 'completed_at')
+                                            @if (request('sortDirection') === 'asc')
+                                                &#9650;
+                                            @else
+                                                &#9660;
+                                            @endif
+                                        @endif
+                                    </a>
+                                </th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -104,7 +117,10 @@
                                     <td>{{ $project->name }}</td>
                                     <td>{{ Str::limit($project->description, 35) }}</td>
                                     <td>{{ $project->status }}</td>
+                                    <td class="text-center">{{ $project->completed_at ? $project->completed_at : '-' }}</td>
                                     <td class="text-center">
+                                        <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#completeModal{{ $project->id }}" type="button">Complete</button>
                                         <button data-bs-target="#editModal{{ $project->id }}" data-bs-toggle="modal"
                                             class="btn btn-warning btn-sm">Edit</button>
                                         <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
@@ -112,6 +128,34 @@
                                             type="button">Delete</button>
                                     </td>
                                 </tr>
+
+                                <!-- Modal Complete -->
+                                <div class="modal fade" id="completeModal{{ $project->id }}" tabindex="-1"
+                                    aria-labelledby="completeModalLabel" style="display: none;" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header d-flex align-items-center">
+                                                <h5 class="modal-title" id="completeModalLabel">Konfirmasi</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Apakah anda yakin proyek ini telah selesai?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button"
+                                                    class="btn btn-light-danger text-danger font-medium waves-effect text-start"
+                                                    data-bs-dismiss="modal">Cancel</button>
+                                                <form action="{{ route('projects.complete', $project->id) }}" method="post">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button class="btn btn-success" type="submit">Yes, Mark as Completed</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
 
                                 <!-- Modal Delete -->
                                 <div class="modal fade" id="vertical-center-modal{{ $project->id }}" tabindex="-1"
@@ -288,7 +332,10 @@
                                 </div>
                             @enderror
                         </div>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        </div>
                     </form>
                 </div>
             </div>
