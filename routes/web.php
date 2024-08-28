@@ -7,6 +7,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SalarieController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MyprojectController;
 use App\Http\Controllers\UserAbsenController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DepartmentController;
@@ -18,9 +19,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\EmployeeDetailsController;
 use App\Http\Controllers\ProjectAssignmentController;
 
-Route::middleware('guest')->group(function () {
-    Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');
-});
+Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -76,10 +75,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('attendance', AttendanceController::class);
     Route::get('/mark-absentees', [AttendanceController::class, 'markAbsentees']);
 
+    Route::resource('myproject', MyprojectController::class);
+
     Route::prefix('employee')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'userDashboard'])->name('employee.dashboard');
     });
-
 });
 
 require __DIR__ . '/auth.php';
