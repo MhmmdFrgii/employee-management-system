@@ -184,8 +184,8 @@
                 </div>
 
                 <!-- Pagination Links -->
-                <div class="mt-3">
-                    {{ $salaries->links('pagination::bootstrap-4') }}
+                <div class="mt-3 justify-content-end">
+                    {{ $salaries->links() }}
                 </div>
             </div>
         </div>

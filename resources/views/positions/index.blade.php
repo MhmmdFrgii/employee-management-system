@@ -147,8 +147,8 @@
                             </tbody>
                         </table>
 
-                        <div class="mt-3">
-                            {{ $positions->links('pagination::bootstrap-4') }}
+                        <div class="mt-3 justify-content-end">
+                            {{ $positions->links() }}
                         </div>
                     </div>
                 </div>

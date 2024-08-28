@@ -203,7 +203,7 @@
                         </tbody>
                     </table>
 
-                    <div class="mt-3">
+                    <div class="mt-3 justify-content-end">
                         {{ $leaveRequest->links() }}
                     </div>
                 </div>

@@ -269,8 +269,8 @@
                 </div>
 
                 <!-- Pagination Links -->
-                <div class="mt-3">
-                    {{ $projects->links('pagination::bootstrap-4') }}
+                <div class="mt-3 justify-content-end">
+                    {{ $projects->links() }}
                 </div>
             </div>
         </div>

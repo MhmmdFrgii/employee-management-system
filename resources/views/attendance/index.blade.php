@@ -117,8 +117,8 @@
                         </table>
 
                         <!-- Pagination Links -->
-                        <div class="mt-3">
-                            {{ $attendances->links('pagination::bootstrap-4') }}
+                        <div class="mt-3 justify-content-end">
+                            {{ $attendances->links() }}
                         </div>
                     </div>
                 @endif

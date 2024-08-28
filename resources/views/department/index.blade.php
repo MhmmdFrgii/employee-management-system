@@ -160,8 +160,8 @@
                         </tbody>
                     </table>
 
-                    <div class="mt-3">
-                        {{ $departments->links('pagination::bootstrap-4') }}
+                    <div class="mt-3 justify-content-end">
+                        {{ $departments->links() }}
                     </div>
                 </div>
             </div>

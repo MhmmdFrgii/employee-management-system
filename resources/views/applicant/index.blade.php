@@ -36,11 +36,11 @@
                                     @else
                                         <img src="{{ asset('assets/images/no-data.png') }}" alt="avatar" class="rounded-1 img-fluid" width="170px" height="170px">
                                     @endif
-                
+
                                     <div class="card-body p-0 mt-2">
                                         <h5 class="card-title">{{ $user->name}}</h5>
                                         <p class="card-text">{{ $user->employeeDetail->department->name ?? 'No Department'}}</p>
-                                    </div>                                   
+                                    </div>
                                     <a href="{{ route('applicant.detail', $user->id) }}" class="btn btn-primary mt-3">Detail</a>
                                 </div>
                             </div>
@@ -48,7 +48,7 @@
                     @empty
                     @endforelse
                 </div>
-                    <div class="pagination justify-content-center">
+                    <div class="justify-content-end">
                         {{ $users->links() }}
                     </div>
                 </div>

@@ -172,8 +172,8 @@
                             @endforelse
                         </tbody>
                     </table>
-                    <div class="mt-3">
-                        {{ $employees->links('pagination::bootstrap-4') }}
+                    <div class="mt-3 justify-content-end">
+                        {{ $employees->links() }}
                     </div>
                 </div>
             </div>
