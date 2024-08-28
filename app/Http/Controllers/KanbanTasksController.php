@@ -23,7 +23,7 @@ class KanbanTasksController extends Controller
     {
         $data = $request->all();
         $kanbantask->update($data);
-        return redirect()->route('kanbanboard.index')->with('status', 'Kanban Tasks berhasil diupdate');
+        return redirect()->route('kanbanboard.index', ['id' => $kanbantask->kanban_boards_id])->with('status', 'Kanban Tasks berhasil diupdate');
     }
 
     /**

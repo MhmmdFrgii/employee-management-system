@@ -50,11 +50,6 @@ class EmployeeDetailsController extends Controller
             )
             ->paginate(10);
         return view('employee.index', compact('employees'));
-
-        $employees = EmployeeDetail::paginate(10);
-        $employees->appends($request->all());
-
-        return view('employee.index', compact('employees'));
     }
 
     public function userKaryawan()

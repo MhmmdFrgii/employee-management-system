@@ -14,4 +14,9 @@ class KanbanTasks extends Model
     {
         return $this->belongsTo(KanbanBoard::class, 'kanban_boards_id');
     }
+
+    public function employee()
+    {
+        return $this->belongsTo(EmployeeDetail::class, 'employee_id');
+    }
 }
