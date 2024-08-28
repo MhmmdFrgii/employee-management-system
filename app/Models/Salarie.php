@@ -12,9 +12,14 @@ class Salarie extends Model
     protected $table = 'salaries';
 
     protected $fillable = [
-        'employee',
+        'employee_id',
         'amount',
         'payment_date',
     ];
+
+    public function employeeDetails()
+    {
+        return $this->belongsTo(EmployeeDetail::class);
+    }
 
 }
