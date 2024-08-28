@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreKanbanBoardRequest;
 use App\Models\KanbanBoard;
+use App\Models\KanbanTasks;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
@@ -12,19 +13,23 @@ class KanbanBoardController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $projects = Project::all();
-        $kanbanboard = KanbanBoard::all(); // Perbaikan nama variabel
-        return view('kanbanboard.index', compact('kanbanboard', 'projects'));
-    }
+        $kanbanboardID = $request->id ?  $request->id : 1;
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        // Tidak diperlukan jika form create ada di halaman index
+        $kanbanboards = KanbanBoard::all(); // Perbaikan nama variabel 
+        $todo = KanbanTasks::where('kanban_boards_id', $kanbanboardID)
+            ->where('status', 'todo')
+            ->get();
+        $progress = KanbanTasks::where('kanban_boards_id', $kanbanboardID)
+            ->where('status', 'progress')
+            ->get();
+        $done = KanbanTasks::where('kanban_boards_id', $kanbanboardID)
+            ->where('status', 'done')
+            ->get();
+
+        $kanbanboard = KanbanBoard::where('id', $kanbanboardID)->first();
+        return view('kanbanboard.index', compact('kanbanboards', 'kanbanboard', 'todo', 'progress', 'done'));
     }
 
     /**
@@ -34,23 +39,6 @@ class KanbanBoardController extends Controller
     {
         KanbanBoard::create($request->validated());
         return redirect()->route('kanbanboard.index')->with('status', 'KanbanBoard berhasil disimpan.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(KanbanBoard $kanbanBoard)
-    {
-        // Tidak digunakan dalam kasus ini
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(KanbanBoard $kanbanboard)
-    {
-        $projects = Project::all();
-        return view('kanbanboard.edit', compact('kanbanboard', 'projects')); // Perbaikan nama variabel
     }
 
     /**
