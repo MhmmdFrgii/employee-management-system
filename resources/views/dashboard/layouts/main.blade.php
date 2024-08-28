@@ -47,7 +47,7 @@
     <!--  Body Wrapper -->
     <div class="page-wrapper" id="main-wrapper" data-theme="blue_theme" data-layout="vertical" data-sidebartype="full"
         data-sidebar-position="fixed" data-header-position="fixed">
-        <!-- Sidebar Start -->  
+        <!-- Sidebar Start -->
         @include('dashboard.layouts.sidebar')
         <!--  Sidebar End -->
 
@@ -129,7 +129,7 @@
                                                 </div>
                                             </div>
                                             <div class="message-body">
-                                                <a href="page-user-profile.html"
+                                                <a href="/profile"
                                                     class="py-8 px-7 mt-8 d-flex align-items-center">
                                                     <span
                                                         class="d-flex align-items-center justify-content-center bg-light rounded-1 p-6">

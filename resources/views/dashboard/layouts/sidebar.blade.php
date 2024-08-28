@@ -85,6 +85,14 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
+                    <a class="sidebar-link" href="/applicants" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-user-up"></i>
+                        </span>
+                        <span class="hide-menu">Pelamar</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
                     <a class="sidebar-link has-arrow" href="#" aria-expanded="false">
                         <span class="d-flex">
                             <i class="ti ti-clipboard-list"></i>

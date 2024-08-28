@@ -8,7 +8,7 @@
                         <div class="col-sm-7">
                             <div class="d-flex align-items-center mb-7">
 
-                                <h5 class="fw-semibold mb-0 fs-5">Kehadiran yang Baik Membangun Kepercayaan
+                                <h5 class="fw-semibold mb-0 fs-5 ">Kehadiran yang Baik Membangun Kepercayaan
                                     dan Meningkatkan Produktivitas
                                 </h5>
                             </div>
@@ -27,7 +27,7 @@
     </div>
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-12">
-            <div class="card mb-4 bg-info">
+            <div class="card mb-4 bg-light-primary">
                 <a href="/siswa-offline/absensi" class="stretched-link"></a>
                 <div class="card-body">
                     <div class="row align-items-center">
@@ -53,7 +53,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-6 col-sm-12">
-            <div class="card mb-4 bg-success">
+            <div class="card mb-4 bg-light-success">
                 <a href="/siswa-offline/absensi?status=attend" class="stretched-link"></a>
                 <div class="card-body">
                     <div class="row align-items-center">
@@ -79,7 +79,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-6 col-sm-12">
-            <div class="card mb-4 bg-warning">
+            <div class="card mb-4 bg-light-warning">
                 <a href="/siswa-offline/absensi?status=absent" class="stretched-link"></a>
                 <div class="card-body">
                     <div class="row align-items-center">
@@ -105,7 +105,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-6 col-sm-12">
-            <div class="card mb-4 bg-danger">
+            <div class="card mb-4 bg-light-danger">
                 <a href="/siswa-offline/absensi?status=alpha" class="stretched-link"></a>
                 <div class="card-body">
                     <div class="row align-items-center">
