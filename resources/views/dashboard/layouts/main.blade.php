@@ -31,6 +31,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    {{-- Select2 --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+
 </head>
 
 <body>
@@ -129,8 +134,7 @@
                                                 </div>
                                             </div>
                                             <div class="message-body">
-                                                <a href="/profile"
-                                                    class="py-8 px-7 mt-8 d-flex align-items-center">
+                                                <a href="/profile" class="py-8 px-7 mt-8 d-flex align-items-center">
                                                     <span
                                                         class="d-flex align-items-center justify-content-center bg-light rounded-1 p-6">
                                                         <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/icon-account.svg"
@@ -227,6 +231,14 @@
         });
     </script>
 
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Select a user",
+                allowClear: true
+            });
+        });
+    </script>
 </body>
 
 </html>

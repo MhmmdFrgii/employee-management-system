@@ -1,117 +1,69 @@
-{{-- @extends('dashboard.layouts.main')
-@section('content')
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="container py-4">
-                @if (session()->has('success'))
-                    <div class="alert alert-success mt-3" role="alert">
-                        {{ session('success') }}
-                    </div>
-                @endif
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    {{-- <h1 class="h3">Detail Pelamar - Asanti Muda Syantika</h1>
-                    <h1 class="h3">{{ __('Detail Pelamar - ') . $user->name }}</h1>
-                </div>
-
-                <div class="row">
-                    <div class="d-flex">
-                        <!-- Gambar -->
-                        <div class="p-3">
-                            <img src="{{ asset('assets/images/no-data.png') }}" alt="avatar" class="rounded-1 img-fluid" width="350px" height="350px">
-                        </div>
-                        
-                        <!-- Data -->
-                        <div class="p-3">
-                            <table class="table table-borderless">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <tr>
-                                            <td>NIK</td>
-                                            <td>: {{ $user->nik }} </td>
-                                        </tr>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <tr>
-                                            <td>Email</td>
-                                            <td>: {{ $user->email }} </td>
-                                        </tr>
-                                    </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <tr>
-                                                <td>Jenis Kelamin</td>
-                                                <td>: {{ $user->gender }} </td>
-                                            </tr>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <tr>
-                                                <td>No Telepon</td>
-                                                <td>: {{ $user->phone }}</td>
-                                            </tr>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <tr>
-                                                <td>Departemen</td>
-                                                <td>: {{ $user->department_id }}</td>
-                                            </tr>
-                                        </div>
-                                        </div>
-                                    <div class="form-group">
-                                        <tr>
-                                            <td>Alamat</td>
-                                            <td>: {{ $user->addres }}</td>
-                                        </tr>
-                                    </div>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection --}}
-
-
 @extends('dashboard.layouts.main')
 
 @section('content')
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="container py-4">
-                @if (session()->has('success'))
-                    <div class="alert alert-success mt-3" role="alert">
-                        {{ session('success') }}
-                    </div>
-                @endif
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="container py-4">
+                    <h1 class="h3 mb-4">Applicant Detail</h1>
 
-                <h1 class="h3">Applicant Detail</h1>
+                    @if ($employeeDetails)
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body d-flex flex-wrap align-items-center gap-4">
+                                @php
+                                    $photoPath = $user->photo ?? 'assets/images/no-profile.jpeg';
+                                @endphp
 
-                @if ($employeeDetails)
-                    <div class="card">
-                        <div class="card-body">
-                            @if ($employeeDetails->photo)
-                                <img src="{{ asset('storage/' . $employeeDetails->photo) }}" alt="{{ $employeeDetails->fullname }}" class="img-fluid">
-                            @else
-                                <img src="https://source.unsplash.com/170x170?person" alt="Default avatar" class="img-fluid">
-                            @endif
+                                <div class="flex-shrink-0">
+                                    <img src="{{ Storage::exists($photoPath) ? asset('storage/' . $photoPath) : asset('assets/images/no-profile.jpeg') }}"
+                                        alt="avatar" class="rounded-circle img-fluid"
+                                        style="width: 150px; height: 150px; object-fit: cover;">
+                                </div>
 
-                            <h5 class="card-title">{{ $employeeDetails->fullname }}</h5>
-                            <p class="card-text">Department: {{ $employeeDetails->department->name ?? 'No Department' }}</p>
-                            <p class="card-text">Position: {{ $employeeDetails->position->name ?? 'No Position' }}</p>
-                            <p class="card-text">Phone: {{ $employeeDetails->phone ?? 'No Phone' }}</p>
-                            <p class="card-text">Address: {{ $employeeDetails->address ?? 'No Address' }}</p>
-                            <p class="card-text">Hire Date: {{ $employeeDetails->hire_date ?? 'No Hire Date' }}</p>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-3">{{ $employeeDetails->fullname }}</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p class="card-text mb-1"><strong>NIK:</strong>
+                                                {{ $employeeDetails->nik ?? 'No Nik' }}</p>
+                                            <p class="card-text mb-1"><strong>Phone:</strong>
+                                                {{ $employeeDetails->phone ?? 'No Phone' }}</p>
+                                            <p class="card-text mb-1"><strong>Gender:</strong>
+                                                {{ $employeeDetails->gender ?? 'No Gender' }}</p>
+                                            <p class="card-text mb-1"><strong>Department:</strong>
+                                                {{ $employeeDetails->department->name ?? 'No Department' }}</p>
+                                            <p class="card-text mb-1"><strong>Address:</strong>
+                                                {{ $employeeDetails->address ?? 'No Address' }}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5 class="card-title">Curriculum Vitae (CV)</h5>
+                                            @if ($employeeDetails->cv)
+                                                <a href="{{ asset('storage/' . $employeeDetails->cv) }}"
+                                                    class="btn btn-secondary mt-2" target="_blank">
+                                                    View CV
+                                                </a>
+                                            @else
+                                                <p class="text-muted mt-2">No CV uploaded.</p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                @else
-                    <p>No employee detail found.</p>
-                @endif
+
+                        <div class="mt-4 text-center">
+                            <form action="{{ route('applicant.update', $employeeDetails->user->id) }}" method="POST">
+                                @csrf
+                                @method('patch')
+                                <input type="hidden" name="user_id" value="{{ $employeeDetails->user->id }}">
+                                <input type="hidden" name="status" value="approve">
+                                <button type="submit" class="btn btn-primary">Approve</button>
+                        </div>
+                    @else
+                        <p class="text-muted">No employee detail found.</p>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
-</div>
 @endsection

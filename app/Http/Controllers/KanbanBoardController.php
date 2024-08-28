@@ -6,6 +6,7 @@ use App\Http\Requests\StoreKanbanBoardRequest;
 use App\Models\KanbanBoard;
 use App\Models\KanbanTasks;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class KanbanBoardController extends Controller
@@ -27,9 +28,12 @@ class KanbanBoardController extends Controller
         $done = KanbanTasks::where('kanban_boards_id', $kanbanboardID)
             ->where('status', 'done')
             ->get();
+        $users = User::whereHas('employeeDetails', function ($query) {
+            $query->where('status', 'approve');
+        })->with('employeeDetails')->get();
 
         $kanbanboard = KanbanBoard::where('id', $kanbanboardID)->first();
-        return view('kanbanboard.index', compact('kanbanboards', 'kanbanboard', 'todo', 'progress', 'done'));
+        return view('kanbanboard.index', compact('kanbanboards', 'kanbanboard', 'todo', 'progress', 'done', 'users'));
     }
 
     /**
