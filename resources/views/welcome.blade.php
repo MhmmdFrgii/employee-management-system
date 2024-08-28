@@ -39,7 +39,7 @@
                         src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/light-logo.svg"
                         alt="brand-logo">
                     <img class="navbar-brand-sticky"
-                        src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/light-logo.svg"
+                        src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/dark-logo.svg"
                         alt="sticky brand-logo">
                 </a>
                 <button class="navbar-toggler d-lg-none" type="button" data-toggle="navbarToggler"
@@ -95,17 +95,14 @@
                                 mengelola karyawan secara efisien. Dapatkan wawasan mendalam tentang kinerja, absensi,
                                 dan pengembangan karyawan Anda. Mulailah perjalanan menuju manajemen karyawan yang lebih
                                 efektif dan terorganisir dengan EMS.</p>
-                            <p class="text-white my-4">Filosofi logo EMS melambangkan manajemen yang efisien dan
-                                terstruktur. Logo berbentuk huruf "E" berwarna biru mencerminkan profesionalisme dan
-                                kepercayaan. Warna biru melambangkan stabilitas dan kehandalan, mengajak Anda untuk
-                                mencapai kesuksesan melalui manajemen karyawan yang optimal.</p>
+
                         </div>
                     </div>
                     <div class="col-12 col-md-5 col-lg-6">
                         <!-- Welcome Thumb -->
                         <div class="welcome-thumb mx-auto" data-aos="fade-left" data-aos-delay="500"
                             data-aos-duration="1000">
-                            <img src="{{ asset('assets/images/mockup/Mockup-Dashboard.png') }}" alt="">
+                            <img class="img-fluid" src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/landingpage/dist/images/backgrounds/business-woman-checking-her-mail.png" alt="">
                         </div>
                     </div>
                 </div>
