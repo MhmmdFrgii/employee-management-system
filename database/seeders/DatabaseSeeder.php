@@ -35,5 +35,12 @@ class DatabaseSeeder extends Seeder
             'name' => 'Keuangan',
             'description' => 'Keuangan Description'
         ]);
+
+        $this->call([
+            DepartmentSeeder::class,
+            PositionSeeder::class,
+            RoleSeeder::class,
+            UserSeeder::class,
+        ]);
     }
 }
