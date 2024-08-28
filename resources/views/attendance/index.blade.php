@@ -56,7 +56,7 @@
                                 </ul>
                             </div>
                         </div>
-                        
+
                         <!-- Tombol Cari -->
                         <div class="col-md-1">
                             {{-- <button class="btn btn-secondary w-100 shadow-sm" type="submit">Cari</button> --}}
@@ -76,7 +76,7 @@
                             <thead>
                                 <tr>
                                     <th class="mr-5">
-                                        <a href="#" class="sort-link" data-sort="employee_id" 
+                                        <a href="#" class="sort-link" data-sort="employee_id"
                                         data-direction="{{ request('sortDirection') === 'asc' ? 'desc' : 'asc' }}">
                                             Employee
                                             @if (request('sortBy') === 'employee_id')
@@ -85,7 +85,7 @@
                                         </a>
                                     </th>
                                     <th>
-                                        <a href="#" class="sort-link" data-sort="date" 
+                                        <a href="#" class="sort-link" data-sort="date"
                                         data-direction="{{ request('sortDirection') === 'asc' ? 'desc' : 'asc' }}">
                                             Date
                                             @if (request('sortBy') === 'date')

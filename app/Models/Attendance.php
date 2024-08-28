@@ -15,4 +15,9 @@ class Attendance extends Model
         'status'
     ];
 
+    function employee(): mixed
+    {
+        return $this->belongsTo(EmployeeDetail::class);
+    }
+
 }
