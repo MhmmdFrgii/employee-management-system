@@ -31,7 +31,7 @@ class StoreKanbanBoardRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Nama harus diisi!',
+            'name.required' => 'Nama harus diisi!asd',
             'name.string' => 'Nama tidak valid!',
             'name.max' => 'Maximal 50 karakter',
             'projects_id.required' => 'Projek tidak boleh kosong',

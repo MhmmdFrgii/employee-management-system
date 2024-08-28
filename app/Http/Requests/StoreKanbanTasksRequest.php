@@ -23,10 +23,12 @@ class StoreKanbanTasksRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:50'],
-            'description' => ['required', 'max:255'],
-            'status' => ['required', 'in:To Do,In Progress,Done'],
+            'description' => ['nullable', 'max:255'],
+            'status' => ['in:todo,progress,done'],
             'kanban_boards_id' => ['required', 'exists:kanban_boards,id'],
-            'date' => ['required'],
+            'date' => ['nullable'],
+            'color' => ['nullable'],
+            'employee_id' => ['nullable', 'exists:employee_details,id']
         ];
     }
 
@@ -41,13 +43,11 @@ class StoreKanbanTasksRequest extends FormRequest
             'title.required' => 'Title harus diisi!',
             'title.string'  => 'Title tidak valid!',
             'title.max' => 'Maximal 50 karakter.',
-            'description.required' => 'Deskripsi harus diisi.',
             'description.max' => 'Maximal 255 karakter.',
             'status.required' => 'Status tidak boleh kosong.',
             'status.in' => 'Status harus berisi salah satu dari: To Do, In Progress, Done.',
             'kanban_boards_id.required' => 'Kanban Board tidak boleh kosong.',
             'kanban_boards_id.exists' => 'Kanban Board tidak valid.',
-            'date.required' => 'Tanggal tidak boleh kosong.',
         ];
     }
 }
