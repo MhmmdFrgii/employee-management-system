@@ -6,30 +6,34 @@ use App\Models\Salarie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\SalarieRequest;
+use App\Models\EmployeeDetail;
 
 class SalarieController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Salarie::query();
+        $query = Salarie::with('employeeDetails');
+        $employee = EmployeeDetail::all();
 
-        // Menambahkan filter pencarian jika ada
+        
         if ($request->has('search')) {
-            $query->where('employee', 'like', '%' . $request->search . '%')
-                ->orWhere('amount', 'like', '%' . $request->search . '%')
-                ->orWhere('payment_date', 'like', '%' . $request->search . '%');
+            $query->whereHas('employeeDetails', function ($q) use ($request) {
+                $q->where('fullname', 'like', '%' . $request->search . '%');
+            })
+            ->orWhere('amount', 'like', '%' . $request->search . '%')
+            ->orWhere('payment_date', 'like', '%' . $request->search . '%');
         }
 
-        // Menambahkan sorting jika ada
+        
         if ($request->has('sortBy') && $request->has('sortDirection')) {
             $query->orderBy($request->sortBy, $request->sortDirection);
         }
 
-        // Paginasi
-        $salaries = $query->paginate(10); // Menentukan jumlah item per halaman
+        $salaries = $query->paginate(10);
+
         $salaries->appends($request->all());
 
-        return view('salaries.index', compact('salaries'));
+        return view('salaries.index', compact('salaries', 'employee'));
     }
 
     /**
@@ -38,8 +42,7 @@ class SalarieController extends Controller
     public function store(SalarieRequest $request)
     {
         Salarie::create($request->validated());
-
-        return redirect()->route('salaries.index')->with('success', 'Salarie berhasil dibuat.');
+        return redirect()->route('salaries.index')->with('success', 'Gaji berhasil dibuat.');
     }
 
     /**
@@ -50,15 +53,15 @@ class SalarieController extends Controller
         $salarie = Salarie::findOrFail($id);
         $salarie->update($request->validated());
 
-        return redirect()->route('salaries.index')->with('success', 'Salaries berhasil di edit');
+        return redirect()->route('salaries.index')->with('success', 'Gaji berhasil di edit');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Salarie $salary)
+    public function destroy(Salarie $salarie)
     {
-        $salary->delete();
-        return redirect()->route('salaries.index')->with('danger', 'Data berhasil dihapus');
+        $salarie->delete();
+        return redirect()->route('salaries.index')->with('danger', 'Data gaji berhasil dihapus');
     }
 }
