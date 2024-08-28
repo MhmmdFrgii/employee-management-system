@@ -1,12 +1,13 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LandingPageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SalarieController;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('guest')->group(function () {
+    Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');
 });
 
 Route::middleware('auth')->group(function () {

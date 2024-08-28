@@ -1,0 +1,38 @@
+	/*
+  	Flaticon icon font: Flaticon
+  	Creation date: 24/01/2020 06:37
+  	*/
+
+@font-face {
+  font-family: "Flaticon";
+  src: url("Flaticon.html");
+  src: url("Flaticond41d.html?#iefix") format("embedded-opentype"),
+       url("Flaticon-2.html") format("woff2"),
+       url("Flaticon.woff") format("woff"),
+       url("Flaticon-3.html") format("truetype"),
+       url("Flaticon-4.html#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("Flaticon-4.html#Flaticon") format("svg");
+  }
+}
+
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+  font-family: Flaticon;
+        font-size: 20px;
+font-style: normal;
+margin-left: 20px;
+}
+
+.flaticon-tap:before { content: "\f100"; }
+.flaticon-fingerprint:before { content: "\f101"; }
+.flaticon-notification:before { content: "\f102"; }
+.flaticon-settings:before { content: "\f103"; }
+.flaticon-language:before { content: "\f104"; }
+.flaticon-place:before { content: "\f105"; }
