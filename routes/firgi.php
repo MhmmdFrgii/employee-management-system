@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeDetailsController;
 use App\Http\Controllers\KanbanBoardController;
 use App\Http\Controllers\KanbanTasksController;
