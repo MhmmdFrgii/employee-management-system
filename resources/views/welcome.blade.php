@@ -61,16 +61,10 @@
                                 <a class="nav-link scroll" href="#features">Fitur</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link scroll" href="#projects">Proyek</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link scroll" href="#teams">Tim</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link scroll" href="#workflow">Alur Kerja</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link scroll" href="#employees">Karyawan</a>
+                                <a class="nav-link scroll" href="#projects">Proyek</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">Masuk</a>
@@ -299,7 +293,7 @@
         <!-- ***** Service Area End ***** -->
 
         <!-- ***** Work Area Start ***** -->
-        <section id="tutor" class="section work-area bg-overlay overflow-hidden ptb_100">
+        <section id="workflow" class="section work-area bg-overlay overflow-hidden ptb_100">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-12 col-md-10 col-lg-8">
