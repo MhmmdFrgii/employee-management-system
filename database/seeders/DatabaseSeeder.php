@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Applicant;
 use App\Models\Department;
 use App\Models\EmployeeDetail;
 use App\Models\Position;

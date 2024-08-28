@@ -21,6 +21,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'status'
+    ];
+
+    protected $attributes = [
+        'status' => 'disapprove', // Default status
     ];
 
     /**
@@ -46,7 +51,7 @@ class User extends Authenticatable
         ];
     }
 
-    function employee(): mixed
+    function employeeDetails()
     {
         return $this->hasOne(EmployeeDetail::class);
     }
