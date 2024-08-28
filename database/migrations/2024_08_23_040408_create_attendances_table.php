@@ -16,7 +16,7 @@ return new class extends Migration
             // dummy column from employeDetail
             $table->foreignId('employee_id')->constrained('employee_details')->onDelete('cascade');
             $table->date('date');
-            $table->enum('status', ['present', 'absent', 'late'])->default('present');
+            $table->enum('status', ['present', 'absent', 'late', 'alpha'])->default('present');
             $table->timestamps();
         });
     }

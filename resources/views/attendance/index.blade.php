@@ -53,6 +53,13 @@
                                             <label class="form-check-label" for="status_late">Late</label>
                                         </div>
                                     </li>
+                                    <li>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="status[]" value="alpha" class="form-check-input" id="status_alpha"
+                                            {{ is_array(request('status')) && in_array('alpha', request('status')) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="status_alpha">Alpha</label>
+                                        </div>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
