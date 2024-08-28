@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProjectRequest;
+use App\Models\KanbanBoard;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
@@ -49,8 +50,11 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        Project::create($request->validated());
-
+        $project = Project::create($request->validated());
+        KanbanBoard::create([
+            'name' => $project->name,
+            'project_id' => $project->id
+        ]);
         return redirect()->route('projects.index')->with('success', 'Project berhasil ditambah');
     }
 
