@@ -74,5 +74,4 @@ class NotificationController extends Controller
         $notification->delete();
         return redirect()->route('notifications.index')->with('success', 'Notification deleted successfully.');
     }
-    
 }
