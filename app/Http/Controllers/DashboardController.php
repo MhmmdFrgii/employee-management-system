@@ -18,4 +18,9 @@ class DashboardController extends Controller
 
         return view('dashboard.index', compact('employee_count', 'project_count', 'department_count'));
     }
+
+    public function userDashboard()
+    {
+        return view('dashboard.employee.index');
+    }
 }

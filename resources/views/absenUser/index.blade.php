@@ -135,7 +135,7 @@
     <div class="d-flex justify-content-end mb-3 gap-2">
         <form action="{{ route('absensi.store') }}" method="post">
             @csrf
-            <button button type="button" class="btn btn-success">Absen</button>
+            <button button type="submit" class="btn btn-success">Absen</button>
         </form>
         <button type="button" class="btn btn-primary">
             Buat Izin
