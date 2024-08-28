@@ -14,7 +14,7 @@ class UserAbsenController extends Controller
      * Display a listing of the resource.
      */
 
-    // Mark Absentees today 
+    // Mark Absentees today
     public function markAbsentees()
     {
         $today = Carbon::today()->toDateString();
@@ -74,7 +74,7 @@ class UserAbsenController extends Controller
 
         Attendance::create([
             // for now just user_id
-            'employee_id' => Auth::id(),
+            'employee_id' => Auth::user()->employee->id,
             'date' => date('Y-m-d'),
             'status' => 'present',
         ]);

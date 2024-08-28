@@ -48,7 +48,7 @@ class User extends Authenticatable
 
     function employee(): mixed
     {
-        return $this->hasMany(EmployeeDetail::class);
+        return $this->hasOne(EmployeeDetail::class);
     }
 
     public function notifications()
