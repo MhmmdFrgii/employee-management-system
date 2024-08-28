@@ -11,13 +11,13 @@ class KanbanBoard extends Model
 
     protected $fillable = ['name', 'project_id', 'description'];
 
-    public function projects()
+    public function project()
     {
-        return $this->belongsTo(Project::class, 'projects_id');
+        return $this->belongsTo(Project::class, 'project_id');
     }
 
     public function kanbantasks()
     {
-        return $this->hasMany(KanbanTasks::class);
+        return $this->hasMany(KanbanTasks::class, 'kanban_boards_id');
     }
 }
