@@ -28,6 +28,6 @@ class ProjectAssignment extends Model
 
     public function employe()
     {
-        return $this->belongsTo(EmployeeDetail::class);
+        return $this->belongsTo(EmployeeDetail::class, 'employee_id');
     }
 }

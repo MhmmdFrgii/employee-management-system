@@ -20,4 +20,9 @@ class LeaveRequest extends Model
             ->orWhere('type', 'like', '%' . $search . '%')
             ->orWhere('status', 'like', '%' . $search . '%');
     }
+
+    public function employe()
+    {
+        return $this->belongsTo(EmployeeDetail::class, 'employee_id');
+    }
 }
