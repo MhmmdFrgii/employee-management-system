@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Department;
+use App\Models\EmployeeDetail;
 use App\Models\Position;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -41,6 +42,8 @@ class DatabaseSeeder extends Seeder
             PositionSeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
+            EmployeeDetailsSeeder::class,
+            ProjectSeeder::class,
         ]);
     }
 }
