@@ -69,7 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('kanbantasks', KanbanTasksController::class);
 
     // route employee
-    Route::resource('employee', EmployeeDetailsController::class);
+    Route::resource('employee', EmployeeDetailsController::class)->except('show');
     Route::get('/userKaryawan', [EmployeeDetailsController::class, 'userKaryawan']);
 
     // route attendence
