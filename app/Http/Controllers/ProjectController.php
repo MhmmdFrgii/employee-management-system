@@ -4,10 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProjectRequest;
 use App\Models\Project;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
+
+    public function markAsCompleted($id)
+{
+    $project = Project::findOrFail($id);
+
+    Project::where('id', $id)->update([
+        'status' => 'Completed',
+        'completed_at' => Carbon::now(),
+        'name' => $project->name, // Pastikan 'name' diambil dari proyek yang ada
+    ]);
+
+    return redirect()->route('projects.index')->with('success', 'Proyek telah berhasil diselesaikan.');
+}
+
+
     /**
      * Display a listing of the resource.
      */
