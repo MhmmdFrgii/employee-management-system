@@ -108,8 +108,9 @@
                                                     @csrf
                                                     <div class="mb-3">
                                                         <label for="employee_id" class="form-label">Employee</label>
-                                                        <input type="text" name="employee"
-                                                            class="form-control @error('employee') is-invalid @enderror"
+                                                        <input type="hidden" value="{{ $salary->employee_id }}" name="employee_id">
+                                                        <input readonly type="text" 
+                                                            class="form-control  @error('employee') is-invalid @enderror"
                                                             id="employee"
                                                             value="{{ old('employee', $salary->employeeDetails->fullname) }}">
                                                         @error('employee')

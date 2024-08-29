@@ -95,12 +95,12 @@
         </div>
 
         <div class="row">
-            <div class="col-md-7">
+            <div class="col-md-12">
                 <div id="projectsChart"></div>
             </div>
         </div>
 
-        @if(isset($activeCounts) && isset($completedCounts) && isset($attendanceCounts))
+        @if (isset($activeCounts) && isset($completedCounts) && isset($attendanceCounts))
             <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
             <script>
                 var projectOptions = {
@@ -143,7 +143,7 @@
                     },
                     tooltip: {
                         y: {
-                            formatter: function (val) {
+                            formatter: function(val) {
                                 return val + " projects";
                             }
                         }
