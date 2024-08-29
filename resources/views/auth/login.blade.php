@@ -57,12 +57,10 @@
                                         <a class="text-primary fw-medium" href="{{ route('password.request') }}">Forgot
                                             Password ?</a>
                                     </div>
-                                    <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign
-                                        In</button>
+                                    <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Masuk</button>
                                     <div class="d-flex align-items-center justify-content-center">
-                                        <p class="fs-4 mb-0 fw-medium">New to Modernize?</p>
-                                        <a class="text-primary fw-medium ms-2" href="{{ route('register') }}">Create an
-                                            account</a>
+                                        <p class="fs-4 mb-0 fw-medium">Belum terdaftar?</p>
+                                        <a class="text-primary fw-medium ms-2" href="{{ route('register') }}">Daftar</a>
                                     </div>
                                 </form>
                             </div>
