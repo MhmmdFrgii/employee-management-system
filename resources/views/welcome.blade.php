@@ -71,11 +71,11 @@
 
                                 @if (Auth::user()->hasRole('manajer'))
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.dashboard') }}">Home</a>
+                                        <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
                                     </li>
-                                @elseif(Auth::user()->hasRole('karyawan'))
+                                @else
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('employee.dashboard') }}">Home</a>
+                                        <a class="nav-link" href="{{ route('employee.dashboard') }}">Dashboard</a>
                                     </li>
                                 @endif
                             @else
