@@ -44,12 +44,17 @@ class UserAbsenController extends Controller
     public function index()
     {
 
-        $today = Carbon::today()->toDateString();
 
-        // Ambil semua karyawan
-        $employees = User::all(); // Sesuaikan model jika berbeda
+        $user = Auth::user()->employeeDetails->id;
 
-        return view('absenUser.index');
+        $total_attendance = Attendance::where('employee_id', $user)->where('status', 'present')->count();
+        $attendance_count = Attendance::where('employee_id', $user)->count();
+
+        $attendances = Attendance::where('employee_id', $user)->get();
+
+        // dd($attendances);
+
+        return view('absenUser.index', compact('attendances', 'attendance_count', 'total_attendance'));
     }
 
     /**

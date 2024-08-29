@@ -28,7 +28,7 @@
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-12">
             <div class="card mb-4 bg-light-primary">
-                <a href="/siswa-offline/absensi" class="stretched-link"></a>
+                <a href="" class="stretched-link"></a>
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-3">
@@ -45,7 +45,7 @@
                     </div>
                     <div class="row mt-3">
                         <div class="d-flex justify-content-between">
-                            <h3>0 Kali</h3>
+                            <h3>{{ $attendance_count }} Kali</h3>
                             <span class="ml-auto">Absensi</span>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
         </div>
         <div class="col-lg-3 col-md-6 col-sm-12">
             <div class="card mb-4 bg-light-success">
-                <a href="/siswa-offline/absensi?status=attend" class="stretched-link"></a>
+                <a href="" class="stretched-link"></a>
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-3">
@@ -71,7 +71,7 @@
                     </div>
                     <div class="row mt-3">
                         <div class="d-flex justify-content-between">
-                            <h3>0 Kali</h3>
+                            <h3>{{ $total_attendance }} Kali</h3>
                             <span class="ml-auto">Absensi</span>
                         </div>
                     </div>
@@ -80,7 +80,7 @@
         </div>
         <div class="col-lg-3 col-md-6 col-sm-12">
             <div class="card mb-4 bg-light-warning">
-                <a href="/siswa-offline/absensi?status=absent" class="stretched-link"></a>
+                <a href="" class="stretched-link"></a>
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-3">
@@ -106,7 +106,7 @@
         </div>
         <div class="col-lg-3 col-md-6 col-sm-12">
             <div class="card mb-4 bg-light-danger">
-                <a href="/siswa-offline/absensi?status=alpha" class="stretched-link"></a>
+                <a href="" class="stretched-link"></a>
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-3">
@@ -153,16 +153,22 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>User</td>
-                <td>27 Agustus 2024</td>
-                <td>
-                    <span class="badge bg-success">Masuk</span>
-                </td>
-                <td>07:20</td>
-                <td>05:15</td>
-            </tr>
+            @foreach ($attendances as $attendence)
+                <tr>
+                    <td>{{ $attendence->employeeDetail->user->name }}</td>
+                    <td>{{ \Carbon\Carbon::parse($attendence->date)->translatedFormat('d F Y') }}</td>
+                    <td>
+                        @if ($attendence->status == 'present')
+                            <span class="badge bg-success">Masuk</span>
+                        @elseif($attendence->status == 'absent')
+                            <span class="badge bg-danger">Masuk</span>
+                        @endif
+                    </td>
+                    <td class="badge bg-success">{{ $attendence->created_at->format('H:i') }}</td>
+                    <td>05:15</td>
+                </tr>
         </tbody>
+        @endforeach
     </table>
 
     @include('absenUser.partial.add-modal')
