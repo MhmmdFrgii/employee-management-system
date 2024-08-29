@@ -98,9 +98,6 @@
             <div class="col-md-7">
                 <div id="projectsChart"></div>
             </div>
-            <div class="col-md-5">
-                <div id="attendanceChart"></div>
-            </div>
         </div>
 
         @if(isset($activeCounts) && isset($completedCounts) && isset($attendanceCounts))

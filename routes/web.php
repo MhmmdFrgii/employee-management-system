@@ -21,6 +21,11 @@ use App\Http\Controllers\ProjectAssignmentController;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');
 
+
+Route::get('confirmation', function () {
+    return view('confirmation');
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -52,6 +57,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/applicants', [UserController::class, 'index'])->name('applicant.index');
             Route::get('/applicant/detail/{id}', [UserController::class, 'detail'])->name('applicant.detail');
             Route::patch('/applicant/{applicant}', [UserController::class, 'update'])->name('applicant.update');
+
+            Route::resource('kanbanboard', KanbanBoardController::class);
+            Route::resource('kanbantasks', KanbanTasksController::class);
         });
     });
 
@@ -63,11 +71,11 @@ Route::middleware('auth')->group(function () {
             Route::resource('notifikasi', NotificationController::class);
 
             Route::resource('myproject', MyprojectController::class);
+
+            Route::resource('absensi', UserAbsenController::class);
         });
     });
 
-
-    Route::resource('absensi', UserAbsenController::class);
 
     Route::prefix('leave-request')->group(function () {
         Route::get('', [LeaveRequestController::class, 'index'])->name('leave.index');
@@ -78,11 +86,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('{leaveRequest}', [LeaveRequestController::class, 'destroy'])->name('leave.destroy');
     });
 
-    Route::resource('kanbanboard', KanbanBoardController::class);
-    Route::resource('kanbantasks', KanbanTasksController::class);
-
     Route::get('/userKaryawan', [EmployeeDetailsController::class, 'userKaryawan']);
-
 });
 
 require __DIR__ . '/auth.php';

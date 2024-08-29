@@ -144,7 +144,7 @@
                         <div class="counter-inner p-3 p-md-0">
                             <!-- Counter Item -->
                             <div class="counter-item d-inline-block mb-3">
-                                <span class="counter fw-7">50</span>
+                                <span class="counter fw-7">{{ $employees }}</span>
                             </div>
                             <h5>Karyawan</h5>
                         </div>
@@ -153,7 +153,7 @@
                         <div class="counter-inner p-3 p-md-0">
                             <!-- Counter Item -->
                             <div class="counter-item d-inline-block mb-3">
-                                <span class="counter fw-7">12</span>
+                                <span class="counter fw-7">{{ $departments }}</span>
                             </div>
                             <h5>Departemen</h5>
                         </div>
@@ -162,7 +162,7 @@
                         <div class="counter-inner p-3 p-md-0">
                             <!-- Counter Item -->
                             <div class="counter-item d-inline-block mb-3">
-                                <span class="counter fw-7">100</span>
+                                <span class="counter fw-7">{{ $projects }}</span>
                             </div>
                             <h5>Proyek</h5>
                         </div>

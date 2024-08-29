@@ -175,7 +175,7 @@
                                             </div>
                                         </section>
                                     </form>
-
+                                    <a class="text-black" href="/login">Sudah punya akun? <span class="text-primary">Masuk</span></a>
                                 </div>
                             </div>
                         </div>
