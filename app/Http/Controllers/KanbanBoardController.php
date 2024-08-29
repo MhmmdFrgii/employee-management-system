@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreKanbanBoardRequest;
+use App\Http\Requests\KanbanBoardRequest;
 use App\Models\KanbanBoard;
-use App\Models\KanbanTasks;
+use App\Models\KanbanTask;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,13 +19,13 @@ class KanbanBoardController extends Controller
         $kanbanboardID = $request->id ?  $request->id : 1;
 
         $kanbanboards = KanbanBoard::all(); // Perbaikan nama variabel 
-        $todo = KanbanTasks::where('kanban_boards_id', $kanbanboardID)
+        $todo = KanbanTask::where('kanban_boards_id', $kanbanboardID)
             ->where('status', 'todo')
             ->get();
-        $progress = KanbanTasks::where('kanban_boards_id', $kanbanboardID)
+        $progress = KanbanTask::where('kanban_boards_id', $kanbanboardID)
             ->where('status', 'progress')
             ->get();
-        $done = KanbanTasks::where('kanban_boards_id', $kanbanboardID)
+        $done = KanbanTask::where('kanban_boards_id', $kanbanboardID)
             ->where('status', 'done')
             ->get();
         $users = User::whereHas('employeeDetails', function ($query) {
@@ -39,7 +39,7 @@ class KanbanBoardController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreKanbanBoardRequest $request)
+    public function store(KanbanBoardRequest $request)
     {
         KanbanBoard::create($request->validated());
         return redirect()->route('kanbanboard.index')->with('status', 'KanbanBoard berhasil disimpan.');
@@ -48,7 +48,7 @@ class KanbanBoardController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreKanbanBoardRequest $request, KanbanBoard $kanbanboard)
+    public function update(KanbanBoardRequest $request, KanbanBoard $kanbanboard)
     {
         $kanbanboard->update($request->validated());
         return redirect()->route('kanbanboard.index')->with('status', 'KanbanBoard berhasil diperbarui.');
