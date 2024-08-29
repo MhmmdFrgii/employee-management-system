@@ -87,7 +87,7 @@ class UserAbsenController extends Controller
             'date' => date('Y-m-d'),
             'status' => 'present',
         ]);
-        return redirect()->route(back())->with('success', 'berhasil!');
+        return redirect()->route('absensi.index')->with('success', 'berhasil!');
     }
 
     /**

@@ -5,6 +5,7 @@
          <div class="modal-content">
              <form action="{{ route('leave.store') }}" method="POST">
                  @csrf
+                 <input type="hidden" name="employee_id" value="{{ Auth::user()->employeeDetails->id }}">
                  <div class="modal-header">
                      <h5 class="modal-title" id="addModalLabel">Tambah Permintaan Cuti
                      </h5>

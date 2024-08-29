@@ -164,7 +164,7 @@
                             <span class="badge bg-danger">Masuk</span>
                         @endif
                     </td>
-                    <td class="badge bg-success">{{ $attendence->created_at->format('H:i') }}</td>
+                    <td>{{ $attendence->created_at->format('H:i') }}</td>
                     <td>05:15</td>
                 </tr>
         </tbody>

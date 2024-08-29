@@ -46,10 +46,10 @@ class LeaveRequestController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(RequestsLeaveRequest $request)
-    {
+    { 
         LeaveRequest::create($request->validated());
 
-        return redirect()->route('leave.index')->with('success', 'Berhasil menambahkan data.');
+        return redirect()->route('absensi.index')->with('success', 'Berhasil menambahkan data.');
     }
 
     public function update(RequestsLeaveRequest $request, LeaveRequest $leaveRequest)

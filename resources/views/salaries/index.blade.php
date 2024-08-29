@@ -111,7 +111,7 @@
                                                         <input type="text" name="employee"
                                                             class="form-control @error('employee') is-invalid @enderror"
                                                             id="employee"
-                                                            value="{{ old('employee', $salary->employee) }}">
+                                                            value="{{ old('employee', $salary->employeeDetails->fullname) }}">
                                                         @error('employee')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
@@ -350,11 +350,12 @@
                                                     @csrf
                                                     <div class="mb-3">
                                                         <label for="employee_id" class="form-label">Employee</label>
-                                                        <select name="employee_id" id="employee_id" class="form-control">
+                                                        <select name="employee_id" id="employee_id" class="form-control disabled">
                                                             @foreach ($employees as $employee)
-                                                                <option value="{{ $employee->id }}" {{ $employee->id == old('employee_id', $salary->employee_id) ? 'selected' : '' }}>
-                                                                    {{ $employee->fullname }}
-                                                                </option>
+                                                               <option value="{{ $employee->id }}"
+                                                                            {{ old('project_id', $data->project_id) == $employee->id ? 'selected' : '' }}>
+                                                                            {{ $employee->fullname }}
+                                                                        </option>
                                                             @endforeach
                                                         </select>
                                                         @error('employee_id')

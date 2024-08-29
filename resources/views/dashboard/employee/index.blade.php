@@ -1,6 +1,6 @@
 @extends('dashboard.layouts.main')
 
-@include('absenUser.partial.add-modal')
+{{-- @include('absenUser.partial.add-modal') --}}
 
 @section('content')
     <div class="row">
@@ -38,10 +38,7 @@
                 <form action="{{ route('absensi.store') }}" method="post">
                     @csrf
                     <button button type="submit" class="btn btn-success">Absen</button>
-                </form>
-                <button type="button" class="btn btn-primary">
-                    Buat Izin
-                </button>
+                </form> 
             </div>
             <div id="attendanceChart"></div>
         </div>

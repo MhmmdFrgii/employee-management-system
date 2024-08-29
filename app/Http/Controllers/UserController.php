@@ -34,7 +34,7 @@ class UserController extends Controller
             'status' => $request->status,
         ]);
 
-        if ($request->status == "approved") {
+        if ($request->status == "approve") {
             $user->assignRole('karyawan');
         }
 

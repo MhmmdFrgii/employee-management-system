@@ -121,8 +121,8 @@
                                     <td>{{ $employee->position->name }}</td>
                                     <td>{{ $employee->hire_date }}</td>
                                     <td>
-                                        <a href="{{ route('employee.edit', $employee->id) }}"
-                                            class="btn btn-warning btn-sm">Edit</a>
+                                        {{-- <a href="{{ route('employee.edit', $employee->id) }}"
+                                            class="btn btn-warning btn-sm">Edit</a> --}}
                                         <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#vertical-center-modal{{ $employee->id }}"
                                             type="button">Delete</button>

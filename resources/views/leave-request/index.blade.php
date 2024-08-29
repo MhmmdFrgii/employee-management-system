@@ -147,10 +147,10 @@
                                     <td>{{ $data->type }}</td>
                                     <td>{{ ucfirst($data->status) }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                        {{-- <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#editModal{{ $data->id }}">
                                             Edit
-                                        </button>
+                                        </button> --}}
                                         <form action="{{ route('leave.destroy', $data->id) }}" method="POST"
                                             class="d-inline"
                                             onsubmit="return confirm('Are you sure you want to delete this item?');">
