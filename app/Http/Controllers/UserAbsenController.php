@@ -47,14 +47,17 @@ class UserAbsenController extends Controller
 
         $user = Auth::user()->employeeDetails->id;
 
-        $total_attendance = Attendance::where('employee_id', $user)->where('status', 'present')->count();
+        $total_attendance = Attendance::where('employee_id', $user)->count();
+        $total_present = Attendance::where('employee_id', $user)->where('status', 'present')->count();
+        $total_absent = Attendance::where('employee_id', $user)->where('status', 'absent')->count();
+        $total_alpha = Attendance::where('employee_id', $user)->where('status', 'ajlpha')->count();
         $attendance_count = Attendance::where('employee_id', $user)->count();
 
         $attendances = Attendance::where('employee_id', $user)->get();
 
         // dd($attendances);
 
-        return view('absenUser.index', compact('attendances', 'attendance_count', 'total_attendance'));
+        return view('absenUser.index', compact('attendances', 'attendance_count', 'total_attendance', 'total_present', 'total_absent', 'total_alpha'));
     }
 
     /**

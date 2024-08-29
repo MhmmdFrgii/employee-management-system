@@ -45,7 +45,7 @@
                     </div>
                     <div class="row mt-3">
                         <div class="d-flex justify-content-between">
-                            <h3>{{ $attendance_count }} Kali</h3>
+                            <h3>{{ $total_attendance }} Kali</h3>
                             <span class="ml-auto">Absensi</span>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                     </div>
                     <div class="row mt-3">
                         <div class="d-flex justify-content-between">
-                            <h3>{{ $total_attendance }} Kali</h3>
+                            <h3>{{ $total_present }} Kali</h3>
                             <span class="ml-auto">Absensi</span>
                         </div>
                     </div>
@@ -91,13 +91,13 @@
 
                         <div class="col-9">
                             <div>
-                                <h6 class="card-subtitle mb-0">Total Izin &amp; Sakit</h6>
+                                <h6 class="card-subtitle mb-0">Total Izin &amp;</h6>
                             </div>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="d-flex justify-content-between">
-                            <h3>0 Kali</h3>
+                            <h3>{{ $total_absent }} Kali</h3>
                             <span class="ml-auto">Absensi</span>
                         </div>
                     </div>
@@ -123,7 +123,7 @@
                     </div>
                     <div class="row mt-3">
                         <div class="d-flex justify-content-between">
-                            <h3>0 Kali</h3>
+                            <h3>{{ $total_alpha }} Kali</h3>
                             <span class="ml-auto">Absensi</span>
                         </div>
                     </div>
