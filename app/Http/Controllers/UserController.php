@@ -22,27 +22,7 @@ class UserController extends Controller
         $user = User::with('employeeDetails.department', 'employeeDetails.position')->findOrFail($id);
         $employeeDetails = $user->employeeDetails;
         return view('applicant.detail', compact('user', 'employeeDetails'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $user = User::create([
-            'name' => $request->fullname,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'status' => $request->status ?? 'disapprove', // Status default
-        ]);
-
-        // Pindahkan data ke EmployeeDetail jika disetujui
-        if ($request->status === 'approve') {
-            $this->moveToEmployeeDetail($user, $request);
-        }
-
-        return redirect()->route('applicant.index')->with('success', 'User created successfully.');
-    }
+    } 
 
     /**
      * Update the specified resource in storage.

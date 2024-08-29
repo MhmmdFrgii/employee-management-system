@@ -51,13 +51,21 @@
                             </div>
                         </div>
 
-                        <div class="mt-4 text-center">
+                        <div class="mt-4 text-center d-flex justify-content-center gap-3">
                             <form action="{{ route('applicant.update', $employeeDetails->user->id) }}" method="POST">
                                 @csrf
                                 @method('patch')
                                 <input type="hidden" name="user_id" value="{{ $employeeDetails->user->id }}">
                                 <input type="hidden" name="status" value="approve">
                                 <button type="submit" class="btn btn-primary">Approve</button>
+                            </form>
+                            <form action="{{ route('applicant.update', $employeeDetails->user->id) }}" method="POST">
+                                @csrf
+                                @method('patch')
+                                <input type="hidden" name="user_id" value="{{ $employeeDetails->user->id }}">
+                                <input type="hidden" name="status" value="approve">
+                                <button type="submit" class="btn btn-danger">Reject</button>
+                            </form>
                         </div>
                     @else
                         <p class="text-muted">No employee detail found.</p>

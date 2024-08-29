@@ -6,8 +6,7 @@
             <div class="container py-2">
 
                 <h1 class="h3">Karyawan</h1>
-                <div class="d-flex justify-content-between mb-3 mt-3">
-                    <a href="{{ route('employee.create') }}" class="btn btn-primary">Create</a>
+                <div class="d-flex justify-content-end mb-3 mt-3">
                     <form id="searchForm" action="{{ route('employee.index') }}" method="GET"
                         class="d-flex align-items-center gap-2 position-relative">
                         @csrf
@@ -123,8 +122,8 @@
                                     <td>{{ $employee->hire_date }}</td>
                                     <td>
                                         <a href="{{ route('employee.edit', $employee->id) }}"
-                                            class="btn btn-warning">Edit</a>
-                                        <button class="btn btn-danger" data-bs-toggle="modal"
+                                            class="btn btn-warning btn-sm">Edit</a>
+                                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#vertical-center-modal{{ $employee->id }}"
                                             type="button">Delete</button>
                                     </td>

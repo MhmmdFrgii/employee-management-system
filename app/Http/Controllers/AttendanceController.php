@@ -72,6 +72,7 @@ class AttendanceController extends Controller
      */
     public function store()
     {
+        dd(Auth::user()->id);
         $today_attendance = Attendance::where('employee_id', Auth::id())
             ->Where('date', date('Y-m-d'))
             ->exists();
@@ -82,7 +83,7 @@ class AttendanceController extends Controller
 
         Attendance::create([
             // for now just user_id
-            'employee_id' => Auth::id(),
+            // 'employee_id' => Auth::id(),
             'date' => date('Y-m-d'),
             'status' => 'present',
         ]);

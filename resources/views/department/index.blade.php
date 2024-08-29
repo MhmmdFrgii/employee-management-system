@@ -67,8 +67,8 @@
                                     <td>{{ Str::limit($department->description, 35) }}</td>
                                     <td>
                                         <button data-bs-target="#editModal{{ $department->id }}" data-bs-toggle="modal"
-                                            class="btn btn-warning">Edit</button>
-                                        <button class="btn btn-danger" data-bs-toggle="modal"
+                                            class="btn btn-warning btn-sm">Edit</button>
+                                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#vertical-center-modal{{ $department->id }}"
                                             type="button">Delete</button>
                                     </td>

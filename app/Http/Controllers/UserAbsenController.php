@@ -7,6 +7,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 class UserAbsenController extends Controller
 {
@@ -69,16 +70,16 @@ class UserAbsenController extends Controller
             ->exists();
 
         if ($today_attendance) {
-            return redirect()->route('attendance.index')->with('info', 'kamu sudah absen!');
+            return redirect()->route('absensi.index')->with('info', 'kamu sudah absen!');
         }
 
         Attendance::create([
             // for now just user_id
-            'employee_id' => Auth::user()->employee->id,
+            'employee_id' => Auth::user()->employeeDetails->id,
             'date' => date('Y-m-d'),
             'status' => 'present',
         ]);
-        return redirect()->route('attendance.index')->with('success', 'berhasil!');
+        return redirect()->route(back())->with('success', 'berhasil!');
     }
 
     /**

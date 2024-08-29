@@ -119,32 +119,13 @@
                     </ul>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow" href="#" aria-expanded="false">
-                        <span class="d-flex">
+                    <a class="sidebar-link" href="{{ route('kanbanboard.index') }}" aria-expanded="false">
+                        <span class=>
                             <i class="ti ti-brand-trello"></i>
                         </span>
                         <span class="hide-menu">Kanban</span>
                     </a>
-                    <ul aria-expanded="false" class="collapse first-level">
-                        <li class="sidebar-item">
-                            <a href="{{ route('kanbanboard.index') }}" class="sidebar-link">
-                                <div class="round-16 d-flex align-items-center justify-content-center">
-                                    <i class="ti ti-circle"></i>
-                                </div>
-                                <span class="hide-menu">Papan Kanban</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ route('kanbantasks.index') }}" class="sidebar-link">
-                                <div class="round-16 d-flex align-items-center justify-content-center">
-                                    <i class="ti ti-circle"></i>
-                                </div>
-                                <span class="hide-menu">Tugas Kanban</span>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
-
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

@@ -137,7 +137,7 @@
             @csrf
             <button button type="submit" class="btn btn-success">Absen</button>
         </form>
-        <button type="button" class="btn btn-primary">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
             Buat Izin
         </button>
     </div>
@@ -164,4 +164,6 @@
             </tr>
         </tbody>
     </table>
+
+    @include('absenUser.partial.add-modal')
 @endsection

@@ -51,15 +51,6 @@
                         <span class="hide-menu">Absensi</span>
                     </a>
                 </li>
-
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/leave-request" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-archive"></i>
-                        </span>
-                        <span class="hide-menu">Permintaan Cuti</span>
-                    </a>
-                </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/kanban" aria-expanded="false">
                         <span>
