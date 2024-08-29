@@ -21,11 +21,9 @@ class KanbanTasksController extends Controller
 
     public function update(Request $request, KanbanTasks $kanbantask)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-        ]);
-
-        $kanbantask->update($validatedData);
+        $data = $request->all();
+        $data['title'] = $data['title'] ?? $kanbantask->title;
+        $kanbantask->update($data);
         return redirect()->route('kanbanboard.index', ['id' => $kanbantask->kanban_boards_id])->with('status', 'Kanban Tasks berhasil diupdate');
     }
 
