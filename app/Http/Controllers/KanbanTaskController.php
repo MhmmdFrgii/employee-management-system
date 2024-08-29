@@ -8,7 +8,7 @@ use App\Models\KanbanTasks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 
-class KanbanTasksController extends Controller
+class KanbanTaskController extends Controller
 {
     /**
      * Store a newly created resource in storage.

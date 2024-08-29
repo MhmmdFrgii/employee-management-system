@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Salarie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Http\Requests\SalarieRequest;
+use App\Http\Requests\SalaryRequest;
 use App\Models\EmployeeDetail;
+use App\Models\Salary;
 
-class SalarieController extends Controller
+class SalaryController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Salarie::with('employeeDetails');
+        $query = Salary::with('employeeDetails');
         $employees = EmployeeDetail::all();
 
 
@@ -39,18 +39,18 @@ class SalarieController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(SalarieRequest $request)
+    public function store(SalaryRequest $request)
     {
-        Salarie::create($request->validated());
+        Salary::create($request->validated());
         return redirect()->route('salaries.index')->with('success', 'Gaji berhasil dibuat.');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(SalarieRequest $request, $id)
+    public function update(SalaryRequest $request, $id)
     {
-        $salarie = Salarie::findOrFail($id);
+        $salarie = Salary::findOrFail($id);
         $salarie->update($request->validated());
 
         return redirect()->route('salaries.index')->with('success', 'Gaji berhasil di edit');
@@ -59,7 +59,7 @@ class SalarieController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Salarie $salarie)
+    public function destroy(Salary $salarie)
     {
         $salarie->delete();
         return redirect()->route('salaries.index')->with('danger', 'Data gaji berhasil dihapus');

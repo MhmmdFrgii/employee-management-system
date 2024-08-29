@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Redis;
 class AttendanceController extends Controller
 {
     // Mark Absentees today
-    public function markAbsentees()
+    public function mark_absentees()
     {
         $today = Carbon::today()->toDateString();
 
@@ -34,6 +34,44 @@ class AttendanceController extends Controller
                 ]);
             }
         }
+    }
+
+    // display a list of each user attendance
+    public function user_index()
+    {
+        $user = Auth::user()->employee_detail->id;
+
+        $total_attendance = Attendance::where('employee_id', $user)->count();
+        $total_present = Attendance::where('employee_id', $user)->where('status', 'present')->count();
+        $total_absent = Attendance::where('employee_id', $user)->where('status', 'absent')->count();
+        $total_alpha = Attendance::where('employee_id', $user)->where('status', 'ajlpha')->count();
+        $attendance_count = Attendance::where('employee_id', $user)->count();
+
+        $attendances = Attendance::where('employee_id', $user)->get();
+
+        return view('absenUser.index', compact('attendances', 'attendance_count', 'total_attendance', 'total_present', 'total_absent', 'total_alpha'));
+    }
+
+    /**
+     * Store a newly attendance for each user.
+     */
+    public function user_attendance()
+    {
+        $today_attendance = Attendance::where('employee_id', Auth::id())
+            ->Where('date', date('Y-m-d'))
+            ->exists();
+
+        if ($today_attendance) {
+            return redirect()->route('attendance.index')->with('info', 'kamu sudah absen!');
+        }
+
+        Attendance::create([
+            // for now just user_id
+            // 'employee_id' => Auth::id(),
+            'date' => date('Y-m-d'),
+            'status' => 'present',
+        ]);
+        return redirect()->route('attendance.index')->with('success', 'berhasil!');
     }
 
     /**
@@ -65,28 +103,5 @@ class AttendanceController extends Controller
         $attendances = $query->paginate(10); // Sesuaikan pagination sesuai kebutuhan
 
         return view('attendance.index', compact('attendances'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store()
-    {
-        dd(Auth::user()->id);
-        $today_attendance = Attendance::where('employee_id', Auth::id())
-            ->Where('date', date('Y-m-d'))
-            ->exists();
-
-        if ($today_attendance) {
-            return redirect()->route('attendance.index')->with('info', 'kamu sudah absen!');
-        }
-
-        Attendance::create([
-            // for now just user_id
-            // 'employee_id' => Auth::id(),
-            'date' => date('Y-m-d'),
-            'status' => 'present',
-        ]);
-        return redirect()->route('attendance.index')->with('success', 'berhasil!');
     }
 }

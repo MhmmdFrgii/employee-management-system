@@ -14,7 +14,6 @@ class LeaveRequestController extends Controller
      */
     public function index(Request $request)
     {
-
         $query = LeaveRequest::query();
 
         // Pencarian

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 use function Laravel\Prompts\search;
 
-class EmployeeDetailsController extends Controller
+class EmployeeDetailController extends Controller
 {
     public function index(Request $request)
     {

@@ -9,14 +9,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
-{
-    public function search()
-    {
-        $departments = Department::all();
-
-        return view('department.index', compact('departments'));
-    }
-
+{ 
     /**
      * Display a listing of the resource.
      */
@@ -40,15 +33,7 @@ class DepartmentController extends Controller
         $departments->appends($request->all());
 
         return view('department.index', compact('departments'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('department.create');
-    }
+    } 
 
     /**
      * Store a newly created resource in storage.
