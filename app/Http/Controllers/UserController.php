@@ -22,7 +22,7 @@ class UserController extends Controller
         $user = User::with('employeeDetails.department', 'employeeDetails.position')->findOrFail($id);
         $employeeDetails = $user->employeeDetails;
         return view('applicant.detail', compact('user', 'employeeDetails'));
-    } 
+    }
 
     /**
      * Update the specified resource in storage.
@@ -33,6 +33,10 @@ class UserController extends Controller
         $user->update([
             'status' => $request->status,
         ]);
+
+        if ($request->status == "approved") {
+            $user->assignRole('karyawan');
+        }
 
         return redirect()->route('applicant.index')->with('success', 'User Applicant Approved.');
     }

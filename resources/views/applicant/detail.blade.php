@@ -56,14 +56,14 @@
                                 @csrf
                                 @method('patch')
                                 <input type="hidden" name="user_id" value="{{ $employeeDetails->user->id }}">
-                                <input type="hidden" name="status" value="approve">
+                            <input type="hidden" name="status" value="approved">
                                 <button type="submit" class="btn btn-primary">Approve</button>
                             </form>
                             <form action="{{ route('applicant.update', $employeeDetails->user->id) }}" method="POST">
                                 @csrf
                                 @method('patch')
                                 <input type="hidden" name="user_id" value="{{ $employeeDetails->user->id }}">
-                                <input type="hidden" name="status" value="approve">
+                                <input type="hidden" name="status" value="rejected">
                                 <button type="submit" class="btn btn-danger">Reject</button>
                             </form>
                         </div>

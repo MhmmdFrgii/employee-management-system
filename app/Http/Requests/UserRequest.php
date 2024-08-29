@@ -32,11 +32,7 @@ class UserRequest extends FormRequest
             'phone' => 'required|string|regex:/^[0-9]+$/|max:15|unique:employee_details,phone',
             'address' => 'required|string|max:500',
             'hire_date' => 'required|date|before_or_equal:today',
-            'status' => 'required|in:approve,disapprove', // For the status field in the User model
-
-            
-            
-
+            'status' => 'required|in:approved,disapprove,rejected', // For the status field in the User model
         ];
     }
 }
