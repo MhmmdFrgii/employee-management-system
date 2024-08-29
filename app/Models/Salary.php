@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Salarie extends Model
+class Salary extends Model
 {
     use HasFactory;
     protected $table = 'salaries';
@@ -17,7 +17,7 @@ class Salarie extends Model
         'payment_date',
     ];
 
-    public function employeeDetails()
+    public function employee_detail()
     {
         return $this->belongsTo(EmployeeDetail::class, 'employee_id');
     }
