@@ -29,7 +29,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         if (Auth::user()->hasRole('manager')) {
-            return redirect()->to('administrator/dashboard');
+            return redirect()->to('manager/dashboard');
         }
 
         if (Auth::user()->hasRole('employee')) {
