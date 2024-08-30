@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\Department;
 use App\Models\EmployeeDetail;
 use App\Models\User;
@@ -33,40 +34,19 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'department_id' => ['required', 'exists:departments,id'],
-            'fullname' => ['required', 'string', 'max:255'],
-            'nik' => ['required', 'string', 'max:20', 'unique:employee_details,nik'],
-            'photo' => ['required', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
-            'cv' => ['required', 'mimes:jpeg,jpg,png', 'max:2048'],
-            'phone' => ['required', 'string', 'max:15', 'unique:employee_details,phone'],
-            'gender' => ['required', 'in:male,female'],
-            'address' => ['required', 'string', 'max:500'],
+        $company = Company::create([
+            'name' => $request->company_name,
+            'address' => $request->company_address,
+            'contact_email' => $request->contact_email,
         ]);
 
         $user = User::create([
+            'company_id' => $company->id,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-        ]);
-
-        $cv = $request->file('cv')->store('cv');
-        $photo = $request->file('photo')->store('photo');
-
-        EmployeeDetail::create([
-            'user_id' => $user->id,
-            'department_id' => $request->department_id,
-            'fullname' => $request->fullname,
-            'nik' => $request->nik,
-            'photo' => $photo,
-            'cv' => $cv,
-            'phone' => $request->phone,
-            'gender' => $request->gender,
-            'address' => $request->address
-        ]);
+            'status' => 'approved',
+        ])->assignRole('manager');
 
         event(new Registered($user));
 

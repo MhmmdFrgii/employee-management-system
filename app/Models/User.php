@@ -21,7 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'status'
+        'status',
+        'company_id'
     ];
 
     protected $attributes = [
@@ -51,12 +52,17 @@ class User extends Authenticatable
         ];
     }
 
-    function employee_detail()
+    public function company(): mixed
+    {
+        return $this->belongsTo(Company::class, 'company_id');
+    }
+
+    public function employee_detail(): mixed
     {
         return $this->hasOne(EmployeeDetail::class);
     }
 
-    public function notifications()
+    public function notifications(): mixed
     {
         return $this->hasMany(Notification::class);
     }

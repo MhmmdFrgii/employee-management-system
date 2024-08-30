@@ -15,32 +15,32 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Menambahkan pengguna
-        $users = [
-            [
-                'name' => 'Admin User',
-                'email' => 'admin@example.com',
-                'password' => Hash::make('password123'),
-                'role' => 'manajer', // Pastikan role ini sudah ada di tabel roles
-            ],
-            [
-                'name' => 'Employee User',
-                'email' => 'employee@example.com',
-                'password' => Hash::make('password123'),
-                'role' => 'karyawan', // Pastikan role ini sudah ada di tabel roles
-            ],
-        ];
+        // $users = [
+        //     [
+        //         'name' => 'Admin User',
+        //         'email' => 'admin@example.com',
+        //         'password' => Hash::make('password123'),
+        //         'role' => 'manajer', // Pastikan role ini sudah ada di tabel roles
+        //     ],
+        //     [
+        //         'name' => 'Employee User',
+        //         'email' => 'employee@example.com',
+        //         'password' => Hash::make('password123'),
+        //         'role' => 'karyawan', // Pastikan role ini sudah ada di tabel roles
+        //     ],
+        // ];
 
-        foreach ($users as $userData) {
-            $user = User::create([
-                'name' => $userData['name'],
-                'email' => $userData['email'],
-                'password' => $userData['password'],
-            ]);
+        // foreach ($users as $userData) {
+        //     $user = User::create([
+        //         'name' => $userData['name'],
+        //         'email' => $userData['email'],
+        //         'password' => $userData['password'],
+        //     ]);
 
-            // Assign role if Spatie Laravel Permission is used
-            if (isset($userData['role'])) {
-                $user->assignRole($userData['role']);
-            }
-        }
+        //     // Assign role if Spatie Laravel Permission is used
+        //     if (isset($userData['role'])) {
+        //         $user->assignRole($userData['role']);
+        //     }
+        // }
     }
 }

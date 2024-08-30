@@ -69,7 +69,7 @@
 
                             @auth
 
-                                @if (Auth::user()->hasRole('manajer'))
+                                @if (Auth::user()->hasRole('manager'))
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
                                     </li>
