@@ -109,7 +109,7 @@
                                 </th>
                                 <th>
                                     <a
-                                        href="{{ route('leave.index', array_merge(request()->query(), ['sortBy' => 'type', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        href="{{ route('leave-requests.index', array_merge(request()->query(), ['sortBy' => 'type', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
                                         Tipe
                                         @if (request('sortBy') === 'type')
                                             @if (request('sortDirection') === 'asc')
