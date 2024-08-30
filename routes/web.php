@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('departments', DepartmentController::class);
             Route::resource('salaries', SalaryController::class);
             Route::resource('positions', PositionController::class);
-            Route::resource('employee', EmployeeDetailController::class);
+            Route::resource('employees', EmployeeDetailController::class);
             Route::resource('attendance', AttendanceController::class);
             Route::resource('kanban-board', KanbanBoardController::class);
             Route::resource('kanban-tasks', KanbanTaskController::class);

@@ -15,7 +15,7 @@
                             </a>
                         </li>
                     @empty
-                        <li><a class="dropdown-item">Not Available.</a></li>
+                        <li><a class="dropdown-item">Tidak tersedia</a></li>
                     @endforelse
                 </ul>
             </div>
@@ -23,7 +23,7 @@
             <h1 class="text-center m-0">{{ $kanbanboard->name ?? 'Kanban Board' }}</h1>
             <button type="button" class="btn btn-outline-primary" @if (!isset($kanbanboard)) disabled @endif
                 data-bs-toggle="modal" data-bs-target="#createTaskModalTodo{{ $kanbanboard->id ?? '' }}">
-                Create Task
+                Buat Tugas
             </button>
         </div>
         <div class="row g-4">
@@ -55,14 +55,14 @@
                                         'task' => $task,
                                     ])
                                 @empty
-                                    <p class="text-center">No tasks available.</p>
+                                    <p class="text-center">Tidak ada tugas tersedia</p>
                                 @endforelse
                             </div>
                             <div class="card-footer text-center">
                                 <button data-bs-toggle="modal"
                                     data-bs-target="#createTaskModal{{ ucfirst($status) }}{{ $kanbanboard->id ?? '' }}"
                                     class="btn btn-sm btn-outline-{{ $status === 'todo' ? 'primary' : ($status === 'progress' ? 'warning' : 'success') }}">
-                                    + Add Task
+                                    + Tambahkan tugas
                                 </button>
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                 <div class="text-center">
                     <img src="{{ asset('assets/images/no-data.png') }}" alt="No Data" class="img-fluid"
                         style="width: clamp(150px, 50vw, 400px);">
-                    <p class="mt-2">No Kanban Board Available.</p>
+                    <p class="mt-2">Tidak ada papan kanban tersedia</p>
                 </div>
             @endisset
         </div>

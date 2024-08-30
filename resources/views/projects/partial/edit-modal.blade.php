@@ -4,8 +4,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel{{ $project->id }}">Edit
-                    project</h5>
+                <h5 class="modal-title" id="editModalLabel{{ $project->id }}">Ubah Proyek</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -13,7 +12,7 @@
                     @method('PUT')
                     @csrf
                     <div class="mb-3">
-                        <label for="name" class="form-label">Nama projects</label>
+                        <label for="name" class="form-label">Nama proyek</label>
                         <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
                             id="name" value="{{ old('name', $project->name) }}">
                         @error('name')
@@ -75,7 +74,7 @@
                             </div>
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
                 </form>
             </div>
         </div>

@@ -5,14 +5,14 @@
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="container py-2">
 
-                <h1 class="h3">Departments</h1>
+                <h1 class="h3">Departemen</h1>
                 <div class="d-flex justify-content-between mb-3 mt-3">
                     <button data-bs-target="#createModal" data-bs-toggle="modal" class="btn btn-primary">Tambah</button>
                     <form id="searchForm" action="{{ route('departments.index') }}" method="GET"
                         class="d-flex align-items-center gap-2">
                         @csrf
                         <div class="form-group mb-0 position-relative">
-                            <label for="search" class="sr-only">Search:</label>
+                            <label for="search" class="sr-only">Cari:</label>
                             <input type="text" id="search" name="search" value="{{ request('search') }}"
                                 class="form-control shadow search-input" placeholder="Cari data..">
 
@@ -34,7 +34,7 @@
                                 <th>
                                     <a
                                         href="{{ route('departments.index', array_merge(request()->query(), ['sortBy' => 'name', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
-                                        Name
+                                        Nama
                                         @if (request('sortBy') === 'name')
                                             @if (request('sortDirection') === 'asc')
                                                 &#9650;
@@ -47,7 +47,7 @@
                                 <th>
                                     <a
                                         href="{{ route('departments.index', array_merge(request()->query(), ['sortBy' => 'description', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
-                                        Description
+                                        Deskripsi
                                         @if (request('sortBy') === 'description')
                                             @if (request('sortDirection') === 'asc')
                                                 &#9650;
@@ -57,7 +57,7 @@
                                         @endif
                                     </a>
                                 </th>
-                                <th>Action</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -71,7 +71,7 @@
                                             class="btn btn-warning btn-sm">Edit</button>
                                         <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#vertical-center-modal{{ $department->id }}"
-                                            type="button">Delete</button>
+                                            type="button">Hapus</button>
                                     </td>
                                 </tr>
 
@@ -91,12 +91,12 @@
                                             <div class="modal-footer">
                                                 <button type="button"
                                                     class="btn btn-light-danger text-danger font-medium waves-effect text-start"
-                                                    data-bs-dismiss="modal">Cancel</button>
-                                                <form action="{{ route('department.destroy', $department->id) }}"
+                                                    data-bs-dismiss="modal">Batal</button>
+                                                <form action="{{ route('departments.destroy', $department->id) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button class="btn btn-danger" type="submit">Delete</button>
+                                                    <button class="btn btn-danger" type="submit">Hapus</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -111,17 +111,17 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="editModalLabel{{ $department->id }}">Edit
-                                                    Department</h5>
+                                                    Departemen</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <form action="{{ route('department.update', $department->id) }}"
+                                                <form action="{{ route('departments.update', $department->id) }}"
                                                     method="POST">
                                                     @method('PUT')
                                                     @csrf
                                                     <div class="mb-3">
-                                                        <label for="name" class="form-label">Nama Department</label>
+                                                        <label for="name" class="form-label">Nama Departemen</label>
                                                         <input type="text" name="name"
                                                             class="form-control @error('name') is-invalid @enderror"
                                                             id="name" value="{{ old('name') ?? $department->name }}">
@@ -143,7 +143,7 @@
                                                             </div>
                                                         @enderror
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary">Update</button>
+                                                    <button type="submit" class="btn btn-primary">Edit</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -154,7 +154,7 @@
                                     <td colspan="4" class="text-center">
                                         <img src="{{ asset('assets/images/no-data.png') }}" alt="No Data"
                                             class="img-fluid" style="width: clamp(150px, 50vw, 300px);">
-                                        <p class="mt-3">No data available.</p>
+                                        <p class="mt-3">Tidak ada data tersedia</p>
                                     </td>
                                 </tr>
                             @endforelse
@@ -175,7 +175,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createModal">Create Department</h5>
+                    <h5 class="modal-title" id="createModal">Buat Departemen</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -183,7 +183,7 @@
                         @method('post')
                         @csrf
                         <div class="mb-3">
-                            <label for="name" class="form-label">Nama Department</label>
+                            <label for="name" class="form-label">Nama Departemen</label>
                             <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
                                 id="name" value="{{ old('name') ?? '' }}">
                             @error('name')
@@ -203,7 +203,7 @@
                                 </div>
                             @enderror
                         </div>
-                        <button type="submit" class="btn btn-primary">Create</button>
+                        <button type="submit" class="btn btn-primary">Buat</button>
                     </form>
                 </div>
             </div>
