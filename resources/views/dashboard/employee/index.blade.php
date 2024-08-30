@@ -44,58 +44,50 @@
         </div>
     </div>
 
-    @if (isset($activeCounts) && isset($completedCounts) && isset($attendanceCounts))
+    @if (isset($activeCounts) && isset($attendanceCounts))
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         <script>
-            var projectOptions = {
-                series: [{
-                    name: 'Active Projects',
-                    data: @json($activeCounts)
-                }, {
-                    name: 'Completed Projects',
-                    data: @json($completedCounts)
-                }],
-                chart: {
-                    type: 'bar',
-                    height: 350
-                },
-                plotOptions: {
-                    bar: {
-                        horizontal: false,
-                        columnWidth: '55%',
-                        endingShape: 'rounded'
+          var projectOptions = {
+                    series: [{
+                        name: 'Active Projects',
+                        data: @json($activeCounts)
+                    }],
+                    chart: {
+                        type: 'line', // Ubah dari 'bar' menjadi 'line'
+                        height: 350
                     },
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                stroke: {
-                    show: true,
-                    width: 2,
-                    colors: ['transparent']
-                },
-                xaxis: {
-                    categories: @json($months),
-                },
-                yaxis: {
-                    title: {
-                        text: 'Number of Projects'
-                    }
-                },
-                fill: {
-                    opacity: 1
-                },
-                tooltip: {
-                    y: {
-                        formatter: function(val) {
-                            return val + " projects";
+                    stroke: {
+                        curve: 'smooth', // Menambahkan garis yang lebih halus
+                        width: 2
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    xaxis: {
+                        categories: @json($months),
+                    },
+                    yaxis: {
+                        title: {
+                            text: 'Jumlah Projek Selesai'
                         }
+                    },
+                    tooltip: {
+                        y: {
+                            formatter: function(val) {
+                                return val + " projects";
+                            }
+                        }
+                    },
+                    markers: {
+                        size: 4, // Ukuran titik pada garis
+                    },
+                    fill: {
+                        opacity: 1
                     }
-                }
-            };
+                };
 
-            var projectChart = new ApexCharts(document.querySelector("#projectsChart"), projectOptions);
-            projectChart.render();
+                var projectChart = new ApexCharts(document.querySelector("#projectsChart"), projectOptions);
+                projectChart.render();
 
             var attendanceOptions = {
                 series: @json($attendanceCounts),
