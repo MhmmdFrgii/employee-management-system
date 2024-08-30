@@ -18,6 +18,6 @@ class KanbanBoard extends Model
 
     public function kanbantasks()
     {
-        return $this->hasMany(KanbanTasks::class, 'kanban_boards_id');
+        return $this->hasMany(KanbanTask::class, 'kanban_boards_id');
     }
 }
