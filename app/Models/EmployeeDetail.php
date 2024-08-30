@@ -13,10 +13,9 @@ class EmployeeDetail extends Model
         'user_id',
         'department_id',
         'position_id',
-        'fullname',
-        'nik',
+        'name',
         'photo',
-        'cv',
+        'email',
         'gender',
         'phone',
         'address',
@@ -41,6 +40,6 @@ class EmployeeDetail extends Model
     }
     public function salary()
     {
-        return $this->hasOne(Salarie::class);
+        return $this->hasOne(Salary::class);
     }
 }

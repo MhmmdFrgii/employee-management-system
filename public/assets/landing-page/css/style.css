@@ -738,10 +738,6 @@ img {
 }
 
 /*BACKGROUND IMAGES*/
-.welcome-area {
-    background: rgba(0, 0, 0, 0) url("../img/bg/welcome-bg.jpg") no-repeat
-        scroll center center/cover;
-}
 
 .homepage-3 .welcome-area {
     background: rgba(0, 0, 0, 0) url("../img/blog/blog-5.jpg") no-repeat scroll
@@ -797,11 +793,6 @@ img {
 .blog .breadcrumb-area {
     background: rgba(0, 0, 0, 0) url("../img/blog/blog-5.jpg") no-repeat scroll
         center center/cover;
-}
-
-.inner-area {
-    background: rgba(0, 0, 0, 0) url("../img/bg/welcome-bg.jpg") no-repeat
-        scroll center center/cover;
 }
 
 .download-page .welcome-area {
@@ -2711,6 +2702,10 @@ img {
 .height-emulator {
     float: left;
     height: 585px;
+}
+
+.footer-area {
+    padding-top: 40px;
 }
 
 .footer-area .footer-items .social-icons > a {
