@@ -22,6 +22,11 @@ class DashboardController extends Controller
         $currentMonth = $now->month;
         $currentYear = $now->year;
 
+        // Ambil data proyek berdasarkan tenggat yang terdekat
+        $projectsWithNearestDeadlines = Project::where('end_date', '>=', $now)
+        ->orderBy('end_date', 'asc')
+        ->get();
+
         // Ambil data proyek berdasarkan bulan dan tahun saat ini
         $activeProjects = Project::where('status', 'Active')
             ->whereYear('start_date', $currentYear)
@@ -81,7 +86,8 @@ class DashboardController extends Controller
             'attendanceCounts' => $attendanceCounts,
             'employee_count' => $employee_count,
             'project_count' => $project_count,
-            'department_count' => $department_count
+            'department_count' => $department_count,
+            'projectsWithNearestDeadlines' => $projectsWithNearestDeadlines
 
         ]);
     }

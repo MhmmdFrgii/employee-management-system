@@ -33,6 +33,26 @@
                             </div>
                         @enderror
                     </div>
+
+                    @php
+                        $selectedStates = old('states', $project->states ?? []); // Mengambil nilai dari database atau input lama
+                    @endphp
+                    <div class="mb-3">
+                        <label for="assigned_to" class="form-label">Ditugaskan kepada</label> <br>
+                        <select class="js-example-basic-multiple form-control w-100" name="states[]" multiple="multiple">
+                            <option value="AL" {{ in_array('AL', $selectedStates) ? 'selected' : '' }}>Alabama</option>
+                            <option value="AK" {{ in_array('AK', $selectedStates) ? 'selected' : '' }}>Alaska</option>
+                            <option value="AZ" {{ in_array('AZ', $selectedStates) ? 'selected' : '' }}>Arizona</option>
+                            <option value="AR" {{ in_array('AR', $selectedStates) ? 'selected' : '' }}>Arkansas</option>
+                            <!-- Tambahkan opsi lainnya -->
+                        </select>
+                        
+                        @error('end_date')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
                     <div class="mb-3">
                         <label for="start_date" class="form-label">Tanggal Mulai</label>
                         <input type="date" name="start_date"
@@ -61,3 +81,44 @@
         </div>
     </div>
 </div>
+
+<script>
+    // $(document).ready(function() {
+    //     $('.js-example-basic-multiple').select2({
+    //         placeholder: "Pilih State", // Placeholder text
+    //         allowClear: true, // Enable the clear button
+    //         width: '100%' // Use the full width of the select element
+    //     });
+    // });
+
+    $(document).ready(function() {
+        $('#editModal{{ $project->id }}').on('shown.bs.modal', function () {
+            $('.js-example-basic-multiple').select2({
+                placeholder: "Pilih State",
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    });
+</script>
+
+<style>
+    /* Adjust Select2 container and dropdown styles */
+    .select2-container--default .select2-selection--multiple {
+        background-color: #fff !important;; /* Ensure solid background */
+        border: 1px solid #ccc !important;; /* Match border style */
+    }
+
+    /* Ensure options are clearly visible */
+    .select2-container--default .select2-results>.select2-results__options {
+        background-color: #fff !important;; /* Solid background for options */
+    }
+
+    /* Highlighted option styling */
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background-color: #bcb9b9 !important;; /* Lighter background on hover */
+    }
+    .select2-container--default .select2-dropdown {
+    z-index: 9999; /* Pastikan dropdown berada di atas elemen lain */
+}
+</style>

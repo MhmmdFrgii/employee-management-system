@@ -179,4 +179,52 @@
         @else
             <p>Data tidak ditemukan.</p>
         @endif
+
+        <div class="col-md-12">
+            <h5 class="mt-4">Projek Dengan Tenggat Waktu Terdekat</h5>
+            <div class="list-group">
+                @forelse ($projectsWithNearestDeadlines as $project)
+                    @php
+                        $endDate = \Carbon\Carbon::parse($project->end_date);
+                        $now = \Carbon\Carbon::now();
+
+                        $daysRemaining = $now->diffInDays($endDate, false);
+
+                        // Debugging untuk memverifikasi nilai $daysRemaining
+                        // echo $daysRemaining;
+
+                        $isUrgent = $daysRemaining <= 20;
+                        $cardClass = $isUrgent ? 'card-danger' : 'card-primary';
+                    @endphp
+                    <a href="{{ route('projects.show', $project->id) }}"
+                        class="list-group-item list-group-item-action {{ $cardClass }}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ $project->name }}</h5>
+                            <small>{{ $endDate->locale('id')->diffForHumans() }}</small>
+                        </div>
+                        <small class="text-muted">Tenggat Waktu: {{ $endDate->format('d M Y') }}</small>
+                    </a>
+                @empty
+                    <p class="list-group-item">No projects found with upcoming deadlines.</p>
+                @endforelse
+            </div>
+        </div>
+
+        <style>
+            .card-danger {
+                border: 2px solid #dc3545; /* Red color for urgent deadlines */
+                background-color: #f8d7da; /* Light red background */
+                border-radius: 4px; /* Optional: for rounded corners */
+                padding: 10px; /* Optional: for inner spacing */
+                margin-bottom: 10px; /* Spacing between cards */
+            }
+    
+            .card-primary {
+                border: 2px solid #007bff; /* Blue color for non-urgent deadlines */
+                background-color: #cce5ff; /* Light blue background */
+                border-radius: 4px; /* Optional: for rounded corners */
+                padding: 10px; /* Optional: for inner spacing */
+                margin-bottom: 10px; /* Spacing between cards */
+            }
+        </style>
     @endsection
