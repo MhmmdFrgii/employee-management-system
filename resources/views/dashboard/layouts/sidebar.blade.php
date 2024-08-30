@@ -59,7 +59,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('employee.index') }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('employees.index') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-users"></i>
                         </span>

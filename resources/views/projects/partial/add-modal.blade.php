@@ -37,7 +37,7 @@
                         <select class="js-example-basic-multiple form-control w-100" name="employee_id[]"
                             multiple="multiple">
                             @forelse ($employees as $employee)
-                                <option value="{{ $employee->id }}">{{ $employee->fullname }}</option>
+                                <option value="{{ $employee->id }}">{{ $employee->name }}</option>
                             @empty
                                 <option disabled>Tidak ada karyawan.</option>
                             @endforelse

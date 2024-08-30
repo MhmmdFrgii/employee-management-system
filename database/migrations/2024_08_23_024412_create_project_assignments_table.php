@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('project_id')->constrained('projects', 'id');
             $table->foreignId('employee_id')->constrained('employee_details', 'id');
-            $table->date('assigned_at');
+            $table->date('assigned_at')->default(date('Y-m-d'));
             $table->timestamps();
         });
     }

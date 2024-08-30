@@ -88,7 +88,7 @@
 
                         @include('projects.partial.delete-modal')
                         @include('projects.partial.complete-modal')
-                        @include('projects.partial.edit-modal')
+                        {{-- @include('projects.partial.edit-modal') --}}
                     @empty
                         <div class="col-12
                                         text-center">
