@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained('companies', 'id')->onDelete('cascade');
             $table->string('name');
             $table->string('description');
             $table->date('start_date');
             $table->date('end_date');
-            $table->enum('status', ['Active', 'Completed'])->default('Active');
-            $table->date('completed_at')->nullable(); // Menambahkan kolom completed_at
+            $table->enum('status', ['active', 'completed'])->default('active');
+            $table->date('completed_at')->nullable();
             $table->timestamps();
         });
     }

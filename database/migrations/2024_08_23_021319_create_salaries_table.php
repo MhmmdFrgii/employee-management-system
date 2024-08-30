@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('salaries', function (Blueprint $table) {
             $table->id();
-            $table->string('employee');
-            $table->decimal('amount',10,2);
+            $table->foreignId('company_id')->constrained('companies', 'id')->onDelete('cascade');
+            $table->foreignId('employee_id')->nullable()->constrained('employee_details', 'id')->onDelete('cascade');
+            $table->decimal('amount', 10, 2);
             $table->date('payment_date');
             $table->timestamps();
         });

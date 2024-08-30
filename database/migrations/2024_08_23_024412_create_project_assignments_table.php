@@ -13,12 +13,9 @@ return new class extends Migration
     {
         Schema::create('project_assignments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('project_id');
-            $table->unsignedBigInteger('employee_id');
-            $table->string('role');
+            $table->foreignId('project_id')->constrained('projects', 'id');
+            $table->foreignId('employee_id')->constrained('employee_details', 'id');
             $table->date('assigned_at');
-            $table->foreign('project_id')->references('id')->on('projects');
-            $table->foreign('employee_id')->references('id')->on('employee_details');
             $table->timestamps();
         });
     }
