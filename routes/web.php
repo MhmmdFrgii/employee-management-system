@@ -35,7 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::middleware('role:manajer')->group(function () {
+    Route::middleware('role:manager')->group(function () {
 
         Route::prefix('administrator')->group(function () {
             // route attendence
@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::middleware('role:karyawan')->group(function () {
+    Route::middleware('role:employee')->group(function () {
 
         Route::prefix('employee')->group(function () {
             Route::get('dashboard', [DashboardController::class, 'userDashboard'])->name('employee.dashboard');
@@ -73,7 +73,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::resource('leave-request', LeaveRequestController::class);
+    Route::resource('leave-requests', LeaveRequestController::class);
 });
 
 require __DIR__ . '/auth.php';

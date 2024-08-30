@@ -86,7 +86,7 @@
                     <span>
                         <i class="ti ti-user-cog fs-8"></i>
                     </span>
-                    <h3 class="card-title mt-3 mb-0 text-white">15</h3>
+                    <h3 class="card-title mt-3 mb-0 text-white">0</h3>
                     <p class="card-text text-white-50 fs-3 fw-normal">
                         Menunggu Konfirmasi
                     </p>

@@ -35,30 +35,12 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow" href="#" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('projects.index') }}" aria-expanded="false">
                         <span class="d-flex">
                             <i class="ti ti-clipboard-list"></i>
                         </span>
                         <span class="hide-menu">Projects</span>
                     </a>
-                    <ul aria-expanded="false" class="collapse first-level">
-                        <li class="sidebar-item">
-                            <a href="{{ route('projects.index') }}" class="sidebar-link">
-                                <div class="round-16 d-flex align-items-center justify-content-center">
-                                    <i class="ti ti-circle"></i>
-                                </div>
-                                <span class="hide-menu">Daftar Project</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ route('projectAssignments.index') }}" class="sidebar-link">
-                                <div class="round-16 d-flex align-items-center justify-content-center">
-                                    <i class="ti ti-circle"></i>
-                                </div>
-                                <span class="hide-menu">Penugasan Project</span>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="{{ route('positions.index') }}" aria-expanded="false">
@@ -69,7 +51,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('department.index') }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('departments.index') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-category-2"></i>
                         </span>
@@ -77,7 +59,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('employee.index') }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('employees.index') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-users"></i>
                         </span>
@@ -85,7 +67,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('applicant.index') }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('applicants.index') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-user-up"></i>
                         </span>
@@ -109,7 +91,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{{ route('leave.index') }}" class="sidebar-link">
+                            <a href="{{ route('leave-requests.index') }}" class="sidebar-link">
                                 <div class="round-16 d-flex align-items-center justify-content-center">
                                     <i class="ti ti-circle"></i>
                                 </div>
@@ -119,7 +101,7 @@
                     </ul>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('kanbanboard.index') }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('kanban-board.index') }}" aria-expanded="false">
                         <span class=>
                             <i class="ti ti-brand-trello"></i>
                         </span>

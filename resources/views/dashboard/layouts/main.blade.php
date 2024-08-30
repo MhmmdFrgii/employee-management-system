@@ -13,6 +13,16 @@
     <meta name="author" content="" />
     <meta name="keywords" content="Mordenize" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    {{-- jQuery --}}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    {{-- Select to --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.2.0/dist/select2-bootstrap-5-theme.min.css"
+        rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <!--  Favicon -->
     <link rel="shortcut icon" type="image/png"
         href="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/favicon.ico" />
@@ -30,12 +40,10 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    {{-- Select2 --}}
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
-
+    {{-- Multi Select --}}
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.1.0/dist/css/multi-select-tag.css">
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.1.0/dist/js/multi-select-tag.js"></script>
 </head>
 
 <body>
@@ -54,7 +62,7 @@
         data-sidebar-position="fixed" data-header-position="fixed">
         <!-- Sidebar Start -->
 
-        @if (Auth::user()->hasRole('manajer'))
+        @if (Auth::user()->hasRole('manager'))
             @include('dashboard.layouts.sidebar')
         @else
             @include('dashboard.layouts.sidebar-user')
@@ -222,7 +230,7 @@
                 position: 'topRight'
             });
         @endif
-        
+
         @if ($errors->any())
             iziToast.error({
                 title: 'Erorr!',
@@ -243,15 +251,6 @@
             });
 
             $('.search-input').trigger('input');
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            $('.select2').select2({
-                placeholder: "Select a user",
-                allowClear: true
-            });
         });
     </script>
 </body>

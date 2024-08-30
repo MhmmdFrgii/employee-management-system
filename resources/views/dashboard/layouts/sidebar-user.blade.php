@@ -44,7 +44,7 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('absensi.index') }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('attendance.index') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-clipboard-data"></i>
                         </span>
