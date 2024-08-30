@@ -39,12 +39,14 @@ class AttendanceController extends Controller
     // display a list of each user attendance
     public function user_index()
     {
+
+
         $user = Auth::user()->employee_detail->id;
 
         $total_attendance = Attendance::where('employee_id', $user)->count();
         $total_present = Attendance::where('employee_id', $user)->where('status', 'present')->count();
         $total_absent = Attendance::where('employee_id', $user)->where('status', 'absent')->count();
-        $total_alpha = Attendance::where('employee_id', $user)->where('status', 'ajlpha')->count();
+        $total_alpha = Attendance::where('employee_id', $user)->where('status', 'alpha')->count();
         $attendance_count = Attendance::where('employee_id', $user)->count();
 
         $attendances = Attendance::where('employee_id', $user)->get();
@@ -58,21 +60,22 @@ class AttendanceController extends Controller
     public function user_attendance()
     {
         $today_attendance = Attendance::where('employee_id', Auth::id())
-            ->Where('date', date('Y-m-d'))
+            ->where('date', date('Y-m-d'))
             ->exists();
 
         if ($today_attendance) {
-            return redirect()->route('attendance.index')->with('info', 'kamu sudah absen!');
+            return redirect()->route('attendance.user')->with('info', 'Kamu sudah absen!');
         }
 
         Attendance::create([
-            // for now just user_id
-            // 'employee_id' => Auth::id(),
+            'employee_id' => Auth::id(),
             'date' => date('Y-m-d'),
             'status' => 'present',
         ]);
-        return redirect()->route('attendance.index')->with('success', 'berhasil!');
+
+        return redirect()->route('attendance.user')->with('success', 'Berhasil absen!');
     }
+
 
     /**
      * Display a listing of the resource.

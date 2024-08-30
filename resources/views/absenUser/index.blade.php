@@ -133,7 +133,7 @@
     </div>
     {{-- ABSENSII --}}
     <div class="d-flex justify-content-end mb-3 gap-2">
-        <form action="{{ route('absensi.store') }}" method="post">
+        <form action="{{ route('attendance.mark') }}" method="post">
             @csrf
             <button button type="submit" class="btn btn-success">Absen</button>
         </form>
@@ -161,7 +161,7 @@
                         @if ($attendence->status == 'present')
                             <span class="badge bg-success">Masuk</span>
                         @elseif($attendence->status == 'absent')
-                            <span class="badge bg-danger">Masuk</span>
+                            <span class="badge bg-warning">Izin</span>
                         @endif
                     </td>
                     <td>{{ $attendence->created_at->format('H:i') }}</td>
