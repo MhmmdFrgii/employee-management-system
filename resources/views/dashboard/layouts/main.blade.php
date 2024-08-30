@@ -44,13 +44,6 @@
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.1.0/dist/css/multi-select-tag.css">
     <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.1.0/dist/js/multi-select-tag.js"></script>
-
-    {{-- <style>
-        .js-example-basic-multiple {
-            width: 100%; /* Menjadikan dropdown selebar kontainer induknya */
-            max-width: 400px; /* Anda dapat menetapkan batas lebar maksimal jika diinginkan */
-        }
-    </style> --}}
 </head>
 
 <body>
@@ -121,9 +114,9 @@
                                     <div class="dropdown-menu content-dd dropdown-menu-end dropdown-menu-animate-up"
                                         aria-labelledby="drop2">
                                         <div class="d-flex align-items-center justify-content-between py-3 px-7">
-                                            <h5 class="mb-0 fs-5 fw-semibold">Notifications</h5>
+                                            <h5 class="mb-0 fs-5 fw-semibold">Notifikasi</h5>
                                             <div class="py-6 px-7 mb-1">
-                                                <button class="btn btn-outline-primary w-100"> See All Notifications
+                                                <button class="btn btn-outline-primary w-100"> Lihat Semua Notifikasi
                                                 </button>
                                             </div>
                                         </div>
@@ -142,7 +135,7 @@
                                         aria-labelledby="drop1">
                                         <div class="profile-dropdown position-relative" data-simplebar>
                                             <div class="py-3 px-7 pb-0">
-                                                <h5 class="mb-0 fs-5 fw-semibold">User Profile</h5>
+                                                <h5 class="mb-0 fs-5 fw-semibold">Profil Pengguna</h5>
                                             </div>
                                             <div class="d-flex align-items-center py-9 mx-7 border-bottom">
                                                 <img src="../../dist/images/profile/user-1.jpg" class="rounded-circle"
@@ -163,9 +156,9 @@
                                                             alt="" width="24" height="24">
                                                     </span>
                                                     <div class="w-75 d-inline-block v-middle ps-3">
-                                                        <h6 class="mb-1 bg-hover-primary fw-semibold"> My Profile
+                                                        <h6 class="mb-1 bg-hover-primary fw-semibold"> Profil Saya
                                                         </h6>
-                                                        <span class="d-block text-dark">Account Settings</span>
+                                                        <span class="d-block text-dark">Pengaturan Akun</span>
                                                     </div>
                                                 </a>
                                             </div>
@@ -173,8 +166,7 @@
                                                 <form action="{{ route('logout') }}" method="post">
                                                     @csrf
 
-                                                    <button type="submit" class="btn btn-outline-primary">Log
-                                                        Out</button>
+                                                    <button type="submit" class="btn btn-outline-primary">Keluar</button>
                                                 </form>
                                             </div>
                                         </div>

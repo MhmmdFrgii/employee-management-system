@@ -9,7 +9,7 @@
         {{-- Form Create Task --}}
         <div class="card mb-4">
             <div class="card-header">
-                <h4>Create Task</h4>
+                <h4>Buat Tugas</h4>
             </div>
             <div class="card-body">
                 @if (session('status'))
@@ -21,7 +21,7 @@
                 <form action="{{ route('kanbantasks.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <label for="title" class="form-label">Task Title</label>
+                        <label for="title" class="form-label">Judul Tugas</label>
                         <input type="text" name="title" class="form-control" id="title" placeholder="Enter task title" value="{{ old('title') }}">
                         @error('title')
                         <div class="text-danger">{{ $message }}</div>
@@ -29,7 +29,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="description" class="form-label">Task Description</label>
+                        <label for="description" class="form-label">Deskripsi Tugas</label>
                         <textarea name="description" class="form-control" id="description" placeholder="Enter task description">{{ old('description') }}</textarea>
                         @error('description')
                         <div class="text-danger">{{ $message }}</div>
@@ -37,9 +37,9 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="kanban_boards_id" class="form-label">Board</label>
+                        <label for="kanban_boards_id" class="form-label">Papan</label>
                         <select name="kanban_boards_id" id="kanban_boards_id" class="form-select">
-                            <option value="">-- Pilih Board --</option>
+                            <option value="">-- Pilih Papan --</option>
                             @foreach ($kanbanboard as $board)
                                 <option value="{{ $board->id }}" {{ old('kanban_boards_id') == $board->id ? 'selected' : '' }}>{{ $board->name }}</option>
                             @endforeach
@@ -62,14 +62,14 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="date" class="form-label">Due Date</label>
+                        <label for="date" class="form-label">Tenggat Waktu</label>
                         <input type="date" name="date" class="form-control" id="date" value="{{ old('date') }}">
                         @error('date')
                         <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Create Task</button>
+                    <button type="submit" class="btn btn-primary">Buat Tugas</button>
                 </form>
             </div>
         </div>
@@ -81,12 +81,12 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Board</th>
+                            <th>Judul</th>
+                            <th>Deskripsi</th>
+                            <th>Papan</th>
                             <th>Status</th>
-                            <th>Due Date</th>
-                            <th>Actions</th>
+                            <th>Tenggat Waktu</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -103,13 +103,13 @@
                                     <form action="{{ route('kanbantasks.destroy', $task->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus task ini?');">Delete</button>
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus task ini?');">Hapus</button>
                                     </form>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center">No tasks available.</td>
+                                <td colspan="7" class="text-center">Tidak ada tugas tersedia</td>
                             </tr>
                         @endforelse
                     </tbody>

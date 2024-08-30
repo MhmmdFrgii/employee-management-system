@@ -31,7 +31,7 @@
                         <span>
                             <i class="ti ti-aperture"></i>
                         </span>
-                        <span class="hide-menu">Dashboard</span>
+                        <span class="hide-menu">Dasbor</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
@@ -39,7 +39,7 @@
                         <span class="d-flex">
                             <i class="ti ti-category"></i>
                         </span>
-                        <span class="hide-menu">Project Saya</span>
+                        <span class="hide-menu">Proyek Saya</span>
                     </a>
                 </li>
 
