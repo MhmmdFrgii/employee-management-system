@@ -59,6 +59,7 @@
                                 X
                             </a>
                         </div>
+                        <button type="submit" class="btn btn-secondary">Cari</button>
                     </form>
                 </div>
 
