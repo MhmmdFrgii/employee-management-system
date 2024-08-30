@@ -12,6 +12,36 @@ class LeaveRequest extends Model
     protected $table = 'leave_requests';
     protected $guarded = [];
 
+    protected static function booted()
+    {
+        static::updated(function ($leaveRequest) {
+            if ($leaveRequest->status == 'approved') {
+                $leaveRequest->createAttendanceRecords();
+            }
+        });
+    }
+
+    // Method untuk membuat record attendance
+    public function createAttendanceRecords()
+    {
+        $startDate = \Carbon\Carbon::parse($this->start_date);
+        $endDate = \Carbon\Carbon::parse($this->end_date);
+
+        $dates = [];
+        while ($startDate->lte($endDate)) {
+            $dates[] = $startDate->toDateString();
+            $startDate->addDay();
+        }
+
+        foreach ($dates as $date) {
+            \App\Models\Attendance::create([
+                'employee_id' => $this->employee_id,
+                'date' => $date,
+                'status' => 'absent',
+            ]);
+        }
+    }
+
     public function scopeSearch($query, $search)
     {
         return $query->where('employee_id', 'like', '%' . $search . '%')
@@ -24,5 +54,10 @@ class LeaveRequest extends Model
     public function employe()
     {
         return $this->belongsTo(EmployeeDetail::class, 'employee_id');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id');
     }
 }

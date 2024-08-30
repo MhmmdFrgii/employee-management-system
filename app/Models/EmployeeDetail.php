@@ -41,6 +41,6 @@ class EmployeeDetail extends Model
     }
     public function salary()
     {
-        return $this->hasOne(Salarie::class);
+        return $this->hasOne(Salary::class);
     }
 }
