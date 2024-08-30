@@ -20,7 +20,7 @@
                 <!-- ============================= -->
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">Home</span>
+                    <span class="hide-menu">Menu</span>
                 </li>
                 <!-- =================== -->
                 <!-- Dashboard -->
@@ -31,7 +31,7 @@
                         <span>
                             <i class="ti ti-aperture"></i>
                         </span>
-                        <span class="hide-menu">Dashboard</span>
+                        <span class="hide-menu">Dasbor</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
@@ -39,7 +39,7 @@
                         <span class="d-flex">
                             <i class="ti ti-clipboard-list"></i>
                         </span>
-                        <span class="hide-menu">Projects</span>
+                        <span class="hide-menu">Proyek</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
@@ -59,7 +59,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('employee.index') }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('employees.index') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-users"></i>
                         </span>
@@ -99,14 +99,6 @@
                             </a>
                         </li>
                     </ul>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('kanban-board.index') }}" aria-expanded="false">
-                        <span class=>
-                            <i class="ti ti-brand-trello"></i>
-                        </span>
-                        <span class="hide-menu">Kanban</span>
-                    </a>
                 </li>
             </ul>
         </nav>

@@ -9,7 +9,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
-{ 
+{
     /**
      * Display a listing of the resource.
      */
@@ -33,7 +33,7 @@ class DepartmentController extends Controller
         $departments->appends($request->all());
 
         return view('department.index', compact('departments'));
-    } 
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -42,7 +42,7 @@ class DepartmentController extends Controller
     {
         Department::create($request->validated());
 
-        return redirect()->route('department.index')->with('success', 'Departemen berhasil dibuat.');
+        return redirect()->route('departments.index')->with('success', 'Departemen berhasil dibuat.');
     }
 
     /**
@@ -52,7 +52,7 @@ class DepartmentController extends Controller
     {
         $department->update($request->validated());
 
-        return redirect()->route('department.index')->with('success', 'Departemen berhasil di edit');
+        return redirect()->route('departments.index')->with('success', 'Departemen berhasil di edit');
     }
 
     /**
@@ -62,16 +62,16 @@ class DepartmentController extends Controller
     {
         try {
             $department->delete();
-            return redirect()->route('department.index')->with('success', 'Hapus Department Success!');
+            return redirect()->route('departments.index')->with('success', 'Hapus Department Success!');
         } catch (QueryException $e) {
             // Cek jika kesalahan disebabkan oleh foreign key constraint
             if ($e->getCode() === '23000') { // 23000 adalah kode untuk pelanggaran constraint
-                return redirect()->route('department.index')->with('danger', 'Tidak dapat menghapus department karena terkait dengan data lain.');
+                return redirect()->route('departments.index')->with('danger', 'Tidak dapat menghapus department karena terkait dengan data lain.');
             }
 
-            return redirect()->route('department.index')->with('danger', 'Terjadi kesalahan saat menghapus department.');
+            return redirect()->route('departments.index')->with('danger', 'Terjadi kesalahan saat menghapus department.');
         } catch (Exception $e) {
-            return redirect()->route('department.index')->with('danger', 'Terjadi kesalahan tak terduga.');
+            return redirect()->route('departments.index')->with('danger', 'Terjadi kesalahan tak terduga.');
         }
     }
 }

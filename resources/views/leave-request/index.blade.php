@@ -27,7 +27,7 @@
                                             <input class="form-check-input" type="checkbox" name="status[]" value="pending"
                                                 id="statusPending"
                                                 {{ in_array('pending', request('status', [])) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="statusPending">Pending</label>
+                                            <label class="form-check-label" for="statusPending">Tertunda/label>
                                         </div>
                                     </li>
                                     <li>
@@ -35,7 +35,7 @@
                                             <input class="form-check-input" type="checkbox" name="status[]" value="approved"
                                                 id="statusApproved"
                                                 {{ in_array('approved', request('status', [])) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="statusApproved">Approved</label>
+                                            <label class="form-check-label" for="statusApproved">Disetujui</label>
                                         </div>
                                     </li>
                                     <li>
@@ -43,14 +43,14 @@
                                             <input class="form-check-input" type="checkbox" name="status[]" value="rejected"
                                                 id="statusRejected"
                                                 {{ in_array('rejected', request('status', [])) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="statusRejected">Rejected</label>
+                                            <label class="form-check-label" for="statusRejected">Ditolak</label>
                                         </div>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <div class="form-group mb-0 position-relative">
-                            <label for="search" class="sr-only">Search:</label>
+                            <label for="search" class="sr-only">Cari:</label>
                             <input type="text" id="search" placeholder="Cari data..." name="search"
                                 value="{{ request('search') }}" class="form-control rounded shadow search-input">
                             <a href="{{ route('leave-requests.index') }}"
@@ -109,8 +109,8 @@
                                 </th>
                                 <th>
                                     <a
-                                        href="{{ route('leave-requests.index', array_merge(request()->query(), ['sortBy' => 'type', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
-                                        Type
+                                        href="{{ route('leave.index', array_merge(request()->query(), ['sortBy' => 'type', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        Tipe
                                         @if (request('sortBy') === 'type')
                                             @if (request('sortDirection') === 'asc')
                                                 &#9650; <!-- Unicode character for upward arrow -->
@@ -133,7 +133,7 @@
                                         @endif
                                     </a>
                                 </th>
-                                <th class="text-center">Action</th>
+                                <th class="text-center">Aksi</th>
                             </tr>
 
                         </thead>
@@ -164,7 +164,7 @@
                                             @csrf
                                             @method('delete')
                                             <button type="submit" class="btn btn-danger btn-sm">
-                                                Reject
+                                                Hapus
                                             </button>
                                         </form>
 
@@ -256,7 +256,7 @@
                                                         @enderror
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="type" class="form-label">Type</label>
+                                                        <label for="type" class="form-label">Tipe</label>
                                                         <input type="text"
                                                             class="form-control @error('type') is-invalid @enderror"
                                                             id="type" name="type"
@@ -302,21 +302,20 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="deleteSalariesModalLabel{{ $data->id }}">
-                                                    Confirm Delete</h5>
+                                                    Konfirmasi Hapus Data</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <p>Are you sure you want to delete this record? This action cannot be
-                                                    undone.</p>
+                                                <p>Yakin untuk menghapus data ini?</p>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Cancel</button>
+                                                    data-bs-dismiss="modal">Batal</button>
                                                 <form action="{{ route('salaries.destroy', $data->id) }}" method="POST">
                                                     @method('DELETE')
                                                     @csrf
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                    <button type="submit" class="btn btn-danger">Hapus</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -328,7 +327,7 @@
                                     <td colspan="7" class="text-center">
                                         <img src="{{ asset('assets/images/no-data.png') }}" alt="No Data"
                                             class="img-fluid" style="width: clamp(150px, 50vw, 300px);">
-                                        <p class="mt-3">No data available.</p>
+                                        <p class="mt-3">Tidak ada data tersedia</p>
                                     </td>
                                 </tr>
                             @endforelse
@@ -406,7 +405,7 @@
                             @enderror
                         </div>
                         <div class="mb-3">
-                            <label for="type" class="form-label">Type</label>
+                            <label for="type" class="form-label">Tipe</label>
                             <input type="text" class="form-control @error('type') is-invalid @enderror" id="type"
                                 name="type" value="{{ old('type') }}">
                             @error('type')
@@ -417,9 +416,9 @@
                             <label for="status" class="form-label">Status</label>
                             <select class="form-control @error('status') is-invalid @enderror" id="status"
                                 name="status">
-                                <option value="pending">Pending</option>
-                                <option value="approved">Approved</option>
-                                <option value="rejected">Rejected</option>
+                                <option value="pending">Tertunda</option>
+                                <option value="approved">Disetujui</option>
+                                <option value="rejected">Ditolak</option>
                             </select>
                             @error('status')
                                 <div class="invalid-feedback">{{ $message }}</div>

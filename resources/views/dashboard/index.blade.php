@@ -12,7 +12,7 @@
                                     <img src="../../dist/images/profile/user-1.jpg" alt="" width="40"
                                         height="40">
                                 </div>
-                                <h5 class="fw-semibold mb-0 fs-5">Welcome back {{ auth()->user()->name }}</h5>
+                                <h5 class="fw-semibold mb-0 fs-5">Selamat datang kembali {{ auth()->user()->name }}</h5>
                             </div>
                             <div class="d-flex align-items-center">
                                 <div class="border-end pe-4 border-muted border-opacity-10">
@@ -49,7 +49,7 @@
                     </span>
                     <h3 class="card-title mt-3 mb-0 text-white">{{ $project_count }}</h3>
                     <p class="card-text text-white-50 fs-3 fw-normal">
-                        Total Project
+                        Total Proyek
                     </p>
                 </div>
             </div>
@@ -105,7 +105,7 @@
             <script>
                 var projectOptions = {
                     series: [{
-                        name: 'Active Projects',
+                        name: 'Proyek Aktif',
                         data: @json($activeCounts)
                     }],
                     chart: {
@@ -151,7 +151,7 @@
 
 
         <div class="col-md-12">
-            <h5 class="mt-4">Projek Dengan Tenggat Waktu Terdekat</h5>
+            <h5 class="mt-4">Proyek Dengan Tenggat Waktu Terdekat</h5>
             <div class="list-group">
                 @forelse ($projectsWithNearestDeadlines as $project)
                     @php
@@ -175,7 +175,7 @@
                         <small class="text-muted">Tenggat Waktu: {{ $endDate->format('d M Y') }}</small>
                     </a>
                 @empty
-                    <p class="list-group-item">No projects found with upcoming deadlines.</p>
+                    <p class="list-group-item">Tidak ada proyek dengan tenggat waktu yang akan datang.</p>
                 @endforelse
             </div>
         </div>

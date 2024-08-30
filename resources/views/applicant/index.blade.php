@@ -23,7 +23,7 @@
                                                 {{ $user->employeeDetail->department->name ?? 'No Department' }}</p>
                                         </div>
                                         <a href="{{ route('applicant.detail', $user->id) }}"
-                                            class="btn btn-primary mt-3">Detail</a>
+                                            class="btn btn-primary mt-3">Rincian</a>
                                     </div>
                                 </div>
                             </div>
@@ -31,7 +31,7 @@
                             <div colspan="7" class="text-center">
                                 <img src="{{ asset('assets/images/no-data.png') }}" alt="No Data" class="img-fluid"
                                     style="width: clamp(150px, 50vw, 300px);">
-                                <p class="mt-3">No data available.</p>
+                                <p class="mt-3">Tidak ada data tersedia</p>
                             </div>
                         @endforelse
                     </div>
