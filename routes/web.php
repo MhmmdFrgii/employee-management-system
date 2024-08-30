@@ -28,7 +28,7 @@ Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');
 
 Route::get('confirmation', function () {
     return view('confirmation');
-});
+})->name('confirmation');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
