@@ -1,41 +1,56 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<!doctype html>
+<html class="no-js" lang="en">
+
+
+<!-- Mirrored from theme-land.com/sapp/demo/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Jun 2024 01:22:54 GMT -->
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <!-- Title  -->
+    <title>@yield('title')</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" /> 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> 
+    <!-- Favicon  -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">
+    <!-- ***** All CSS Files ***** -->
 
-    <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Style css -->
+    <link rel="stylesheet" href="{{ asset('assets/landing-page/css/style.css') }}">
+
 </head>
 
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
-        @include('layouts.navigation')
-
-        <!-- Page Heading -->
-        @isset($header)
-            <header class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
-        @endisset
-
-        <!-- Page Content -->
-        <main>
-            {{ $slot }} 
-        </main>
+<body>
+    <!--====== Scroll To Top Area Start ======-->
+    <div id="scrollUp" title="Scroll To Top">
+        <i class="fas fa-arrow-up"></i>
     </div>
+    <!--====== Scroll To Top Area End ======-->
+
+    @yield('content')
+
+
+    <!-- ***** All jQuery Plugins ***** -->
+
+    <!-- jQuery(necessary for all JavaScript plugins) -->
+    <script src="{{ asset('assets/landing-page/js/jquery/jquery.min.js') }}"></script>
+
+    <!-- Bootstrap js -->
+    <script src="{{ asset('assets/landing-page/js/bootstrap/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/landing-page/js/bootstrap/bootstrap.min.js') }}"></script>
+
+    <!-- Plugins js -->
+    <script src="{{ asset('assets/landing-page/js/plugins/plugins.min.js') }}"></script>
+
+    <!-- Active js -->
+    <script src="{{ asset('assets/landing-page/js/active.js') }}"></script>
+
 </body>
+
+
+<!-- Mirrored from theme-land.com/sapp/demo/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Jun 2024 01:23:08 GMT -->
 
 </html>
