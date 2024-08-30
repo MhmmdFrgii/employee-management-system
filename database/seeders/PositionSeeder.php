@@ -12,25 +12,21 @@ class PositionSeeder extends Seeder
      */
     public function run(): void
     {
-        // DB::table('positions')->insert([
-        //     [
-        //         'name' => 'Manager',
-        //         'description' => 'Bertanggung jawab atas manajemen umum dan pengawasan tim.',
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'name' => 'Supervisor',
-        //         'description' => 'Mengawasi pekerjaan staf dan memastikan mereka bekerja dengan benar.',
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'name' => 'Staff',
-        //         'description' => 'Melaksanakan tugas operasional sehari-hari sesuai instruksi supervisor.',
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        // ]);
+        DB::table('positions')->insert([
+            [
+                'company_id' => 1,
+                'name' => 'Software Engineer',
+                'description' => 'Responsible for developing and maintaining software applications.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'company_id' => 1,
+                'name' => 'Product Manager',
+                'description' => 'Oversees the development and strategy of the company’s products.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
     }
 }
