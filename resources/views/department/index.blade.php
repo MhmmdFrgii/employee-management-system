@@ -7,7 +7,7 @@
 
                 <h1 class="h3">Departments</h1>
                 <div class="d-flex justify-content-between mb-3 mt-3">
-                    <button data-bs-target="#createModal" data-bs-toggle="modal" class="btn btn-primary">Create</button>
+                    <button data-bs-target="#createModal" data-bs-toggle="modal" class="btn btn-primary">Tambah</button>
                     <form id="searchForm" action="{{ route('departments.index') }}" method="GET"
                         class="d-flex align-items-center gap-2">
                         @csrf

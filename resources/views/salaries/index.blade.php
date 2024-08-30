@@ -8,7 +8,7 @@
 
                 <div class="d-flex justify-content-between align-items-center mb-2 mt-3">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSalariesModal">
-                        Create
+                        Tambah
                     </button>
                     <form id="searchForm" action="{{ route('salaries.index') }}" method="GET"
                         class="d-flex align-items-center gap-2">
@@ -109,7 +109,7 @@
                                                     <div class="mb-3">
                                                         <label for="employee_id" class="form-label">Employee</label>
                                                         <input type="hidden" value="{{ $salary->employee_id }}" name="employee_id">
-                                                        <input readonly type="text" 
+                                                        <input readonly type="text"
                                                             class="form-control  @error('employee') is-invalid @enderror"
                                                             id="employee"
                                                             value="{{ old('employee', $salary->employeeDetails->fullname) }}">
@@ -217,7 +217,7 @@
                             @error('employee_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                        </div>        
+                        </div>
                         <div class="mb-3">
                             <label for="amount" class="form-label">Amount</label>
                             <input type="text" name="amount"
@@ -244,7 +244,7 @@
     </div>
 @endsection
 
-{{-- 
+{{--
 @extends('dashboard.layouts.main')
 
 @section('content')

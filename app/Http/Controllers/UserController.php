@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $users = User::whereHas('employeeDetails', function ($query) {
+        $users = User::whereHas('employee_detail', function ($query) {
             $query->where('status', 'disapprove');
         })->with('employeeDetails')->paginate(6);
         return view('applicant.index', compact('users'));
@@ -19,8 +19,8 @@ class UserController extends Controller
 
     public function detail($id)
     {
-        $user = User::with('employeeDetails.department', 'employeeDetails.position')->findOrFail($id);
-        $employeeDetails = $user->employeeDetails;
+        $user = User::with('employee_detail.department', 'employee_detail.position')->findOrFail($id);
+        $employeeDetails = $user->employee_detail;
         return view('applicant.detail', compact('user', 'employeeDetails'));
     }
 

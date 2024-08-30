@@ -5,7 +5,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="container py-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h1 class="h3">Applicants</h1>
+                        <h1 class="h3">Daftar Pelamar</h1>
                     </div>
 
                     <div class="row">

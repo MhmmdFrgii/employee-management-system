@@ -7,7 +7,7 @@
                 <h1 class="h3">Project</h1>
                 <div class="d-flex justify-content-between align-items-center mb-4 mt-3">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
-                        Create
+                        Tambah Project
                     </button>
                     <form action="{{ route('projects.index') }}" method="GET">
                         <div class="d-flex gap-2">
