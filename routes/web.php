@@ -28,7 +28,7 @@ Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');
 
 Route::get('confirmation', function () {
     return view('confirmation');
-});
+})->name('confirmation');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -68,12 +68,15 @@ Route::middleware('auth')->group(function () {
             Route::resource('notification', NotificationController::class);
             Route::get('/my-project', [ProjectController::class, 'my_project'])->name('project.user');
             Route::get('/attendance', [AttendanceController::class, 'user_index'])->name('attendance.user');
-            Route::get('/attendance-mark', [AttendanceController::class, 'user_attendance'])->name('attendance.mark');
+            Route::post('/attendance-mark', [AttendanceController::class, 'user_attendance'])->name('attendance.mark');
+
             Route::get('/employee-list', [EmployeeDetailController::class, 'user_index']);
         });
     });
 
     Route::resource('leave-requests', LeaveRequestController::class);
+    // Route untuk approve leave request
+    Route::put('/leave-requests/{id}/approve', [LeaveRequestController::class, 'approve'])->name('leave-requests.approve');
 });
 
 require __DIR__ . '/auth.php';

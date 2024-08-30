@@ -11,7 +11,7 @@
                         Tambah Data
                     </button>
 
-                    <form id="searchForm" action="{{ route('leave.index') }}" method="GET"
+                    <form id="searchForm" action="{{ route('leave-requests.index') }}" method="GET"
                         class="d-flex align-items-center gap-2">
                         @csrf
                         <div class="form-group mb-0 position-relative">
@@ -53,12 +53,13 @@
                             <label for="search" class="sr-only">Search:</label>
                             <input type="text" id="search" placeholder="Cari data..." name="search"
                                 value="{{ request('search') }}" class="form-control rounded shadow search-input">
-                            <a href="{{ route('leave.index') }}"
+                            <a href="{{ route('leave-requests.index') }}"
                                 class="clear-search btn btn-sm position-absolute top-50 translate-middle-y end-0 me-2"
                                 style="z-index: 10; padding: 0.2rem 0.4rem; line-height: 1; display: none;">
                                 X
                             </a>
                         </div>
+                        <button type="submit" class="btn btn-secondary">Cari</button>
                     </form>
                 </div>
 
@@ -69,7 +70,7 @@
                                 <th>No</th>
                                 <th>
                                     <a
-                                        href="{{ route('leave.index', array_merge(request()->query(), ['sortBy' => 'employee_id', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        href="{{ route('leave-requests.index', array_merge(request()->query(), ['sortBy' => 'employee_id', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
                                         Nama Karyawan
                                         @if (request('sortBy') === 'employee_id')
                                             @if (request('sortDirection') === 'asc')
@@ -82,7 +83,7 @@
                                 </th>
                                 <th>
                                     <a
-                                        href="{{ route('leave.index', array_merge(request()->query(), ['sortBy' => 'start_date', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        href="{{ route('leave-requests.index', array_merge(request()->query(), ['sortBy' => 'start_date', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
                                         Mulai Ijin
                                         @if (request('sortBy') === 'start_date')
                                             @if (request('sortDirection') === 'asc')
@@ -95,7 +96,7 @@
                                 </th>
                                 <th>
                                     <a
-                                        href="{{ route('leave.index', array_merge(request()->query(), ['sortBy' => 'end_date', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        href="{{ route('leave-requests.index', array_merge(request()->query(), ['sortBy' => 'end_date', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
                                         Sampai Tanggal
                                         @if (request('sortBy') === 'end_date')
                                             @if (request('sortDirection') === 'asc')
@@ -108,7 +109,7 @@
                                 </th>
                                 <th>
                                     <a
-                                        href="{{ route('leave.index', array_merge(request()->query(), ['sortBy' => 'type', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        href="{{ route('leave-requests.index', array_merge(request()->query(), ['sortBy' => 'type', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
                                         Type
                                         @if (request('sortBy') === 'type')
                                             @if (request('sortDirection') === 'asc')
@@ -121,7 +122,7 @@
                                 </th>
                                 <th>
                                     <a
-                                        href="{{ route('leave.index', array_merge(request()->query(), ['sortBy' => 'status', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        href="{{ route('leave-requests.index', array_merge(request()->query(), ['sortBy' => 'status', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
                                         Status
                                         @if (request('sortBy') === 'status')
                                             @if (request('sortDirection') === 'asc')
@@ -151,15 +152,54 @@
                                             data-bs-target="#editModal{{ $data->id }}">
                                             Edit
                                         </button> --}}
-                                        <form action="{{ route('leave.destroy', $data->id) }}" method="POST"
+
+                                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#approveModal{{ $data->id }}">
+                                            Approve
+                                        </button>
+
+                                        <form action="{{ route('leave-requests.destroy', $data->id) }}" method="POST"
                                             class="d-inline"
                                             onsubmit="return confirm('Are you sure you want to delete this item?');">
                                             @csrf
                                             @method('delete')
                                             <button type="submit" class="btn btn-danger btn-sm">
-                                                Delete
+                                                Reject
                                             </button>
                                         </form>
+
+                                        <!-- Approve Modal -->
+                                        <div class="modal fade" id="approveModal{{ $data->id }}" tabindex="-1"
+                                            aria-labelledby="approveModalLabel{{ $data->id }}" aria-hidden="true"
+                                            data-bs-backdrop="static">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form action="{{ route('leave-requests.approve', $data->id) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="approveModalLabel{{ $data->id }}">Approve
+                                                                Permintaan Cuti</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Apakah Anda yakin ingin menyetujui permintaan cuti ini?</p>
+                                                            <input type="hidden" name="status" value="approved">
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Batal</button>
+                                                            <button type="submit"
+                                                                class="btn btn-primary">Approve</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </td>
                                 </tr>
 
@@ -168,7 +208,8 @@
                                     data-bs-backdrop="static">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                            <form action="{{ route('leave.update', $data->id) }}" method="POST">
+                                            <form action="{{ route('leave-requests.update', $data->id) }}"
+                                                method="POST">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="modal-header">
@@ -281,6 +322,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                             @empty
                                 <tr>
                                     <td colspan="7" class="text-center">
@@ -306,7 +348,7 @@
         data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ route('leave.store') }}" method="POST">
+                <form action="{{ route('leave-requests.store') }}" method="POST">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="addModalLabel">Tambah Permintaan Cuti
@@ -314,6 +356,22 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="company_id" class="form-label">Company</label>
+                            <select name="company_id" id="company_id"
+                                class="form-control @error('company_id') is-invalid @enderror">
+                                <option value="">--Karyawan--</option>
+                                @foreach ($company as $item)
+                                    <option value="{{ $item->id }}"
+                                        {{ old('company_id') == $item->id ? 'selected' : '' }}>
+                                        {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('company_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <div class="mb-3">
                             <label for="employee_id" class="form-label">Karyawan</label>
                             <select name="employee_id" id="employee_id"
@@ -376,4 +434,5 @@
             </div>
         </div>
     </div>
+
 @endsection

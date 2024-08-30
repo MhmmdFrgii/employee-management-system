@@ -35,10 +35,10 @@
         </div>
         <div class="col-md-4">
             <div class="d-flex justify-content-end gap-3 mb-5">
-                <form action="{{ route('absensi.store') }}" method="post">
+                <form action="{{ route('attendance.mark') }}" method="post">
                     @csrf
                     <button button type="submit" class="btn btn-success">Absen</button>
-                </form> 
+                </form>
             </div>
             <div id="attendanceChart"></div>
         </div>

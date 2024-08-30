@@ -377,13 +377,13 @@
 
 
         <!--====== Height Emulator Area Start ======-->
-        <div class="height-emulator d-none d-lg-block"></div>
+        {{-- <div class="height-emulator d-none d-lg-block"></div> --}}
         <!--====== Height Emulator Area End ======-->
 
         <!--====== Footer Area Start ======-->
-        <footer class="footer-area footer-fixed">
+        <footer class="footer-area">
             <!-- Footer Top -->
-            <div class="footer-top ptb_100">
+            <div class="footer-top">
                 <div class="container">
                     <div class="row">
                         <div class="col-12 col-sm-6 col-lg-3">

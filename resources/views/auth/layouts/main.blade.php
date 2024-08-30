@@ -19,6 +19,8 @@
     <!-- Core Css -->
     <link id="themeColors" rel="stylesheet" href="{{ asset('dist/css/style.min.css') }}" />
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
+
 
 </head>
 
@@ -53,6 +55,32 @@
     <script src="{{ asset('dist/libs/jquery-validation/dist/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('dist/js/forms/form-wizard.js') }}"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+
+    <script>
+        @if (session('success'))
+            iziToast.success({
+                title: 'Sukses!',
+                message: "{{ session('success') }}",
+                position: 'topRight'
+            });
+        @endif
+        @if (session('danger'))
+            iziToast.error({
+                title: 'Sukses!',
+                message: "{{ session('danger') }}",
+                position: 'topRight'
+            });
+        @endif
+
+        @if ($errors->any())
+            iziToast.error({
+                title: 'Erorr!',
+                message: "{{ $errors->first() }}",
+                position: 'topRight'
+            });
+        @endif
+    </script>
 
 
 

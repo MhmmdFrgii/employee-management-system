@@ -100,46 +100,32 @@
             </div>
         </div>
 
-        @if (isset($activeCounts) && isset($completedCounts) && isset($attendanceCounts))
+        @if (isset($activeCounts))
             <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
             <script>
                 var projectOptions = {
                     series: [{
                         name: 'Active Projects',
                         data: @json($activeCounts)
-                    }, {
-                        name: 'Completed Projects',
-                        data: @json($completedCounts)
                     }],
                     chart: {
-                        type: 'bar',
+                        type: 'line', // Ubah dari 'bar' menjadi 'line'
                         height: 350
                     },
-                    plotOptions: {
-                        bar: {
-                            horizontal: false,
-                            columnWidth: '55%',
-                            endingShape: 'rounded'
-                        },
+                    stroke: {
+                        curve: 'smooth', // Menambahkan garis yang lebih halus
+                        width: 2
                     },
                     dataLabels: {
                         enabled: false
-                    },
-                    stroke: {
-                        show: true,
-                        width: 2,
-                        colors: ['transparent']
                     },
                     xaxis: {
                         categories: @json($months),
                     },
                     yaxis: {
                         title: {
-                            text: 'Number of Projects'
+                            text: 'Jumlah Projek Selesai'
                         }
-                    },
-                    fill: {
-                        opacity: 1
                     },
                     tooltip: {
                         y: {
@@ -147,38 +133,22 @@
                                 return val + " projects";
                             }
                         }
+                    },
+                    markers: {
+                        size: 4, // Ukuran titik pada garis
+                    },
+                    fill: {
+                        opacity: 1
                     }
                 };
 
                 var projectChart = new ApexCharts(document.querySelector("#projectsChart"), projectOptions);
                 projectChart.render();
-
-                var attendanceOptions = {
-                    series: @json($attendanceCounts),
-                    chart: {
-                        width: 380,
-                        type: 'pie',
-                    },
-                    labels: ['Present', 'Absent', 'Late', 'Alpha'],
-                    responsive: [{
-                        breakpoint: 480,
-                        options: {
-                            chart: {
-                                width: 200
-                            },
-                            legend: {
-                                position: 'bottom'
-                            }
-                        }
-                    }]
-                };
-
-                var attendanceChart = new ApexCharts(document.querySelector("#attendanceChart"), attendanceOptions);
-                attendanceChart.render();
             </script>
         @else
             <p>Data tidak ditemukan.</p>
         @endif
+
 
         <div class="col-md-12">
             <h5 class="mt-4">Projek Dengan Tenggat Waktu Terdekat</h5>
@@ -218,7 +188,7 @@
                 padding: 10px; /* Optional: for inner spacing */
                 margin-bottom: 10px; /* Spacing between cards */
             }
-    
+
             .card-primary {
                 border: 2px solid #007bff; /* Blue color for non-urgent deadlines */
                 background-color: #cce5ff; /* Light blue background */

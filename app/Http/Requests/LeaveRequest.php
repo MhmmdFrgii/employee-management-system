@@ -22,11 +22,12 @@ class LeaveRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'company_id' => 'required|exists:companies,id',  // Validasi company_id
             'employee_id' => 'required|numeric',
             'start_date' => ['required', 'date', 'after_or_equal:today', 'before_or_equal:end_date'],
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'type' => 'required|string|max:255',
-            'status' => 'required',
+            // 'status' => 'required',
         ];
     }
 
@@ -51,6 +52,5 @@ class LeaveRequest extends FormRequest
 
             'status.required' => 'Status harus diisi.',
         ];
-
     }
 }
