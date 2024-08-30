@@ -7,6 +7,7 @@ use App\Models\KanbanBoard;
 use App\Models\Project;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -38,7 +39,7 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
 
-        $query = Project::query();
+        $query = Project::query()->where('company_id', Auth::user()->company->id);
 
         // Pencarian
         $search = $request->input('search');
@@ -62,7 +63,7 @@ class ProjectController extends Controller
         $sortDirection = $request->input('sortDirection', 'asc'); // Default sort direction 'asc'
 
         // Dapatkan hasil query dengan pagination
-        $projects = $query->orderBy($sortBy, $sortDirection)->paginate(10);
+        $projects = $query->orderBy($sortBy, $sortDirection)->paginate(6);
         $projects->appends($request->all());
 
         return view('projects.index', compact('projects'));
@@ -73,7 +74,10 @@ class ProjectController extends Controller
      */
     public function store(ProjectRequest $request)
     {
-        $project = Project::create($request->validated());
+        $validatedData = $request->validated();
+
+        $validatedData['company_id'] = Auth::user()->company->id;
+        $project = Project::create($validatedData);
         KanbanBoard::create([
             'name' => $project->name,
             'project_id' => $project->id
