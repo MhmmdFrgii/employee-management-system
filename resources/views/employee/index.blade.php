@@ -19,7 +19,7 @@
                         </nav>
                     </div>
 
-                    
+
 
                     <div class="col-3">
                         <div class="text-center mb-n5">
@@ -86,7 +86,7 @@
 
             <h1 class="h3">Karyawan</h1>
             <div class="d-flex justify-content-end mb-3 mt-3">
-                <form id="searchForm" action="{{ route('employee.index') }}" method="GET"
+                <form id="searchForm" action="{{ route('employees.index') }}" method="GET"
                     class="d-flex align-items-center gap-2">
                     @csrf
                     <div class="form-group mb-0 position-relative">
@@ -94,7 +94,7 @@
                         <input type="text" id="search" name="search" value="{{ request('search') }}"
                             class="form-control shadow search-input" placeholder="Cari data..">
 
-                        <a href="{{ route('employee.index') }}"
+                        <a href="{{ route('employees.index') }}"
                             class="clear-search btn btn-sm position-absolute top-50 translate-middle-y end-0 me-2"
                             style="z-index: 10; padding: 0.2rem 0.4rem; line-height: 1; display: none;">
                             X
@@ -115,11 +115,11 @@
                     <div class="col-lg-4 col-md-6 mb-4">
                         <div class="card text-center">
                             <div class="card-body">
-    
+
                                 <!-- Tampilkan foto dari storage -->
                                 <img src="{{ Storage::exists($employee->photo) ? asset('storage/' . $employee->photo) : asset('assets/images/no-profile.jpeg') }}"
                                     alt="avatar" class="rounded-1 img-fluid" width="90px" height="90px">
-    
+
                                 <div class="mt-n2">
                                     <!-- Tampilkan departemen -->
                                     <span class="badge bg-primary">{{ $employee->department->name }}</span>
@@ -133,7 +133,7 @@
                         </div>
                     </div>
                 @endforeach
-    
+
                 @include('employee.partial.detail-modal');
             </div>
             <div class="mt-3 justify-content-end">
