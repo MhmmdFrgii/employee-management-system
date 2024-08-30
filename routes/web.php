@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:manager')->group(function () {
 
-        Route::prefix('administrator')->group(function () {
+        Route::prefix('manager')->group(function () {
             // route attendence
             Route::get('/mark-absentees', [AttendanceController::class, 'markAbsentees']);
 

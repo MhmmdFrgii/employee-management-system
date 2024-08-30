@@ -14,33 +14,38 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Menambahkan pengguna
-        // $users = [
-        //     [
-        //         'name' => 'Admin User',
-        //         'email' => 'admin@example.com',
-        //         'password' => Hash::make('password123'),
-        //         'role' => 'manajer', // Pastikan role ini sudah ada di tabel roles
-        //     ],
-        //     [
-        //         'name' => 'Employee User',
-        //         'email' => 'employee@example.com',
-        //         'password' => Hash::make('password123'),
-        //         'role' => 'karyawan', // Pastikan role ini sudah ada di tabel roles
-        //     ],
-        // ];
+        $users = [
+            [
+                'name' => 'Manager',
+                'email' => 'manager@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'manager',
+                'company_id' => 1,
+                'status' => 'approved'
+            ],
+            [
+                'name' => 'Employee User',
+                'email' => 'employee@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'employee',
+                'company_id' => 1,
+                'status' => 'approved'
+            ],
+        ];
 
-        // foreach ($users as $userData) {
-        //     $user = User::create([
-        //         'name' => $userData['name'],
-        //         'email' => $userData['email'],
-        //         'password' => $userData['password'],
-        //     ]);
+        foreach ($users as $userData) {
+            $user = User::create([
+                'name' => $userData['name'],
+                'email' => $userData['email'],
+                'password' => $userData['password'],
+                'company_id' => $userData['company_id'],
+                'status' => $userData['status']
+            ]);
 
-        //     // Assign role if Spatie Laravel Permission is used
-        //     if (isset($userData['role'])) {
-        //         $user->assignRole($userData['role']);
-        //     }
-        // }
+            // Assign role if Spatie Laravel Permission is used
+            if (isset($userData['role'])) {
+                $user->assignRole($userData['role']);
+            }
+        }
     }
 }

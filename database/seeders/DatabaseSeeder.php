@@ -33,5 +33,10 @@ class DatabaseSeeder extends Seeder
         //     EmployeeDetailsSeeder::class,
         //     ProjectSeeder::class,
         // ]);
+        $this->call([
+            CompanySeeder::class,
+            RoleSeeder::class,
+            UserSeeder::class,
+        ]);
     }
 }

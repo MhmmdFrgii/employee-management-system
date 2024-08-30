@@ -8,7 +8,7 @@
                 <h1 class="h3">Departments</h1>
                 <div class="d-flex justify-content-between mb-3 mt-3">
                     <button data-bs-target="#createModal" data-bs-toggle="modal" class="btn btn-primary">Create</button>
-                    <form id="searchForm" action="{{ route('department.index') }}" method="GET"
+                    <form id="searchForm" action="{{ route('departments.index') }}" method="GET"
                         class="d-flex align-items-center gap-2">
                         @csrf
                         <div class="form-group mb-0 position-relative">
@@ -16,7 +16,7 @@
                             <input type="text" id="search" name="search" value="{{ request('search') }}"
                                 class="form-control shadow search-input" placeholder="Cari data..">
 
-                            <a href="{{ route('department.index') }}"
+                            <a href="{{ route('departments.index') }}"
                                 class="clear-search btn btn-sm position-absolute top-50 translate-middle-y end-0 me-2"
                                 style="z-index: 10; padding: 0.2rem 0.4rem; line-height: 1; display: none;">
                                 X
@@ -32,7 +32,7 @@
                                 <th>No</th>
                                 <th>
                                     <a
-                                        href="{{ route('department.index', array_merge(request()->query(), ['sortBy' => 'name', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        href="{{ route('departments.index', array_merge(request()->query(), ['sortBy' => 'name', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
                                         Name
                                         @if (request('sortBy') === 'name')
                                             @if (request('sortDirection') === 'asc')
@@ -45,7 +45,7 @@
                                 </th>
                                 <th>
                                     <a
-                                        href="{{ route('department.index', array_merge(request()->query(), ['sortBy' => 'description', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        href="{{ route('departments.index', array_merge(request()->query(), ['sortBy' => 'description', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
                                         Description
                                         @if (request('sortBy') === 'description')
                                             @if (request('sortDirection') === 'asc')
@@ -178,7 +178,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('department.store') }}" method="POST">
+                    <form action="{{ route('departments.store') }}" method="POST">
                         @method('post')
                         @csrf
                         <div class="mb-3">

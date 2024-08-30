@@ -2,7 +2,7 @@
     <!-- Sidebar scroll-->
     <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
-            <a href="/dashboard" class="text-nowrap logo-img">
+            <a href="/manager/dashboard" class="text-nowrap logo-img">
                 <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/dark-logo.svg"
                     class="dark-logo" width="180" alt="" />
                 <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/light-logo.svg"
@@ -27,7 +27,7 @@
                 <!-- =================== -->
 
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="/administrator/dashboard" aria-expanded="false">
+                    <a class="sidebar-link" href="/manager/dashboard" aria-expanded="false">
                         <span>
                             <i class="ti ti-aperture"></i>
                         </span>
