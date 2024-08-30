@@ -33,63 +33,31 @@ class DashboardController extends Controller
             ->whereMonth('start_date', $currentMonth)
             ->count();
 
-        $completedProjects = Project::where('status', 'Completed')
-            ->whereYear('completed_at', $currentYear)
-            ->whereMonth('completed_at', $currentMonth)
-            ->count();
-
         // Data untuk chart bulanan
-        $months = [];
-        $activeCounts = [];
-        $completedCounts = [];
+    $months = [];
+    $activeCounts = [];
 
-        for ($i = 1; $i <= 12; $i++) {
-            $months[] = Carbon::create()->month($i)->format('F');
-            $activeCounts[] = Project::where('status', 'Active')
-                ->whereYear('start_date', $currentYear)
-                ->whereMonth('start_date', $i)
-                ->count();
+    for ($i = 1; $i <= 12; $i++) {
+        $months[] = Carbon::create()->month($i)->format('F');
 
-            $completedCounts[] = Project::where('status', 'Completed')
-                ->whereYear('completed_at', $currentYear)
-                ->whereMonth('completed_at', $i)
-                ->count();
-        }
+        // Hitung jumlah proyek yang dimulai pada bulan ini dan dinyatakan 'completed'
+        $activeCounts[] = Project::where('status', 'Completed')
+            ->whereYear('start_date', $currentYear)
+            ->whereMonth('start_date', $i)
+            ->count();
+    }
 
-        // Mendapatkan user yang sedang login
-        $user = Auth::user();
+    // Mendapatkan user yang sedang login
+    $user = Auth::user();
 
-        // Ambil data attendance dengan relasi ke employee_detail dan user
-        $attendanceData = Attendance::selectRaw('status, COUNT(*) as count')
-            ->whereHas('employeeDetail', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })
-            ->groupBy('status')
-            ->pluck('count', 'status')
-            ->toArray();
-
-        // Mendefinisikan status yang akan ditampilkan
-        $statuses = ['present', 'absent', 'late', 'alpha'];
-        $attendanceCounts = [];
-
-        // Mengisi array attendanceCounts berdasarkan status yang telah didefinisikan
-        foreach ($statuses as $status) {
-            $attendanceCounts[] = $attendanceData[$status] ?? 0;
-        }
-
-        return view('dashboard.index', [
-            'activeProjects' => $activeProjects,
-            'completedProjects' => $completedProjects,
-            'months' => $months,
-            'activeCounts' => $activeCounts,
-            'completedCounts' => $completedCounts,
-            'attendanceCounts' => $attendanceCounts,
-            'employee_count' => $employee_count,
-            'project_count' => $project_count,
-            'department_count' => $department_count,
-            'projectsWithNearestDeadlines' => $projectsWithNearestDeadlines
-
-        ]);
+    return view('dashboard.index', [
+        'months' => $months,
+        'activeCounts' => $activeCounts,
+        'employee_count' => $employee_count,
+        'project_count' => $project_count,
+        'department_count' => $department_count,
+        'projectsWithNearestDeadlines' => $projectsWithNearestDeadlines
+    ]);
     }
 
     public function userDashboard()
