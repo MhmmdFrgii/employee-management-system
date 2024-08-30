@@ -27,8 +27,13 @@ class Project extends Model
         return $this->hasMany(ProjectAssignment::class);
     }
 
-    public function kanban_boards()
+    public function kanban_board()
     {
-        return $this->hasMany(KanbanBoard::class);
+        return $this->hasOne(KanbanBoard::class);
+    }
+
+    public function employee_details(): mixed
+    {
+        return $this->belongsToMany(EmployeeDetail::class, 'project_assignments', 'project_id', 'employee_id');
     }
 }

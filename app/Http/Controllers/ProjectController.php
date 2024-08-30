@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjectRequest;
+use App\Models\EmployeeDetail;
 use App\Models\KanbanBoard;
 use App\Models\Project;
 use Carbon\Carbon;
@@ -66,7 +67,11 @@ class ProjectController extends Controller
         $projects = $query->orderBy($sortBy, $sortDirection)->paginate(6);
         $projects->appends($request->all());
 
-        return view('projects.index', compact('projects'));
+        $employees = EmployeeDetail::whereHas('user', function ($query) {
+            $query->where('company_id', Auth::user()->company_id);
+        })->get();
+
+        return view('projects.index', compact('projects', 'employees'));
     }
 
     /**
@@ -82,6 +87,11 @@ class ProjectController extends Controller
             'name' => $project->name,
             'project_id' => $project->id
         ]);
+
+        if (isset($request->employee_id)) {
+        $project->employee_details()->attach($request->employee_id);
+        }
+
         return redirect()->route('projects.index')->with('success', 'Project berhasil ditambah');
     }
 

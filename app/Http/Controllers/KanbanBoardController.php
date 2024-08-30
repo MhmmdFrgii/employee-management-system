@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\KanbanBoardRequest;
+use App\Models\EmployeeDetail;
 use App\Models\KanbanBoard;
 use App\Models\KanbanTask;
 use App\Models\Project;
@@ -33,6 +34,7 @@ class KanbanBoardController extends Controller
             $query->where('status', 'approve');
         })->with('employee_detail')->get();
 
+        // $employees = EmployeeDetail::where('company_id', Auth::user()->company->id);
         $kanbanboard = KanbanBoard::where('id', $kanbanboardID)->first();
         return view('kanban-board.index', compact('kanbanboards', 'kanbanboard', 'todo', 'progress', 'done', 'users'));
     }
