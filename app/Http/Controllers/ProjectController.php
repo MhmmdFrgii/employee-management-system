@@ -88,19 +88,8 @@ class ProjectController extends Controller
             'project_id' => $project->id
         ]);
 
-        if (isset($request->employee_id)) {
         $project->employee_details()->attach($request->employee_id);
-        }
-
         return redirect()->route('projects.index')->with('success', 'Project berhasil ditambah');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Project $project)
-    {
-        return view('projects.edit', compact('project'));
     }
 
     /**
@@ -109,6 +98,7 @@ class ProjectController extends Controller
     public function update(ProjectRequest $request, Project $project)
     {
         $project->update($request->validated());
+        $project->employee_details()->sync($request->employee_id);
         return redirect()->route('projects.index')->with('success', 'Project berhasil diperbarui');
     }
 
