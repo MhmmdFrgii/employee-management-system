@@ -37,8 +37,8 @@
                         <select class="js-example-basic-multiple form-control w-100" name="employee_id[]"
                             multiple="multiple">
                             @forelse ($employees as $employee)
-                                <option value="{{ $employee->id }}" @selected(in_array($employee->id, old('genre_ids', $project->employee_details->pluck('id')->toArray())))>
-                                    {{ $employee->fullname }}
+                                <option value="{{ $employee->id }}" @selected(in_array($employee->id, old('employee_id[]', $project->employee_details->pluck('id')->toArray())))>
+                                    {{ $employee->name }}
                                 </option>
                             @empty
                                 <option disabled>Tidak ada karyawan.</option>
@@ -72,7 +72,7 @@
                             </div>
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-primary">Edit</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </form>
             </div>
         </div>
@@ -91,7 +91,7 @@
     $(document).ready(function() {
         $('#editModal{{ $project->id }}').on('shown.bs.modal', function() {
             $('.js-example-basic-multiple').select2({
-                placeholder: "Pilih State",
+                placeholder: "Pilih Karyawan",
                 allowClear: true,
                 width: '100%'
             });

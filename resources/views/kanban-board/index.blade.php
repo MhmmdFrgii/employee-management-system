@@ -3,22 +3,8 @@
 @section('content')
     <div class="container py-2">
         <div class="d-flex flex-column flex-md-row justify-content-between mb-4">
-            <div class="dropdown mb-3 mb-md-0">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    Pilih Kanban
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    @forelse ($kanbanboards as $board)
-                        <li><a class="dropdown-item" href="{{ route('kanban-board.index', ['id' => $board->id]) }}">
-                                {{ $board->name }}
-                            </a>
-                        </li>
-                    @empty
-                        <li><a class="dropdown-item">Tidak tersedia</a></li>
-                    @endforelse
-                </ul>
-            </div>
+            <a href="{{ route(Auth::user()->hasRole('manager') ? 'projects.index' : 'project.user') }}"
+                class="btn btn-primary">Kembali</a>
 
             <h1 class="text-center m-0">{{ $kanbanboard->name ?? 'Kanban Board' }}</h1>
             <button type="button" class="btn btn-outline-primary" @if (!isset($kanbanboard)) disabled @endif

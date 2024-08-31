@@ -15,15 +15,15 @@ class KanbanTaskController extends Controller
     public function store(Request $request)
     {
         KanbanTask::create($request->all());
-        return redirect()->route('kanbanboard.index', ['id' => $request->kanban_boards_id])->with('status', 'Kanban Tasks berhasil disimpan.');
+        return redirect()->route('kanban-board.index', ['id' => $request->kanban_boards_id])->with('status', 'Kanban Tasks berhasil disimpan.');
     }
 
-    public function update(Request $request, KanbanTask $kanbantask)
+    public function update(Request $request, KanbanTask $kanban_task)
     {
         $data = $request->all();
-        $data['title'] = $data['title'] ?? $kanbantask->title;
-        $kanbantask->update($data);
-        return redirect()->route('kanbanboard.index', ['id' => $kanbantask->kanban_boards_id])->with('status', 'Kanban Tasks berhasil diupdate');
+        $data['title'] = $data['title'] ?? $kanban_task->title;
+        $kanban_task->update($data);
+        return redirect()->route('kanban-board.index', ['id' => $kanban_task->kanban_boards_id])->with('status', 'Kanban Tasks berhasil diupdate');
     }
 
     /**
@@ -33,6 +33,6 @@ class KanbanTaskController extends Controller
     {
         $kanbantasks = KanbanTask::findOrFail($id);
         $kanbantasks->delete();
-        return redirect()->route('kanbantasks.index')->with('status', 'Kanban Tasks berhasil dihapus.');
+        return redirect()->route('kanban-tasks.index')->with('status', 'Kanban Tasks berhasil dihapus.');
     }
 }

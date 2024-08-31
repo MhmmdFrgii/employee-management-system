@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\EmployeeDetail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
@@ -14,7 +16,9 @@ class UserController extends Controller
         $users = User::whereHas('employee_detail', function ($query) {
             $query->where('status', 'disapprove');
         })->with('employeeDetails')->paginate(6);
-        return view('applicant.index', compact('users'));
+
+        $company = Company::where('id', Auth::user()->company_id)->first();
+        return view('applicant.index', compact('users', 'company'));
     }
 
     public function detail($id)

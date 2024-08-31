@@ -53,6 +53,7 @@ class RegisteredUserController extends Controller
             'name' => $request->company_name,
             'address' => $request->company_address,
             'contact_email' => $request->contact_email,
+            'company_code' => Company::company_generate()
         ]);
 
         $user = User::create([
