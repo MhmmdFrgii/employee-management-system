@@ -16,11 +16,12 @@
                             </span>
                             <h2>Akun Anda Sedang Menunggu Konfirmasi</h2>
                             <p class="d-none d-sm-block mt-4">Terima kasih telah mendaftar. Akun Anda sedang dalam
-                                proses konfirmasi oleh administrator. Anda akan menerima notifikasi setelah akun Anda
+                                proses konfirmasi oleh administrator. Anda akan menerima email setelah akun Anda
                                 disetujui.</p>
                             <p class="d-block d-sm-none mt-4">Terima kasih telah mendaftar. Akun Anda sedang dalam
-                                proses konfirmasi oleh administrator. Anda akan menerima notifikasi setelah akun Anda
+                                proses konfirmasi oleh administrator. Anda akan menerima email setelah akun Anda
                                 disetujui.</p>
+                            <a href="/" class="btn btn-primary mt-2">Kembali</a>
                         </div>
                     </div>
                 </div>

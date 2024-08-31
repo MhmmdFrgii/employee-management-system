@@ -21,6 +21,7 @@ class EmployeeDetailsSeeder extends Seeder
                 'name' => 'Jane Smith',
                 'email' => 'jane@gmail.com',
                 'photo' => 'jane_smith.jpg',
+                'cv' => 'cv.jpg',
                 'phone' => '081298765432',
                 'gender' => 'female',
                 'address' => 'Jl. Thamrin No. 5, Jakarta',

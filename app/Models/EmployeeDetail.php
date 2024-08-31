@@ -15,6 +15,7 @@ class EmployeeDetail extends Model
         'position_id',
         'name',
         'photo',
+        'cv',
         'email',
         'gender',
         'phone',

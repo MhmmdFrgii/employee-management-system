@@ -81,6 +81,7 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'cv' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'phone' => 'required|string|max:15',
             'gender' => 'required|string|in:male,female',
             'address' => 'required|string|max:500',
@@ -91,12 +92,15 @@ class RegisteredUserController extends Controller
         }
 
         try {
-            $photoPath = $request->file('photo')->store('employee_photos', 'public');
+            $photo = $request->file('photo')->store('employee_photos', 'public');
+
+            $cv = $request->file('cv')->store('employee-cv', 'public');
 
             EmployeeDetail::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'photo' => $photoPath,
+                'photo' => $photo,
+                'cv' => $cv,
                 'phone' => $request->phone,
                 'gender' => $request->gender,
                 'address' => $request->address
