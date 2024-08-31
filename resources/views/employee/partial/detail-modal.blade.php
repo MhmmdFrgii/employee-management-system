@@ -18,7 +18,7 @@
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <h6 class="text-muted">Nama:</h6>
-                                    <p id="modal-fullname" class="fw-semibold">{{ $employee->fullname }}</p>
+                                    <p id="modal-fullname" class="fw-semibold">{{ $employee->name }}</p>
                                 </div>
                                 <div class="col-md-6">
                                     <h6 class="text-muted">Departemen:</h6>

@@ -62,8 +62,7 @@
                     <!-- User Select -->
                     <div class="mb-3">
                         <label for="employee_id" class="form-label">Assign to User</label>
-                        <select name="employee_id"
-                            class="form-select select2 @error('employee_id') is-invalid @enderror" id="employee_id">
+                        <select class="js-example-basic-single form-select @error('employee_id') is-invalid @enderror" id="employee_id" name="employee_id">
                             <option value="" selected>Select a user</option>
                             @foreach ($users as $user)
                                 <option value="{{ $user->id }}"
@@ -87,9 +86,29 @@
 
 <script>
     $(document).ready(function() {
-        $('.select2').select2({
-            placeholder: "Select a user",
-            allowClear: true
+        $('.js-example-basic-single').select2({
+            dropdownParent: $('#{{ $modalId }}'), // Ensures dropdown is within the modal
+            width: '100%' // Ensures select2 fits the container width
         });
     });
 </script>
+
+<style>
+    /* Ensure the dropdown appears correctly within the modal */
+    .select2-container {
+        width: 100% !important; /* Ensures select2 takes the full width */
+    }
+
+    .select2-selection__rendered {
+        line-height: 2.4rem; /* Adjust to match bootstrap input height */
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: 2.5rem; /* Adjust to match bootstrap input height */
+        border: 1px solid #ced4da; /* Consistent border with bootstrap */
+    }
+
+    .select2-dropdown {
+        z-index: 1055; /* Higher than Bootstrap modal z-index */
+    }
+</style>
