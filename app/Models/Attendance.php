@@ -14,10 +14,9 @@ class Attendance extends Model
         'date',
         'status'
     ];
-    
-    public function employeeDetail()
+
+    public function employee_detail()
     {
         return $this->belongsTo(EmployeeDetail::class, 'employee_id');
     }
-
 }

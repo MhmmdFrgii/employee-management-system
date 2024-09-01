@@ -57,7 +57,7 @@ class AttendanceController extends Controller
     /**
      * Store a newly attendance for each user.
      */
-    public function user_attendance()
+    public function user_attendance(Request $request)
     {
         $today_attendance = Attendance::where('employee_id', Auth::id())
             ->where('date', date('Y-m-d'))
@@ -68,12 +68,12 @@ class AttendanceController extends Controller
         }
 
         Attendance::create([
-            'employee_id' => Auth::id(),
+            'employee_id' => Auth::user()->employee_detail->id,
             'date' => date('Y-m-d'),
             'status' => 'present',
         ]);
 
-        return redirect()->route('attendance.user')->with('success', 'Berhasil absen!');
+        return redirect()->route($request->route)->with('success', 'Berhasil absen!');
     }
 
 
