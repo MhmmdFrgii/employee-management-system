@@ -7,11 +7,11 @@
                 <div class="container py-4">
                     <h1 class="h3 mb-4">Applicant Detail</h1>
 
-                    @if ($employeeDetails)
+                    @if ($applicant)
                         <div class="card border-0 shadow-sm">
                             <div class="card-body d-flex flex-wrap align-items-center gap-4">
                                 @php
-                                    $photoPath = $user->photo ?? 'assets/images/no-profile.jpeg';
+                                    $photoPath = $applicant->photo ?? 'assets/images/no-profile.jpeg';
                                 @endphp
 
                                 <div class="flex-shrink-0">
@@ -21,24 +21,22 @@
                                 </div>
 
                                 <div class="flex-grow-1">
-                                    <h5 class="card-title mb-3">{{ $employeeDetails->fullname }}</h5>
+                                    <h5 class="card-title mb-3">{{ $applicant->name }}</h5>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <p class="card-text mb-1"><strong>NIK:</strong>
-                                                {{ $employeeDetails->nik ?? 'No Nik' }}</p>
+                                            <p class="card-text mb-1"><strong>Email:</strong>
+                                                {{ $applicant->email ?? 'No Email' }}</p>
                                             <p class="card-text mb-1"><strong>Phone:</strong>
-                                                {{ $employeeDetails->phone ?? 'No Phone' }}</p>
+                                                {{ $applicant->phone ?? 'No Phone' }}</p>
                                             <p class="card-text mb-1"><strong>Gender:</strong>
-                                                {{ $employeeDetails->gender ?? 'No Gender' }}</p>
-                                            <p class="card-text mb-1"><strong>Department:</strong>
-                                                {{ $employeeDetails->department->name ?? 'No Department' }}</p>
+                                                {{ $applicant->gender ?? 'No Gender' }}</p>
                                             <p class="card-text mb-1"><strong>Address:</strong>
-                                                {{ $employeeDetails->address ?? 'No Address' }}</p>
+                                                {{ $applicant->address ?? 'No Address' }}</p>
                                         </div>
                                         <div class="col-md-6">
                                             <h5 class="card-title">Curriculum Vitae (CV)</h5>
-                                            @if ($employeeDetails->cv)
-                                                <a href="{{ asset('storage/' . $employeeDetails->cv) }}"
+                                            @if ($applicant->cv)
+                                                <a href="{{ asset('storage/' . $applicant->cv) }}"
                                                     class="btn btn-secondary mt-2" target="_blank">
                                                     View CV
                                                 </a>
@@ -52,17 +50,17 @@
                         </div>
 
                         <div class="mt-4 text-center d-flex justify-content-center gap-3">
-                            <form action="{{ route('applicant.update', $employeeDetails->user->id) }}" method="POST">
+                            <form action="{{ route('applicants.update', $applicant->id) }}" method="POST">
                                 @csrf
                                 @method('patch')
-                                <input type="hidden" name="user_id" value="{{ $employeeDetails->user->id }}">
-                            <input type="hidden" name="status" value="approve">
+                                <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
+                                <input type="hidden" name="status" value="approved">
                                 <button type="submit" class="btn btn-primary">Approve</button>
                             </form>
-                            <form action="{{ route('applicant.update', $employeeDetails->user->id) }}" method="POST">
+                            <form action="{{ route('applicants.update', $applicant->id) }}" method="POST">
                                 @csrf
                                 @method('patch')
-                                <input type="hidden" name="user_id" value="{{ $employeeDetails->user->id }}">
+                                <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
                                 <input type="hidden" name="status" value="rejected">
                                 <button type="submit" class="btn btn-danger" disabled>Reject</button>
                             </form>

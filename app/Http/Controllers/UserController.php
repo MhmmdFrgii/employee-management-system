@@ -2,47 +2,60 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ApprovedMail;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\EmployeeDetail;
+use App\Models\InvitationCode;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $users = User::whereHas('employee_detail', function ($query) {
-            $query->where('status', 'disapprove');
-        })->with('employeeDetails')->paginate(6);
-
         $company = Company::where('id', Auth::user()->company_id)->first();
-        return view('applicant.index', compact('users', 'company'));
+
+        $applicants = EmployeeDetail::where('status', 'pending')
+            ->where('company_id', $company->id)
+            ->paginate(6);
+
+        return view('applicant.index', compact('applicants', 'company'));
     }
 
     public function detail($id)
     {
-        $user = User::with('employee_detail.department', 'employee_detail.position')->findOrFail($id);
-        $employeeDetails = $user->employee_detail;
-        return view('applicant.detail', compact('user', 'employeeDetails'));
+        $applicant = EmployeeDetail::findOrFail($id);
+        return view('applicant.detail', compact('applicant'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, EmployeeDetail $applicant)
     {
-        $user = User::where('id', $request->user_id)->first();
-        $user->update([
-            'status' => $request->status,
-        ]);
+        $applicant_name = $applicant->name;
+        $applicant_company = $applicant->company->name;
+        $company_email = $applicant->company->email;
+        $status = $request->status;
 
-        if ($request->status == "approve") {
-            $user->assignRole('karyawan');
+        if ($status == 'approved') {
+
+            $invitation_code = InvitationCode::create([
+                'code' => InvitationCode::invitation_generate(),
+                'company_id' => $applicant->company->id
+            ]);
+
+            Mail::to($applicant->email)->send(new ApprovedMail($applicant_name, $applicant_company, $company_email, $invitation_code->code));
         }
 
-        return redirect()->route('applicant.index')->with('success', 'User Applicant Approved.');
+        $applicant->update([
+            'status' => $status
+        ]);
+
+        return redirect()->route('applicants.index')->with('success', 'User Applicant ' . $status . '.');
     }
 
     /**

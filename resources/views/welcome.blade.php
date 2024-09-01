@@ -75,6 +75,16 @@
                                 mengelola karyawan secara efisien. Dapatkan wawasan mendalam tentang kinerja, absensi,
                                 dan pengembangan karyawan Anda.</p>
                         </div>
+                        <form action="{{ route('create.applicant') }}">
+                            <div class="form-group" class="text-white">
+                                <label for="applicant" class="text-white">Laraman :</label>
+                                <input type="text" id="applicant" name="applicant">
+                                <button type="submit">Lanjutkan</button>
+                                @error('applicant')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </form>
                     </div>
                     <div class="col-12 col-md-5 col-lg-6">
                         <!-- Welcome Thumb -->

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Department;
 use App\Models\EmployeeDetail;
+use App\Models\InvitationCode;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules;
@@ -69,14 +71,25 @@ class RegisteredUserController extends Controller
         return redirect(route('login', absolute: false));
     }
 
-    public function create_employee()
+    public function apply_applicant(Request $request)
     {
-        return view('auth.register-employee');
+        $validator = Validator::make($request->all(), [
+            'applicant' => 'required|string|exists:companies,company_code',
+        ], [
+            'applicant.exists' => 'Kode lamaran tidak valid!',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        return view('auth.apply-applicant');
     }
 
-    public function store_employee(Request $request)
-    {
 
+    public function store_applicant(Request $request)
+    {
+        $company = Company::where('company_code', $request->company_code)->first();
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
@@ -92,8 +105,8 @@ class RegisteredUserController extends Controller
 
         try {
             $photoPath = $request->file('photo')->store('employee_photos', 'public');
-
-            EmployeeDetail::create([
+            $employee = EmployeeDetail::create([
+                'company_id' => $company->id,
                 'name' => $request->name,
                 'email' => $request->email,
                 'photo' => $photoPath,
@@ -110,5 +123,65 @@ class RegisteredUserController extends Controller
             }
             return redirect()->back()->with('error', 'Terjadi Kesalaah Pendaftaran.!')->withInput();
         }
+    }
+
+    public function create_employee(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'company' => 'required|string|exists:invitation_codes,code',
+        ], [
+            'company.exists' => 'Kode lamaran tidak valid!',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('landing-page')->withErrors($validator)->withInput();
+        }
+
+        $invitation = InvitationCode::where('code', $request->company)
+            ->where('status', 'unused')
+            ->first();
+
+        if (!$invitation) {
+            return redirect()->route('landing-page')->withErrors(['company' => 'Kode lamaran sudah digunakan atau tidak valid!'])->withInput();
+        }
+
+        return view('auth.register-employee');
+    }
+
+    public function store_employee(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+        ]);
+
+        $applicant = EmployeeDetail::where('email', $request->email)
+            ->where('status', 'approved')
+            ->first();
+
+        if (!$applicant) {
+            return redirect()->back()->withErrors(['email' => 'Email tidak ditemukan dalam data kami.']);
+        }
+
+        $user = User::create([
+            'company_id' => $applicant->company->id,
+            'name' => $applicant->name,
+            'email' => $applicant->email,
+            'password' => $request->password,
+            'status' => 'approved'
+        ])->assignRole('employee');
+
+        $applicant->update([
+            'user_id' => $user->id,
+            'hire_date' => date('Y-m-d')
+        ]);
+
+        $invitation_code = InvitationCode::where('code', $request->company)->first();
+        $invitation_code->update([
+            'status' => 'used',
+            'used_by' => $applicant->id
+        ]);
+
+        return view('auth.login');
     }
 }

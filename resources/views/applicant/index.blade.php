@@ -7,9 +7,17 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h1 class="h3">Daftar Pelamar</h1>
                     </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3 gap-4">
+                        <input type="text" readonly value="{{ $company->company_code }}" class="form-control">
+                        <form action="{{ route('companies.reset', $company->id) }}" method="post">
+                            @csrf
+                            @method('patch')
+                            <button type="submit" class="btn btn-primary">Reset</button>
+                        </form>
+                    </div>
 
                     <div class="row">
-                        @forelse ($users as $user)
+                        @forelse ($applicants as $applicant)
                             <div class="col-lg-4 col-md-6">
                                 <div class="card justify-content-center align-items-center" style="width: 16rem;">
                                     <div class="card-body d-flex flex-column text-center">
@@ -18,11 +26,11 @@
                                             class="rounded-1 img-fluid" width="170px" height="170px">
 
                                         <div class="card-body p-0 mt-2">
-                                            <h5 class="card-title">{{ $user->employeeDetails->fullname }}</h5>
+                                            <h5 class="card-title">{{ $applicant->name }}</h5>
                                             <p class="card-text">
-                                                {{ $user->employeeDetail->department->name ?? 'No Department' }}</p>
+                                                {{ $applicant->name ?? 'No Department' }}</p>
                                         </div>
-                                        <a href="{{ route('applicant.detail', $user->id) }}"
+                                        <a href="{{ route('applicants.detail', $applicant->id) }}"
                                             class="btn btn-primary mt-3">Rincian</a>
                                     </div>
                                 </div>
@@ -36,7 +44,7 @@
                         @endforelse
                     </div>
                     <div class="justify-content-end">
-                        {{ $users->links() }}
+                        {{ $applicants->links() }}
                     </div>
                 </div>
             </div>
