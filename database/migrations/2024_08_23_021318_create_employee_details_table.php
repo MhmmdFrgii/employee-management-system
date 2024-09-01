@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->string('name');
             $table->string('photo');
+            $table->string('cv');
             $table->string('phone', 16)->unique();
             $table->string('email')->unique();
             $table->enum('gender', ['male', 'female']);

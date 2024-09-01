@@ -45,7 +45,7 @@
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="{{ route('positions.index') }}" aria-expanded="false">
                         <span>
-                            <i class="ti ti-archive"></i>
+                            <i class="ti ti-list-details"></i>
                         </span>
                         <span class="hide-menu">Jabatan</span>
                     </a>

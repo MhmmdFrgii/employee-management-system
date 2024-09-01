@@ -17,6 +17,7 @@ class EmployeeDetail extends Model
         'status',
         'name',
         'photo',
+        'cv',
         'email',
         'gender',
         'phone',

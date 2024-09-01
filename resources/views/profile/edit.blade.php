@@ -67,38 +67,6 @@
                             </div>
                         </div>
                         <div class="col-lg-6 d-flex align-items-stretch">
-                            <div class="card w-100 position-relative overflow-hidden">
-                                <div class="card-body p-4">
-                                    <h5 class="card-title fw-semibold">
-                                        Ubah Password
-                                    </h5>
-                                    <p class="card-subtitle mb-4">
-                                        Untuk mengubah kata sandi Anda, silakan konfirmasi di sini
-                                    </p>
-                                    <form>
-                                        <div class="mb-4">
-                                            <label for="exampleInputPassword1" class="form-label fw-semibold">Current
-                                                Password</label>
-                                            <input type="password" class="form-control" id="exampleInputPassword1"
-                                                value="" />
-                                        </div>
-                                        <div class="mb-4">
-                                            <label for="exampleInputPassword1" class="form-label fw-semibold">New
-                                                Password</label>
-                                            <input type="password" class="form-control" id="exampleInputPassword1"
-                                                value="" />
-                                        </div>
-                                        <div class="">
-                                            <label for="exampleInputPassword1" class="form-label fw-semibold">Confirm
-                                                Password</label>
-                                            <input type="password" class="form-control" id="exampleInputPassword1"
-                                                value="" />
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
                             <div class="card w-100 position-relative overflow-hidden mb-0">
                                 <div class="card-body p-4">
                                     <h5 class="card-title fw-semibold">

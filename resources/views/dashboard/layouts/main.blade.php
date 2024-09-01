@@ -202,7 +202,6 @@
 
     <script src="{{ asset('dist/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('dist/js/datatable/datatable-basic.init.js') }}"></script>
-    <script src="../../dist/libs/apexcharts/dist/apexcharts.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     {{-- Select2 --}}

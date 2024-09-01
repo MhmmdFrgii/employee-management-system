@@ -124,7 +124,7 @@
                                     <!-- Tampilkan departemen -->
                                     <span class="badge bg-primary">{{ $employee->department->name }}</span>
                                     <!-- Tampilkan nama karyawan -->
-                                    <h3 class="card-title mt-3">{{ $employee->fullname }}</h3>
+                                    <h3 class="card-title mt-3">{{ $employee->name }}</h3>
                                 </div>
                                 <div class="mt-2">
                                     <button class="btn btn-success btn-sm" data-id="{{ $employee->id }}" data-bs-toggle="modal" data-bs-target="#detailModal">Lihat Rincian</button>

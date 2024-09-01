@@ -109,7 +109,8 @@
                                                     @csrf
                                                     <div class="mb-3">
                                                         <label for="employee_id" class="form-label">Nama Karyawan</label>
-                                                        <input type="hidden" value="{{ $salary->employee_id }}" name="employee_id">
+                                                        <input type="hidden" value="{{ $salary->employee_id }}"
+                                                            name="employee_id">
                                                         <input readonly type="text"
                                                             class="form-control  @error('employee') is-invalid @enderror"
                                                             id="employee"
@@ -128,7 +129,8 @@
                                                         @enderror
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="payment_date" class="form-label">Tanggal Pembayaran</label>
+                                                        <label for="payment_date" class="form-label">Tanggal
+                                                            Pembayaran</label>
                                                         <input type="date" name="payment_date"
                                                             class="form-control @error('payment_date') is-invalid @enderror"
                                                             id="payment_date"
@@ -208,11 +210,16 @@
                         <div class="mb-3">
                             <label for="employee_id" class="form-label">Nama Karywan</label>
                             <select name="employee_id" id="employee_id" class="form-control">
-                                @foreach ($employees as $employee)
-                                    <option value="{{ $employee->id }}" {{ $employee->id == old('employee_id', $employee->id) ? 'selected' : '' }}>
+                                @forelse ($employees as $employee)
+                                    <option value="{{ $employee->id }}"
+                                        {{ $employee->id == old('employee_id', $employee->id) ? 'selected' : '' }}>
                                         {{ $employee->fullname }}
                                     </option>
-                                @endforeach
+                                @empty
+                                    <option selected disabled>
+                                       - Data Kosong -
+                                    </option>
+                                @endforelse
                             </select>
                             @error('employee_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
