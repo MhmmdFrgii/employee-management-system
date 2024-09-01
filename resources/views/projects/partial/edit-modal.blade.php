@@ -22,6 +22,16 @@
                         @enderror
                     </div>
                     <div class="mb-3">
+                        <label for="price" class="form-label">Harga</label>
+                        <input type="numeric" name="price" class="form-control @error('price') is-invalid @enderror"
+                            id="price"value="{{ old('price', number_format($project->price, 0, '.', '')) }}">
+                        @error('price')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
                         <label for="description" class="form-label">Deskripsi</label>
                         <input type="text" name="description"
                             class="form-control @error('description') is-invalid @enderror" id="description"
