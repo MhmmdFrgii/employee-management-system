@@ -17,6 +17,7 @@ class CompanySeeder extends Seeder
             'name' => 'PT. Modernize',
             'address' => 'Jl. Manggis',
             'contact_email' => 'company@email.com',
+            'company_code' => Company::company_generate()
         ]);
     }
 }
