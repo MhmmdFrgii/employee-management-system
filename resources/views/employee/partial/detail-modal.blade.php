@@ -11,7 +11,7 @@
                     <div class="row">
                         <!-- Kolom Foto -->
                         <div class="col-md-4 text-center">
-                            <img id="modal-photo" src="{{ asset('storage/' . $employee->photo) }}" alt="avatar" class="rounded-circle img-fluid border border-3 border-primary shadow-sm mb-3" width="150" height="150">
+                            <img id="modal-photo" src="../../dist/images/profile/user-1.jpg" alt="avatar" class="rounded-circle img-fluid border border-3 border-primary shadow-sm mb-3" width="150" height="150">
                         </div>
                         <!-- Kolom Detail Karyawan -->
                         <div class="col-md-8">
