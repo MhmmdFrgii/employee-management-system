@@ -6,32 +6,27 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Company extends Model
+class InvitationCode extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'address',
-        'contact_email',
-        'company_code'
+        'code',
+        'company_id',
+        'used_by',
+        'status'
     ];
 
-    public function users(): mixed
+    public static function invitation_generate(): string
     {
-        return $this->hasMany(User::class);
-    }
-
-    public static function company_generate(): string
-    {
-        $length = 35;
+        $length = 75;
         $unique = false;
         $code = '';
 
         while (!$unique) {
             $code = strtoupper(Str::random($length));
 
-            $unique = !Company::where('company_code', $code)->exists();
+            $unique = !InvitationCode::where('code', $code)->exists();
         }
 
         return $code;

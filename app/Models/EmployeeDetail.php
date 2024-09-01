@@ -10,18 +10,24 @@ class EmployeeDetail extends Model
     use HasFactory;
 
     protected $fillable = [
+        'company_id',
         'user_id',
         'department_id',
         'position_id',
+        'status',
         'name',
         'photo',
         'email',
         'gender',
         'phone',
         'address',
-        'hire_date'
+        'hire_date',
     ];
 
+    function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id', 'id');
+    }
     function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

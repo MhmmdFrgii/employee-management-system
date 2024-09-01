@@ -22,7 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'status',
-        'company_id'
+        'company_id',
     ];
 
     protected $attributes = [

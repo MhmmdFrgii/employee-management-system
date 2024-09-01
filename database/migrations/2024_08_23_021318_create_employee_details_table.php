@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('employee_details', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained('companies', 'id')->restrictOnDelete();
             $table->foreignId('user_id')->nullable()->constrained('users', 'id')->restrictOnDelete();
             $table->foreignId('department_id')->nullable()->constrained('departments', 'id')->restrictOnDelete();
             $table->foreignId('position_id')->nullable()->constrained('positions', 'id')->restrictOnDelete();
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->string('name');
             $table->string('photo');
             $table->string('phone', 16)->unique();

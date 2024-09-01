@@ -10,6 +10,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MyprojectController;
 use App\Http\Controllers\UserAbsenController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeDetailController;
 use App\Http\Controllers\KanbanBoardController;
@@ -52,11 +54,13 @@ Route::middleware('auth')->group(function () {
             Route::resource('kanban-board', KanbanBoardController::class);
             Route::resource('kanban-tasks', KanbanTaskController::class);
 
-            Route::resource('projects', ProjectController::class);
             Route::patch('/projects/{id}/complete', [ProjectController::class, 'mark_completed'])->name('projects.complete');
+            Route::resource('projects', ProjectController::class);
 
+            Route::get('/applicants/detail/{id}', [UserController::class, 'detail'])->name('applicants.detail');
             Route::resource('applicants', UserController::class);
-            Route::get('/applicant/detail/{id}', [UserController::class, 'detail'])->name('applicant.detail');
+
+            Route::patch('/company/{company}', [CompanyController::class, 'reset_code'])->name('companies.reset');
         });
     });
 
