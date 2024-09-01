@@ -71,6 +71,23 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="cv">CV : <span class="danger">*</span></label>
+                                                        <input type="file"
+                                                            class="form-control @error('cv') is-invalid @enderror"
+                                                            id="cv" name="cv" placeholder="Nomor Telepon"
+                                                            value="{{ old('cv') }}" min="0" />
+
+                                                        <p class="text-danger">*CV Harus Berformat .jpg, .jpeg, atau .png
+                                                        </p>
+                                                        @error('cv')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
                                                     <label for="phone"> Nomor Telepon : <span
                                                             class="danger">*</span></label>
                                                     <input type="number"
@@ -81,8 +98,6 @@
                                                         <div class="text-danger">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-                                            </div>
-                                            <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <label for="gender">Jenis Kelamin : <span
@@ -92,7 +107,8 @@
                                                                 value="male"
                                                                 class="form-check-input @error('gender') is-invalid @enderror"
                                                                 {{ old('gender') == 'male' ? 'checked' : '' }}>
-                                                            <label for="male" class="form-check-label">Laki-laki</label>
+                                                            <label for="male"
+                                                                class="form-check-label">Laki-laki</label>
                                                         </div>
                                                         <div class="form-check">
                                                             <input type="radio" id="female" name="gender"
@@ -107,7 +123,10 @@
                                                         @enderror
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
                                                     <div class="mb-3">
                                                         <label for="address">Alamat : <span
                                                                 class="danger">*</span></label>
@@ -118,12 +137,14 @@
                                                         @enderror
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         {!! htmlFormSnippet([
                                                             'theme' => 'light',
                                                             'size' => 'normal',
-                                                            'tabindex' => '2',
+                                                        'tabindex' => '2',
                                                             'callback' => 'callbackFunction',
                                                             'expired-callback' => 'expiredCallbackFunction',
                                                             'error-callback' => 'errorCallbackFunction',
@@ -136,21 +157,20 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        </section>
+                                        <div class="d-flex justify-content-between">
+                                            <a class="text-black" href="/login">Sudah punya akun? <span
+                                                    class="text-primary">Masuk</span></a>
+                                            <button type="submit" class="btn btn-primary">Daftar</button>
+                                        </div>
+                                    </form>
                                 </div>
-                                </section>
-                                <div class="d-flex justify-content-between">
-                                    <a class="text-black" href="/login">Sudah punya akun? <span
-                                            class="text-primary">Masuk</span></a>
-                                    <button type="submit" class="btn btn-primary">Daftar</button>
-                                </div>
-                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-    </div>
+        </div>
     </div>
 @endsection
