@@ -49,4 +49,9 @@ class EmployeeDetail extends Model
     {
         return $this->hasOne(Salary::class);
     }
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'project_assignments', 'employee_id', 'project_id');
+    }
 }
