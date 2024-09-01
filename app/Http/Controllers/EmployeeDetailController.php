@@ -8,6 +8,7 @@ use App\Models\EmployeeDetail;
 use App\Models\Position;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 use function Laravel\Prompts\search;
@@ -33,9 +34,8 @@ class EmployeeDetailController extends Controller
         $sortDirection = $request->get('sortDirection', 'asc'); // Default sorting direction is ascending
 
         $validSortColumns = ['name', 'phone', 'address', 'department', 'hire_date', 'position'];
-        // Validasi sortBy dan sortDirection
         if (!in_array($sortBy, $validSortColumns)) {
-            $sortBy = 'name'; // Set default jika kolom tidak valid
+            $sortBy = 'name'; // Set default     jika kolom tidak valid
         }
 
         // Validate sort direction
@@ -59,6 +59,7 @@ class EmployeeDetailController extends Controller
                 $sortBy === 'department' ? 'departments.name' : ($sortBy === 'name' ? 'users.name' : ($sortBy === 'position' ? 'positions.name' : 'employee_details.' . $sortBy)),
                 $sortDirection
             )
+            ->where('employee_details.company_id', Auth::user()->company->id)
             ->paginate(10);
         return view('employee.index', compact('employees'));
     }
