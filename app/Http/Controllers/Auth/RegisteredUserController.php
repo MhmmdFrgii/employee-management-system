@@ -98,6 +98,8 @@ class RegisteredUserController extends Controller
             'phone' => 'required|string|max:15',
             'gender' => 'required|string|in:male,female',
             'address' => 'required|string|max:500',
+            'g-recaptcha-response' => 'recaptcha',
+            recaptchaFieldName() => recaptchaRuleName()
         ]);
 
         if ($validator->fails()) {

@@ -22,6 +22,7 @@
             <label for="password">Password :</label>
             <input type="text" id="password" name="password">
         </div>
+        
         <button class="btn btn-primary" type="submit">Simpan</button>
     </form>
 @endsection

@@ -118,6 +118,23 @@
                                                         @enderror
                                                     </div>
                                                 </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        {!! htmlFormSnippet([
+                                                            'theme' => 'light',
+                                                            'size' => 'normal',
+                                                            'tabindex' => '2',
+                                                            'callback' => 'callbackFunction',
+                                                            'expired-callback' => 'expiredCallbackFunction',
+                                                            'error-callback' => 'errorCallbackFunction',
+                                                        ]) !!}
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        @error('g-recaptcha-response')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
                                             </div>
                                 </div>
                                 </section>
