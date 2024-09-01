@@ -44,6 +44,9 @@
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.1.0/dist/css/multi-select-tag.css">
     <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.1.0/dist/js/multi-select-tag.js"></script>
+
+    {{-- APEX Chart --}}
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 
 <body>
@@ -166,7 +169,8 @@
                                                 <form action="{{ route('logout') }}" method="post">
                                                     @csrf
 
-                                                    <button type="submit" class="btn btn-outline-primary col-12">Keluar</button>
+                                                    <button type="submit"
+                                                        class="btn btn-outline-primary col-12">Keluar</button>
                                                 </form>
                                             </div>
                                         </div>
