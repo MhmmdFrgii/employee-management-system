@@ -213,11 +213,11 @@
                                 @forelse ($employees as $employee)
                                     <option value="{{ $employee->id }}"
                                         {{ $employee->id == old('employee_id', $employee->id) ? 'selected' : '' }}>
-                                        {{ $employee->fullname }}
+                                    {{ $employee->name }}
                                     </option>
                                 @empty
                                     <option selected disabled>
-                                       - Data Kosong -
+                                        - Data Kosong -
                                     </option>
                                 @endforelse
                             </select>

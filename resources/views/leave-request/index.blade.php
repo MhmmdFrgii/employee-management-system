@@ -6,11 +6,7 @@
             <div class="container py-2">
                 <h1 class="h3">Permintaan Cuti</h1>
 
-                <div class="d-flex justify-content-between mb-3 mt-3">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
-                        Tambah Data
-                    </button>
-
+                <div class="d-flex justify-content-end mb-3 mt-3">
                     <form id="searchForm" action="{{ route('leave-requests.index') }}" method="GET"
                         class="d-flex align-items-center gap-2">
                         @csrf
@@ -341,97 +337,4 @@
             </div>
         </div>
     </div>
-
-    <!-- Modal Tambah Data -->
-    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true"
-        data-bs-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form action="{{ route('leave-requests.store') }}" method="POST">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addModalLabel">Tambah Permintaan Cuti
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="company_id" class="form-label">Company</label>
-                            <select name="company_id" id="company_id"
-                                class="form-control @error('company_id') is-invalid @enderror">
-                                <option value="">--Karyawan--</option>
-                                @foreach ($company as $item)
-                                    <option value="{{ $item->id }}"
-                                        {{ old('company_id') == $item->id ? 'selected' : '' }}>
-                                        {{ $item->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('company_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="employee_id" class="form-label">Karyawan</label>
-                            <select name="employee_id" id="employee_id"
-                                class="form-control @error('employee_id') is-invalid @enderror">
-                                <option value="">--Karyawan--</option>
-                                @foreach ($employee as $item)
-                                    <option value="{{ $item->id }}"
-                                        {{ old('employee_id') == $item->id ? 'selected' : '' }}>
-                                        {{ $item->fullname }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('employee_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="start_date" class="form-label">Mulai Ijin</label>
-                            <input type="date" class="form-control @error('start_date') is-invalid @enderror"
-                                id="start_date" name="start_date" value="{{ old('start_date') }}">
-                            @error('start_date')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="end_date" class="form-label">Sampai
-                                Tanggal</label>
-                            <input type="date" class="form-control @error('end_date') is-invalid @enderror"
-                                id="end_date" name="end_date" value="{{ old('end_date') }}">
-                            @error('end_date')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="type" class="form-label">Tipe</label>
-                            <input type="text" class="form-control @error('type') is-invalid @enderror" id="type"
-                                name="type" value="{{ old('type') }}">
-                            @error('type')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="status" class="form-label">Status</label>
-                            <select class="form-control @error('status') is-invalid @enderror" id="status"
-                                name="status">
-                                <option value="pending">Tertunda</option>
-                                <option value="approved">Disetujui</option>
-                                <option value="rejected">Ditolak</option>
-                            </select>
-                            @error('status')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
 @endsection

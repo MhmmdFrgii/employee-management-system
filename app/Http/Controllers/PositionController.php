@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PositionRequest;
 use App\Models\Position;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PositionController extends Controller
 {
@@ -31,7 +32,10 @@ class PositionController extends Controller
      */
     public function store(PositionRequest $request)
     {
-        Position::create($request->validated());
+        $validatedData = $request->validated();
+        $validatedData['company_id'] = Auth::user()->company_id;
+
+        Position::create($validatedData);
 
         return redirect()->route('positions.index')->with('success', 'Tambah Jabatan Success!');
     }
