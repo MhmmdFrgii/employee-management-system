@@ -129,8 +129,28 @@
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                         <div class="d-flex align-items-center">
                                             <div class="user-profile-img">
-                                                <img src="../../dist/images/profile/user-1.jpg" class="rounded-circle"
-                                                    width="35" height="35" alt="" />
+                                                @if (Auth::user()->hasRole('manager'))
+                                                    <img src="
+                                                        @if (Auth::user()->hasRole('manager')) {{ asset('dist/images/profile/user-4.jpg') }}
+                                                        @else
+                                                            {{ asset('assets/images/no-profile.jpeg') }} @endif"
+                                                        class="rounded-circle" width="35" height="35"
+                                                        alt="" />
+                                                @else
+                                                    <img src="
+                                                        @if (Auth::user()->employee_detail->gender == 'male') {{ asset('dist/images/profile/user-1.jpg') }}
+
+                                                        @elseif (Auth::user()->employee_detail->gender == 'female')
+                                                            {{ asset('dist/images/profile/user-2.jpg') }}
+
+                                                        @elseif (Auth::user()->hasRole('manager'))
+                                                            {{ asset('dist/images/profile/user-4.jpg') }}
+
+                                                        @else
+                                                            {{ asset('assets/images/no-profile.jpeg') }} @endif"
+                                                        class="rounded-circle" width="35" height="35"
+                                                        alt="" />
+                                                @endif
                                             </div>
                                         </div>
                                     </a>
@@ -141,11 +161,32 @@
                                                 <h5 class="mb-0 fs-5 fw-semibold">Profil Pengguna</h5>
                                             </div>
                                             <div class="d-flex align-items-center py-9 mx-7 border-bottom">
-                                                <img src="../../dist/images/profile/user-1.jpg" class="rounded-circle"
-                                                    width="80" height="80" alt="" />
+                                                @if (Auth::user()->hasRole('manager'))
+                                                    <img src="
+                                                        @if (Auth::user()->hasRole('manager')) {{ asset('dist/images/profile/user-4.jpg') }}
+                                                        @else
+                                                            {{ asset('assets/images/no-profile.jpeg') }} @endif"
+                                                        class="rounded-circle" width="80" height="80"
+                                                        alt="" />
+                                                @else
+                                                    <img src="
+                                                        @if (Auth::user()->employee_detail->gender == 'male') {{ asset('dist/images/profile/user-1.jpg') }}
+
+                                                        @elseif (Auth::user()->employee_detail->gender == 'female')
+                                                            {{ asset('dist/images/profile/user-2.jpg') }}
+
+                                                        @elseif (Auth::user()->hasRole('manager'))
+                                                            {{ asset('dist/images/profile/user-4.jpg') }}
+
+                                                        @else
+                                                            {{ asset('assets/images/no-profile.jpeg') }} @endif"
+                                                        class="rounded-circle" width="80" height="80"
+                                                        alt="" />
+                                                @endif
                                                 <div class="ms-3">
                                                     <h5 class="mb-1 fs-3">{{ Auth::user()->name }}</h5>
-                                                    <span class="mb-1 d-block text-dark">Admin</span>
+                                                    <span
+                                                        class="mb-1 d-block text-dark">{{ Auth::user()->getRoleNames()->implode(',') }}</span>
                                                     <p class="mb-0 d-flex text-dark align-items-center gap-2">
                                                         <i class="ti ti-mail fs-4"></i> {{ Auth::user()->email }}
                                                     </p>

@@ -27,7 +27,7 @@
                 <!-- =================== -->
 
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="/employee/dashboard" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('employee.dashboard') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-aperture"></i>
                         </span>

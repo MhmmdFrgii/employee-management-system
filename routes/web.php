@@ -43,7 +43,7 @@ Route::middleware('auth')->group(function () {
             // route attendence
             Route::get('/mark-absentees', [AttendanceController::class, 'markAbsentees']);
 
-            Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+            Route::get('', [DashboardController::class, 'index'])->name('admin.dashboard');
 
             Route::resource('project-assignments', ProjectAssignmentController::class);
             Route::resource('departments', DepartmentController::class);
@@ -67,7 +67,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:employee')->group(function () {
 
         Route::prefix('employee')->group(function () {
-            Route::get('dashboard', [DashboardController::class, 'userDashboard'])->name('employee.dashboard');
+            Route::get('', [DashboardController::class, 'userDashboard'])->name('employee.dashboard');
 
             Route::resource('notification', NotificationController::class);
             Route::get('/my-project', [ProjectController::class, 'my_project'])->name('project.user');

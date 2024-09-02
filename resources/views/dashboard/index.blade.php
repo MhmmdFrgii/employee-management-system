@@ -9,8 +9,13 @@
                         <div class="col-sm-7">
                             <div class="d-flex align-items-center mb-7">
                                 <div class="rounded-circle overflow-hidden me-6">
-                                    <img src="../../dist/images/profile/user-1.jpg" alt="" width="40"
-                                        height="40">
+                                    <img src="
+                                    @if (Auth::user()->hasRole('manager'))
+                                        {{ asset('dist/images/profile/user-4.jpg') }}
+                                    @else
+                                        {{ asset('assets/images/no-profile.jpeg') }}
+                                    @endif
+                                    "alt="" width="40" height="40">
                                 </div>
                                 <h5 class="fw-semibold mb-0 fs-5">Selamat datang kembali {{ auth()->user()->name }}</h5>
                             </div>
