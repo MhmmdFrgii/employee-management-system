@@ -29,6 +29,7 @@ class DashboardController extends Controller
             ->count();
 
         $performance = ($project_done / $project_count)  * 100;
+        $performance = round($performance, 2);
 
         $department_count = Department::where('company_id', $company_id)->count();
 
