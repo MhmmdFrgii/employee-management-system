@@ -15,22 +15,29 @@
                                     @else
                                         {{ asset('assets/images/no-profile.jpeg') }}
                                     @endif
-                                    "alt="" width="40" height="40">
+                                    " alt="" width="40" height="40">
                                 </div>
-                                <h5 class="fw-semibold mb-0 fs-5">Selamat datang kembali {{ auth()->user()->name }}</h5>
+                                <div>
+                                    <h5 class="fw-semibold mb-0 fs-5">Selamat datang kembali {{ auth()->user()->name }}</h5>
+                                    @if (Auth::user()->hasRole('manager') && Auth::user()->company)
+                                        <p class="mb-0 text-dark">Perusahaan: {{ Auth::user()->company->name }}</p>
+                                    @endif
+                                </div>
                             </div>
                             <div class="d-flex align-items-center">
                                 <div class="border-end pe-4 border-muted border-opacity-10">
-                                    <h3 class="mb-1 fw-semibold fs-8 d-flex align-content-center">2,340<i
-                                            class="ti ti-arrow-up-right fs-5 lh-base text-success"></i>
+                                    <h3 class="mb-1 fw-semibold fs-8 d-flex align-content-center">{{ $project_done }}<i
+                                            class="{{ $project_done ? 'ti ti-arrow-up-right fs-5 lh-base text-success' :
+                                            'ti ti-arrow-down-right fs-5 lh-base text-danger' }}"></i>
                                     </h3>
-                                    <p class="mb-0 text-dark">Today’s Sales</p>
+                                    <p class="mb-0 text-dark">Project Selesai</p>
                                 </div>
                                 <div class="ps-4">
-                                    <h3 class="mb-1 fw-semibold fs-8 d-flex align-content-center">35%<i
-                                            class="ti ti-arrow-up-right fs-5 lh-base text-success"></i>
+                                    <h3 class="mb-1 fw-semibold fs-8 d-flex align-content-center">{{ $performance }}%<i
+                                            class="{{ $performance ? 'ti ti-arrow-up-right fs-5 lh-base text-success' :
+                                            'ti ti-arrow-down-right fs-5 lh-base text-danger' }}"></i>
                                     </h3>
-                                    <p class="mb-0 text-dark">Overall Performance</p>
+                                    <p class="mb-0 text-dark">Kinerja Keseluruhan</p>
                                 </div>
                             </div>
                         </div>
@@ -44,6 +51,7 @@
                 </div>
             </div>
         </div>
+
     </div>
     <div class="row gx-3">
         <div class="col-md-6 col-lg-3 col-6">
