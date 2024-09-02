@@ -31,4 +31,9 @@ class Project extends Model
     {
         return $this->belongsToMany(EmployeeDetail::class, 'project_assignments', 'project_id', 'employee_id');
     }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
 }

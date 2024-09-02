@@ -62,6 +62,9 @@
                                 <div class="card-body">
                                     <p class="card-text">{{ Str::limit($project->description, 100) }}</p>
                                     <p class="card-text">
+                                        <strong>Departemen:</strong> {{ $project->department->name ?? '-' }}
+                                    </p>
+                                    <p class="card-text">
                                         <strong>Status:</strong> {{ ucfirst($project->status) }}
                                     </p>
                                     <p class="card-text">
@@ -71,17 +74,22 @@
                                 </div>
                                 <div class="card-footer justify-content-between d-flex ">
                                     <div class="d-flex  gap-1">
-                                        <button class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#completeModal{{ $project->id }}"
-                                            type="button">Selesai</button>
-                                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#editModal{{ $project->id }}" type="button">Ubah</button>
+                                        @if($project->status !== 'completed')
+                                            <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#completeModal{{ $project->id }}" type="button">Selesai</button>
+                                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#editModal{{ $project->id }}" type="button">Ubah</button>
+                                        @endif
                                         <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#vertical-center-modal{{ $project->id }}"
                                             type="button">Hapus</button>
                                     </div>
-                                    <a class="btn btn-info btn-sm"
-                                        href="{{ route('kanban-board.index', ['id' => $project->kanban_board->id]) }}">Kanban</a>
+                                    @if($project->kanban_board)
+                                        <a class="btn btn-info btn-sm"
+                                            href="{{ route('kanban-board.index', ['id' => $project->kanban_board->id]) }}">Kanban</a>
+                                    @endif
+                                    {{-- <a class="btn btn-info btn-sm"
+                                        href="{{ route('kanban-board.index', ['id' => $project->kanban_board->id]) }}">Kanban</a> --}}
                                 </div>
                             </div>
                         </div>

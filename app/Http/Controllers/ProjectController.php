@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProjectRequest;
-use App\Models\EmployeeDetail;
-use App\Models\KanbanBoard;
-use App\Models\Project;
 use Carbon\Carbon;
+use App\Models\Project;
+use App\Models\Department;
+use App\Models\KanbanBoard;
 use Illuminate\Http\Request;
+use App\Models\EmployeeDetail;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ProjectRequest;
 
 class ProjectController extends Controller
 {
@@ -64,14 +65,22 @@ class ProjectController extends Controller
         $sortDirection = $request->input('sortDirection', 'asc'); // Default sort direction 'asc'
 
         // Dapatkan hasil query dengan pagination
-        $projects = $query->orderBy($sortBy, $sortDirection)->paginate(6);
+        // $projects = $query->orderBy($sortBy, $sortDirection)->paginate(6);
+        // $projects->appends($request->all());
+
+        $projects = $query->with('department') // Tambahkan eager loading untuk department
+                    ->orderBy($sortBy, $sortDirection)
+                    ->paginate(6);
         $projects->appends($request->all());
 
         $employees = EmployeeDetail::whereHas('user', function ($query) {
             $query->where('company_id', Auth::user()->company_id);
         })->get();
 
-        return view('projects.index', compact('projects', 'employees'));
+        // Ambil semua departemen jika perlu untuk modal edit
+        $departments = Department::where('company_id', Auth::user()->company_id)->get();
+
+        return view('projects.index', compact('projects', 'employees','departments'));
     }
 
     /**
@@ -82,6 +91,8 @@ class ProjectController extends Controller
         $validatedData = $request->validated();
 
         $validatedData['company_id'] = Auth::user()->company->id;
+        $validatedData['department_id'] = $request->department_id;
+        
         $project = Project::create($validatedData);
         KanbanBoard::create([
             'name' => $project->name,

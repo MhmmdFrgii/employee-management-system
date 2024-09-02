@@ -43,6 +43,24 @@
                         @enderror
                     </div>
                     <div class="mb-3">
+                        <label for="department_id" class="form-label">Departemen</label>
+                        <select name="department_id" class="form-control @error('department_id') is-invalid @enderror" id="department_id">
+                            <option value="">Pilih Departemen</option>
+                            @forelse ($departments as $department)
+                                <option value="{{ $department->id }}" {{ old('department_id') == $department->id ? 'selected' : '' }}>
+                                    {{ $department->name }}
+                                </option>
+                            @empty
+                                <option disabled>Tidak ada departemen.</option>
+                            @endforelse
+                        </select>
+                        @error('department_id')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
                         <label for="end_date" class="form-label">Ditugaskan kepada</label> <br>
                         <select class="js-example-basic-multiple form-control w-100" name="employee_id[]"
                             multiple="multiple">
