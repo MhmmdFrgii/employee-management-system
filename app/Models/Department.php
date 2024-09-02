@@ -14,9 +14,10 @@ class Department extends Model
     protected $fillable = [
         'name',
         'description',
+        'company_id'
     ];
 
-    function employee(): mixed
+    function employee_details(): mixed
     {
         return $this->hasMany(EmployeeDetail::class);
     }

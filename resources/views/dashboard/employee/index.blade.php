@@ -35,7 +35,7 @@
         </div>
         <div class="col-md-4">
             <div class="d-flex justify-content-end gap-3 mb-5">
-                <form action="{{ route('attendance.mark') }}" method="post">
+                <form action="{{ route('attendance.mark', ['route' => 'employee.dashboard']) }}" method="post">
                     @csrf
                     <button button type="submit" class="btn btn-success">Absen</button>
                 </form>
@@ -44,50 +44,50 @@
         </div>
     </div>
 
-    @if (isset($activeCounts) && isset($attendanceCounts))
+    @if (isset($projectCounts))
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         <script>
-          var projectOptions = {
-                    series: [{
-                        name: 'Active Projects',
-                        data: @json($activeCounts)
-                    }],
-                    chart: {
-                        type: 'line', // Ubah dari 'bar' menjadi 'line'
-                        height: 350
-                    },
-                    stroke: {
-                        curve: 'smooth', // Menambahkan garis yang lebih halus
-                        width: 2
-                    },
-                    dataLabels: {
-                        enabled: false
-                    },
-                    xaxis: {
-                        categories: @json($months),
-                    },
-                    yaxis: {
-                        title: {
-                            text: 'Jumlah Projek Selesai'
-                        }
-                    },
-                    tooltip: {
-                        y: {
-                            formatter: function(val) {
-                                return val + " projects";
-                            }
-                        }
-                    },
-                    markers: {
-                        size: 4, // Ukuran titik pada garis
-                    },
-                    fill: {
-                        opacity: 1
+            var projectOptions = {
+                series: [{
+                    name: 'Active Projects',
+                    data: @json($projectCounts)
+                }],
+                chart: {
+                    type: 'line',
+                    height: 350
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 2
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                xaxis: {
+                    categories: @json($months),
+                },
+                yaxis: {
+                    title: {
+                        text: 'Jumlah Projek Selesai'
                     }
-                };
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(val) {
+                            return val + " projects";
+                        }
+                    }
+                },
+                markers: {
+                    size: 4,
+                },
+                fill: {
+                    opacity: 1
+                }
+            };
 
-                var projectChart = new ApexCharts(document.querySelector("#projectsChart"), projectOptions);
-                projectChart.render();
+            var projectChart = new ApexCharts(document.querySelector("#projectsChart"), projectOptions);
+            projectChart.render();
 
             var attendanceOptions = {
                 series: @json($attendanceCounts),

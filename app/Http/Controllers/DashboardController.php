@@ -14,50 +14,73 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $employee_count = EmployeeDetail::count();
-        $project_count = Project::count();
-        $department_count = Department::count();
+        $employee_count = EmployeeDetail::where('company_id', Auth::user()->company->id)
+            ->where('status', 'approved')
+            ->whereHas('user')
+            ->count();
+        $applicant_count = EmployeeDetail::where('company_id', Auth::user()->company->id)
+            ->where('status', 'pending')
+            ->count();
+        $project_count = Project::where('company_id', Auth::user()->company->id)->count();
+        $department_count = Department::where('company_id', Auth::user()->company->id)->count();
 
         $now = Carbon::now();
-        $currentMonth = $now->month;
         $currentYear = $now->year;
 
-        // Ambil data proyek berdasarkan tenggat yang terdekat
         $projectsWithNearestDeadlines = Project::where('end_date', '>=', $now)
-        ->orderBy('end_date', 'asc')
-        ->get();
+            ->where('company_id', Auth::user()->company->id)
+            ->orderBy('end_date', 'asc')
+            ->get();
 
-        // Ambil data proyek berdasarkan bulan dan tahun saat ini
-        $activeProjects = Project::where('status', 'Active')
-            ->whereYear('start_date', $currentYear)
-            ->whereMonth('start_date', $currentMonth)
-            ->count();
+        $months = [];
+        $activeCounts = [];
+        $earningCounts = [];
+        $project_data = [];
 
-        // Data untuk chart bulanan
-    $months = [];
-    $activeCounts = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $months[] = Carbon::create()->month($i)->format('F');
 
-    for ($i = 1; $i <= 12; $i++) {
-        $months[] = Carbon::create()->month($i)->format('F');
+            $activeCounts[] = Project::where('status', 'Completed')
+                ->where('company_id', Auth::user()->company->id)
+                ->whereYear('start_date', $currentYear)
+                ->whereMonth('start_date', $i)
+                ->count();
 
-        // Hitung jumlah proyek yang dimulai pada bulan ini dan dinyatakan 'completed'
-        $activeCounts[] = Project::where('status', 'Completed')
-            ->whereYear('start_date', $currentYear)
-            ->whereMonth('start_date', $i)
-            ->count();
-    }
+            $earningCounts[] = Project::where('status', 'Completed')
+                ->where('company_id', Auth::user()->company->id)
+                ->whereYear('start_date', $currentYear)
+                ->whereMonth('start_date', $i)
+                ->sum('price');
+        }
 
-    // Mendapatkan user yang sedang login
-    $user = Auth::user();
+        for ($i = 0; $i < 12; $i++) {
+            $project_data[] = [
+                $i + 1,
+                $activeCounts[$i],
+                $earningCounts[$i]
+            ];
+        }
 
-    return view('dashboard.index', [
-        'months' => $months,
-        'activeCounts' => $activeCounts,
-        'employee_count' => $employee_count,
-        'project_count' => $project_count,
-        'department_count' => $department_count,
-        'projectsWithNearestDeadlines' => $projectsWithNearestDeadlines
-    ]);
+        $departments = Department::where('company_id', Auth::user()->company->id)
+            ->pluck('name')
+            ->toArray();
+
+        $department_data = Department::where('company_id', Auth::user()->company->id)
+            ->withCount('employee_details')
+            ->pluck('employee_details_count')
+            ->toArray();
+
+        return view('dashboard.index', [
+            'employee_count' => $employee_count,
+            'project_count' => $project_count,
+            'department_count' => $department_count,
+            'applicant_count' => $applicant_count,
+            'months' => $months,
+            'project_data' => $project_data,
+            'departments' => $departments,
+            'department_data' => $department_data,
+            'projectsWithNearestDeadlines' => $projectsWithNearestDeadlines,
+        ]);
     }
 
 
@@ -68,32 +91,28 @@ class DashboardController extends Controller
         $currentMonth = $now->month;
         $currentYear = $now->year;
 
-        // Ambil data proyek berdasarkan bulan dan tahun saat ini
-        $activeProjects = Project::where('status', 'Active')
-            ->whereYear('start_date', $currentYear)
-            ->whereMonth('start_date', $currentMonth)
-            ->count();
-
         // Data untuk chart bulanan
-    $months = [];
-    $activeCounts = [];
+        $months = [];
+        $activeCounts = [];
 
-    for ($i = 1; $i <= 12; $i++) {
-        $months[] = Carbon::create()->month($i)->format('F');
+        for ($i = 1; $i <= 12; $i++) {
+            $months[] = Carbon::create()->month($i)->format('F');
 
-        // Hitung jumlah proyek yang dimulai pada bulan ini dan dinyatakan 'completed'
-        $activeCounts[] = Project::where('status', 'Completed')
-            ->whereYear('start_date', $currentYear)
-            ->whereMonth('start_date', $i)
-            ->count();
-    }
+            $projectCounts[] = Project::where('status', 'Completed')
+                ->whereHas('employee_details', function ($query) {
+                    $query->where('user_id', Auth::user()->id);
+                })
+                ->whereYear('start_date', $currentYear)
+                ->whereMonth('start_date', $i)
+                ->count();
+        }
 
-    // Mendapatkan user yang sedang login
-    $user = Auth::user();
+        // Mendapatkan user yang sedang login
+        $user = Auth::user();
 
         // Ambil data attendance dengan relasi ke employee_detail dan user
         $attendanceData = Attendance::selectRaw('status, COUNT(*) as count')
-            ->whereHas('employeeDetail', function ($query) use ($user) {
+            ->whereHas('employee_detail', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             })
             ->groupBy('status')
@@ -109,10 +128,11 @@ class DashboardController extends Controller
             $attendanceCounts[] = $attendanceData[$status] ?? 0;
         }
 
+
         return view('dashboard.employee.index', [
-            'activeProjects' => $activeProjects,
             'months' => $months,
-            'activeCounts' => $activeCounts,
+            'projectCounts' => $projectCounts,
+            'statuses' => $statuses,
             'attendanceCounts' => $attendanceCounts,
         ]);
     }

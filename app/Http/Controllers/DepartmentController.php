@@ -7,6 +7,7 @@ use App\Models\Department;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DepartmentController extends Controller
 {
@@ -40,7 +41,10 @@ class DepartmentController extends Controller
      */
     public function store(DepartmentRequest $request)
     {
-        Department::create($request->validated());
+        $validatedData = $request->validated();
+        $validatedData['company_id'] = Auth::user()->company->id;
+
+        Department::create($validatedData);
 
         return redirect()->route('departments.index')->with('success', 'Departemen berhasil dibuat.');
     }

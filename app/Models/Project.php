@@ -22,11 +22,6 @@ class Project extends Model
         });
     }
 
-    public function project_assignments()
-    {
-        return $this->hasMany(ProjectAssignment::class);
-    }
-
     public function kanban_board()
     {
         return $this->hasOne(KanbanBoard::class);

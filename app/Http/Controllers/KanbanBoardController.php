@@ -30,9 +30,8 @@ class KanbanBoardController extends Controller
         $done = KanbanTask::where('kanban_boards_id', $kanbanboardID)
             ->where('status', 'done')
             ->get();
-        $users = User::whereHas('employee_detail', function ($query) {
-            $query->where('status', 'approve');
-        })->with('employee_detail')->get();
+        $users = EmployeeDetail::whereHas('projects')
+            ->get();
 
         // $employees = EmployeeDetail::where('company_id', Auth::user()->company->id);
         $kanbanboard = KanbanBoard::where('id', $kanbanboardID)->first();
@@ -48,6 +47,12 @@ class KanbanBoardController extends Controller
             dd('ad');
         }
 
+        $user = User::find(Auth::id());
+
+        if ($user->hasRole('employee') && !$user->projects()->exists()) {
+            return redirect()->route('project.user');
+        }
+
         $kanbanboardID = $request->id ?  $request->id : 1;
 
         $kanbanboards = KanbanBoard::all(); // Perbaikan nama variabel 
@@ -60,9 +65,8 @@ class KanbanBoardController extends Controller
         $done = KanbanTask::where('kanban_boards_id', $kanbanboardID)
             ->where('status', 'done')
             ->get();
-        $users = User::whereHas('employee_detail', function ($query) {
-            $query->where('status', 'approve');
-        })->with('employee_detail')->get();
+        $users = EmployeeDetail::whereHas('projects')
+            ->get();
 
         $kanbanboard = KanbanBoard::where('id', $kanbanboardID)->first();
         return view('kanban-board.index', compact('kanbanboards', 'kanbanboard', 'todo', 'progress', 'done', 'users'));

@@ -99,6 +99,10 @@ class ProjectController extends Controller
     {
         $project->update($request->validated());
         $project->employee_details()->sync($request->employee_id);
+
+        $project->kanban_board->update([
+            "name" => $request->name
+        ]);
         return redirect()->route('projects.index')->with('success', 'Project berhasil diperbarui');
     }
 

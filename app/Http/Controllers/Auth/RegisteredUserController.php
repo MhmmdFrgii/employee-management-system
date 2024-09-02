@@ -118,7 +118,8 @@ class RegisteredUserController extends Controller
                 'cv' => $cv,
                 'phone' => $request->phone,
                 'gender' => $request->gender,
-                'address' => $request->address
+                'address' => $request->address,
+                'company_id' => $company->id
             ]);
 
             return redirect()->route('confirmation')->with('success', 'Berhasil Daftar Menunggu Konfirmasi!');

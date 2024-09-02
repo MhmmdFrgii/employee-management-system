@@ -155,7 +155,7 @@
         <tbody>
             @foreach ($attendances as $attendence)
                 <tr>
-                    <td>{{ $attendence->employeeDetail->user->name }}</td>
+                    <td>{{ $attendence->employee_detail->user->name }}</td>
                     <td>{{ \Carbon\Carbon::parse($attendence->date)->translatedFormat('d F Y') }}</td>
                     <td>
                         @if ($attendence->status == 'present')

@@ -25,7 +25,8 @@ class ProjectRequest extends FormRequest
             'name' => 'required|max:250',
             'description' => 'required|max:250',
             'start_date' => 'required|date',
-            'end_date' => 'required|nullable|date|after_or_equal:start_date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'price' => 'required',
         ];
     }
 
