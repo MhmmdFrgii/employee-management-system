@@ -35,7 +35,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="/employee/myproject" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('project.user') }}" aria-expanded="false">
                         <span class="d-flex">
                             <i class="ti ti-category"></i>
                         </span>
@@ -44,7 +44,7 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('attendance.index') }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('attendance.user') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-clipboard-data"></i>
                         </span>

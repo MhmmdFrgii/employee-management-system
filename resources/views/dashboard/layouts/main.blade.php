@@ -230,7 +230,7 @@
         @endif
         @if (session('info'))
             iziToast.info({
-                title: 'Sukses!',
+                title: 'Info!',
                 message: "{{ session('info') }}",
                 position: 'topRight'
             });

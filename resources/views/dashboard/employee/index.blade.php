@@ -40,7 +40,7 @@
                     <button button type="submit" class="btn btn-success">Absen</button>
                 </form>
             </div>
-            <div id="attendanceChart"></div>
+            <div id="chart"></div>
         </div>
     </div>
 
@@ -89,11 +89,12 @@
             var projectChart = new ApexCharts(document.querySelector("#projectsChart"), projectOptions);
             projectChart.render();
 
-            var attendanceOptions = {
+
+            var options = {
                 series: @json($attendanceCounts),
                 chart: {
-                    width: 380,
-                    type: 'pie',
+                    width: 350,
+                    type: 'donut',
                 },
                 labels: ['Present', 'Absent', 'Late', 'Alpha'],
                 responsive: [{
@@ -109,8 +110,8 @@
                 }]
             };
 
-            var attendanceChart = new ApexCharts(document.querySelector("#attendanceChart"), attendanceOptions);
-            attendanceChart.render();
+            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
         </script>
     @else
         <p>Data tidak ditemukan.</p>
