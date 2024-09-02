@@ -133,7 +133,7 @@
     </div>
     {{-- ABSENSII --}}
     <div class="d-flex justify-content-end mb-3 gap-2">
-        <form action="{{ route('attendance.mark') }}" method="post">
+        <form action="{{ route('attendance.mark', ['route' => 'attendance.user']) }}" method="post">
             @csrf
             <button button type="submit" class="btn btn-success">Absen</button>
         </form>

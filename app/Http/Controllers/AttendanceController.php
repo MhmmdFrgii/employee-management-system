@@ -39,8 +39,6 @@ class AttendanceController extends Controller
     // display a list of each user attendance
     public function user_index()
     {
-
-
         $user = Auth::user()->employee_detail->id;
 
         $total_attendance = Attendance::where('employee_id', $user)->count();
@@ -68,7 +66,7 @@ class AttendanceController extends Controller
             ->exists();
 
         if ($today_attendance) {
-            return redirect()->route('attendance.user')->with('info', 'Kamu sudah absen!');
+            return redirect()->route($request->route)->with('info', 'Kamu sudah absen!');
         }
 
         Attendance::create([
@@ -77,7 +75,7 @@ class AttendanceController extends Controller
             'status' => 'present',
         ]);
 
-        return redirect()->route('attendance.user')->with('success', 'Berhasil absen!');
+        return redirect()->route($request->route)->with('success', 'Berhasil absen!');
     }
 
 
