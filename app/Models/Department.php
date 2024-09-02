@@ -21,4 +21,9 @@ class Department extends Model
     {
         return $this->hasMany(EmployeeDetail::class);
     }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
 }

@@ -138,7 +138,7 @@
                             @forelse($leaveRequest as $data)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $data->employe->fullname }}</td>
+                                    <td>{{ $data->employe->name }}</td>
                                     <td>{{ $data->start_date }}</td>
                                     <td>{{ $data->end_date }}</td>
                                     <td>{{ $data->type }}</td>
@@ -149,10 +149,16 @@
                                             Edit
                                         </button> --}}
 
-                                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#approveModal{{ $data->id }}">
-                                            Approve
-                                        </button>
+                                        @if ($data->status !== 'approved' && $data->status !== 'rejected')
+                                            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#approveModal{{ $data->id }}">
+                                                Approve
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#rejectModal{{ $data->id }}">
+                                                Reject
+                                            </button>
+                                        @endif
 
                                         <form action="{{ route('leave-requests.destroy', $data->id) }}" method="POST"
                                             class="d-inline"
@@ -160,7 +166,7 @@
                                             @csrf
                                             @method('delete')
                                             <button type="submit" class="btn btn-danger btn-sm">
-                                                Hapus
+                                                <i class="ti ti-trash"></i>
                                             </button>
                                         </form>
 
@@ -190,6 +196,37 @@
                                                                 data-bs-dismiss="modal">Batal</button>
                                                             <button type="submit"
                                                                 class="btn btn-primary">Approve</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- Reject Modal --}}
+                                        <div class="modal fade" id="rejectModal{{ $data->id }}" tabindex="-1"
+                                            aria-labelledby="rejectModalLabel{{ $data->id }}" aria-hidden="true"
+                                            data-bs-backdrop="static">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form action="{{ route('leave-requests.reject', $data->id) }}"
+                                                        method="POST">
+                                                        @csrf
+
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="rejectModalLabel{{ $data->id }}">Tolak
+                                                                Permintaan Cuti</h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Apakah Anda yakin ingin menolak permintaan cuti ini?</p>
+                                                            <input type="hidden" name="status" value="rejected">
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Batal</button>
+                                                            <button type="submit" class="btn btn-primary">Tolak</button>
                                                         </div>
                                                     </form>
                                                 </div>
