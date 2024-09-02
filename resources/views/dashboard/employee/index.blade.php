@@ -11,8 +11,14 @@
                         <div class="col-sm-7">
                             <div class="d-flex align-items-center mb-7">
                                 <div class="rounded-circle overflow-hidden me-6">
-                                    <img src="{{ asset('dist/images/profile/user-1.jpg') }}" alt="" width="40"
-                                        height="40">
+                                    <img src="
+                                        @if (Auth::user()->employee_detail->gender == 'male') {{ asset('dist/images/profile/user-1.jpg') }}
+
+                                        @elseif (Auth::user()->employee_detail->gender == 'female')
+                                            {{ asset('dist/images/profile/user-2.jpg') }}
+                                        @else
+                                            {{ asset('assets/images/no-profile.jpeg') }} @endif"
+                                        alt="" width="40" height="40">
                                 </div>
                                 <h5 class="fw-semibold mb-0 fs-5">Selamat Datang {{ auth()->user()->name }}</h5>
                             </div>
@@ -40,7 +46,7 @@
                     <button button type="submit" class="btn btn-success">Absen</button>
                 </form>
             </div>
-            <div id="attendanceChart"></div>
+            <div id="chart"></div>
         </div>
     </div>
 
@@ -89,11 +95,12 @@
             var projectChart = new ApexCharts(document.querySelector("#projectsChart"), projectOptions);
             projectChart.render();
 
-            var attendanceOptions = {
+
+            var options = {
                 series: @json($attendanceCounts),
                 chart: {
-                    width: 380,
-                    type: 'pie',
+                    width: 350,
+                    type: 'donut',
                 },
                 labels: ['Present', 'Absent', 'Late', 'Alpha'],
                 responsive: [{
@@ -109,8 +116,8 @@
                 }]
             };
 
-            var attendanceChart = new ApexCharts(document.querySelector("#attendanceChart"), attendanceOptions);
-            attendanceChart.render();
+            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
         </script>
     @else
         <p>Data tidak ditemukan.</p>

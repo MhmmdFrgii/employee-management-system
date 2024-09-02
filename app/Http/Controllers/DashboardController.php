@@ -14,21 +14,30 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $employee_count = EmployeeDetail::where('company_id', Auth::user()->company->id)
+        $company_id = Auth::user()->company->id;
+
+        $employee_count = EmployeeDetail::where('company_id', $company_id)
             ->where('status', 'approved')
             ->whereHas('user')
             ->count();
-        $applicant_count = EmployeeDetail::where('company_id', Auth::user()->company->id)
+        $applicant_count = EmployeeDetail::where('company_id', $company_id)
             ->where('status', 'pending')
             ->count();
-        $project_count = Project::where('company_id', Auth::user()->company->id)->count();
-        $department_count = Department::where('company_id', Auth::user()->company->id)->count();
+        $project_count = Project::where('company_id', $company_id)->count();
+        $project_done = Project::where('company_id', $company_id)
+            ->where('status', 'completed')
+            ->count();
+
+        $performance = ($project_done / $project_count)  * 100;
+        $performance = round($performance, 2);
+
+        $department_count = Department::where('company_id', $company_id)->count();
 
         $now = Carbon::now();
         $currentYear = $now->year;
 
         $projectsWithNearestDeadlines = Project::where('end_date', '>=', $now)
-            ->where('company_id', Auth::user()->company->id)
+            ->where('company_id', $company_id)
             ->orderBy('end_date', 'asc')
             ->get();
 
@@ -41,13 +50,13 @@ class DashboardController extends Controller
             $months[] = Carbon::create()->month($i)->format('F');
 
             $activeCounts[] = Project::where('status', 'Completed')
-                ->where('company_id', Auth::user()->company->id)
+                ->where('company_id', $company_id)
                 ->whereYear('start_date', $currentYear)
                 ->whereMonth('start_date', $i)
                 ->count();
 
             $earningCounts[] = Project::where('status', 'Completed')
-                ->where('company_id', Auth::user()->company->id)
+                ->where('company_id', $company_id)
                 ->whereYear('start_date', $currentYear)
                 ->whereMonth('start_date', $i)
                 ->sum('price');
@@ -61,11 +70,11 @@ class DashboardController extends Controller
             ];
         }
 
-        $departments = Department::where('company_id', Auth::user()->company->id)
+        $departments = Department::where('company_id', $company_id)
             ->pluck('name')
             ->toArray();
 
-        $department_data = Department::where('company_id', Auth::user()->company->id)
+        $department_data = Department::where('company_id', $company_id)
             ->withCount('employee_details')
             ->pluck('employee_details_count')
             ->toArray();
@@ -73,9 +82,11 @@ class DashboardController extends Controller
         return view('dashboard.index', [
             'employee_count' => $employee_count,
             'project_count' => $project_count,
+            'project_done' => $project_done,
             'department_count' => $department_count,
             'applicant_count' => $applicant_count,
             'months' => $months,
+            'performance' => $performance,
             'project_data' => $project_data,
             'departments' => $departments,
             'department_data' => $department_data,

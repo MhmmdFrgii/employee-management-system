@@ -59,8 +59,12 @@ class AttendanceController extends Controller
      */
     public function user_attendance(Request $request)
     {
-        $today_attendance = Attendance::where('employee_id', Auth::id())
-            ->where('date', date('Y-m-d'))
+        $employee = Auth::user()->employee_detail->id;
+
+        $today = Carbon::today()->format('Y-m-d');
+
+        $today_attendance = Attendance::where('employee_id', $employee)
+            ->where('date', $today)
             ->exists();
 
         if ($today_attendance) {
@@ -68,12 +72,12 @@ class AttendanceController extends Controller
         }
 
         Attendance::create([
-            'employee_id' => Auth::user()->employee_detail->id,
-            'date' => date('Y-m-d'),
+            'employee_id' => $employee,
+            'date' => $today,
             'status' => 'present',
         ]);
 
-        return redirect()->route($request->route)->with('success', 'Berhasil absen!');
+        return redirect()->route('attendance.user')->with('success', 'Berhasil absen!');
     }
 
 

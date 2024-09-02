@@ -136,4 +136,13 @@ class LeaveRequestController extends Controller
         // Redirect kembali dengan pesan sukses
         return redirect()->route('leave-requests.index')->with('success', 'Permintaan cuti telah disetujui dan data absensi telah ditambahkan.');
     }
+
+    public function reject($id)
+    {
+        $leaveRequest = LeaveRequest::findOrFail($id);
+        $leaveRequest->status = 'rejected';
+        $leaveRequest->save();
+
+        return redirect()->route('leave-requests.index')->with('success', 'Permintaan curi telah ditolak');
+    }
 }
