@@ -21,6 +21,15 @@
                         <div
                             class="authentication-login min-vh-100 bg-body row justify-content-center align-items-center p-4">
                             <div class="col-sm-8 col-md-8 col-xl-12">
+                                {{-- MAP --}}
+                                <input type="text" id="location-search" placeholder="Search for a location" />
+                                <button id="search-button">Search</button>
+
+                                <div id="map" style="height: 300px;"></div>
+
+                                <input type="text" id="latitude" placeholder="Latitude" readonly />
+                                <input type="text" id="longitude" placeholder="Longitude" readonly />
+                                {{-- END MAp --}}
                                 <div class="card-body wizard-content">
                                     <h4 class="card-title">Step wizard with validation</h4>
                                     <form action="{{ route('register') }}" class="validation-wizard wizard-circle mt-5"
@@ -138,4 +147,56 @@
 
         </div>
     </div>
+
+    <script>
+        var map = L.map('map').setView([-7.8965894, 112.6090665], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marker = null; // Initialize marker variable
+
+        // Function to update the marker and input fields
+        function updateMarker(lat, lng) {
+            if (!marker) {
+                // Create a new marker if it doesn't exist
+                marker = L.marker([lat, lng]).addTo(map);
+            } else {
+                // Move the existing marker to the new location
+                marker.setLatLng([lat, lng]);
+            }
+
+            map.setView([lat, lng], 15);
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+        }
+
+        // Event listener for the search button
+        document.getElementById('search-button').addEventListener('click', function() {
+            var location = document.getElementById('location-search').value;
+
+            if (location) {
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${location}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            var lat = data[0].lat;
+                            var lng = data[0].lon;
+                            updateMarker(lat, lng);
+                        } else {
+                            alert('Location not found.');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        });
+
+        // Add a pin when the user clicks on the map
+        map.on('click', function(e) {
+            var lat = e.latlng.lat;
+            var lng = e.latlng.lng;
+            updateMarker(lat, lng);
+        });
+    </script>
 @endsection
