@@ -53,8 +53,8 @@ class EmployeeDetailsSeeder extends Seeder
             [
                 'company_id' => 2,
                 'user_id' => 4,
-                'department_id' => 1,
-                'position_id' => 1,
+                'department_id' => 3,
+                'position_id' => 3,
                 'status' => 'approved',
                 'name' => 'Alice Johnson',
                 'email' => 'alice.johnson@innovatech.com',
@@ -68,8 +68,8 @@ class EmployeeDetailsSeeder extends Seeder
             [
                 'company_id' => 2,
                 'user_id' => 5,
-                'department_id' => 2,
-                'position_id' => 2,
+                'department_id' => 4,
+                'position_id' => 4,
                 'status' => 'approved',
                 'name' => 'Bob Brown',
                 'email' => 'bob.brown@innovatech.com',

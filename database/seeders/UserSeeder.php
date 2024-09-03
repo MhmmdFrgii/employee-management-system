@@ -24,6 +24,14 @@ class UserSeeder extends Seeder
                 'status' => 'approved'
             ],
             [
+                'name' => 'Manager1',
+                'email' => 'manager1@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'manager',
+                'company_id' => 2,
+                'status' => 'approved'
+            ],
+            [
                 'name' => 'Employee User',
                 'email' => 'employee@example.com',
                 'password' => Hash::make('password'),

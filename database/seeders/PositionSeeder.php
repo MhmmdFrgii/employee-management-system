@@ -27,6 +27,20 @@ class PositionSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'company_id' => 2,
+                'name' => 'Magang',
+                'description' => 'Lorem ipsum dolor sit amet.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'company_id' => 2,
+                'name' => 'Mentor',
+                'description' => 'Lorem ipsum dolor sit amet.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }
