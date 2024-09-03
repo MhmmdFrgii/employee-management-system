@@ -52,7 +52,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('positions', PositionController::class);
             Route::resource('employees', EmployeeDetailController::class);
             Route::resource('attendance', AttendanceController::class);
-            Route::resource('kanban-board', KanbanBoardController::class);
+
             Route::resource('kanban-tasks', KanbanTaskController::class);
 
             Route::patch('/projects/{id}/complete', [ProjectController::class, 'mark_completed'])->name('projects.complete');
@@ -71,7 +71,13 @@ Route::middleware('auth')->group(function () {
             Route::get('dashboard', [DashboardController::class, 'userDashboard'])->name('employee.dashboard');
 
             Route::resource('notification', NotificationController::class);
-            Route::get('/my-project', [ProjectController::class, 'my_project'])->name('project.user');
+
+            // Route::get('/my-project', [ProjectController::class, 'my_project'])->name('project.user');
+
+            Route::get('/my-projects', [ProjectController::class, 'myProjects'])->name('project.user');
+
+
+
             Route::get('/attendance', [AttendanceController::class, 'user_index'])->name('attendance.user');
             Route::post('/attendance-mark', [AttendanceController::class, 'user_attendance'])->name('attendance.mark');
 
@@ -79,6 +85,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 
+    Route::resource('kanban-board', KanbanBoardController::class);
     Route::resource('leave-requests', LeaveRequestController::class);
     // Route untuk approve leave request
     Route::put('/leave-requests/{id}/approve', [LeaveRequestController::class, 'approve'])->name('leave-requests.approve');
