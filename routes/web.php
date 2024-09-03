@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::middleware('role:manager')->group(function () {
+    Route::middleware(['role:manager', 'auth', 'check_location'])->group(function () {
 
         Route::prefix('manager')->group(function () {
             // route attendence
@@ -64,6 +64,14 @@ Route::middleware('auth')->group(function () {
 
             Route::patch('/company/{company}', [CompanyController::class, 'reset_code'])->name('companies.reset');
         });
+    });
+
+    Route::middleware(['role:manager', 'check_exists_location'])->group(function () {
+        Route::get('company-location', [RegisteredUserController::class, 'setup_location'])
+            ->name('company.location.setup');
+
+        Route::patch('company-location', [RegisteredUserController::class, 'store_location'])
+            ->name('company.location.store');
     });
 
     Route::middleware('role:employee')->group(function () {
