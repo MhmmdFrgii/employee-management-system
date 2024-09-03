@@ -40,7 +40,6 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-
         $query = Project::query()->where('company_id', Auth::user()->company->id);
 
         // Pencarian
@@ -64,14 +63,9 @@ class ProjectController extends Controller
         $sortBy = $request->input('sortBy', 'id'); // Default sort by 'id'
         $sortDirection = $request->input('sortDirection', 'asc'); // Default sort direction 'asc'
 
-        // Dapatkan hasil query dengan pagination
-        // $projects = $query->orderBy($sortBy, $sortDirection)->paginate(6);
-        // $projects->appends($request->all());
-
-        $projects = $query->with('department') // Tambahkan eager loading untuk department
-                    ->orderBy($sortBy, $sortDirection)
-                    ->paginate(6);
-        $projects->appends($request->all());
+        $projects = $query->with(['employee_details.user.department'])
+                ->orderBy($sortBy, $sortDirection)
+                ->paginate(6);
 
         $employees = EmployeeDetail::whereHas('user', function ($query) {
             $query->where('company_id', Auth::user()->company_id);

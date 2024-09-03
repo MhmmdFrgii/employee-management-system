@@ -33,10 +33,10 @@
                                     <p class="mb-0 text-dark">Project Selesai</p>
                                 </div>
                                 <div class="ps-4">
-                                    {{-- <h3 class="mb-1 fw-semibold fs-8 d-flex align-content-center">{{ $performance }}%<i
+                                    <h3 class="mb-1 fw-semibold fs-8 d-flex align-content-center">{{ $performance }}%<i
                                             class="{{ $performance ? 'ti ti-arrow-up-right fs-5 lh-base text-success' :
                                             'ti ti-arrow-down-right fs-5 lh-base text-danger' }}"></i>
-                                    </h3> --}}
+                                    </h3>
                                     <p class="mb-0 text-dark">Kinerja Keseluruhan</p>
                                 </div>
                             </div>

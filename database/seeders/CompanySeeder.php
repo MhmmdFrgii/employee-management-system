@@ -19,5 +19,12 @@ class CompanySeeder extends Seeder
             'contact_email' => 'company@email.com',
             'company_code' => Company::company_generate()
         ]);
+
+        Company::create([
+            'name' => 'PT. Innovatech',
+            'address' => 'Jl. Karya No. 45',
+            'contact_email' => 'contact@innovatech.com',
+            'company_code' => Company::company_generate()
+        ]);
     }
 }

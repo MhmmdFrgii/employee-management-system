@@ -30,6 +30,21 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     {!! htmlScriptTagJsApi() !!}
+
+    <style>
+        #map {
+            position: relative;
+            z-index: 1;
+            /* Pastikan z-index lebih tinggi dari elemen lain */
+            overflow: hidden;
+            /* Ini akan memastikan peta tidak melampaui batasannya */
+        }
+
+
+        .input-group {
+            width: 100%;
+        }
+    </style>
 </head>
 
 <body>

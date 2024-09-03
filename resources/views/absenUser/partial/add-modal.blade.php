@@ -3,7 +3,7 @@
     data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="{{ route('leave-requests.store') }}" method="POST">
+            <form action="{{ route('leave-requests.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <!-- Ubah ke employee_detail -->
                 <!-- Ubah ke employee_detail -->
@@ -36,15 +36,45 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="type" class="form-label">Type</label>
-                        <input type="text" class="form-control @error('type') is-invalid @enderror" id="type"
-                            name="type" value="{{ old('type') }}">
-                        @error('type')
+                        <label for="photo" class="form-label">Bukti</label>
+                        <input type="file" class="form-control @error('photo') is-invalid @enderror" id="photo"
+                            name="photo" value="{{ old('photo') }}">
+                        @error('photo')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <input type="hidden" name="status" value="pending">
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Deskripsi (opsional)</label>
+                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
+                            rows="2">{{ old('description') }}</textarea>
+                        @error('description')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Tipe Izin</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input @error('type') is-invalid @enderror" type="radio"
+                                    name="type" id="izin" value="izin"
+                                    {{ old('type') == 'izin' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="izin">Izin</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input @error('type') is-invalid @enderror" type="radio"
+                                    name="type" id="sakit" value="sakit"
+                                    {{ old('type') == 'sakit' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="sakit">Sakit</label>
+                            </div>
+                        </div>
+                        @error('type')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-primary">Simpan</button>
