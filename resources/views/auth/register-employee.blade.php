@@ -38,6 +38,7 @@
                                     </div>
 
                                     <div class="mb-4">
+
                                         <label for="password" class="form-label">Password</label>
                                         <input type="password" class="form-control @error('password') is-invalid @enderror"
                                             name="password" id="password">
@@ -63,7 +64,7 @@
 
                                     <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Daftar</button>
                                     <div class="d-flex align-items-center justify-content-center">
-                                        <p class="fs-4 mb-0 fw-medium">Sudah terdaftar?</p>
+                                        <p class="fs-4 mb-0 fw-medium">Sudah Terdaftar?</p>
                                         <a class="text-primary fw-medium ms-2" href="{{ route('login') }}">Masuk</a>
                                     </div>
                                 </form>
