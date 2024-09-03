@@ -84,9 +84,11 @@
                                 <div class="card-footer justify-content-between d-flex ">
                                     <div class="d-flex  gap-1">
                                         @if ($project->status !== 'completed')
-                                            <button class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                                data-bs-target="#completeModal{{ $project->id }}"
-                                                type="button">Selesai</button>
+                                            @if ($project->employee_details->isNotEmpty())
+                                                <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                                    data-bs-target="#completeModal{{ $project->id }}"
+                                                    type="button">Selesai</button>
+                                            @endif
                                             <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#editModal{{ $project->id }}" type="button">Ubah</button>
                                         @endif
@@ -98,12 +100,16 @@
                                         <a class="btn btn-info btn-sm"
                                             href="{{ route('kanban-board.index', ['id' => $project->kanban_board->id]) }}">Kanban</a>
                                     @endif
+
                                 </div>
                             </div>
                         </div>
 
+                        @if ($project->employee_details->isNotEmpty())
+                            @include('projects.partial.complete-modal')
+                        @endif
+
                         @include('projects.partial.delete-modal')
-                        @include('projects.partial.complete-modal')
                         @include('projects.partial.edit-modal')
                     @empty
                         <div class="col-12

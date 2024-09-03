@@ -79,7 +79,7 @@
                                 <tr>
 
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $salary->employeeDetails->fullname }}</td>
+                                    <td>{{ $salary->employee_detail->name }}</td>
                                     <td>Rp {{ number_format($salary->amount, 2, ',', '.') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($salary->payment_date)->format('d M Y') }}</td>
                                     <td class="text-center">
@@ -114,7 +114,7 @@
                                                         <input readonly type="text"
                                                             class="form-control  @error('employee') is-invalid @enderror"
                                                             id="employee"
-                                                            value="{{ old('employee', $salary->employeeDetails->fullname) }}">
+                                                            value="{{ old('employee', $salary->employee_detail->name) }}">
                                                         @error('employee')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
@@ -213,7 +213,7 @@
                                 @forelse ($employees as $employee)
                                     <option value="{{ $employee->id }}"
                                         {{ $employee->id == old('employee_id', $employee->id) ? 'selected' : '' }}>
-                                    {{ $employee->name }}
+                                        {{ $employee->name }}
                                     </option>
                                 @empty
                                     <option selected disabled>

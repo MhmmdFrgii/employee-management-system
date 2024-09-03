@@ -15,6 +15,7 @@ class Salary extends Model
         'employee_id',
         'amount',
         'payment_date',
+        'company_id'
     ];
 
     public function employee_detail()

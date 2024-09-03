@@ -56,6 +56,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('kanban-tasks', KanbanTaskController::class);
 
             Route::patch('/projects/{id}/complete', [ProjectController::class, 'mark_completed'])->name('projects.complete');
+            Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
             Route::resource('projects', ProjectController::class);
 
             Route::get('/applicants/detail/{id}', [UserController::class, 'detail'])->name('applicants.detail');
@@ -81,7 +82,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/attendance', [AttendanceController::class, 'user_index'])->name('attendance.user');
             Route::post('/attendance-mark', [AttendanceController::class, 'user_attendance'])->name('attendance.mark');
 
-            Route::get('/employee-list', [EmployeeDetailController::class, 'user_index']);
+            Route::get('/employee-list', [EmployeeDetailController::class, 'user_index'])->name('employee.user');
         });
     });
 

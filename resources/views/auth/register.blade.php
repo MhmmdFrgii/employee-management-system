@@ -18,19 +18,12 @@
                         </div>
                     </div>
                     <div class="col-xl-7 col-xxl-7">
+
                         <div
                             class="authentication-login min-vh-100 bg-body row justify-content-center align-items-center p-4">
                             <div class="col-sm-8 col-md-8 col-xl-12">
-                                {{-- MAP --}}
-                                <input type="text" id="location-search" placeholder="Search for a location" />
-                                <button id="search-button">Search</button>
 
-                                <div id="map" style="height: 300px;"></div>
-
-                                <input type="text" id="latitude" placeholder="Latitude" readonly />
-                                <input type="text" id="longitude" placeholder="Longitude" readonly />
-                                {{-- END MAp --}}
-                                <div class="card-body wizard-content">
+                                <div class="card-body  wizard-content">
                                     <h4 class="card-title">Step wizard with validation</h4>
                                     <form action="{{ route('register') }}" class="validation-wizard wizard-circle mt-5"
                                         method="POST" enctype="multipart/form-data">
@@ -84,7 +77,7 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <!-- Step 2 -->
+
                                         <h6>Step 2</h6>
                                         <section>
                                             <div class="row">
@@ -148,11 +141,11 @@
         </div>
     </div>
 
-    <script>
+    {{-- <script>
         var map = L.map('map').setView([-7.8965894, 112.6090665], 15);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+            attribution: ''
         }).addTo(map);
 
         var marker = null; // Initialize marker variable
@@ -192,11 +185,26 @@
             }
         });
 
+        $('#wizard').on('show.bs.tab', function(event) {
+            if ($(event.target).index() === 1) { // Sesuaikan index dengan step di mana peta berada
+                setTimeout(function() {
+                    map.invalidateSize(); // Memastikan ukuran peta diperbarui
+                }, 0);
+            }
+        });
+
+
+
+        // Panggil fungsi initializeMap saat dokumen siap
+        $(document).ready(function() {
+            initializeMap();
+        });
+
         // Add a pin when the user clicks on the map
         map.on('click', function(e) {
             var lat = e.latlng.lat;
             var lng = e.latlng.lng;
             updateMarker(lat, lng);
         });
-    </script>
+    </script> --}}
 @endsection
