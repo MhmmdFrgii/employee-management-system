@@ -132,7 +132,7 @@
                         $isUrgent = $daysRemaining <= 20;
                         $cardClass = $isUrgent ? 'card-danger' : 'card-primary';
                     @endphp
-                    <a href="{{ route('projects.show', $project->id) }}"
+                    <a href="{{ route('kanban-board.index', ['id' => $project->kanban_board->id]) }}"
                         class="list-group-item list-group-item-action {{ $cardClass }}">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{{ $project->name }}</h5>

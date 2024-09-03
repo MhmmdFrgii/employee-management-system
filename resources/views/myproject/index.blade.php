@@ -5,7 +5,7 @@
     @forelse ($kanbanboard as $data)
         <div class="card mb-3">
             <div class="card-header">
-                <h5>{{ $data->project->name }}</h5>
+                {{-- <h5>{{ $data->project->name }}</h5> --}}
             </div>
 
             <div class="card-body p-0">
