@@ -191,4 +191,38 @@ class RegisteredUserController extends Controller
 
         return view('auth.login');
     }
+
+    public function setup_location()
+    {
+        return view('auth.location-setup');
+    }
+
+    public function store_location(Request $request)
+    {
+
+        $company_id = Auth::user()->company_id;
+
+        $company = Company::where('id', $company_id)->first();
+
+        $messages = [
+            'required' => 'Lokasi harus diisi!'
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'latitude' => 'required',
+            'longitude' => 'required'
+        ], $messages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $company->update([
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude
+        ]);
+
+        return redirect()->route('manager.dashboard')->with('success', 'Berhasil Update Lokasi!');
+
+    }
 }

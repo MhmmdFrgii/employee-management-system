@@ -79,7 +79,7 @@
                             <div class="form-group" class="text-white">
                                 <div class="row">
                                     <div class="col-6">
-                                        <input type="text" class="form-control @error('applicant') is-invalid @enderror" id="applicant" name="applicant" placeholder="Kode Invit">
+                                        <input type="text" class="form-control @error('applicant') is-invalid @enderror" id="applicant" name="applicant" placeholder="Kode Undangan">
                                     </div>
                                     <div class="col-6">
                                         <button type="submit" class="mt-2 btn btn-primary">Lanjutkan</button>
