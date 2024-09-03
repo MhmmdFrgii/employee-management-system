@@ -28,6 +28,20 @@ class DepartmentSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'company_id' => 2,
+                'name' => 'Web',
+                'description' => 'Develops and maintains products and systems.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'company_id' => 2,
+                'name' => 'Mobile',
+                'description' => 'Develops and maintains products and systems.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

@@ -16,12 +16,12 @@ class EmployeeDetailsSeeder extends Seeder
         DB::table('employee_details')->insert([
             [
                 'company_id' => 1,
-                'user_id' => 2,
+                'user_id' => 3,
                 'department_id' => 1,
                 'position_id' => 1,
                 'status' => 'approved',
-                'name' => 'Jane Smith',
-                'email' => 'jane@gmail.com',
+                'name' => 'Employee User',
+                'email' => 'employee@example.com',
                 'photo' => 'jane_smith.jpg',
                 'cv' => 'cv.jpg',
                 'phone' => '081298765432',
@@ -34,12 +34,12 @@ class EmployeeDetailsSeeder extends Seeder
         DB::table('employee_details')->insert([
             [
                 'company_id' => 1,
-                'user_id' => 3,
+                'user_id' => 4,
                 'department_id' => 2,
                 'position_id' => 2,
                 'status' => 'approved',
-                'name' => 'John Doe',
-                'email' => 'john.doe@gmail.com',
+                'name' => 'Employee 2',
+                'email' => 'employee2@example.com',
                 'photo' => 'john_doe.jpg',
                 'cv' => 'john_cv.jpg',
                 'phone' => '081234567890',
@@ -52,12 +52,12 @@ class EmployeeDetailsSeeder extends Seeder
         DB::table('employee_details')->insert([
             [
                 'company_id' => 2,
-                'user_id' => 4,
-                'department_id' => 1,
-                'position_id' => 1,
+                'user_id' => 5,
+                'department_id' => 3,
+                'position_id' => 3,
                 'status' => 'approved',
-                'name' => 'Alice Johnson',
-                'email' => 'alice.johnson@innovatech.com',
+                'name' => 'Employee 3',
+                'email' => 'employee3@example.com',
                 'photo' => 'alice_johnson.jpg',
                 'cv' => 'alice_cv.jpg',
                 'phone' => '082345678901',
@@ -65,14 +65,17 @@ class EmployeeDetailsSeeder extends Seeder
                 'address' => 'Jl. Karya No. 12, Bandung',
                 'hire_date' => '2023-01-10',
             ],
+        ]);
+
+        DB::table('employee_details')->insert([
             [
                 'company_id' => 2,
-                'user_id' => 5,
-                'department_id' => 2,
-                'position_id' => 2,
+                'user_id' => 6,
+                'department_id' => 4,
+                'position_id' => 4,
                 'status' => 'approved',
-                'name' => 'Bob Brown',
-                'email' => 'bob.brown@innovatech.com',
+                'name' => 'Employee 4',
+                'email' => 'employee4@example.com',
                 'photo' => 'bob_brown.jpg',
                 'cv' => 'bob_cv.jpg',
                 'phone' => '082987654321',
