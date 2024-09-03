@@ -42,7 +42,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label for="department_id" class="form-label">Departemen</label>
                         <select name="department_id" class="form-control @error('department_id') is-invalid @enderror" id="department_id">
                             <option value="">Pilih Departemen</option>
@@ -59,11 +59,16 @@
                                 {{ $message }}
                             </div>
                         @enderror
-                    </div>
+                    </div> --}}
                     <div class="mb-3">
                         <label for="end_date" class="form-label">Ditugaskan kepada</label> <br>
                         <select class="js-example-basic-multiple form-control w-100" name="employee_id[]"
                             multiple="multiple">
+                            {{-- @forelse ($employees as $employee)
+                                <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                            @empty
+                                <option disabled>Tidak ada karyawan.</option>
+                            @endforelse --}}
                             @forelse ($employees as $employee)
                                 <option value="{{ $employee->id }}">{{ $employee->name }}</option>
                             @empty

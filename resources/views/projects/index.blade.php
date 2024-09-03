@@ -62,7 +62,16 @@
                                 <div class="card-body">
                                     <p class="card-text">{{ Str::limit($project->description, 100) }}</p>
                                     <p class="card-text">
-                                        <strong>Departemen:</strong> {{ $project->department->name ?? '-' }}
+                                        <strong>Departemen:</strong>
+                                        @if($project->employee_details->isNotEmpty())
+                                        <ul>
+                                            @foreach($project->employee_details->unique('department_id') as $employee_detail)
+                                                <li>{{ $employee_detail->department->name ?? 'Tidak Diketahui' }}</li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <span>-</span>
+                                    @endif
                                     </p>
                                     <p class="card-text">
                                         <strong>Status:</strong> {{ ucfirst($project->status) }}
@@ -88,8 +97,6 @@
                                         <a class="btn btn-info btn-sm"
                                             href="{{ route('kanban-board.index', ['id' => $project->kanban_board->id]) }}">Kanban</a>
                                     @endif
-                                    {{-- <a class="btn btn-info btn-sm"
-                                        href="{{ route('kanban-board.index', ['id' => $project->kanban_board->id]) }}">Kanban</a> --}}
                                 </div>
                             </div>
                         </div>

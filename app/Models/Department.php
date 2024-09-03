@@ -26,4 +26,8 @@ class Department extends Model
     {
         return $this->hasMany(Project::class);
     }
+    public function department()
+{
+    return $this->belongsTo(Department::class);
+}
 }
