@@ -75,7 +75,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/attendance', [AttendanceController::class, 'user_index'])->name('attendance.user');
             Route::post('/attendance-mark', [AttendanceController::class, 'user_attendance'])->name('attendance.mark');
 
-            Route::get('/employee-list', [EmployeeDetailController::class, 'user_index']);
+            Route::get('/employee-list', [EmployeeDetailController::class, 'user_index'])->name('employee.user');
         });
     });
 
