@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
             DepartmentSeeder::class,
             PositionSeeder::class,
             EmployeeDetailsSeeder::class,
+            ProjectSeeder::class,
         ]);
     }
 }
