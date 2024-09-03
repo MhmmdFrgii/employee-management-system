@@ -28,8 +28,8 @@ class DashboardController extends Controller
             ->where('status', 'completed')
             ->count();
 
-        $performance = ($project_done / $project_count)  * 100;
-        $performance = round($performance, 2);
+        // $performance = ($project_done / $project_count)  * 100;
+        // $performance = round($performance, 2);
 
         $department_count = Department::where('company_id', $company_id)->count();
 
@@ -86,7 +86,6 @@ class DashboardController extends Controller
             'department_count' => $department_count,
             'applicant_count' => $applicant_count,
             'months' => $months,
-            'performance' => $performance,
             'project_data' => $project_data,
             'departments' => $departments,
             'department_data' => $department_data,
