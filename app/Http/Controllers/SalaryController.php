@@ -7,18 +7,19 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Requests\SalaryRequest;
 use App\Models\EmployeeDetail;
 use App\Models\Salary;
+use Illuminate\Support\Facades\Auth;
 
 class SalaryController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Salary::with('employeeDetails');
+        $query = Salary::with('employee_detail');
         $employees = EmployeeDetail::all();
 
 
         if ($request->has('search')) {
-            $query->whereHas('employeeDetails', function ($q) use ($request) {
-                $q->where('fullname', 'like', '%' . $request->search . '%');
+            $query->whereHas('employee_detail', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%');
             })
                 ->orWhere('amount', 'like', '%' . $request->search . '%')
                 ->orWhere('payment_date', 'like', '%' . $request->search . '%');
@@ -41,7 +42,11 @@ class SalaryController extends Controller
      */
     public function store(SalaryRequest $request)
     {
-        Salary::create($request->validated());
+        $validatedData = $request->validated();
+        $validatedData['company_id'] = Auth::user()->company->id;
+
+        Salary::create($validatedData);
+
         return redirect()->route('salaries.index')->with('success', 'Gaji berhasil dibuat.');
     }
 
