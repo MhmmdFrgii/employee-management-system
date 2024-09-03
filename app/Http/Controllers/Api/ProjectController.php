@@ -41,6 +41,7 @@ class ProjectController extends Controller
             'name' => 'required|max:250',
             'description' => 'required|max:250',
             'start_date' => 'required|date',
+            'price' => 'required|numeric',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'employee_id' => 'required|array',
             'employee_id.*' => 'exists:employee_details,id'
@@ -59,6 +60,7 @@ class ProjectController extends Controller
                 'company_id' => $company,
                 'employee_id' => $request->employee_id,
                 'name' => $request->name,
+                'price' => $request->price,
                 'description' => $request->description,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date
