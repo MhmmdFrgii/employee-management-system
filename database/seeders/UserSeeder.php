@@ -52,7 +52,7 @@ class UserSeeder extends Seeder
                 'email' => 'employee3@example.com',
                 'password' => Hash::make('password'),
                 'role' => 'employee',
-                'company_id' => 1,
+                'company_id' => 2,
                 'status' => 'approved'
             ],
             [
@@ -60,7 +60,7 @@ class UserSeeder extends Seeder
                 'email' => 'employee4@example.com',
                 'password' => Hash::make('password'),
                 'role' => 'employee',
-                'company_id' => 1,
+                'company_id' => 2,
                 'status' => 'approved'
             ],
         ];

@@ -39,5 +39,18 @@ class ProjectSeeder extends Seeder
                 'updated_at' => now(),
             ],
         ]);
+
+        DB::table('kanban_boards')->insert([
+            [
+                'name' => 'Kanban Alpha',
+                'project_id' => '1',
+                'description' => 'deskripsi'
+            ],
+            [
+                'name' => 'Kanban Delta',
+                'project_id' => '2',
+                'description' => 'deskripsi'
+            ]
+        ]);
     }
 }
