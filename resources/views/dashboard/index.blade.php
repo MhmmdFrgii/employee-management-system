@@ -120,196 +120,179 @@
 
     </div>
 
+    <div class="col-md-12">
+        <h5 class="mt-4">Proyek Dengan Tenggat Waktu Terdekat</h5>
+        <div class="list-group">
+            @forelse ($projectsWithNearestDeadlines as $project)
+                @php
+                    $endDate = \Carbon\Carbon::parse($project->end_date);
+                    $now = \Carbon\Carbon::now();
 
+                    $daysRemaining = $now->diffInDays($endDate, false);
 
-    $isUrgent = $daysRemaining <= 20; $cardClass=$isUrgent ? 'card-danger' : 'card-primary' ; @endphp <a
-        href="{{ route('projects.show', ['id' => $project->id]) }}"
-        class="list-group-item list-group-item-action {{ $cardClass }}">
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{ $project->name }}</h5>
-            <small>{{ $endDate->locale('id')->diffForHumans() }}</small>
-        </div>
-        <small class="text-muted">Tenggat Waktu: {{ $endDate->format('d M Y') }}</small>
-        </a>
-        @empty
-            <p class="list-group-item">Tidak ada proyek dengan tenggat waktu yang akan datang.</p>
+                    $isUrgent = $daysRemaining <= 20;
+                    $cardClass = $isUrgent ? 'card-danger' : 'card-primary';
+                @endphp
+                <a href="{{ route('projects.show', ['project' => $project->id]) }}"
+                    class="list-group-item list-group-item-action {{ $cardClass }}">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ $project->name }}</h5>
+                        <small>{{ $endDate->locale('id')->diffForHumans() }}</small>
+                    </div>
+                    <small class="text-muted">Tenggat Waktu: {{ $endDate->format('d M Y') }}</small>
+                </a>
+            @empty
+                <p class="list-group-item">Tidak ada proyek dengan tenggat waktu yang akan datang.</p>
             @endforelse
-            </div>
-            </div> --}}
+        </div>
+    </div>
+    @if (isset($project_data))
+        <script>
+            var projectData = @json($project_data);
 
-            <div class="col-md-12">
-                <h5 class="mt-4">Proyek Dengan Tenggat Waktu Terdekat</h5>
-                <div class="list-group">
-                    @forelse ($projectsWithNearestDeadlines as $project)
-                        @php
-                            $endDate = \Carbon\Carbon::parse($project->end_date);
-                            $now = \Carbon\Carbon::now();
-
-                            $daysRemaining = $now->diffInDays($endDate, false);
-
-                            $isUrgent = $daysRemaining <= 20;
-                            $cardClass = $isUrgent ? 'card-danger' : 'card-primary';
-                        @endphp
-                        <a href="{{ route('projects.show', ['project' => $project->id]) }}"
-                            class="list-group-item list-group-item-action {{ $cardClass }}">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">{{ $project->name }}</h5>
-                                <small>{{ $endDate->locale('id')->diffForHumans() }}</small>
-                            </div>
-                            <small class="text-muted">Tenggat Waktu: {{ $endDate->format('d M Y') }}</small>
-                        </a>
-                    @empty
-                        <p class="list-group-item">Tidak ada proyek dengan tenggat waktu yang akan datang.</p>
-                    @endforelse
-                </div>
-            </div>
-
-            @if (isset($project_data))
-                <script>
-                    var projectData = @json($project_data);
-                    var projectOptions = {
-                        series: [{
-                                name: 'Jumlah Proyek Selesai',
-                                data: projectData.map(function(data) {
-                                    return {
-                                        x: data[0],
-                                        y: data[1]
-                                    };
-                                })
-                            },
-                            {
-                                name: 'Pendapatan',
-                                data: projectData.map(function(data) {
-                                    return {
-                                        x: data[0],
-                                        y: data[2]
-                                    };
-                                })
-                            }
-                        ],
-                        chart: {
-                            type: 'line',
-                            height: 350
-                        },
-                        stroke: {
-                            curve: 'smooth',
-                            width: [2, 2]
-                        },
-                        dataLabels: {
-                            enabled: false
-                        },
-                        xaxis: {
-                            categories: @json($months),
-                            title: {
-                                text: 'Bulan'
-                            }
-                        },
-                        yaxis: [{
-                                title: {
-                                    text: 'Jumlah Proyek Selesai'
-                                }
-                            },
-                            {
-                                opposite: true,
-                                title: {
-                                    text: 'Pendapatan'
-                                }
-                            }
-                        ],
-                        tooltip: {
-                            y: {
-                                formatter: function(val, {
-                                    seriesIndex
-                                }) {
-                                    return seriesIndex === 0 ? val + " proyek" : val + " pendapatan";
-                                }
-                            }
-                        },
-                        markers: {
-                            size: 4
-                        },
-                        fill: {
-                            opacity: 1
+            var projectOptions = {
+                series: [{
+                        name: 'Jumlah Proyek Selesai',
+                        data: projectData.map(function(data) {
+                            return {
+                                x: data[0],
+                                y: data[1]
+                            };
+                        })
+                    },
+                    {
+                        name: 'Pendapatan',
+                        data: projectData.map(function(data) {
+                            return {
+                                x: data[0],
+                                y: data[2]
+                            };
+                        })
+                    }
+                ],
+                chart: {
+                    type: 'line',
+                    height: 350
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: [2, 2]
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                xaxis: {
+                    categories: @json($months),
+                    title: {
+                        text: 'Bulan'
+                    }
+                },
+                yaxis: [{
+                        title: {
+                            text: 'Jumlah Proyek Selesai'
                         }
-                    };
-
-                    var projectChart = new ApexCharts(document.querySelector("#projectsChart"), projectOptions);
-                    projectChart.render();
-                </script>
-            @else
-                <p>Data tidak ditemukan.</p>
-            @endif
-
-            @if (isset($departments))
-                <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-                <script>
-                    // Data untuk pie chart
-                    var pieData = [1, 5, 5,
-                        2
-                    ] // Format data: [{ name: 'Kategori A', value: 20 }, { name: 'Kategori B', value: 30 }, ...]
-
-                    // Opsi konfigurasi pie chart
-                    var pieOptions = {
-                        // series: pieData.map(function(item) {
-                        //     return item.value;
-                        // }),
-                        // labels: pieData.map(function(item) {
-                        //     return item.name;
-                        // }),
-                        series: @json($department_data),
-                        labels: @json($departments),
-                        chart: {
-                            type: 'pie',
-                            height: 350
-                        },
-                        legend: {
-                            position: 'bottom'
-                        },
-                        dataLabels: {
-                            enabled: true
-                        },
-                        tooltip: {
-                            y: {
-                                formatter: function(val) {
-                                    return val + " units";
-                                }
-                            }
+                    },
+                    {
+                        opposite: true,
+                        title: {
+                            text: 'Pendapatan'
                         }
-                    };
-
-                    // Membuat dan merender pie chart
-                    var pieChart = new ApexCharts(document.querySelector("#pieChart"), pieOptions);
-                    pieChart.render();
-                </script>
-            @else
-                <p>Data tidak ditemukan.</p>
-            @endif
-
-            <style>
-                .card-danger {
-                    border: 2px solid #dc3545;
-                    /* Red color for urgent deadlines */
-                    background-color: #f8d7da;
-                    /* Light red background */
-                    border-radius: 4px;
-                    /* Optional: for rounded corners */
-                    padding: 10px;
-                    /* Optional: for inner spacing */
-                    margin-bottom: 10px;
-                    /* Spacing between cards */
+                    }
+                ],
+                tooltip: {
+                    y: {
+                        formatter: function(val, {
+                            seriesIndex
+                        }) {
+                            return seriesIndex === 0 ? val + " proyek" : val + " pendapatan";
+                        }
+                    }
+                },
+                markers: {
+                    size: 4
+                },
+                fill: {
+                    opacity: 1
                 }
+            };
 
-                .card-primary {
-                    border: 2px solid #007bff;
-                    /* Blue color for non-urgent deadlines */
-                    background-color: #cce5ff;
-                    /* Light blue background */
-                    border-radius: 4px;
-                    /* Optional: for rounded corners */
-                    padding: 10px;
-                    /* Optional: for inner spacing */
-                    margin-bottom: 10px;
-                    /* Spacing between cards */
+            var projectChart = new ApexCharts(document.querySelector("#projectsChart"), projectOptions);
+            projectChart.render();
+        </script>
+    @else
+        <p>Data tidak ditemukan.</p>
+    @endif
+
+    @if (isset($departments))
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        <script>
+            // Data untuk pie chart
+            var pieData = [1, 5, 5,
+                2
+            ] // Format data: [{ name: 'Kategori A', value: 20 }, { name: 'Kategori B', value: 30 }, ...]
+
+            // Opsi konfigurasi pie chart
+            var pieOptions = {
+                // series: pieData.map(function(item) {
+                //     return item.value;
+                // }),
+                // labels: pieData.map(function(item) {
+                //     return item.name;
+                // }),
+                series: @json($department_data),
+                labels: @json($departments),
+                chart: {
+                    type: 'pie',
+                    height: 350
+                },
+                legend: {
+                    position: 'bottom'
+                },
+                dataLabels: {
+                    enabled: true
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(val) {
+                            return val + " units";
+                        }
+                    }
                 }
-            </style>
-        @endsection
+            };
+
+            // Membuat dan merender pie chart
+            var pieChart = new ApexCharts(document.querySelector("#pieChart"), pieOptions);
+            pieChart.render();
+        </script>
+    @else
+        <p>Data tidak ditemukan.</p>
+    @endif
+
+    <style>
+        .card-danger {
+            border: 2px solid #dc3545;
+            /* Red color for urgent deadlines */
+            background-color: #f8d7da;
+            /* Light red background */
+            border-radius: 4px;
+            /* Optional: for rounded corners */
+            padding: 10px;
+            /* Optional: for inner spacing */
+            margin-bottom: 10px;
+            /* Spacing between cards */
+        }
+
+        .card-primary {
+            border: 2px solid #007bff;
+            /* Blue color for non-urgent deadlines */
+            background-color: #cce5ff;
+            /* Light blue background */
+            border-radius: 4px;
+            /* Optional: for rounded corners */
+            padding: 10px;
+            /* Optional: for inner spacing */
+            margin-bottom: 10px;
+            /* Spacing between cards */
+        }
+    </style>
+@endsection
