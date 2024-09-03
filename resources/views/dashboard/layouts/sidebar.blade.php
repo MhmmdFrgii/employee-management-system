@@ -75,30 +75,28 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow" href="#" aria-expanded="false">
-                        <span class="d-flex">
-                            <i class="ti ti-clipboard-list"></i>
-                        </span>
-                        <span class="hide-menu">Pendataan Admin</span>
+                    <a href="{{ route('salaries.index') }}" class="sidebar-link">
+                        <div class="round-16 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-coins"></i>
+                        </div>
+                        <span class="hide-menu">Gaji </span>
                     </a>
-                    <ul aria-expanded="false" class="collapse first-level">
-                        <li class="sidebar-item">
-                            <a href="{{ route('salaries.index') }}" class="sidebar-link">
-                                <div class="round-16 d-flex align-items-center justify-content-center">
-                                    <i class="ti ti-circle"></i>
-                                </div>
-                                <span class="hide-menu">Gaji </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ route('leave-requests.index') }}" class="sidebar-link">
-                                <div class="round-16 d-flex align-items-center justify-content-center">
-                                    <i class="ti ti-circle"></i>
-                                </div>
-                                <span class="hide-menu">Permintaan Cuti</span>
-                            </a>
-                        </li>
-                    </ul>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{{ route('leave-requests.index') }}" class="sidebar-link">
+                        <div class="round-16 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-license"></i>
+                        </div>
+                        <span class="hide-menu">Permintaan Cuti</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{{ route('notification.index') }}" class="sidebar-link">
+                        <div class="round-16 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-inbox"></i>
+                        </div>
+                        <span class="hide-menu">Kotak Masuk</span>
+                    </a>
                 </li>
             </ul>
         </nav>

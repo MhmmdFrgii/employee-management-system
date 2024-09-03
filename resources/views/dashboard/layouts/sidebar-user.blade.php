@@ -52,15 +52,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="/kanban" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-layout-kanban"></i>
-                        </span>
-                        <span class="hide-menu">Kanban</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/userKaryawan" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('employee.user') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-users"></i>
                         </span>
