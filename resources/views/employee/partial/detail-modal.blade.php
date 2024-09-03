@@ -78,18 +78,6 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <h6 class="text-muted">Projek Yang Sedang Dikerjakan:</h6>
-                                    <p id="modal-hire-date" class="fw-semibold">{{ $projectCounts }}</p>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <h6 class="text-muted">Projek Yang Selesai Dikerjakan:</h6>
-                                    <p id="modal-hire-date" class="fw-semibold"></p>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
