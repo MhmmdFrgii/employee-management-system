@@ -20,7 +20,7 @@
     @if ($task->date || $task->employee_id)
         <div class="p-2 px-3 card-body d-flex justify-content-between align-items-center">
             <p class="small m-0">{{ $task->date }}</p>
-            <p class="small m-0">{{ $task->employee->fullname ?? 'nobody' }}</p>
+            <p class="small m-0">{{ $task->employee->name }}</p>
         </div>
     @endif
 </div>
