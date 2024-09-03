@@ -14,7 +14,9 @@ class Company extends Model
         'name',
         'address',
         'contact_email',
-        'company_code'
+        'company_code',
+        'latitude',
+        'longitude'
     ];
 
     public function users(): mixed

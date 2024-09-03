@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\EmployeeDetail;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ProjectRequest;
+use App\Models\ProjectAssignment;
 
 class ProjectController extends Controller
 {
@@ -64,8 +65,8 @@ class ProjectController extends Controller
         $sortDirection = $request->input('sortDirection', 'asc'); // Default sort direction 'asc'
 
         $projects = $query->with(['employee_details.user.department'])
-                ->orderBy($sortBy, $sortDirection)
-                ->paginate(6);
+            ->orderBy($sortBy, $sortDirection)
+            ->paginate(6);
 
         $employees = EmployeeDetail::whereHas('user', function ($query) {
             $query->where('company_id', Auth::user()->company_id);
@@ -74,7 +75,7 @@ class ProjectController extends Controller
         // Ambil semua departemen jika perlu untuk modal edit
         $departments = Department::where('company_id', Auth::user()->company_id)->get();
 
-        return view('projects.index', compact('projects', 'employees','departments'));
+        return view('projects.index', compact('projects', 'employees', 'departments'));
     }
 
     /**
@@ -86,7 +87,7 @@ class ProjectController extends Controller
 
         $validatedData['company_id'] = Auth::user()->company->id;
         $validatedData['department_id'] = $request->department_id;
-        
+
         $project = Project::create($validatedData);
         KanbanBoard::create([
             'name' => $project->name,
@@ -119,4 +120,52 @@ class ProjectController extends Controller
         $project->delete();
         return redirect()->route('projects.index')->with('success', 'Data berhasil dihapus');
     }
+
+    // public function myProjects()
+    // {
+    //     // Mendapatkan ID user yang sedang login
+    //     $userId = auth('web')->id();
+
+    //     // Mendapatkan Kanban Board yang hanya di-assign kepada user yang sedang login
+    //     $kanbanboard = KanbanBoard::whereHas('kanbantasks', function ($query) use ($userId) {
+    //         $query->where('employee_id', $userId);
+    //     })->get();
+
+    //     return view('myproject.index', compact('kanbanboard'));
+    // }
+
+    public function myProjects()
+    {
+        // Mendapatkan ID user yang sedang login
+        $userId = auth('web')->id();
+
+        // Mendapatkan daftar proyek yang di-assign ke user yang login
+        $assignedProjects = ProjectAssignment::where('employee_id', $userId)
+            ->with(['project.kanban_board' => function ($query) use ($userId) {
+                // Memuat hanya kanbantasks yang di-assign ke user yang login
+                $query->with(['kanbantasks' => function ($query) use ($userId) {
+                    $query->where('employee_id', $userId);
+                }]);
+            }])
+            ->get();
+
+        // Mengambil daftar KanbanBoard yang terkait dengan proyek yang di-assign ke user tersebut
+        $kanbanboard = $assignedProjects->map(function ($assignment) {
+            return $assignment->project->kanban_board;
+        })->filter()->flatten(); // Menghilangkan nilai null dan membuat collection menjadi satu tingkat
+
+        return view('myproject.index', compact('kanbanboard'));
+    }
+}
+    public function show(Project $project)
+{
+    // Cek apakah proyek memiliki Kanban Board
+    if ($project->kanban_board) {
+        // Redirect ke halaman Kanban Board
+        return redirect()->route('kanban-board.index', ['id' => $project->kanban_board->id]);
+    } else {
+        // Jika tidak ada Kanban Board, Anda bisa redirect atau menampilkan pesan
+        return redirect()->route('projects.index')->with('error', 'Proyek ini tidak memiliki Kanban Board.');
+    }
+}
 }

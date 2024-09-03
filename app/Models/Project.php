@@ -22,10 +22,10 @@ class Project extends Model
         });
     }
 
-    public function kanban_board()
-    {
-        return $this->hasOne(KanbanBoard::class);
-    }
+    // public function kanban_board()
+    // {
+    //     return $this->hasOne(KanbanBoard::class);
+    // }
 
     // public function employee_details(): mixed
     // {
@@ -44,5 +44,17 @@ class Project extends Model
     public function departments()
     {
         return $this->hasManyThrough(Department::class, EmployeeDetail::class, 'project_id', 'id', 'id', 'department_id');
+    }
+
+    // 
+
+    public function kanban_board()
+    {
+        return $this->hasOne(KanbanBoard::class, 'project_id');
+    }
+
+    public function projectAssignments()
+    {
+        return $this->hasMany(ProjectAssignment::class, 'project_id');
     }
 }

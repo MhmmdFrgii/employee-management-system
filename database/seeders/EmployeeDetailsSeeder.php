@@ -47,9 +47,6 @@ class EmployeeDetailsSeeder extends Seeder
                 'address' => 'Jl. Sudirman No. 10, Jakarta',
                 'hire_date' => '2021-08-20',
             ],
-        ]);
-
-        DB::table('employee_details')->insert([
             [
                 'company_id' => 2,
                 'user_id' => 5,

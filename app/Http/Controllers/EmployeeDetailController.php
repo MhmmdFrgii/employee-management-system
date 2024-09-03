@@ -19,6 +19,7 @@ class EmployeeDetailController extends Controller
     public function user_index()
     {
         $employees = EmployeeDetail::select('employee_details.*', 'users.name as user_name', 'departments.name as department_name')
+            ->where('employee_details.company_id', Auth::user()->company->id)
             ->join('users', 'employee_details.user_id', '=', 'users.id')
             ->join('departments', 'employee_details.department_id', '=', 'departments.id')
             ->paginate(6);

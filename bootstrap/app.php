@@ -18,6 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
+            'check_location' => \App\Http\Middleware\CheckCompanyLocation::class,
+            'check_exists_location' => \App\Http\Middleware\CheckExistsCompanyLocation::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::middleware('role:manager')->group(function () {
+    Route::middleware(['role:manager', 'auth', 'check_location'])->group(function () {
 
         Route::prefix('manager')->group(function () {
             // route attendence
@@ -52,10 +52,11 @@ Route::middleware('auth')->group(function () {
             Route::resource('positions', PositionController::class);
             Route::resource('employees', EmployeeDetailController::class);
             Route::resource('attendance', AttendanceController::class);
-            Route::resource('kanban-board', KanbanBoardController::class);
+
             Route::resource('kanban-tasks', KanbanTaskController::class);
 
             Route::patch('/projects/{id}/complete', [ProjectController::class, 'mark_completed'])->name('projects.complete');
+            Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
             Route::resource('projects', ProjectController::class);
 
             Route::get('/applicants/detail/{id}', [UserController::class, 'detail'])->name('applicants.detail');
@@ -65,13 +66,27 @@ Route::middleware('auth')->group(function () {
         });
     });
 
+    Route::middleware(['role:manager', 'check_exists_location'])->group(function () {
+        Route::get('company-location', [RegisteredUserController::class, 'setup_location'])
+            ->name('company.location.setup');
+
+        Route::patch('company-location', [RegisteredUserController::class, 'store_location'])
+            ->name('company.location.store');
+    });
+
     Route::middleware('role:employee')->group(function () {
 
         Route::prefix('employee')->group(function () {
             Route::get('dashboard', [DashboardController::class, 'userDashboard'])->name('employee.dashboard');
 
             Route::resource('notification', NotificationController::class);
-            Route::get('/my-project', [ProjectController::class, 'my_project'])->name('project.user');
+
+            // Route::get('/my-project', [ProjectController::class, 'my_project'])->name('project.user');
+
+            Route::get('/my-projects', [ProjectController::class, 'myProjects'])->name('project.user');
+
+
+
             Route::get('/attendance', [AttendanceController::class, 'user_index'])->name('attendance.user');
             Route::post('/attendance-mark', [AttendanceController::class, 'user_attendance'])->name('attendance.mark');
 
@@ -79,6 +94,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 
+    Route::resource('kanban-board', KanbanBoardController::class);
     Route::resource('leave-requests', LeaveRequestController::class);
     // Route untuk approve leave request
     Route::put('/leave-requests/{id}/approve', [LeaveRequestController::class, 'approve'])->name('leave-requests.approve');
