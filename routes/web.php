@@ -56,6 +56,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('kanban-tasks', KanbanTaskController::class);
 
             Route::patch('/projects/{id}/complete', [ProjectController::class, 'mark_completed'])->name('projects.complete');
+            Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
             Route::resource('projects', ProjectController::class);
 
             Route::get('/applicants/detail/{id}', [UserController::class, 'detail'])->name('applicants.detail');

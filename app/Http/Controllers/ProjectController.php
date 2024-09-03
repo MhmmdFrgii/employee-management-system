@@ -119,4 +119,16 @@ class ProjectController extends Controller
         $project->delete();
         return redirect()->route('projects.index')->with('success', 'Data berhasil dihapus');
     }
+
+    public function show(Project $project)
+{
+    // Cek apakah proyek memiliki Kanban Board
+    if ($project->kanban_board) {
+        // Redirect ke halaman Kanban Board
+        return redirect()->route('kanban-board.index', ['id' => $project->kanban_board->id]);
+    } else {
+        // Jika tidak ada Kanban Board, Anda bisa redirect atau menampilkan pesan
+        return redirect()->route('projects.index')->with('error', 'Proyek ini tidak memiliki Kanban Board.');
+    }
+}
 }

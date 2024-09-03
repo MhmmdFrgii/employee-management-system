@@ -72,7 +72,7 @@ class ProjectSeeder extends Seeder
             ],
             [
                 'name' => 'Kanban Delta',
-                'project_id' => '2',
+                'project_id' => '3',
                 'description' => 'deskripsi'
             ]
         ]);
