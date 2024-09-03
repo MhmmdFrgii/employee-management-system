@@ -60,6 +60,16 @@ class AttendanceController extends Controller
         $employee = Auth::user()->employee_detail->id;
 
         $today = Carbon::today()->format('Y-m-d');
+        $now = Carbon::now();
+
+        $limit = (Carbon::parse(date('Y-m-d') . ' 08:00:00'));
+
+
+        if ($now->greaterThan($limit)) {
+            $status = 'late';
+        } else {
+            $status = 'present';
+        }
 
         $today_attendance = Attendance::where('employee_id', $employee)
             ->where('date', $today)
@@ -72,7 +82,7 @@ class AttendanceController extends Controller
         Attendance::create([
             'employee_id' => $employee,
             'date' => $today,
-            'status' => 'present',
+            'status' => $status,
         ]);
 
         return redirect()->route($request->route)->with('success', 'Berhasil absen!');
