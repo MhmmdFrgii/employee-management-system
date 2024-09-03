@@ -28,8 +28,13 @@ class DashboardController extends Controller
             ->where('status', 'completed')
             ->count();
 
-        $performance = ($project_done / $project_count)  * 100;
-        $performance = round($performance, 2);
+        if ($project_count > 0) {
+            $performance = ($project_done / $project_count) * 100;
+            $performance = round($performance, 2);
+        } else {
+            $performance = 0;
+        }
+
 
         $department_count = Department::where('company_id', $company_id)->count();
 
@@ -49,13 +54,13 @@ class DashboardController extends Controller
         for ($i = 1; $i <= 12; $i++) {
             $months[] = Carbon::create()->month($i)->format('F');
 
-            $activeCounts[] = Project::where('status', 'Completed')
+            $activeCounts[] = Project::where('status', 'completed')
                 ->where('company_id', $company_id)
                 ->whereYear('start_date', $currentYear)
                 ->whereMonth('start_date', $i)
                 ->count();
 
-            $earningCounts[] = Project::where('status', 'Completed')
+            $earningCounts[] = Project::where('status', 'completed')
                 ->where('company_id', $company_id)
                 ->whereYear('start_date', $currentYear)
                 ->whereMonth('start_date', $i)
@@ -109,7 +114,7 @@ class DashboardController extends Controller
         for ($i = 1; $i <= 12; $i++) {
             $months[] = Carbon::create()->month($i)->format('F');
 
-            $projectCounts[] = Project::where('status', 'Completed')
+            $projectCounts[] = Project::where('status', 'completed')
                 ->whereHas('employee_details', function ($query) {
                     $query->where('user_id', Auth::user()->id);
                 })

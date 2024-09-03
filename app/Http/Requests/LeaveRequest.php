@@ -26,6 +26,8 @@ class LeaveRequest extends FormRequest
             'employee_id' => 'required|numeric',
             'start_date' => ['required', 'date', 'after_or_equal:today', 'before_or_equal:end_date'],
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
+            'photo' => ['required', 'mimes:png,jpg,jpeg', 'max:2048'],
+            'description' => ['nullable', 'max:300'],
             'type' => 'required|string|max:255',
             // 'status' => 'required',
         ];
@@ -45,6 +47,10 @@ class LeaveRequest extends FormRequest
             'end_date.required' => 'Tanggal selesai harus diisi.',
             'end_date.date' => 'Tanggal selesai harus berupa tanggal yang valid.',
             'end_date.after_or_equal' => 'Tanggal selesai tidak boleh sebelum tanggal mulai.',
+
+            'photo.required' => 'Bukti harus disertakan.',
+            'photo.mimes' => 'File harus berupa jpg, img, atau jpeg.',
+            'photo.max' => 'Ukuran maximal file 2MB',
 
             'type.required' => 'Jenis cuti harus diisi.',
             'type.string' => 'Jenis cuti harus berupa teks.',

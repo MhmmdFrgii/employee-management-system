@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AttendanceApiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
@@ -43,7 +44,7 @@ Route::middleware('auth')->group(function () {
             // route attendence
             Route::get('/mark-absentees', [AttendanceController::class, 'markAbsentees']);
 
-            Route::get('', [DashboardController::class, 'index'])->name('admin.dashboard');
+            Route::get('dashboard', [DashboardController::class, 'index'])->name('manager.dashboard');
 
             Route::resource('project-assignments', ProjectAssignmentController::class);
             Route::resource('departments', DepartmentController::class);
@@ -67,7 +68,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:employee')->group(function () {
 
         Route::prefix('employee')->group(function () {
-            Route::get('', [DashboardController::class, 'userDashboard'])->name('employee.dashboard');
+            Route::get('dashboard', [DashboardController::class, 'userDashboard'])->name('employee.dashboard');
 
             Route::resource('notification', NotificationController::class);
             Route::get('/my-project', [ProjectController::class, 'my_project'])->name('project.user');
@@ -81,7 +82,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('leave-requests', LeaveRequestController::class);
     // Route untuk approve leave request
     Route::put('/leave-requests/{id}/approve', [LeaveRequestController::class, 'approve'])->name('leave-requests.approve');
-
     Route::post('/leave-requests/{id}/reject', [LeaveRequestController::class, 'reject'])->name('leave-requests.reject');
 });
 

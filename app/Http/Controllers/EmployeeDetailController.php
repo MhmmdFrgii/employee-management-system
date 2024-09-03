@@ -63,22 +63,35 @@ class EmployeeDetailController extends Controller
             ->where('employee_details.company_id', Auth::user()->company->id)
             ->paginate(10);
 
-        $now = Carbon::now();
-        $currentYear = $now->year;
+        $employeeIds = EmployeeDetail::where('company_id', Auth::user()->company->id)
+            ->where('status', 'approved')
+            ->pluck('id')->toArray();
 
-        // Data untuk chart bulanan
-        $months = [];
-        $projectCounts = 0;
+        $employee_completed = []; // Initialize an array to store the counts for each employee
 
-
-
-            $projectCounts = Project::where('status', 'completed')
-                ->whereHas('employee_details', function ($query) {
-                    $query->where('user_id', Auth::user()->id);
+        foreach ($employeeIds as $employeeId) {
+            $count = Project::where('status', 'completed')
+                ->whereHas('employee_details', function ($query) use ($employeeId) {
+                    $query->where('employee_id', $employeeId);
                 })
                 ->count();
 
-        return view('employee.index', compact('employees', 'projectCounts', 'months'));
+            $employee_completed[$employeeId] = $count;
+        }
+
+        $employee_active = []; // Initialize an array to store the counts for each employee
+
+        foreach ($employeeIds as $employeeId) {
+            $count = Project::where('status', 'active')
+                ->whereHas('employee_details', function ($query) use ($employeeId) {
+                    $query->where('employee_id', $employeeId);
+                })
+                ->count();
+
+            $employee_active[$employeeId] = $count;
+        }
+
+        return view('employee.index', compact('employees', 'employee_completed', 'employee_active'));
     }
 
     /**

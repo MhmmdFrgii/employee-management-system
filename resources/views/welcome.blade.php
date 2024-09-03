@@ -43,7 +43,7 @@
 
                                 @if (Auth::user()->hasRole('manager'))
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
+                                        <a class="nav-link" href="{{ route('manager.dashboard') }}">Dashboard</a>
                                     </li>
                                 @else
                                     <li class="nav-item">
@@ -77,12 +77,18 @@
                         </div>
                         <form action="{{ route('create.applicant') }}">
                             <div class="form-group" class="text-white">
-                                <label for="applicant" class="text-white">Laraman :</label>
-                                <input type="text" id="applicant" name="applicant">
-                                <button type="submit">Lanjutkan</button>
-                                @error('applicant')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="text" class="form-control @error('applicant') is-invalid @enderror" id="applicant" name="applicant" placeholder="Kode Invit">
+                                    </div>
+                                    <div class="col-6">
+                                        <button type="submit" class="mt-2 btn btn-primary">Lanjutkan</button>
+                                    </div>
+                                    @error('applicant')
+                                        <div class="text-danger mt-2">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                             </div>
                         </form>
                     </div>

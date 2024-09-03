@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('employee_id')->constrained('employee_details')->cascadeOnDelete();
             $table->date('start_date');
             $table->date('end_date');
+            $table->string('photo');
+            $table->string('description')->nullable();
             $table->string('type');
             $table->enum('status', ['approved', 'pending', 'rejected'])->default('pending');
             $table->timestamps();

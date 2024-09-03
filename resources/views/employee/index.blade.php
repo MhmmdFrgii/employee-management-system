@@ -1,84 +1,5 @@
 @extends('dashboard.layouts.main')
 
-{{-- @section('content')
-
-
-    <div class="px-4">
-        <!-- Owl carousel -->
-        <div class="card bg-light-info shadow-none position-relative overflow-hidden">
-            <div class="card-body px-4 py-3">
-                <div class="row align-items-center">
-                    <div class="col-9">
-                        <h4 class="fw-semibold mb-8">Daftar Karyawan</h4>
-                        <nav aria-label="breadcrumb mt-2">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a class="text-muted " href="/employee/dashboard">Dashboard</a>
-                                </li>
-                                <li class="breadcrumb-item" aria-current="page">Manager</li>
-                            </ol>
-                        </nav>
-                    </div>
-
-
-
-                    <div class="col-3">
-                        <div class="text-center mb-n5">
-                            <img src="" alt="" class="img-fluid mb-n4">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <form id="searchForm" action="{{ route('employee.index') }}" method="GET"
-                        class="d-flex align-items-center gap-2">
-                        @csrf
-                        <div class="form-group mb-0 position-relative">
-                            <label for="search" class="sr-only">Search:</label>
-                            <input type="text" id="search" name="search" value="{{ request('search') }}"
-                                class="form-control shadow search-input" placeholder="Cari data..">
-
-                            <a href="{{ route('employee.index') }}"
-                                class="clear-search btn btn-sm position-absolute top-50 translate-middle-y end-0 me-2"
-                                style="z-index: 10; padding: 0.2rem 0.4rem; line-height: 1; display: none;">
-                                X
-                            </a>
-                        </div>
-                        <button type="submit" class="btn btn-secondary">Cari</button>
-                    </form>
-
-        <div class="row">
-            @foreach ($employees as $employee)
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card text-center">
-                        <div class="card-body">
-
-                            <!-- Tampilkan foto dari storage -->
-                            <img src="{{ Storage::exists($employee->photo) ? asset('storage/' . $employee->photo) : asset('assets/images/no-profile.jpeg') }}"
-                                alt="avatar" class="rounded-1 img-fluid" width="90px" height="90px">
-
-                            <div class="mt-n2">
-                                <!-- Tampilkan departemen -->
-                                <span class="badge bg-primary">{{ $employee->department->name }}</span>
-                                <!-- Tampilkan nama karyawan -->
-                                <h3 class="card-title mt-3">{{ $employee->fullname }}</h3>
-                            </div>
-                            <div class="mt-2">
-                                <button class="btn btn-success btn-sm" data-id="{{ $employee->id }}" data-bs-toggle="modal" data-bs-target="#detailModal">View Detail</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-
-            @include('employee.partial.detail-modal');
-        </div>
-        <div class="mt-3 justify-content-end">
-            {{ $employees->links() }}
-        </div>
-    </div>
-@endsection --}}
-
 @section('content')
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -104,11 +25,11 @@
                     </form>
                 </div>
 
-            <div class="col-3">
-                <div class="text-center mb-n5">
-                    <img src="" alt="" class="img-fluid mb-n4">
+                <div class="col-3">
+                    <div class="text-center mb-n5">
+                        <img src="" alt="" class="img-fluid mb-n4">
+                    </div>
                 </div>
-            </div>
 
             <div class="row mt-5">
                 @forelse ($employees as $employee)
@@ -141,35 +62,5 @@
             <div class="mt-3 justify-content-end">
                 {{ $employees->links() }}
             </div>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
-
-                    document.querySelectorAll('[data-bs-target="#detailModal"]').forEach(button => {
-                        button.addEventListener('click', function() {
-                            const employeeId = this.getAttribute('data-id');
-
-                            // Fetch employee details via AJAX or embed data attributes in the button
-                            fetch(`/employee/${employeeId}`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    document.getElementById('modal-photo').src = data.photo_url;
-                                    document.getElementById('modal-fullname').textContent = data.fullname;
-                                    document.getElementById('modal-department').textContent = data.department_name;
-                                    document.getElementById('modal-position').textContent = data.position_name;
-                                    document.getElementById('modal-phone').textContent = data.phone;
-                                    document.getElementById('modal-address').textContent = data.address;
-                                    document.getElementById('modal-gender').textContent = data.gender;
-                                    document.getElementById('modal-hire-date').textContent = data.hire_date;
-                                    document.getElementById('modal-ongoing-projects').textContent = data.ongoing_projects;
-                                    document.getElementById('modal-completed-projects').textContent = data.completed_projects;
-                                });
-
-                            detailModal.show();
-                        });
-                    });
-                });
-            </script>
-
+ 
 @endsection
