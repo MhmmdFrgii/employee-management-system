@@ -6,6 +6,7 @@ use App\Http\Requests\EmployeeDetailRequest;
 use App\Models\Department;
 use App\Models\EmployeeDetail;
 use App\Models\Position;
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -61,7 +62,36 @@ class EmployeeDetailController extends Controller
             )
             ->where('employee_details.company_id', Auth::user()->company->id)
             ->paginate(10);
-        return view('employee.index', compact('employees'));
+
+        $employeeIds = EmployeeDetail::where('company_id', Auth::user()->company->id)
+            ->where('status', 'approved')
+            ->pluck('id')->toArray();
+
+        $employee_completed = []; // Initialize an array to store the counts for each employee
+
+        foreach ($employeeIds as $employeeId) {
+            $count = Project::where('status', 'completed')
+                ->whereHas('employee_details', function ($query) use ($employeeId) {
+                    $query->where('employee_id', $employeeId);
+                })
+                ->count();
+
+            $employee_completed[$employeeId] = $count;
+        }
+
+        $employee_active = []; // Initialize an array to store the counts for each employee
+
+        foreach ($employeeIds as $employeeId) {
+            $count = Project::where('status', 'active')
+                ->whereHas('employee_details', function ($query) use ($employeeId) {
+                    $query->where('employee_id', $employeeId);
+                })
+                ->count();
+
+            $employee_active[$employeeId] = $count;
+        }
+
+        return view('employee.index', compact('employees', 'employee_completed', 'employee_active'));
     }
 
     /**
