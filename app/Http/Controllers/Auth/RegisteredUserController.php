@@ -14,7 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules;
@@ -51,24 +50,31 @@ class RegisteredUserController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $company = Company::create([
-            'name' => $request->company_name,
-            'address' => $request->company_address,
-            'contact_email' => $request->contact_email,
-            'company_code' => Company::company_generate()
-        ]);
+        DB::beginTransaction();
+        try {
+            $company = Company::create([
+                'name' => $request->company_name,
+                'address' => $request->company_address,
+                'contact_email' => $request->contact_email,
+                'company_code' => Company::company_generate(),
+            ]);
 
-        $user = User::create([
-            'company_id' => $company->id,
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'status' => 'approved',
-        ])->assignRole('manager');
+            $user = User::create([
+                'company_id' => $company->id,
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'status' => 'approved',
+            ])->assignRole('manager');
 
-        event(new Registered($user));
+            event(new Registered($user));
 
-        return redirect(route('login', absolute: false));
+            DB::commit();
+            return redirect(route('login'));
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat registrasi.')->withInput();
+        }
     }
 
     public function apply_applicant(Request $request)
@@ -86,7 +92,6 @@ class RegisteredUserController extends Controller
         return view('auth.apply-applicant');
     }
 
-
     public function store_applicant(Request $request)
     {
         $company = Company::where('company_code', $request->company_code)->first();
@@ -99,36 +104,40 @@ class RegisteredUserController extends Controller
             'gender' => 'required|string|in:male,female',
             'address' => 'required|string|max:500',
             'g-recaptcha-response' => 'recaptcha',
-            recaptchaFieldName() => recaptchaRuleName()
+            recaptchaFieldName() => recaptchaRuleName(),
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        DB::beginTransaction();
         try {
-            $photo = $request->file('photo')->store('employee_photos', 'public');
-
-            $cv = $request->file('cv')->store('employee-cv', 'public');
+            $photoPath = $request->file('photo')->store('employee_photos', 'public');
+            $cvPath = $request->file('cv')->store('employee-cv', 'public');
 
             EmployeeDetail::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'photo' => $photo,
-                'cv' => $cv,
+                'photo' => $photoPath,
+                'cv' => $cvPath,
                 'phone' => $request->phone,
                 'gender' => $request->gender,
                 'address' => $request->address,
-                'company_id' => $company->id
+                'company_id' => $company->id,
             ]);
 
-            return redirect()->route('confirmation')->with('success', 'Berhasil Daftar Menunggu Konfirmasi!');
+            DB::commit();
+            return redirect()->route('confirmation')->with('success', 'Berhasil Daftar, Menunggu Konfirmasi!');
         } catch (\Throwable $e) {
-
+            DB::rollBack();
             if (isset($photoPath)) {
                 Storage::disk('public')->delete($photoPath);
             }
-            return redirect()->back()->with('error', 'Terjadi Kesalaah Pendaftaran.!')->withInput();
+            if (isset($cvPath)) {
+                Storage::disk('public')->delete($cvPath);
+            }
+            return redirect()->back()->with('error', 'Terjadi Kesalahan Pendaftaran.')->withInput();
         }
     }
 
@@ -158,8 +167,9 @@ class RegisteredUserController extends Controller
     public function store_employee(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:8',
+            'email' => 'required|email|exists:employee_details,email',
+            'password' => 'required|min:8|confirmed',
+            'password_confirmation' => 'required',
         ]);
 
         $applicant = EmployeeDetail::where('email', $request->email)
@@ -170,25 +180,32 @@ class RegisteredUserController extends Controller
             return redirect()->back()->withErrors(['email' => 'Email tidak ditemukan dalam data kami.']);
         }
 
-        $user = User::create([
-            'company_id' => $applicant->company->id,
-            'name' => $applicant->name,
-            'email' => $applicant->email,
-            'password' => $request->password,
-            'status' => 'approved'
-        ])->assignRole('employee');
+        DB::beginTransaction();
+        try {
+            $user = User::create([
+                'company_id' => $applicant->company->id,
+                'name' => $applicant->name,
+                'email' => $applicant->email,
+                'password' => Hash::make($request->password),
+                'status' => 'approved',
+            ])->assignRole('employee');
 
-        $applicant->update([
-            'user_id' => $user->id,
-            'hire_date' => date('Y-m-d')
-        ]);
+            $applicant->update([
+                'user_id' => $user->id,
+                'hire_date' => now(),
+            ]);
 
-        $invitation_code = InvitationCode::where('code', $request->company)->first();
-        $invitation_code->update([
-            'status' => 'used',
-            'used_by' => $applicant->id
-        ]);
+            $invitation_code = InvitationCode::where('code', $request->company)->first();
+            $invitation_code->update([
+                'status' => 'used',
+                'used_by' => $applicant->id,
+            ]);
 
-        return view('auth.login');
+            DB::commit();
+            return redirect()->route('login')->with('success', 'Akun berhasil dibuat, silakan login.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat pembuatan akun.')->withInput();
+        }
     }
 }
