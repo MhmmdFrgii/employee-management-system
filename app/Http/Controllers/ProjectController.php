@@ -136,36 +136,39 @@ class ProjectController extends Controller
 
     public function myProjects()
     {
-        // Mendapatkan ID user yang sedang login
-        $userId = auth('web')->id();
+        // Get the currently logged-in user
+        $user = Auth::user();
 
-        // Mendapatkan daftar proyek yang di-assign ke user yang login
-        $assignedProjects = ProjectAssignment::where('employee_id', $userId)
-            ->with(['project.kanban_board' => function ($query) use ($userId) {
-                // Memuat hanya kanbantasks yang di-assign ke user yang login
-                $query->with(['kanbantasks' => function ($query) use ($userId) {
-                    $query->where('employee_id', $userId);
-                }]);
+        // Get the employee ID from the logged-in user's employee detail
+        $employeeId = $user->employee_detail->id;
+
+        // Get the list of projects assigned to the employee associated with the logged-in user
+        $assignedProjects = ProjectAssignment::where('employee_id', $employeeId)
+            ->with(['project.kanban_board.kanbantasks' => function ($query) use ($employeeId) {
+                // Load only the Kanban tasks assigned to the employee
+                $query->where('employee_id', $employeeId);
             }])
             ->get();
 
-        // Mengambil daftar KanbanBoard yang terkait dengan proyek yang di-assign ke user tersebut
-        $kanbanboard = $assignedProjects->map(function ($assignment) {
+        // Extract the Kanban boards associated with the assigned projects
+        $kanbanBoards = $assignedProjects->map(function ($assignment) {
             return $assignment->project->kanban_board;
-        })->filter()->flatten(); // Menghilangkan nilai null dan membuat collection menjadi satu tingkat
+        })->filter()->flatten(); // Remove null values and flatten the collection
 
-        return view('myproject.index', compact('kanbanboard'));
+
+        // dd($kanbanBoards);
+        return view('myproject.index', compact('kanbanBoards'));
     }
-}
+
     public function show(Project $project)
-{
-    // Cek apakah proyek memiliki Kanban Board
-    if ($project->kanban_board) {
-        // Redirect ke halaman Kanban Board
-        return redirect()->route('kanban-board.index', ['id' => $project->kanban_board->id]);
-    } else {
-        // Jika tidak ada Kanban Board, Anda bisa redirect atau menampilkan pesan
-        return redirect()->route('projects.index')->with('error', 'Proyek ini tidak memiliki Kanban Board.');
+    {
+        // Cek apakah proyek memiliki Kanban Board
+        if ($project->kanban_board) {
+            // Redirect ke halaman Kanban Board
+            return redirect()->route('kanban-board.index', ['id' => $project->kanban_board->id]);
+        } else {
+            // Jika tidak ada Kanban Board, Anda bisa redirect atau menampilkan pesan
+            return redirect()->route('projects.index')->with('error', 'Proyek ini tidak memiliki Kanban Board.');
+        }
     }
-}
 }

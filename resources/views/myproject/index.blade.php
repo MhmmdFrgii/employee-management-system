@@ -2,7 +2,7 @@
 
 @section('content')
     <h3>My Project</h3>
-    @forelse ($kanbanboard as $data)
+    @forelse ($kanbanBoards as $data)
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">{{ $data->project->name }}</h5>
