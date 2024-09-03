@@ -6,16 +6,16 @@ use App\Http\Requests\EmployeeDetailRequest;
 use App\Models\Department;
 use App\Models\EmployeeDetail;
 use App\Models\Position;
+use App\Models\Project;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-use function Laravel\Prompts\search;
-
 class EmployeeDetailController extends Controller
 {
-    // Display list of employee for user page
+    // Display list of employees for user page
     public function user_index()
     {
         $employees = EmployeeDetail::select('employee_details.*', 'users.name as user_name', 'departments.name as department_name')
@@ -26,16 +26,17 @@ class EmployeeDetailController extends Controller
         return view('userKaryawan.index', compact('employees'));
     }
 
-    //  Display a listing of the resource.
+    // Display list of employees with optional search, sorting, and detail view
     public function index(Request $request)
     {
         $search = $request->get('search');
         $sortBy = $request->get('sortBy', 'name'); // Default sorting by name
         $sortDirection = $request->get('sortDirection', 'asc'); // Default sorting direction is ascending
+        $employeeId = $request->get('employee_id'); // ID karyawan untuk menampilkan detail
 
         $validSortColumns = ['name', 'phone', 'address', 'department', 'hire_date', 'position'];
         if (!in_array($sortBy, $validSortColumns)) {
-            $sortBy = 'name'; // Set default     jika kolom tidak valid
+            $sortBy = 'name'; // Set default jika kolom tidak valid
         }
 
         // Validate sort direction
@@ -61,7 +62,23 @@ class EmployeeDetailController extends Controller
             )
             ->where('employee_details.company_id', Auth::user()->company->id)
             ->paginate(10);
-        return view('employee.index', compact('employees'));
+
+        $now = Carbon::now();
+        $currentYear = $now->year;
+
+        // Data untuk chart bulanan
+        $months = [];
+        $projectCounts = 0;
+
+
+
+            $projectCounts = Project::where('status', 'completed')
+                ->whereHas('employee_details', function ($query) {
+                    $query->where('user_id', Auth::user()->id);
+                })
+                ->count();
+
+        return view('employee.index', compact('employees', 'projectCounts', 'months'));
     }
 
     /**
@@ -81,13 +98,12 @@ class EmployeeDetailController extends Controller
      */
     public function store(EmployeeDetailRequest $request)
     {
-        $cv = $request->file('cv')->store('cv', 'public');
-        $photo = $request->file('photo')->store('photo', 'public');
+        $cv = $request->file('cv') ? $request->file('cv')->store('cv', 'public') : null;
+        $photo = $request->file('photo') ? $request->file('photo')->store('photo', 'public') : null;
 
         $validatedData = $request->validated();
         $validatedData['cv'] = $cv;
         $validatedData['photo'] = $photo;
-        // dd($validatedData);
 
         EmployeeDetail::create($validatedData);
         return redirect()->route('employee.index')->with('success', 'Berhasil menambahkan data employee.');
@@ -99,16 +115,16 @@ class EmployeeDetailController extends Controller
     public function destroy(EmployeeDetail $employee)
     {
         try {
-            $employee->delete();
             if ($employee->cv) {
                 Storage::disk('public')->delete($employee->cv);
             }
             if ($employee->photo) {
                 Storage::disk('public')->delete($employee->photo);
             }
+            $employee->delete();
             return redirect()->route('employee.index')->with('success', 'Berhasil menghapus data karyawan!');
         } catch (\Throwable $e) {
-            return redirect()->route('employee.index')->with('success', 'Gagal Menghapus data Karyawan.');
+            return redirect()->route('employee.index')->with('error', 'Gagal menghapus data karyawan.');
         }
     }
 }

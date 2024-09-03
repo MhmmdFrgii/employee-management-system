@@ -22,13 +22,16 @@
                                 <div class="card justify-content-center align-items-center" style="width: 16rem;">
                                     <div class="card-body d-flex flex-column text-center">
                                         {{-- Gunakan data gambar dari user atau default gambar jika tidak ada --}}
-                                        <img src="{{ asset('assets/images/no-profile.jpeg') }}" alt="avatar"
-                                            class="rounded-1 img-fluid" width="170px" height="170px">
+                                        <img src="{{ $applicant->photo ? asset('storage/' . $applicant->photo) : '../../dist/images/profile/user-1.jpg' }}"
+                                        alt="avatar"
+                                        class="rounded-1 img-fluid"
+                                        style="width: 200px; height: 150px; object-fit: cover;">
+
 
                                         <div class="card-body p-0 mt-2">
                                             <h5 class="card-title">{{ $applicant->name }}</h5>
-                                            <p class="card-text">
-                                                {{ $applicant->name ?? 'No Department' }}</p>
+                                            {{-- <p class="card-text">
+                                                {{ $applicant->name ?? 'No Department' }}</p> --}}
                                         </div>
                                         <a href="{{ route('applicants.detail', $applicant->id) }}"
                                             class="btn btn-primary mt-3">Rincian</a>

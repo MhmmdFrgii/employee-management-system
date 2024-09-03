@@ -116,7 +116,7 @@
                 <div class="col-sm-6 col-lg-4">
                     <div class="card hover-img">
                       <div class="card-body p-4 text-center border-bottom">
-                        <img src="../../dist/images/profile/user-1.jpg" alt="" class="rounded-circle mb-3" width="80" height="80">
+                        <img src="{{ $employee->photo ? asset('storage/' . $employee->photo) : '../../dist/images/profile/user-1.jpg' }}" alt="" class="rounded-circle mb-3" width="80" height="80">
                         <h5 class="fw-semibold mb-0">{{ $employee->name }}</h5>
                         <span class="text-dark fs-2">{{ $employee->department->name }}</span>
                       </div>
@@ -141,32 +141,35 @@
             <div class="mt-3 justify-content-end">
                 {{ $employees->links() }}
             </div>
-@endsection
 
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
 
-            @section('scripts')
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        const detailButtons = document.querySelectorAll('.btn-success');
+                    document.querySelectorAll('[data-bs-target="#detailModal"]').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const employeeId = this.getAttribute('data-id');
 
-                        detailButtons.forEach(button => {
-                            button.addEventListener('click', function() {
-                                const employeeId = this.dataset.id;
-                                const employee = @json($employees).find(emp => emp.id == employeeId);
+                            // Fetch employee details via AJAX or embed data attributes in the button
+                            fetch(`/employee/${employeeId}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    document.getElementById('modal-photo').src = data.photo_url;
+                                    document.getElementById('modal-fullname').textContent = data.fullname;
+                                    document.getElementById('modal-department').textContent = data.department_name;
+                                    document.getElementById('modal-position').textContent = data.position_name;
+                                    document.getElementById('modal-phone').textContent = data.phone;
+                                    document.getElementById('modal-address').textContent = data.address;
+                                    document.getElementById('modal-gender').textContent = data.gender;
+                                    document.getElementById('modal-hire-date').textContent = data.hire_date;
+                                    document.getElementById('modal-ongoing-projects').textContent = data.ongoing_projects;
+                                    document.getElementById('modal-completed-projects').textContent = data.completed_projects;
+                                });
 
-                                document.getElementById('modal-photo').src = employee.photo ?
-                                    `{{ asset('storage/') }}/${employee.photo}` :
-                                    `{{ asset('assets/images/no-profile.jpeg') }}`;
-                                document.getElementById('modal-fullname').textContent = employee.fullname;
-                                document.getElementById('modal-department').textContent = employee.department
-                                    .name;
-                                document.getElementById('modal-position').textContent = employee.position.name;
-                                document.getElementById('modal-phone').textContent = employee.phone;
-                                document.getElementById('modal-gender').textContent = employee.gender;
-                                document.getElementById('modal-address').textContent = employee.address;
-                                document.getElementById('modal-hire-date').textContent = employee.hire_date;
-                            });
+                            detailModal.show();
                         });
                     });
-                </script>
-            @endsection
+                });
+            </script>
+
+@endsection
