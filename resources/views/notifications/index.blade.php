@@ -7,30 +7,32 @@
             <div class="col-md-12">
                 <!-- Daftar Notifikasi -->
                 <div class="list-group">
-                    {{-- @foreach ($notifications as $notification) --}}
-                    <!-- Notifikasi -->
-                    <div class="list-group-item list-group-item-action d-flex flex-column align-items-start mb-1">
-                        <div class="w-100 d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="mb-1" style="font-size: 14px;">Notifikasi</h5>
-                                <p class="mb-1" style="font-size: 12px;">Ini adalah contoh notifikasi yang lebih panjang.
-                                    Berisi pesan singkat tentang aktivitas terbaru dan informasi lebih detail mengenai
-                                    aktivitas
-                                    tersebut.</p>
-                                <small class="text-muted" style="font-size: 12px;">28 Agustus 2024, 14:30</small>
+                    @forelse ($notifications as $notification)
+                        <!-- Notifikasi -->
+                        <div
+                            class="list-group-item list-group-item-action d-flex flex-column align-items-start mb-3 border border-{{ $notification->type }}">
+                            <div class="w-100 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-1" style="font-size: 14px;">{{ $notification->title }}</h5>
+                                    <p class="mb-1" style="font-size: 12px;">
+                                        {{ $notification->message }}
+                                    </p>
+                                    <small class="text-muted"
+                                        style="font-size: 12px;">{{ $notification->created_at }}</small>
+                                </div>
+                                <!-- Tombol Hapus -->
+                                <form action="{{ route('notifications.destroy', $notification->id) }}" method="POST"
+                                    style="margin-left: auto;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="ti ti-trash"></i>
+                                    </button>
+                                </form>
                             </div>
-                            <!-- Tombol Hapus -->
-                            <form action="" method="POST" style="margin-left: auto;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger"
-                                    onclick="return confirm('Apakah Anda yakin ingin menghapus notifikasi ini?');">
-                                    <i class="ti ti-trash"></i>
-                                </button>
-                            </form>
                         </div>
-                    </div>
-                    {{-- @endforeach --}}
+                    @empty
+                    @endforelse
                 </div>
                 {{-- <!-- Pagination -->
                 <div class="mt-3">
