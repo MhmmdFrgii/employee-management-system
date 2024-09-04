@@ -17,10 +17,13 @@
             </form>
         </div>
     </div>
-    @if ($task->date || $task->employee_id)
-        <div class="p-2 px-3 card-body d-flex justify-content-between align-items-center">
+
+    <div class="p-2 px-3 card-body d-flex justify-content-between align-items-center">
+        @if ($task->date)
             <p class="small m-0">{{ $task->date }}</p>
+        @endif
+        @if ($task->employee_id)
             <p class="small m-0">{{ $task->employee->name }}</p>
-        </div>
-    @endif
+        @endif
+    </div>
 </div>
