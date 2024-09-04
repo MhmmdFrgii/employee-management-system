@@ -11,10 +11,10 @@
                     @endif
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h1 class="h3">Attendance</h1>
-                        <form action="{{ route('attendance.store') }}" method="post">
-                            @csrf
-                            <button button type="button" class="btn btn-primary">Absen</button>
-                        </form>
+                        {{-- <form action="{{ route('attendance.store') }}" method="post">
+                        @csrf
+                        <button button type="button" class="btn btn-primary">Absen</button>
+                        </form> --}}
                     </div>
 
                     {{-- SEARCH & FILTER --}}

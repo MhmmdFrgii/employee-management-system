@@ -11,6 +11,8 @@ class Project extends Model
     protected $table = 'projects';
     protected $guarded = ['id'];
 
+    protected $hidden = ['employee_details'];
+
     public function scopeSearch($query, $search)
     {
         return $query->where(function ($query) use ($search) {
@@ -46,7 +48,7 @@ class Project extends Model
         return $this->hasManyThrough(Department::class, EmployeeDetail::class, 'project_id', 'id', 'id', 'department_id');
     }
 
-    // 
+    //
 
     public function kanban_board()
     {
