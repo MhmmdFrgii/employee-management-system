@@ -6,7 +6,6 @@
             <form action="{{ route('leave-requests.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <!-- Ubah ke employee_detail -->
-                <!-- Ubah ke employee_detail -->
                 <input type="hidden" name="employee_id" value="{{ Auth::user()->employee_detail->id }}">
                 <!-- Tambahkan input hidden untuk company_id -->
                 <input type="hidden" name="company_id" value="{{ Auth::user()->company->id }}">
