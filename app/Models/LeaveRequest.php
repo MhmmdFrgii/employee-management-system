@@ -51,7 +51,7 @@ class LeaveRequest extends Model
             ->orWhere('status', 'like', '%' . $search . '%');
     }
 
-    public function employe()
+    public function employee_detail()
     {
         return $this->belongsTo(EmployeeDetail::class, 'employee_id');
     }
