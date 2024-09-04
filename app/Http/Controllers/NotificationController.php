@@ -16,7 +16,7 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        $notifications = Notification::where('user_id', FacadesAuth::user()->id)->get();
+        $notifications = Notification::where('user_id', FacadesAuth::user()->id)->latest()->get();
         return view('notifications.index', compact('notifications'));
     }
 
