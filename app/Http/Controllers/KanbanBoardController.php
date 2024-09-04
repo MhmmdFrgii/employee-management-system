@@ -73,24 +73,6 @@ class KanbanBoardController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(KanbanBoardRequest $request)
-    {
-        KanbanBoard::create($request->validated());
-        return redirect()->route('kanban-board.index')->with('status', 'KanbanBoard berhasil disimpan.');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(KanbanBoardRequest $request, KanbanBoard $kanbanboard)
-    {
-        $kanbanboard->update($request->validated());
-        return redirect()->route('kanban-board.index')->with('status', 'KanbanBoard berhasil diperbarui.');
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
     public function destroy(KanbanBoard $kanbanboard)

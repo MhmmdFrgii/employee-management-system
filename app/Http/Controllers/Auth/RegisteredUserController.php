@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Department;
 use App\Models\EmployeeDetail;
 use App\Models\InvitationCode;
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -127,6 +128,17 @@ class RegisteredUserController extends Controller
                 'company_id' => $company->id,
             ]);
 
+            $manager = User::where('company_id', $company->id)
+                ->role('manager')
+                ->first();
+
+            Notification::create([
+                'user_id' => $manager->id,
+                'title' => 'Pelamar baru telah bergabung',
+                'message' => 'Seorang pelamar baru telah mendaftar. Silakan tinjau lamaran mereka di portal rekrutmen.',
+                'type' => 'info'
+            ]);
+
             DB::commit();
             return redirect()->route('confirmation')->with('success', 'Berhasil Daftar, Menunggu Konfirmasi!');
         } catch (\Throwable $e) {
@@ -190,6 +202,13 @@ class RegisteredUserController extends Controller
                 'status' => 'approved',
             ])->assignRole('employee');
 
+            Notification::create([
+                'user_id' => $user->id,
+                'title' => 'Selamat Datang!',
+                'message' => 'Akun Anda telah berhasil dibuat. Selamat bergabung dan selamat bekerja!',
+                'type' => 'success',
+            ]);
+
             $applicant->update([
                 'user_id' => $user->id,
                 'hire_date' => now(),
@@ -240,6 +259,5 @@ class RegisteredUserController extends Controller
         ]);
 
         return redirect()->route('manager.dashboard')->with('success', 'Berhasil Update Lokasi!');
-
     }
 }

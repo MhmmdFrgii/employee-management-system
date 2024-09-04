@@ -35,6 +35,14 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{ route('attendance.index') }}" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-clipboard-data"></i>
+                        </span>
+                        <span class="hide-menu">Absensi</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
                     <a class="sidebar-link" href="{{ route('projects.index') }}" aria-expanded="false">
                         <span class="d-flex">
                             <i class="ti ti-clipboard-list"></i>
@@ -91,7 +99,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="{{ route('notification.index') }}" class="sidebar-link">
+                    <a href="{{ route('notifications.index') }}" class="sidebar-link">
                         <div class="round-16 d-flex align-items-center justify-content-center">
                             <i class="ti ti-inbox"></i>
                         </div>

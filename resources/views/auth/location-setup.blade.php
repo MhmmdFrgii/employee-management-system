@@ -36,8 +36,8 @@
                                                         <div class="input-group mb-3">
                                                             <input type="text" id="location-search" class="form-control"
                                                                 placeholder="Search for a location">
-                                                            <button id="search-button"
-                                                                class="btn btn-primary" type="button">Search</button>
+                                                            <button id="search-button" class="btn btn-primary"
+                                                                type="button">Search</button>
                                                         </div>
 
                                                         {{-- Peta --}}
@@ -77,24 +77,23 @@
             attribution: ''
         }).addTo(map);
 
-        var marker = null; // Initialize marker variable
+        var marker = null;
 
-        // Function to update the marker and input fields
-        function updateMarker(lat, lng) {
+        function updateMarker(lat, lng, address = '') {
             if (!marker) {
-                // Create a new marker if it doesn't exist
                 marker = L.marker([lat, lng]).addTo(map);
             } else {
-                // Move the existing marker to the new location
                 marker.setLatLng([lat, lng]);
             }
 
             map.setView([lat, lng], 15);
+
             document.getElementById('latitude').value = lat;
             document.getElementById('longitude').value = lng;
+
+            marker.bindPopup(address).openPopup();
         }
 
-        // Event listener for the search button
         document.getElementById('search-button').addEventListener('click', function() {
             var location = document.getElementById('location-search').value;
 
@@ -105,7 +104,8 @@
                         if (data.length > 0) {
                             var lat = data[0].lat;
                             var lng = data[0].lon;
-                            updateMarker(lat, lng);
+                            var displayName = data[0].display_name;
+                            updateMarker(lat, lng, displayName);
                         } else {
                             alert('Location not found.');
                         }
@@ -114,18 +114,17 @@
             }
         });
 
-
-
-        // Panggil fungsi initializeMap saat dokumen siap
-        $(document).ready(function() {
-            initializeMap();
-        });
-
-        // Add a pin when the user clicks on the map
         map.on('click', function(e) {
             var lat = e.latlng.lat;
             var lng = e.latlng.lng;
-            updateMarker(lat, lng);
+
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                .then(response => response.json())
+                .then(data => {
+                    var displayName = data.display_name;
+                    updateMarker(lat, lng, displayName);
+                })
+                .catch(error => console.error('Error:', error));
         });
     </script>
 @endsection

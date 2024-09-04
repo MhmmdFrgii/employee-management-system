@@ -98,7 +98,7 @@
                                     </div>
                                     @if ($project->kanban_board)
                                         <a class="btn btn-info btn-sm"
-                                            href="{{ route('kanban-board.index', ['id' => $project->kanban_board->id]) }}">Kanban</a>
+                                            href="{{ route('kanban-boards.index', ['id' => $project->kanban_board->id]) }}">Kanban</a>
                                     @endif
 
                                 </div>
