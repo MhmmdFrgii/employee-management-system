@@ -48,11 +48,20 @@
                                             <i class='bx bx-info-circle'></i>
                                         </a>
                                     </li>
+                                    <li class="position-relative">
+                                        <a class="text-warning d-flex align-items-center justify-content-center p-2 fs-5 rounded-circle fw-semibold"
+                                            href="#" data-id="{{ $employee->id }}" data-bs-toggle="modal"
+                                            data-bs-target="#editModal{{ $loop->iteration }}">
+                                            <i class='bx bx-edit-alt'></i>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
 
                         @include('employee.partial.detail-modal')
+                        @include('employee.partial.edit-modal', ['employee' => $employee, 'departments' => $departments, 'positions' => $positions])
+
                     @empty
                         <div class="col-12 text-center">
                             <img src="{{ asset('assets/images/no-data.png') }}" alt="No Data" class="img-fluid"
@@ -60,7 +69,6 @@
                             <p class="mt-3">Tidak ada data tersedia</p>
                         </div>
                     @endforelse
-
                 </div>
                 <div class="mt-3 justify-content-end">
                     {{ $employees->links() }}
