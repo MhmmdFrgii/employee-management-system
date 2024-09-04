@@ -1,12 +1,12 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
-    <h3>My Project</h3> 
+    <h3>My Project</h3>
     @forelse ($kanbanBoards as $data)
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">{{ $data->project->name }}</h5>
-                <a href="{{ route('kanban-board.index', ['id' => $data->id]) }}" class="btn btn-primary btn-sm">Kanban</a>
+                <a href="{{ route('kanban-boards.index', ['id' => $data->id]) }}" class="btn btn-primary btn-sm">Kanban</a>
             </div>
 
             <div class="card-body p-0">

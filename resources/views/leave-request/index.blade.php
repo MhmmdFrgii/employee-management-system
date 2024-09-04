@@ -138,7 +138,7 @@
                             @forelse($leaveRequest as $data)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $data->employe->name }}</td>
+                                    <td>{{ $data->employee_detail->name }}</td>
                                     <td>{{ $data->start_date }}</td>
                                     <td>{{ $data->end_date }}</td>
                                     <td>{{ $data->type }}</td>

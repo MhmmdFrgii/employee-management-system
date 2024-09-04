@@ -91,7 +91,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="{{ route('notification.index') }}" class="sidebar-link">
+                    <a href="{{ route('notifications.index') }}" class="sidebar-link">
                         <div class="round-16 d-flex align-items-center justify-content-center">
                             <i class="ti ti-inbox"></i>
                         </div>
