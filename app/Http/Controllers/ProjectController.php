@@ -117,8 +117,12 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        if ($project->status === 'active') {
+            return redirect()->route('projects.index')->with('info', 'Proyek masih aktif dan tidak dapat dihapus.');
+        }
+
         $project->delete();
-        return redirect()->route('projects.index')->with('success', 'Data berhasil dihapus');
+        return redirect()->route('projects.index')->with('success', 'Data berhasil dihapus.');
     }
 
     // public function myProjects()

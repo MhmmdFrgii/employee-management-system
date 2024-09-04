@@ -61,7 +61,7 @@ class PositionController extends Controller
             return redirect()->route('positions.index')->with('success', 'Hapus Jabatan Success!');
         } catch (\Throwable $e) {
             # code...
-            return redirect()->route('positions.index')->with('success', 'Failed Hapus Jabatan.');
+            return redirect()->route('positions.index')->with('info', 'Failed Hapus Jabatan.');
         }
     }
 }
