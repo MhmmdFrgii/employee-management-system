@@ -120,8 +120,9 @@ class AttendanceController extends Controller
             $query->orderBy($request->sortBy, $direction);
         }
 
+        $today = Carbon::today()->format('Y-m-d');
         // Select relevant fields
-        $attendances = $query->select('attendances.*', 'employee_details.name as employee_name')->paginate(10);
+        $attendances = $query->whereDate('date', '<=', $today)->select('attendances.*', 'employee_details.name as employee_name')->paginate(10);
 
         return view('attendance.index', compact('attendances'));
     }
