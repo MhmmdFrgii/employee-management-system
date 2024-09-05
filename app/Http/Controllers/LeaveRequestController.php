@@ -62,6 +62,8 @@ class LeaveRequestController extends Controller
             $company_id = $employee->company->id;
 
             DB::beginTransaction();
+
+            // Temukan manajer berdasarkan company_id
             $manager = User::where('company_id', $company_id)
                 ->role('manager')
                 ->first();
@@ -95,18 +97,22 @@ class LeaveRequestController extends Controller
                 ->exists();
 
             if ($existingLeave) {
+                DB::rollBack(); // Jangan lupa rollback jika ada kesalahan
                 return redirect()->back()->withErrors(['error' => 'Kamu sudah memiliki izin pada tanggal yang dipilih.']);
             }
 
             LeaveRequest::create($request->validated());
-            return redirect()->route('attendance.user')->with('success', 'Berhasil mengajukan izin.');
+
+            // Commit transaksi sebelum return
             DB::commit();
+
+            return redirect()->route('attendance.user')->with('success', 'Berhasil mengajukan izin.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            dd($e);
             return redirect()->back()->with('error', 'Terjadi Kesalahan.')->withInput();
         }
     }
+
 
     public function update(RequestsLeaveRequest $request, LeaveRequest $leaveRequest)
     {
