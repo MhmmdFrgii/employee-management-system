@@ -108,7 +108,6 @@
                 </div>
             </div>
         </div>
-        {{-- @dd($activeCounts) --}}
         <div class="row">
             <div class="col-md-{{ isset($departments) && $department_data ? '8' : '12' }}">
                 <div class="card">
@@ -121,18 +120,29 @@
                 </div>
             </div>
 
+
             @if (isset($departments) && $department_data)
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title">Department</h5>
-                        </div>
-                        <div class="card-body">
-                            <div id="pieChart"></div>
-                        </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Department</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="pieChart"></div>
                     </div>
                 </div>
+            </div>
             @endif
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Projects</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="attendanceBarChart"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
 
@@ -241,6 +251,78 @@
         <p>Data tidak ditemukan.</p>
     @endif
 
+    <!-- Script untuk Attendance Bar Chart -->
+@if (isset($attendanceData))
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var attendanceOptions = {
+            series: [
+                {
+                    name: 'Present',
+                    data: @json($attendanceData['present'])
+                },
+                {
+                    name: 'Absent',
+                    data: @json($attendanceData['absent'])
+                },
+                {
+                    name: 'Alpha',
+                    data: @json($attendanceData['alpha'])
+                },
+                {
+                    name: 'Late',
+                    data: @json($attendanceData['late'])
+                }
+            ],
+            chart: {
+                type: 'bar',
+                height: 350
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false, // Set horizontal ke false jika ingin bar vertical
+                    columnWidth: '55%',
+                    endingShape: 'rounded',
+                    reverse: true
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                show: true,
+                width: 2,
+                colors: ['transparent']
+            },
+            xaxis: {
+                categories: @json($months) // Data bulan untuk sumbu x
+            },
+            yaxis: {
+                title: {
+                    text: 'Jumlah Kehadiran'
+                }
+            },
+            fill: {
+                opacity: 1
+            },
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        return val + " Karyawan";
+                    }
+                }
+            }
+        };
+
+        var attendanceBarChart = new ApexCharts(document.querySelector("#attendanceBarChart"), attendanceOptions);
+        attendanceBarChart.render();
+    });
+</script>
+@else
+<p>Data kehadiran tidak ditemukan.</p>
+@endif
+
+
     @if (isset($departments))
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         <script>
@@ -272,7 +354,7 @@
                 tooltip: {
                     y: {
                         formatter: function(val) {
-                            return val + " units";
+                            return val + " orang";
                         }
                     }
                 }

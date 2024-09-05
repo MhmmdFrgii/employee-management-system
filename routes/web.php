@@ -52,6 +52,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('projects', ProjectController::class);
 
             Route::get('/applicants/detail/{id}', [UserController::class, 'detail'])->name('applicants.detail');
+            Route::patch('applicants/reject/{applicant}', [UserController::class, 'reject'])->name('applicants.reject');
             Route::resource('applicants', UserController::class);
 
             Route::patch('/company/{company}', [CompanyController::class, 'reset_code'])->name('companies.reset');

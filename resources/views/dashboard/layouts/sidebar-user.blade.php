@@ -59,11 +59,11 @@
                         <span class="hide-menu">Karyawan</span>
                     </a>
                 </li>
-                <li class="sidebar-item d-flex align-items-center">
+                <li class="sidebar-item ">
                     <a href="{{ route('notifications.index') }}" class="sidebar-link d-flex align-items-center">
-                        <div class="d-flex align-items-center ">
-                            <i class="ti ti-inbox"></i>
-                        </div>
+                        <span>
+                            <i class="ti ti-users"></i>
+                        </span>
                         <span class="hide-menu">Kotak Masuk</span>
                         @if (isset($newNotificationCount) && $newNotificationCount > 0)
                             <span class="badge bg-danger text-sm  rounded-pill ms-auto p-1">

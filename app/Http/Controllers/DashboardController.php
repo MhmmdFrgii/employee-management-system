@@ -90,6 +90,60 @@ class DashboardController extends Controller
             ->pluck('employee_details_count')
             ->toArray();
 
+        $now = Carbon::now();
+        $currentYear = $now->year;
+        $months = [];
+        $attendanceData = [
+            'present' => [],
+            'absent' => [],
+            'alpha' => [],
+            'late' => []
+        ];
+
+        // Loop untuk mendapatkan data 6 bulan terakhir termasuk bulan sekarang
+        for ($i = 5; $i >= 0; $i--) {
+            $currentMonth = $now->copy()->subMonths($i);
+
+            // Format bulan dan tahun
+            $months[] = $currentMonth->format('F Y');
+
+            // Hitung jumlah kehadiran untuk setiap bulan
+            $attendanceData['present'][] = Attendance::where('status', 'present')
+                ->whereHas('employee_detail', function ($query) use ($company_id) {
+                    $query->where('company_id', $company_id);
+                })
+                ->whereYear('created_at', $currentMonth->year)
+                ->whereMonth('created_at', $currentMonth->month)
+                ->count();
+
+            $attendanceData['absent'][] = Attendance::where('status', 'absent')
+                ->whereHas('employee_detail', function ($query) use ($company_id) {
+                    $query->where('company_id', $company_id);
+                })
+                ->whereYear('created_at', $currentMonth->year)
+                ->whereMonth('created_at', $currentMonth->month)
+                ->count();
+
+            $attendanceData['alpha'][] = Attendance::where('status', 'alpha')
+                ->whereHas('employee_detail', function ($query) use ($company_id) {
+                    $query->where('company_id', $company_id);
+                })
+                ->whereYear('created_at', $currentMonth->year)
+                ->whereMonth('created_at', $currentMonth->month)
+                ->count();
+
+            $attendanceData['late'][] = Attendance::where('status', 'late')
+                ->whereHas('employee_detail', function ($query) use ($company_id) {
+                    $query->where('company_id', $company_id);
+                })
+                ->whereYear('created_at', $currentMonth->year)
+                ->whereMonth('created_at', $currentMonth->month)
+                ->count();
+        }
+
+        // Balikkan array bulan untuk menampilkan bulan terlama terlebih dahulu
+        // $months = array_reverse($months);
+
         // Ambil ID pengguna yang sedang login
         $userId = Auth::id();
 
@@ -110,6 +164,7 @@ class DashboardController extends Controller
             'departments' => $departments,
             'department_data' => $department_data,
             'projectsWithNearestDeadlines' => $projectsWithNearestDeadlines,
+            'attendanceData' => $attendanceData,
             'newNotificationCount' => $newNotificationCount,
         ]);
     }
@@ -126,8 +181,9 @@ class DashboardController extends Controller
         $months = [];
         $activeCounts = [];
 
-        for ($i = 1; $i <= 12; $i++) {
-            $months[] = Carbon::create()->month($i)->format('F');
+        for ($i = 5; $i >= 0; $i--) {
+            $month = Carbon::now()->subMonths($i); // Mengurangi bulan secara iteratif
+            $months[] = $month->format('F'); // Ambil nama bulan
 
             $projectCounts[] = Project::where('status', 'completed')
                 ->whereHas('employee_details', function ($query) {

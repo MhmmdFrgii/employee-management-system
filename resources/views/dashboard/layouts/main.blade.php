@@ -110,20 +110,10 @@
                                 <i class="ti ti-align-justified fs-7"></i>
                             </a>
                             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-center">
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                <li class="nav-item">
+                                    <a class="nav-link nav-icon-hover" href="{{ route('notifications.index') }}">
                                         <i class="ti ti-bell-ringing"></i>
                                     </a>
-                                    <div class="dropdown-menu content-dd dropdown-menu-end dropdown-menu-animate-up"
-                                        aria-labelledby="drop2">
-                                        <div class="d-flex align-items-center justify-content-between py-3 px-7">
-                                            <h5 class="mb-0 fs-5 fw-semibold">Notifikasi</h5>
-                                            <div class="py-6 px-7 mb-1">
-                                                <button class="btn btn-outline-primary w-100"> Lihat Semua Notifikasi
-                                                </button>
-                                            </div>
-                                        </div>
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link pe-0" href="javascript:void(0)" id="drop1"
@@ -190,6 +180,9 @@
                                                         class="mb-1 d-block text-dark">{{ Auth::user()->getRoleNames()->implode(',') }}</span>
                                                     <p class="mb-0 d-flex text-dark align-items-center gap-2">
                                                         <i class="ti ti-mail fs-4"></i> {{ Auth::user()->email }}
+                                                    </p>
+                                                    <p class="mb-0 d-flex text-dark align-items-center gap-2">
+                                                        <i class="ti ti-building fs-4"></i> {{ Auth::user()->company->name }}
                                                     </p>
                                                 </div>
                                             </div>
