@@ -62,7 +62,7 @@
                 <li class="sidebar-item ">
                     <a href="{{ route('notifications.index') }}" class="sidebar-link d-flex align-items-center">
                         <span>
-                            <i class="ti ti-users"></i>
+                            <i class="ti ti-inbox"></i>
                         </span>
                         <span class="hide-menu">Kotak Masuk</span>
                         @if (isset($newNotificationCount) && $newNotificationCount > 0)
