@@ -48,7 +48,7 @@ class AttendanceController extends Controller
         $total_alpha = Attendance::where('employee_id', $user)->whereDate('date', '<=', $today)->where('status', 'alpha')->count();
         $attendance_count = Attendance::where('employee_id', $user)->whereDate('date', '<=', $today)->count();
 
-        $attendances = Attendance::where('employee_id', $user)->whereDate('date', '<=', $today)->get();
+        $attendances = Attendance::where('employee_id', $user)->get();
 
         return view('absenUser.index', compact('attendances', 'attendance_count', 'total_attendance', 'total_present', 'total_absent', 'total_alpha'));
     }
