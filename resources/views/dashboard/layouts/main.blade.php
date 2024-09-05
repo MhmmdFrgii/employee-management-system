@@ -68,9 +68,10 @@
         @if (Auth::user()->hasRole('manager'))
             @include('dashboard.layouts.sidebar')
         @else
-            @include('dashboard.layouts.sidebar-user', ['newNotificationCount' => $newNotificationCount])
+            @include('dashboard.layouts.sidebar-user')
         @endif
 
+        {{-- @include('dashboard.layouts.sidebar-user', ['newNotificationCount' => $newNotificationCount]) --}}
 
 
         <!--  Sidebar End -->
@@ -182,7 +183,8 @@
                                                         <i class="ti ti-mail fs-4"></i> {{ Auth::user()->email }}
                                                     </p>
                                                     <p class="mb-0 d-flex text-dark align-items-center gap-2">
-                                                        <i class="ti ti-building fs-4"></i> {{ Auth::user()->company->name }}
+                                                        <i class="ti ti-building fs-4"></i>
+                                                        {{ Auth::user()->company->name }}
                                                     </p>
                                                 </div>
                                             </div>
