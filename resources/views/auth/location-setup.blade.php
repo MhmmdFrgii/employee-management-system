@@ -29,7 +29,7 @@
                                         @csrf
                                         @method('patch')
                                         <section>
-                                            <div class="row">
+                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="mb-3">
                                                         {{-- Input untuk lokasi dan tombol pencarian --}}
@@ -46,9 +46,9 @@
 
                                                         {{-- Input untuk latitude dan longitude --}}
                                                         <div class="mt-3">
-                                                            <input type="text" id="latitude" class="form-control mb-2"
+                                                            <input type="hidden" id="latitude" class="form-control mb-2"
                                                                 placeholder="Lintang" name="latitude">
-                                                            <input type="text" id="longitude" class="form-control"
+                                                            <input type="hidden" id="longitude" class="form-control"
                                                                 placeholder="Bujur" name="longitude">
                                                         </div>
                                                     </div>
