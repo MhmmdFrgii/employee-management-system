@@ -40,9 +40,10 @@ class DashboardController extends Controller
 
         $now = Carbon::now();
         $projectsWithNearestDeadlines = Project::where('end_date', '>=', $now)
-            ->where('company_id', $company_id)
-            ->orderBy('end_date', 'asc')
-            ->get();
+        ->where('company_id', $company_id)
+        ->where('status', '!=', 'completed') // Exclude completed projects
+        ->orderBy('end_date', 'asc')
+        ->get();
 
         $months = [];
         $activeCounts = [];

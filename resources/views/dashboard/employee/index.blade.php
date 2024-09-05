@@ -55,7 +55,7 @@
         <script>
             var projectOptions = {
                 series: [{
-                    name: 'Active Projects',
+                    name: 'Proyek Aktif',
                     data: @json($projectCounts)
                 }],
                 chart: {
@@ -80,7 +80,7 @@
                 tooltip: {
                     y: {
                         formatter: function(val) {
-                            return val + " projects";
+                            return val + " proyek";
                         }
                     }
                 },
@@ -102,7 +102,7 @@
                     width: 350,
                     type: 'donut',
                 },
-                labels: ['Present', 'Absent', 'Late', 'Alpha'],
+                labels: ['Hadir', 'Tidak Hadir', 'Terlambat', 'Alfa'],
                 responsive: [{
                     breakpoint: 480,
                     options: {
