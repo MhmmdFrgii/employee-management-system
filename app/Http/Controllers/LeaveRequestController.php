@@ -82,7 +82,7 @@ class LeaveRequestController extends Controller
 
         LeaveRequest::create($request->validated());
 
-        return redirect()->route('attendance.index')->with('success', 'Berhasil menambahkan data.');
+        return redirect()->route('attendance.user')->with('success', 'Berhasil menambahkan data.');
     }
 
     public function update(RequestsLeaveRequest $request, LeaveRequest $leaveRequest)

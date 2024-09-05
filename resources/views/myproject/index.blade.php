@@ -1,9 +1,9 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
-    <h3>My Project</h3> 
+    <h3>Project Saya</h3>
     @forelse ($kanbanBoards as $data)
-        <div class="card mb-4">
+        <div class="card mb-4 shadow-md">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">{{ $data->project->name }}</h5>
                 <a href="{{ route('kanban-board.index', ['id' => $data->id]) }}" class="btn btn-primary btn-sm">Kanban</a>
@@ -32,7 +32,7 @@
                         </li>
                     </ul>
                 @empty
-                    <p class="text-center">No tasks available for this project.</p>
+                    <p class="text-center">Tidak ada tugas yang tersedia untuk proyek ini.</p>
                 @endforelse
             </div>
 
