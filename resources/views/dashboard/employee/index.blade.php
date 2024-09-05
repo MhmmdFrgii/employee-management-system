@@ -37,18 +37,37 @@
 
     <div class="row">
         <div class="col-md-8">
-            <div id="projectsChart"></div>
-        </div>
-        <div class="col-md-4">
-            <div class="d-flex justify-content-end gap-3 mb-5">
-                <form action="{{ route('attendance.mark', ['route' => 'employee.dashboard']) }}" method="post">
-                    @csrf
-                    <button button type="submit" class="btn btn-success">Absen</button>
-                </form>
+            <div class="card">
+                <div class="card-header">
+                    <h5>Project</h5>
+                </div>
+                <div class="card-body">
+                    <div id="projectsChart"></div>
+                </div>
             </div>
-            <div id="chart"></div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body d-flex justify-content-end">
+                    <form action="{{ route('attendance.mark', ['route' => 'employee.dashboard']) }}" method="post">
+                        @csrf
+                        <button type="submit" class="btn btn-success">Absen</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5>Absen</h5>
+                </div>
+                <div class="card-body">
+                    <div id="chart"></div>
+                </div>
+            </div>
         </div>
     </div>
+
 
     @if (isset($projectCounts))
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>

@@ -40,10 +40,10 @@ class DashboardController extends Controller
 
         $now = Carbon::now();
         $projectsWithNearestDeadlines = Project::where('end_date', '>=', $now)
-        ->where('company_id', $company_id)
-        ->where('status', '!=', 'completed') // Exclude completed projects
-        ->orderBy('end_date', 'asc')
-        ->get();
+            ->where('company_id', $company_id)
+            ->where('status', '!=', 'completed') // Exclude completed projects
+            ->orderBy('end_date', 'asc')
+            ->get();
 
         $months = [];
         $activeCounts = [];
@@ -114,8 +114,9 @@ class DashboardController extends Controller
         $months = [];
         $activeCounts = [];
 
-        for ($i = 1; $i <= 12; $i++) {
-            $months[] = Carbon::create()->month($i)->format('F');
+        for ($i = 5; $i >= 0; $i--) {
+            $month = Carbon::now()->subMonths($i); // Mengurangi bulan secara iteratif
+            $months[] = $month->format('F'); // Ambil nama bulan
 
             $projectCounts[] = Project::where('status', 'completed')
                 ->whereHas('employee_details', function ($query) {
