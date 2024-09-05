@@ -242,7 +242,7 @@ class ProjectController extends Controller
         // Cek apakah proyek memiliki Kanban Board
         if ($project->kanban_board) {
             // Redirect ke halaman Kanban Board
-            return redirect()->route('kanban-board.index', ['id' => $project->kanban_board->id]);
+            return redirect()->route('kanban-boards.index', ['id' => $project->kanban_board->id]);
         } else {
             // Jika tidak ada Kanban Board, Anda bisa redirect atau menampilkan pesan
             return redirect()->route('projects.index')->with('error', 'Proyek ini tidak memiliki Kanban Board.');

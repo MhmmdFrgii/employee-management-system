@@ -157,14 +157,16 @@
                     <td>{{ \Carbon\Carbon::parse($attendence->date)->translatedFormat('d F Y') }}</td>
                     <td>
                         @if ($attendence->status == 'present')
-                            <span class="badge bg-success">Masuk</span>
+                            <span class="badge bg-success">masuk</span>
                         @elseif($attendence->status == 'late')
-                            <span class="badge bg-danger">Telat</span>
+                            <span class="badge bg-danger">telat</span>
                         @elseif($attendence->status == 'absent')
-                            <span class="badge bg-warning">Izin</span>
+                            <span class="badge bg-warning">izin</span>
                         @endif
                     </td>
-                    <td>{{ $attendence->created_at->format('H:i') }}</td>
+                    <td>
+                        {{ $attendence->created_at->format('H:i') }}
+                    </td>
                 </tr>
         </tbody>
         @endforeach

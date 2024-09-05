@@ -73,7 +73,7 @@ class AttendanceController extends Controller
         }
 
         $today_attendance = Attendance::where('employee_id', $employee)
-            ->where('created_at', $today)
+            ->where('date', $today)
             ->exists();
 
         if ($today_attendance) {
