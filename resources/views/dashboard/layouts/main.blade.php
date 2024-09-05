@@ -68,8 +68,9 @@
         @if (Auth::user()->hasRole('manager'))
             @include('dashboard.layouts.sidebar')
         @else
-            @include('dashboard.layouts.sidebar-user')
+            @include('dashboard.layouts.sidebar-user', ['newNotificationCount' => $newNotificationCount])
         @endif
+
 
 
         <!--  Sidebar End -->

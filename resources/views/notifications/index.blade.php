@@ -8,7 +8,6 @@
                 <!-- Daftar Notifikasi -->
                 <div class="list-group">
                     @forelse ($notifications as $notification)
-                        <!-- Notifikasi -->
                         <div
                             class="list-group-item list-group-item-action d-flex flex-column align-items-start mb-3 border border-{{ $notification->type }}">
                             <div class="w-100 d-flex justify-content-between align-items-center">
@@ -20,7 +19,6 @@
                                     <small class="text-muted"
                                         style="font-size: 12px;">{{ $notification->created_at }}</small>
                                 </div>
-                                <!-- Tombol Hapus -->
                                 <form action="{{ route('notifications.destroy', $notification->id) }}" method="POST"
                                     style="margin-left: auto;">
                                     @csrf
@@ -31,71 +29,17 @@
                                 </form>
                             </div>
                         </div>
+                        <!-- Tandai sebagai dibaca -->
+                        @php
+                            $notification->markAsRead();
+                        @endphp
                     @empty
-                        <!-- Tampilan ketika tidak ada notifikasi -->
                         <div class="list-group-item d-flex justify-content-center align-items-center">
                             <p class="mb-0" style="font-size: 14px;">Tidak ada notifikasi saat ini.</p>
                         </div>
                     @endforelse
                 </div>
-                {{-- <!-- Pagination -->
-                <div class="mt-3">
-                    {{ $notifications->links() }}
-                </div> --}}
             </div>
         </div>
     </div>
 @endsection
-
-@push('styles')
-    <style>
-        .list-group-item {
-            display: flex;
-            flex-direction: column;
-            padding: 10px;
-            /* Menambahkan padding untuk tampilan lebih baik */
-            font-size: 14px;
-            /* Ukuran font untuk konten utama */
-            border: none;
-            /* Menghilangkan border untuk tampilan bersih */
-        }
-
-        .list-group-item .w-100 {
-            width: 100%;
-            /* Memastikan div mengambil lebar penuh */
-        }
-
-        .list-group-item h5,
-        .list-group-item p {
-            margin: 0;
-            /* Menghapus margin untuk mengurangi ruang kosong */
-        }
-
-        .badge {
-            font-size: 12px;
-            /* Menyesuaikan ukuran font badge */
-        }
-
-        small {
-            font-size: 12px;
-            /* Ukuran font untuk tanggal */
-            color: #6c757d;
-            /* Warna teks tanggal */
-        }
-
-        .container-fluid {
-            padding: 0;
-            /* Menghapus padding untuk tampilan penuh */
-        }
-
-        .list-group-item:last-child {
-            margin-bottom: 0;
-            /* Menghapus margin bawah pada item terakhir */
-        }
-
-        .list-group-item .d-flex {
-            margin-bottom: 0;
-            /* Menghapus margin bawah untuk tampilan bersih */
-        }
-    </style>
-@endpush

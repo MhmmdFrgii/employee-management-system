@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Attendance;
 use App\Models\Department;
 use App\Models\EmployeeDetail;
+use App\Models\Notification;
 use App\Models\Project;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -14,6 +15,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $newNotificationCount = $this->getNewNotificationCount();
+
         $company_id = Auth::user()->company->id;
 
         $employee_count = EmployeeDetail::where('company_id', $company_id)
@@ -40,10 +43,10 @@ class DashboardController extends Controller
 
         $now = Carbon::now();
         $projectsWithNearestDeadlines = Project::where('end_date', '>=', $now)
-        ->where('company_id', $company_id)
-        ->where('status', '!=', 'completed') // Exclude completed projects
-        ->orderBy('end_date', 'asc')
-        ->get();
+            ->where('company_id', $company_id)
+            ->where('status', '!=', 'completed') // Exclude completed projects
+            ->orderBy('end_date', 'asc')
+            ->get();
 
         $months = [];
         $activeCounts = [];
@@ -87,6 +90,14 @@ class DashboardController extends Controller
             ->pluck('employee_details_count')
             ->toArray();
 
+        // Ambil ID pengguna yang sedang login
+        $userId = Auth::id();
+
+        // Hitung jumlah notifikasi baru
+
+
+        $newNotificationCount = Notification::where('user_id', Auth::id())->where('is_read', false)->count();
+
         return view('dashboard.index', [
             'employee_count' => $employee_count,
             'project_count' => $project_count,
@@ -99,6 +110,7 @@ class DashboardController extends Controller
             'departments' => $departments,
             'department_data' => $department_data,
             'projectsWithNearestDeadlines' => $projectsWithNearestDeadlines,
+            'newNotificationCount' => $newNotificationCount,
         ]);
     }
 
@@ -147,12 +159,30 @@ class DashboardController extends Controller
             $attendanceCounts[] = $attendanceData[$status] ?? 0;
         }
 
+        $userId = Auth::user()->id;
+
+        // Hitung notifikasi yang belum dibaca
+        $newNotificationCount = Notification::where('user_id', $userId)
+            ->where('is_read', false)
+            ->count();
 
         return view('dashboard.employee.index', [
             'months' => $months,
             'projectCounts' => $projectCounts,
             'statuses' => $statuses,
             'attendanceCounts' => $attendanceCounts,
+            'newNotificationCount' => $newNotificationCount,
         ]);
+    }
+
+    public function getNewNotificationCount()
+    {
+        // Mengambil ID pengguna yang sedang login
+        $userId = Auth::id();
+
+        // Menghitung jumlah notifikasi yang belum dibaca
+        return Notification::where('user_id', $userId)
+            ->where('is_read', false)
+            ->count();
     }
 }
