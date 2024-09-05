@@ -76,6 +76,14 @@
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-4">
+                                        <i class="bi bi-file-text"></i> <strong>Karyawan:</strong>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ $data->project->employee_details->pluck('name')->implode(', ') }}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
                                         <i class="bi bi-cash-coin"></i> <strong>Harga:</strong>
                                     </div>
                                     <div class="col-md-8">
