@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class LeaveRequestController extends Controller
 {
@@ -102,7 +103,11 @@ class LeaveRequestController extends Controller
                 return redirect()->back()->withErrors(['error' => 'Kamu sudah memiliki izin pada tanggal yang dipilih.']);
             }
 
-            LeaveRequest::create($request->validated());
+            $validatedData = $request->validated();
+            $leaveRequestPhoto = $request->file('photo')->store('leave-request', 'public');
+
+            $validatedData['photo'] = $leaveRequestPhoto;
+            LeaveRequest::create($validatedData);
 
             // Commit transaksi sebelum return
             DB::commit();
@@ -110,6 +115,10 @@ class LeaveRequestController extends Controller
             return redirect()->route('attendance.user')->with('success', 'Berhasil mengajukan izin.');
         } catch (\Throwable $e) {
             DB::rollBack();
+            if (isset($leaveRequestPhoto)) {
+                Storage::disk('public')->delete($leaveRequestPhoto);
+            }
+
             return redirect()->back()->with('error', 'Terjadi Kesalahan.')->withInput();
         }
     }
