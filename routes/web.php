@@ -47,7 +47,10 @@ Route::middleware('auth')->group(function () {
             Route::resource('attendance', AttendanceController::class);
 
             Route::resource('kanban-boards', KanbanBoardController::class);
+
+
             Route::resource('kanban-tasks', KanbanTaskController::class);
+
 
             Route::patch('/projects/{id}/complete', [ProjectController::class, 'mark_completed'])->name('projects.complete');
             Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
