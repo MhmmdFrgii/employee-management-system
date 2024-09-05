@@ -55,7 +55,7 @@
                                         @csrf
                                     </form>
 
-                                    <li><a class="dropdown-item"  onclick="document.getElementById('logout').submit();">Logout</a></li>
+                                    <li><button class="dropdown-item border-0"  onclick="document.getElementById('logout').submit();">Logout</button></li>
                                 </ul>
                             </li>
 

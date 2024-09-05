@@ -87,19 +87,57 @@ class DashboardController extends Controller
             ->pluck('employee_details_count')
             ->toArray();
 
-        return view('dashboard.index', [
-            'employee_count' => $employee_count,
-            'project_count' => $project_count,
-            'project_done' => $project_done,
-            'department_count' => $department_count,
-            'applicant_count' => $applicant_count,
-            'months' => $months,
-            'performance' => $performance,
-            'project_data' => $project_data,
-            'departments' => $departments,
-            'department_data' => $department_data,
-            'projectsWithNearestDeadlines' => $projectsWithNearestDeadlines,
-        ]);
+            $now = Carbon::now();
+$currentYear = $now->year;
+$months = [];
+$attendanceData = [
+    'present' => [],
+    'absent' => [],
+    'alpha' => []
+];
+
+// Loop untuk mendapatkan data 6 bulan terakhir termasuk bulan sekarang
+for ($i = 5; $i >= 0; $i--) {
+    $currentMonth = $now->copy()->subMonths($i);
+
+    // Format bulan dan tahun
+    $months[] = $currentMonth->format('F Y');
+
+    // Hitung jumlah kehadiran untuk setiap bulan
+    $attendanceData['present'][] = Attendance::where('status', 'present')
+        ->whereYear('created_at', $currentMonth->year)
+        ->whereMonth('created_at', $currentMonth->month)
+        ->count();
+
+    $attendanceData['absent'][] = Attendance::where('status', 'absent')
+        ->whereYear('created_at', $currentMonth->year)
+        ->whereMonth('created_at', $currentMonth->month)
+        ->count();
+
+    $attendanceData['alpha'][] = Attendance::where('status', 'alpha')
+        ->whereYear('created_at', $currentMonth->year)
+        ->whereMonth('created_at', $currentMonth->month)
+        ->count();
+}
+
+// Balikkan array bulan untuk menampilkan bulan terlama terlebih dahulu
+$months = array_reverse($months);
+
+return view('dashboard.index', [
+    'employee_count' => $employee_count,
+    'project_count' => $project_count,
+    'project_done' => $project_done,
+    'department_count' => $department_count,
+    'applicant_count' => $applicant_count,
+    'months' => $months,
+    'performance' => $performance,
+    'project_data' => $project_data,
+    'departments' => $departments,
+    'department_data' => $department_data,
+    'projectsWithNearestDeadlines' => $projectsWithNearestDeadlines,
+    'attendanceData' => $attendanceData,
+]);
+
     }
 
 
