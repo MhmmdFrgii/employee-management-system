@@ -15,26 +15,33 @@ class DepartmentController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        $query = Department::query();
+{
+    // Ambil company_id dari user yang sedang login
+    $companyId = Auth::user()->company_id;
 
-        // Pencarian
-        $search = $request->input('search');
-        if ($search) {
-            $query->where('name', 'like', '%' . $search . '%'); // Menggunakan scope search dari model
-        }
+    $query = Department::query();
 
-        // Sorting
-        $sortBy = $request->get('sortBy', 'created_at'); // Kolom default yang valid
-        $sortDirection = $request->get('sortDirection', 'asc'); // Arah default
-        $query->orderBy($sortBy, $sortDirection);
+    // Filter berdasarkan company_id
+    $query->where('company_id', $companyId);
 
-        // Ambil data yang telah disortir dan difilter
-        $departments = $query->paginate(5);
-        $departments->appends($request->all());
-
-        return view('department.index', compact('departments'));
+    // Pencarian
+    $search = $request->input('search');
+    if ($search) {
+        $query->where('name', 'like', '%' . $search . '%'); // Menggunakan scope search dari model
     }
+
+    // Sorting
+    $sortBy = $request->get('sortBy', 'created_at'); // Kolom default yang valid
+    $sortDirection = $request->get('sortDirection', 'asc'); // Arah default
+    $query->orderBy($sortBy, $sortDirection);
+
+    // Ambil data yang telah disortir dan difilter
+    $departments = $query->paginate(5);
+    $departments->appends($request->all());
+
+    return view('department.index', compact('departments'));
+}
+
 
     /**
      * Store a newly created resource in storage.

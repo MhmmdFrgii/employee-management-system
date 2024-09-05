@@ -34,7 +34,7 @@
                         <div class="col-sm-6 col-lg-4">
                             <div class="card hover-img">
                                 <div class="card-body p-4 text-center border-bottom">
-                                    <img src="../../dist/images/profile/user-1.jpg" alt=""
+                                    <img src="{{ $employee->photo && file_exists(public_path('storage/' . $employee->photo)) ? asset('storage/' . $employee->photo) : asset('/dist/images/profile/user-1.jpg') }}" alt=""
                                         class="rounded-circle mb-3" width="80" height="80">
                                     <h5 class="fw-semibold mb-0">{{ $employee->name }}</h5>
                                     <span class="text-dark fs-2">{{ $employee->department->name }}</span>

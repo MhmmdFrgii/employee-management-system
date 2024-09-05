@@ -14,7 +14,13 @@ class PositionController extends Controller
      */
     public function index(Request $request)
     {
+
+        $companyId = Auth::user()->company_id;
+
         $query = Position::query();
+
+        // Filter berdasarkan company_id
+        $query->where('company_id', $companyId);
 
         // Pencarian
         $search = $request->input('search');
@@ -59,7 +65,8 @@ class PositionController extends Controller
             $position->delete();
 
             return redirect()->route('positions.index')->with('success', 'Hapus Jabatan Success!');
-        } catch (\Throwable $e) {
+
+       } catch (\Throwable $e) {
             # code...
             return redirect()->route('positions.index')->with('info', 'Failed Hapus Jabatan.');
         }

@@ -35,8 +35,8 @@ class EmployeeDetailController extends Controller
         $sortDirection = $request->get('sortDirection', 'asc'); // Default sorting direction is ascending
         $employeeId = $request->get('employee_id'); // ID karyawan untuk menampilkan detail
 
-        $departments = Department::all();
-        $positions = Position::all();
+        $departments = Department::where('company_id', Auth::user()->company->id)->get();
+        $positions = Position::where('company_id', Auth::user()->company->id)->get();
 
         $validSortColumns = ['name', 'phone', 'address', 'department', 'hire_date', 'position'];
         if (!in_array($sortBy, $validSortColumns)) {
@@ -127,22 +127,28 @@ class EmployeeDetailController extends Controller
     }
 
     public function edit(EmployeeDetail $employee)
-    {
-        $departments = Department::all();
-        $positions = Position::all();
+{
+    $companyId = Auth::user()->company_id;
 
-        return view('employee.partial.edit-modal', compact('employee','departments', 'positions'));
-    }
+    // Ambil data departemen berdasarkan company_id
+    $departments = Department::where('company_id', $companyId)->get();
+
+    // Ambil data posisi berdasarkan company_id (misalnya jika Position model memiliki company_id)
+    $positions = Position::where('company_id', $companyId)->get();
+
+    return view('employee.partial.edit-modal', compact('employee', 'departments', 'positions'));
+}
+
 
     public function update(Request $request, EmployeeDetail $employee)
     {
-        $validatedData = $request->validate([
+                $validatedData = $request->validate([
             'department_id' => 'required|exists:departments,id',
             'position_id' => 'required|exists:positions,id',
         ]);
-    
+
         $employee->update($validatedData);
-    
+
         return redirect()->route('employees.index')->with('success', 'Data karyawan berhasil diperbarui.');
     }
 
