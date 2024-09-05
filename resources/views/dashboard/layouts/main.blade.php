@@ -180,6 +180,9 @@
                                                     <p class="mb-0 d-flex text-dark align-items-center gap-2">
                                                         <i class="ti ti-mail fs-4"></i> {{ Auth::user()->email }}
                                                     </p>
+                                                    <p class="mb-0 d-flex text-dark align-items-center gap-2">
+                                                        <i class="ti ti-building fs-4"></i> {{ Auth::user()->company->name }}
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div class="message-body">
