@@ -111,10 +111,57 @@
                                 <i class="ti ti-align-justified fs-7"></i>
                             </a>
                             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-center">
-                                <li class="nav-item">
-                                    <a class="nav-link nav-icon-hover" href="{{ route('notifications.index') }}">
+                                @php
+                                    $notifications = auth()
+                                        ->user()
+                                        ->notifications()
+                                        ->where('is_read', false)
+                                        ->latest()
+                                        ->take(5)
+                                        ->get();
+                                @endphp
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link nav-icon-hover position-relative" href="#"
+                                        id="notificationDropdown" role="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
                                         <i class="ti ti-bell-ringing"></i>
+                                        @if (!$notifications->isEmpty())
+                                            <span class="badge bg-danger position-absolute fs-1 rounded-circle"
+                                                style="top: 15px; right: 10px; transform: translate(50%, -50%);">{{ $notifications->count() }}</span>
+                                        @endif
                                     </a>
+                                    <ul class="dropdown-menu dropdown-menu-end p-0 shadow-lg"
+                                        aria-labelledby="notificationDropdown" style="width: 300px;">
+                                        <li class="dropdown-header bg-light fw-bold p-3">Notifications</li>
+                                        @if ($notifications->isEmpty())
+                                            <li class="dropdown-item text-center py-3">No new notifications</li>
+                                        @else
+                                            @foreach ($notifications as $notification)
+                                                <li class="dropdown-item border-bottom">
+                                                    <a href="{{ $notification->url ?? '#' }}"
+                                                        class="d-flex align-items-start text-decoration-none">
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="mb-1 text-truncate"
+                                                                style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                                {{ $notification->title }}
+                                                            </h6>
+                                                            <p class="mb-0 text-muted small"
+                                                                style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                                {{ $notification->message }}
+                                                            </p>
+                                                        </div>
+                                                        <small class="text-muted ms-3"
+                                                            style="max-width: 80px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $notification->created_at->diffForHumans() }}</small>
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        @endif
+                                        <li>
+                                            <hr class="dropdown-divider my-0">
+                                        </li>
+                                        <li><a class="dropdown-item text-center py-3"
+                                                href="{{ route('notifications.index') }}">View all</a></li>
+                                    </ul>
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link pe-0" href="javascript:void(0)" id="drop1"
