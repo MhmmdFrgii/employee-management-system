@@ -374,30 +374,10 @@
                                         src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/dark-logo.svg"
                                         alt="logo-brand">
                                 </a>
-                                <p class="mt-2 mb-3">Employee Management System adalah platform untuk mengelola
-                                    karyawan, mengawasi proyek, dan memfasilitasi komunikasi tim secara efisien. Mulai
-                                    kelola karyawan Anda dengan sistem kami sekarang!</p>
-                                {{-- <!-- Social Icons -->
-                                <div class="social-icons d-flex">
-                                    <a class="facebook" href="#">
-                                        <i class="fab fa-facebook-f"></i>
-                                        <i class="fab fa-facebook-f"></i>
-                                    </a>
-                                    <a class="twitter" href="#">
-                                        <i class="fab fa-twitter"></i>
-                                        <i class="fab fa-twitter"></i>
-                                    </a>
-                                    <a class="linkedin" href="#">
-                                        <i class="fab fa-linkedin-in"></i>
-                                        <i class="fab fa-linkedin-in"></i>
-                                    </a>
-                                    <a class="instagram" href="#">
-                                        <i class="fab fa-instagram"></i>
-                                        <i class="fab fa-instagram"></i>
-                                    </a>
-                                </div> --}}
+                                <p class="mt-2 mb-3">Employee Management System membantu Anda mengelola karyawan dan proyek dengan mudah. Hubungi kami untuk mulai menggunakan sistem kami!</p>
                             </div>
                         </div>
+
                         <div class="col-12 col-sm-6 col-lg-3">
                             <!-- Footer Items -->
                             <div class="footer-items">
