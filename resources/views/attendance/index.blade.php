@@ -26,52 +26,44 @@
 
                             <!-- Input Filter -->
                             <div class="col-md-2">
-                                <div class="dropdown w-100">
-                                    <button class="btn btn-secondary dropdown-toggle w-100" type="button"
-                                        id="statusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="statusDropdown"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
                                         Filter Status
                                     </button>
                                     <ul class="dropdown-menu p-2" aria-labelledby="statusDropdown">
-                                        <label for="status_present" class="bg-danger w-100">
-                                            <div class="form-check ms-4">
-                                                <input class="form-check-input" type="checkbox" name="status[]"
-                                                    value="present" id="status_present"
-                                                    {{ in_array('present', request('status', [])) ? 'checked' : '' }}>
-                                                <span class="form-check-label" for="status_present">
-                                                    Hadir
-                                                </span>
+                                        <li>
+                                            <div class="form-check">
+                                                <input type="checkbox" name="status[]" value="present"
+                                                    class="form-check-input" id="status_present"
+                                                    {{ is_array(request('status')) && in_array('present', request('status')) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="status_present">Present</label>
                                             </div>
-                                        </label>
-                                        <label for="status_absent" class="bg-danger w-100">
-                                            <div class="form-check ms-4">
-                                                <input class="form-check-input" type="checkbox" name="status[]"
-                                                    value="absent" id="status_absent"
-                                                    {{ in_array('absent', request('status', [])) ? 'checked' : '' }}>
-                                                <span class="form-check-label" for="status_absent">
-                                                    Izin
-                                                </span>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input type="checkbox" name="status[]" value="absent"
+                                                    class="form-check-input" id="status_absent"
+                                                    {{ is_array(request('status')) && in_array('absent', request('status')) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="status_absent">Absent</label>
                                             </div>
-                                        </label>
-                                        <label for="status_late" class="bg-danger w-100">
-                                            <div class="form-check ms-4">
-                                                <input class="form-check-input" type="checkbox" name="status[]"
-                                                    value="late" id="status_late"
-                                                    {{ in_array('late', request('status', [])) ? 'checked' : '' }}>
-                                                <span class="form-check-label" for="status_late">
-                                                    Terlambat
-                                                </span>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input type="checkbox" name="status[]" value="late"
+                                                    class="form-check-input" id="status_late"
+                                                    {{ is_array(request('status')) && in_array('late', request('status')) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="status_late">Late</label>
                                             </div>
-                                        </label>
-                                        <label for="status_alpha" class="bg-danger w-100">
-                                            <div class="form-check ms-4">
-                                                <input class="form-check-input" type="checkbox" name="status[]"
-                                                    value="alpha" id="status_alpha"
-                                                    {{ in_array('alpha', request('status', [])) ? 'checked' : '' }}>
-                                                <span class="form-check-label" for="status_alpha">
-                                                    Alpha
-                                                </span>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input type="checkbox" name="status[]" value="alpha"
+                                                    class="form-check-input" id="status_alpha"
+                                                    {{ is_array(request('status')) && in_array('alpha', request('status')) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="status_alpha">Alpha</label>
                                             </div>
-                                        </label>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -82,9 +74,17 @@
                             </div>
                         </div>
                     </form>
+
+                    <!-- Alert ketika data tidak ditemukan -->
+                    @if (request()->has('search') && $attendances->isEmpty())
+                        <div class="alert alert-warning" role="alert">
+                            Data tidak ditemukan.
+                        </div>
+                    @endif
+
                     <!-- Tabel Kehadiran -->
-                    <div class="table-responsive">
-                        <table class="table border text-nowrap customize-table mb-0 align-middle">
+                    <div class="row mt-3">
+                        <table class="table table-bordered shadow">
                             <thead>
                                 <tr>
                                     <th class="mr-5">

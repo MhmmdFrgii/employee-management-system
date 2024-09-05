@@ -142,7 +142,22 @@
                                     <td>{{ $data->start_date }}</td>
                                     <td>{{ $data->end_date }}</td>
                                     <td>{{ $data->type }}</td>
-                                    <td>{{ ucfirst($data->status) }}</td>
+                                    <td>
+                                        {{-- {{ ucfirst($data->status) }} --}}
+                                        @switch($data->status)
+                                            @case('pending')
+                                                Tertunda
+                                                @break
+                                            @case('approved')
+                                                Disetujui
+                                                @break
+                                            @case('rejected')
+                                                Ditolak
+                                                @break
+                                            @default
+                                                {{ ucfirst($data->status) }}
+                                        @endswitch
+                                    </td>
                                     <td>
                                         {{-- <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#editModal{{ $data->id }}">
@@ -152,11 +167,11 @@
                                         @if ($data->status !== 'approved' && $data->status !== 'rejected')
                                             <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#approveModal{{ $data->id }}">
-                                                Approve
+                                                Disetujui
                                             </button>
                                             <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#rejectModal{{ $data->id }}">
-                                                Reject
+                                                Ditolak
                                             </button>
                                         @endif
 
@@ -169,7 +184,10 @@
                                                 <i class="ti ti-trash"></i>
                                             </button>
                                         </form>
-
+                                        <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $data->id }}">
+                                            <i class="bx bx-info-circle"></i> 
+                                        </button>
+                                    
                                         <!-- Approve Modal -->
                                         <div class="modal fade" id="approveModal{{ $data->id }}" tabindex="-1"
                                             aria-labelledby="approveModalLabel{{ $data->id }}" aria-hidden="true"
@@ -195,7 +213,7 @@
                                                             <button type="button" class="btn btn-secondary"
                                                                 data-bs-dismiss="modal">Batal</button>
                                                             <button type="submit"
-                                                                class="btn btn-primary">Approve</button>
+                                                                class="btn btn-primary">Setujui</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -304,13 +322,13 @@
                                                             id="status" name="status">
                                                             <option value="pending"
                                                                 {{ old('status', $data->status) == 'pending' ? 'selected' : '' }}>
-                                                                Pending</option>
+                                                                Tertunda</option>
                                                             <option value="approved"
                                                                 {{ old('status', $data->status) == 'approved' ? 'selected' : '' }}>
-                                                                Approved</option>
+                                                                Disetujui</option>
                                                             <option value="rejected"
                                                                 {{ old('status', $data->status) == 'rejected' ? 'selected' : '' }}>
-                                                                Rejected</option>
+                                                                Ditolak</option>
                                                         </select>
                                                         @error('status')
                                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -355,6 +373,53 @@
                                     </div>
                                 </div>
 
+                                <!-- Detail Modal -->
+                                <div class="modal fade" id="detailModal{{ $data->id }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $data->id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="detailModalLabel{{ $data->id }}">Detail Permintaan Cuti</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="col-md-12">
+                                                    <!-- Details Row -->
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <h6 class="text-muted">Nama:</h6>
+                                                            <p id="modal-fullname" class="fw-semibold">{{ $data->employee_detail->name }}</p>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <h6 class="text-muted">Tanggal Mulai:</h6>
+                                                            <p id="modal-start_date" class="fw-semibold">{{ $data->start_date }}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <h6 class="text-muted">Tipe:</h6>
+                                                            <p id="modal-type" class="fw-semibold">{{ $data->type }}</p>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <h6 class="text-muted">Tanggal Selesai:</h6>
+                                                            <p id="modal-end_date" class="fw-semibold">{{ $data->end_date }}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <h6 class="text-muted">Bukti: </h6>
+                                                        <img id="modal-photo" src="{{ asset('storage/'.$data->photo) }}" 
+                                                            class="img-fluid mb-3" 
+                                                            alt="Employee photo" onerror="this.src='{{ asset('assets/images/no-data.png') }}';" 
+                                                            width="200" height="200">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                             @empty
                                 <tr>
                                     <td colspan="7" class="text-center">

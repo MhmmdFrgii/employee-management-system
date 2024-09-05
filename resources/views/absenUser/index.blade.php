@@ -154,7 +154,7 @@
             @foreach ($attendances as $attendence)
                 <tr>
                     <td>{{ $attendence->employee_detail->user->name }}</td>
-                    <td>{{ \Carbon\Carbon::parse($attendence->created_at)->translatedFormat('d F Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($attendence->date)->translatedFormat('d F Y') }}</td>
                     <td>
                         @if ($attendence->status == 'present')
                             <span class="badge bg-success">Masuk</span>
