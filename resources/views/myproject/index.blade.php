@@ -3,7 +3,7 @@
 @section('content')
     <h3>Proyek Saya</h3>
     @forelse ($kanbanBoards as $data)
-        <div class="card mb-4">
+        <div class="card mb-4 shadow-md">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">{{ $data->project->name }}</h5>
                 <a href="{{ route('kanban-boards.index', ['id' => $data->id]) }}" class="btn btn-primary btn-sm">Kanban</a>
