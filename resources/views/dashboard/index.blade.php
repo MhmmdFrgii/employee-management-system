@@ -111,12 +111,30 @@
         {{-- @dd($activeCounts) --}}
         <div class="row">
             <div class="col-md-{{ isset($departments) && $department_data ? '8' : '12' }}">
-                <div id="projectsChart"></div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Projects</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="projectsChart"></div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4">
-                <div id="pieChart"></div>
-            </div>
+
+            @if (isset($departments) && $department_data)
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Department</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="pieChart"></div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
+
 
     </div>
 

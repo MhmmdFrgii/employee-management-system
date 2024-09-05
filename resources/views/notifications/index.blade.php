@@ -32,6 +32,10 @@
                             </div>
                         </div>
                     @empty
+                        <!-- Tampilan ketika tidak ada notifikasi -->
+                        <div class="list-group-item d-flex justify-content-center align-items-center">
+                            <p class="mb-0" style="font-size: 14px;">Tidak ada notifikasi saat ini.</p>
+                        </div>
                     @endforelse
                 </div>
                 {{-- <!-- Pagination -->

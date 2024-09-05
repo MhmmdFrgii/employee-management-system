@@ -39,13 +39,6 @@ class DashboardController extends Controller
         $department_count = Department::where('company_id', $company_id)->count();
 
         $now = Carbon::now();
-        $currentYear = $now->year;
-
-        // $projectsWithNearestDeadlines = Project::where('end_date', '>=', $now)
-        //     ->where('company_id', $company_id)
-        //     ->orderBy('end_date', 'asc')
-        //     ->get();
-        
         $projectsWithNearestDeadlines = Project::where('end_date', '>=', $now)
         ->where('company_id', $company_id)
         ->where('status', '!=', 'completed') // Exclude completed projects
@@ -55,25 +48,29 @@ class DashboardController extends Controller
         $months = [];
         $activeCounts = [];
         $earningCounts = [];
-        $project_data = [];
 
-        for ($i = 1; $i <= 12; $i++) {
-            $months[] = Carbon::create()->month($i)->format('F');
+        $currentMonth = Carbon::now()->month; // Ambil bulan saat ini
+        $currentYear = Carbon::now()->year; // Ambil tahun saat ini
+        $company_id = $company_id;
+
+        for ($i = 5; $i >= 0; $i--) {
+            $month = Carbon::now()->subMonths($i); // Mengurangi bulan secara iteratif
+            $months[] = $month->format('F'); // Ambil nama bulan
 
             $activeCounts[] = Project::where('status', 'completed')
                 ->where('company_id', $company_id)
-                ->whereYear('start_date', $currentYear)
-                ->whereMonth('start_date', $i)
+                ->whereYear('start_date', $month->year)
+                ->whereMonth('start_date', $month->month)
                 ->count();
 
             $earningCounts[] = Project::where('status', 'completed')
                 ->where('company_id', $company_id)
-                ->whereYear('start_date', $currentYear)
-                ->whereMonth('start_date', $i)
+                ->whereYear('start_date', $month->year)
+                ->whereMonth('start_date', $month->month)
                 ->sum('price');
         }
 
-        for ($i = 0; $i < 12; $i++) {
+        for ($i = 0; $i < 6; $i++) {
             $project_data[] = [
                 $i + 1,
                 $activeCounts[$i],
