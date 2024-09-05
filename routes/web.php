@@ -47,11 +47,6 @@ Route::middleware('auth')->group(function () {
             Route::resource('attendance', AttendanceController::class);
 
 
-
-
-            Route::resource('kanban-tasks', KanbanTaskController::class);
-
-
             Route::patch('/projects/{id}/complete', [ProjectController::class, 'mark_completed'])->name('projects.complete');
             Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
             Route::resource('projects', ProjectController::class);
@@ -85,6 +80,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('notifications', NotificationController::class);
     Route::resource('leave-requests', LeaveRequestController::class);
     Route::resource('kanban-boards', KanbanBoardController::class);
+    Route::resource('kanban-tasks', KanbanTaskController::class);
 
     // Route untuk approve leave request
     Route::put('/leave-requests/{id}/approve', [LeaveRequestController::class, 'approve'])->name('leave-requests.approve');
