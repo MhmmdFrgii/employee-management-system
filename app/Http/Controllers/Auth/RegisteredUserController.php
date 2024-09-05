@@ -136,7 +136,8 @@ class RegisteredUserController extends Controller
                 'user_id' => $manager->id,
                 'title' => 'Pelamar baru telah bergabung',
                 'message' => 'Seorang pelamar baru telah mendaftar. Silakan tinjau lamaran mereka di portal rekrutmen.',
-                'type' => 'info'
+                'type' => 'info',
+                'url' => 'applicants.index'
             ]);
 
             DB::commit();
@@ -207,6 +208,7 @@ class RegisteredUserController extends Controller
                 'title' => 'Selamat Datang!',
                 'message' => 'Akun Anda telah berhasil dibuat. Selamat bergabung dan selamat bekerja!',
                 'type' => 'success',
+                'url' => ''
             ]);
 
             $applicant->update([

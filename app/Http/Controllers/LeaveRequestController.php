@@ -71,8 +71,9 @@ class LeaveRequestController extends Controller
             Notification::create([
                 'user_id' => $manager->id,
                 'title' => 'Pengajuan Izin Karyawan',
-                'message' => 'Seorang karyawan telah mengajukan izin. Silakan tinjau dan proses pengajuan izin tersebut di portal manajemen.',
-                'type' => 'info'
+                'message' => 'Seorang karyawan telah mengajukan izin. Silakan tinjau dan proses pengajuan izin tersebut di halaman permintaan cuti.',
+                'type' => 'info',
+                'url' => 'leave-requests.index'
             ]);
 
             // Ambil data dari request
@@ -143,8 +144,9 @@ class LeaveRequestController extends Controller
             Notification::create([
                 'user_id' => $employee->user->id,
                 'title' => 'Pengajuan Izin Diterima',
-                'message' => 'Pengajuan izin Anda telah diterima. Anda dapat melihat detailnya di portal manajemen.',
-                'type' => 'success'
+                'message' => 'Pengajuan izin Anda telah diterima.',
+                'type' => 'success',
+                'url'
             ]);
 
             // Temukan permintaan cuti berdasarkan ID
@@ -200,8 +202,9 @@ class LeaveRequestController extends Controller
             Notification::create([
                 'user_id' => $employee->user->id,
                 'title' => 'Pengajuan Izin Ditolak',
-                'message' => 'Permintaan izin Anda telah ditolak. Silakan cek portal manajemen untuk detail lebih lanjut.',
+                'message' => 'Permintaan izin Anda telah ditolak.',
                 'type' => 'warning',
+                'url' => ''
             ]);
 
             DB::commit();

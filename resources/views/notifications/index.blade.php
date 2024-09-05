@@ -9,28 +9,30 @@
                 <div class="list-group">
                     @forelse ($notifications as $notification)
                         <!-- Notifikasi -->
-                        <div
-                            class="list-group-item list-group-item-action d-flex flex-column align-items-start mb-3 border border-{{ $notification->type }}">
-                            <div class="w-100 d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h5 class="mb-1" style="font-size: 14px;">{{ $notification->title }}</h5>
-                                    <p class="mb-1" style="font-size: 12px;">
-                                        {{ $notification->message }}
-                                    </p>
-                                    <small class="text-muted"
-                                        style="font-size: 12px;">{{ $notification->created_at }}</small>
+                        <a href="{{ $notification->url ? route($notification->url) : '' }}">
+                            <div
+                                class="list-group-item list-group-item-action d-flex flex-column align-items-start mb-3 border border-{{ $notification->type }}">
+                                <div class="w-100 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="mb-1" style="font-size: 14px;">{{ $notification->title }}</h5>
+                                        <p class="mb-1" style="font-size: 12px;">
+                                            {{ $notification->message }}
+                                        </p>
+                                        <small class="text-muted"
+                                            style="font-size: 12px;">{{ $notification->created_at }}</small>
+                                    </div>
+                                    <!-- Tombol Hapus -->
+                                    <form action="{{ route('notifications.destroy', $notification->id) }}" method="POST"
+                                        style="margin-left: auto;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="ti ti-trash"></i>
+                                        </button>
+                                    </form>
                                 </div>
-                                <!-- Tombol Hapus -->
-                                <form action="{{ route('notifications.destroy', $notification->id) }}" method="POST"
-                                    style="margin-left: auto;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger">
-                                        <i class="ti ti-trash"></i>
-                                    </button>
-                                </form>
                             </div>
-                        </div>
+                        </a>
                     @empty
                         <!-- Tampilan ketika tidak ada notifikasi -->
                         <div class="list-group-item d-flex justify-content-center align-items-center">
