@@ -116,23 +116,33 @@
                     </div>
                     <div class="card-body">
                         <div id="projectsChart"></div>
-                        <div id="attendanceBarChart"></div>
                     </div>
                 </div>
             </div>
 
+
             @if (isset($departments) && $department_data)
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title">Department</h5>
-                        </div>
-                        <div class="card-body">
-                            <div id="pieChart"></div>
-                        </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Department</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="pieChart"></div>
                     </div>
                 </div>
+            </div>
             @endif
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Projects</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="attendanceBarChart"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
 
@@ -258,6 +268,10 @@
                 {
                     name: 'Alpha',
                     data: @json($attendanceData['alpha'])
+                },
+                {
+                    name: 'Late',
+                    data: @json($attendanceData['late'])
                 }
             ],
             chart: {
@@ -268,7 +282,8 @@
                 bar: {
                     horizontal: false, // Set horizontal ke false jika ingin bar vertical
                     columnWidth: '55%',
-                    endingShape: 'rounded'
+                    endingShape: 'rounded',
+                    reverse: true
                 }
             },
             dataLabels: {
