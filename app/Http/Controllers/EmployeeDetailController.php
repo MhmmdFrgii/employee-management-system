@@ -15,6 +15,12 @@ use Illuminate\Support\Facades\Storage;
 
 class EmployeeDetailController extends Controller
 {
+    public function get_employees($department_id)
+    {
+        $employees = EmployeeDetail::where('department_id', $department_id)->get();
+        return response()->json($employees);
+    }
+
     // Display list of employees for user page
     public function user_index()
     {
@@ -95,7 +101,7 @@ class EmployeeDetailController extends Controller
             $employee_active[$employeeId] = $count;
         }
 
-        return view('employee.index', compact('employees', 'employee_completed', 'employee_active','departments','positions'));
+        return view('employee.index', compact('employees', 'employee_completed', 'employee_active', 'departments', 'positions'));
     }
 
     /**
@@ -127,22 +133,22 @@ class EmployeeDetailController extends Controller
     }
 
     public function edit(EmployeeDetail $employee)
-{
-    $companyId = Auth::user()->company_id;
+    {
+        $companyId = Auth::user()->company_id;
 
-    // Ambil data departemen berdasarkan company_id
-    $departments = Department::where('company_id', $companyId)->get();
+        // Ambil data departemen berdasarkan company_id
+        $departments = Department::where('company_id', $companyId)->get();
 
-    // Ambil data posisi berdasarkan company_id (misalnya jika Position model memiliki company_id)
-    $positions = Position::where('company_id', $companyId)->get();
+        // Ambil data posisi berdasarkan company_id (misalnya jika Position model memiliki company_id)
+        $positions = Position::where('company_id', $companyId)->get();
 
-    return view('employee.partial.edit-modal', compact('employee', 'departments', 'positions'));
-}
+        return view('employee.partial.edit-modal', compact('employee', 'departments', 'positions'));
+    }
 
 
     public function update(Request $request, EmployeeDetail $employee)
     {
-                $validatedData = $request->validate([
+        $validatedData = $request->validate([
             'department_id' => 'required|exists:departments,id',
             'position_id' => 'required|exists:positions,id',
         ]);

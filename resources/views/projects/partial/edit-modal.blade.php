@@ -23,8 +23,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="price" class="form-label">Harga</label>
-                        <input type="numeric" name="price" class="form-control @error('price') is-invalid @enderror"
-                            id="price"value="{{ old('price', number_format($project->price, 0, '.', '')) }}">
+                        <input type="number" name="price" class="form-control @error('price') is-invalid @enderror"
+                            id="price" value="{{ old('price', number_format($project->price, 0, '.', '')) }}">
                         @error('price')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -32,27 +32,31 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="description" class="form-label">Deskripsi</label>
-                        <input type="text" name="description"
-                            class="form-control @error('description') is-invalid @enderror" id="description"
-                            value="{{ old('description', $project->description) }}">
-                        @error('description')
+                        <label for="department" class="form-label">Departemen</label>
+                        <select name="department_id" id="edit-department-{{ $project->id }}" class="form-control">
+                            <option value="">Pilih Departemen</option>
+                            @foreach ($departments as $department)
+                                <option value="{{ $department->id }}"
+                                    {{ old('department_id', $project->department_id) == $department->id ? 'selected' : '' }}>
+                                    {{ $department->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('department_id')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="end_date" class="form-label">Ditugaskan kepada</label> <br>
+                        <label for="employee_id" class="form-label">Ditugaskan kepada</label>
                         <select class="js-example-basic-multiple form-control w-100" name="employee_id[]"
-                            multiple="multiple">
-                            @forelse ($employees as $employee)
+                            id="edit-employee-{{ $project->id }}" multiple="multiple">
+                            @foreach ($employees as $employee)
                                 <option value="{{ $employee->id }}" @selected(in_array($employee->id, old('employee_id[]', $project->employee_details->pluck('id')->toArray())))>
                                     {{ $employee->name }}
                                 </option>
-                            @empty
-                                <option disabled>Tidak ada karyawan.</option>
-                            @endforelse
+                            @endforeach
                         </select>
                         @error('employee_id[]')
                             <div class="invalid-feedback">
@@ -90,52 +94,44 @@
 </div>
 
 <script>
-    // $(document).ready(function() {
-    //     $('.js-example-basic-multiple').select2({
-    //         placeholder: "Pilih State", // Placeholder text
-    //         allowClear: true, // Enable the clear button
-    //         width: '100%' // Use the full width of the select element
-    //     });
-    // });
-
     $(document).ready(function() {
+        // Inisialisasi Select2 pada modal edit ketika modal ditampilkan
         $('#editModal{{ $project->id }}').on('shown.bs.modal', function() {
-            $('.js-example-basic-multiple').select2({
+            // Inisialisasi Select2 untuk employee_id
+            $('#edit-employee-{{ $project->id }}').select2({
                 placeholder: "Pilih Karyawan",
                 allowClear: true,
                 width: '100%'
             });
+
+            // Event ketika departemen dipilih
+            $('#edit-department-{{ $project->id }}').on('change', function() {
+                var departmentId = $(this).val();
+                var employeeSelect = $('#edit-employee-{{ $project->id }}');
+
+                // Kosongkan dropdown employee saat departemen diubah
+                employeeSelect.empty().trigger('change');
+
+                if (departmentId) {
+                    $.ajax({
+                        url: '/manager/get-employees/' + departmentId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            var options =
+                                '<option></option>'; // Placeholder for Select2
+                            $.each(data, function(key, value) {
+                                options += '<option value="' + value.id +
+                                    '">' + value.name + '</option>';
+                            });
+                            employeeSelect.html(options).trigger('change');
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Gagal memuat data karyawan:', error);
+                        }
+                    });
+                }
+            });
         });
     });
 </script>
-
-<style>
-    /* Adjust Select2 container and dropdown styles */
-    .select2-container--default .select2-selection--multiple {
-        background-color: #fff !important;
-        ;
-        /* Ensure solid background */
-        border: 1px solid #ccc !important;
-        ;
-        /* Match border style */
-    }
-
-    /* Ensure options are clearly visible */
-    .select2-container--default .select2-results>.select2-results__options {
-        background-color: #fff !important;
-        ;
-        /* Solid background for options */
-    }
-
-    /* Highlighted option styling */
-    .select2-container--default .select2-results__option--highlighted[aria-selected] {
-        background-color: #bcb9b9 !important;
-        ;
-        /* Lighter background on hover */
-    }
-
-    .select2-container--default .select2-dropdown {
-        z-index: 9999;
-        /* Pastikan dropdown berada di atas elemen lain */
-    }
-</style>

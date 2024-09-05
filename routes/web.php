@@ -43,9 +43,10 @@ Route::middleware('auth')->group(function () {
             Route::resource('departments', DepartmentController::class);
             Route::resource('salaries', SalaryController::class);
             Route::resource('positions', PositionController::class);
-            Route::resource('employees', EmployeeDetailController::class);
             Route::resource('attendance', AttendanceController::class);
 
+            Route::get('/get-employees/{department_id}', [EmployeeDetailController::class, 'get_employees'])->name('employee.get');
+            Route::resource('employees', EmployeeDetailController::class);
 
             Route::patch('/projects/{id}/complete', [ProjectController::class, 'mark_completed'])->name('projects.complete');
             Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
