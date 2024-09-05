@@ -14,7 +14,7 @@ class SalaryController extends Controller
     public function index(Request $request)
     {
         $query = Salary::with('employee_detail');
-        $employees = EmployeeDetail::all();
+        $employees = EmployeeDetail::where('company_id', Auth::user()->company->id)->get();
 
 
         if ($request->has('search')) {
