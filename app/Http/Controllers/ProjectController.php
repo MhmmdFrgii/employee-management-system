@@ -10,7 +10,9 @@ use Illuminate\Http\Request;
 use App\Models\EmployeeDetail;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ProjectRequest;
+use App\Models\Notification;
 use App\Models\ProjectAssignment;
+use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller
 {
@@ -84,18 +86,43 @@ class ProjectController extends Controller
     public function store(ProjectRequest $request)
     {
         $validatedData = $request->validated();
-
         $validatedData['company_id'] = Auth::user()->company->id;
-        $validatedData['department_id'] = $request->department_id;
 
-        $project = Project::create($validatedData);
-        KanbanBoard::create([
-            'name' => $project->name,
-            'project_id' => $project->id
-        ]);
+        DB::beginTransaction();
 
-        $project->employee_details()->attach($request->employee_id);
-        return redirect()->route('projects.index')->with('success', 'Project berhasil ditambah');
+        try {
+            // Membuat project baru
+            $project = Project::create($validatedData);
+
+            // Membuat KanbanBoard untuk project baru
+            KanbanBoard::create([
+                'name' => $project->name,
+                'project_id' => $project->id
+            ]);
+
+            // Menyambungkan karyawan ke project
+            $project->employee_details()->attach($request->employee_id);
+
+            // Mengirim notifikasi ke setiap karyawan yang di-assign
+            if ($request->employee_id) {
+                foreach ($request->employee_id as $employeeId) {
+                    $employee = EmployeeDetail::find($employeeId);
+                    Notification::create([
+                        'user_id' => $employee->user->id,
+                        'title' => 'Anda Ditugaskan ke Proyek Baru',
+                        'message' => 'Anda telah ditugaskan ke proyek: ' . $project->name . '. Silakan tinjau detailnya.',
+                        'type' => 'info'
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->route('projects.index')->with('success', 'Project berhasil ditambah');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('projects.index')->with('error', 'Gagal menambah project: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -103,13 +130,59 @@ class ProjectController extends Controller
      */
     public function update(ProjectRequest $request, Project $project)
     {
-        $project->update($request->validated());
-        $project->employee_details()->sync($request->employee_id);
+        // Simpan daftar karyawan yang terhubung sebelum pembaruan
+        $oldEmployeeIds = $project->employee_details->pluck('id')->toArray();
 
-        $project->kanban_board->update([
-            "name" => $request->name
-        ]);
-        return redirect()->route('projects.index')->with('success', 'Project berhasil diperbarui');
+        try {
+            DB::beginTransaction();
+
+            // Update project dengan data yang tervalidasi
+            $project->update($request->validated());
+
+            // Update karyawan yang terhubung ke project (sync)
+            $newEmployeeIds = $request->employee_id ?? [];
+            $project->employee_details()->sync($newEmployeeIds);
+
+            // Update KanbanBoard
+            $project->kanban_board->update([
+                'name' => $request->name
+            ]);
+
+            $removedEmployeeIds = array_diff($oldEmployeeIds, $newEmployeeIds);
+            $addedEmployeeIds = array_diff($newEmployeeIds, $oldEmployeeIds);
+
+            // Kirim notifikasi kepada karyawan yang di-unassign jika ada
+            foreach ($removedEmployeeIds as $employeeId) {
+                $employee = EmployeeDetail::find($employeeId);
+                if ($employee) {
+                    Notification::create([
+                        'user_id' => $employee->user->id,
+                        'title' => 'Penghapusan dari Proyek',
+                        'message' => 'Anda telah dibebas tugaskan ke proyek: ' . $project->name . '.',
+                        'type' => 'info'
+                    ]);
+                }
+            }
+
+            foreach ($addedEmployeeIds as $employeeId) {
+                $employee = EmployeeDetail::find($employeeId);
+                if ($employee) {
+                    Notification::create([
+                        'user_id' => $employee->user->id,
+                        'title' => 'Penugasan ke Proyek Baru',
+                        'message' => 'Anda telah ditugaskan ke proyek: ' . $project->name . '. Silakan tinjau detailnya.',
+                        'type' => 'info'
+                    ]);
+                }
+            }
+            // Commit transaksi jika semua proses berhasil
+            DB::commit();
+
+            return redirect()->route('projects.index')->with('success', 'Project berhasil diperbarui');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return redirect()->route('projects.index')->with('error', 'Terjadi kesalahan saat memperbarui project. Silakan coba lagi.');
+        }
     }
 
     /**

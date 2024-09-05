@@ -6,7 +6,7 @@
         <div class="card mb-4 shadow-md">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">{{ $data->project->name }}</h5>
-                <a href="{{ route('kanban-board.index', ['id' => $data->id]) }}" class="btn btn-primary btn-sm">Kanban</a>
+                <a href="{{ route('kanban-boards.index', ['id' => $data->id]) }}" class="btn btn-primary btn-sm">Kanban</a>
             </div>
 
             <div class="card-body p-0">

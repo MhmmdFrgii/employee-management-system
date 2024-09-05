@@ -7,8 +7,11 @@ use App\Models\Attendance;
 use App\Models\Company;
 use App\Models\EmployeeDetail;
 use App\Models\LeaveRequest;
+use App\Models\Notification;
 use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LeaveRequestController extends Controller
 {
@@ -54,35 +57,55 @@ class LeaveRequestController extends Controller
      */
     public function store(RequestsLeaveRequest $request)
     {
+        try {
+            $employee = EmployeeDetail::where('id', $request->employee_id)->first();
+            $company_id = $employee->company->id;
 
-        // Ambil data dari request
-        $employeeId = $request->input('employee_id');
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
+            DB::beginTransaction();
+            $manager = User::where('company_id', $company_id)
+                ->role('manager')
+                ->first();
 
-        // Format tanggal
-        $start = Carbon::parse($startDate)->format('Y-m-d');
-        $end = Carbon::parse($endDate)->format('Y-m-d');
+            Notification::create([
+                'user_id' => $manager->id,
+                'title' => 'Pengajuan Izin Karyawan',
+                'message' => 'Seorang karyawan telah mengajukan izin. Silakan tinjau dan proses pengajuan izin tersebut di portal manajemen.',
+                'type' => 'info'
+            ]);
 
-        // Periksa apakah ada izin yang sudah ada pada tanggal yang sama untuk karyawan tersebut
-        $existingLeave = LeaveRequest::where('employee_id', $employeeId)
-            ->where(function ($query) use ($start, $end) {
-                $query->whereBetween('start_date', [$start, $end])
-                    ->orWhereBetween('end_date', [$start, $end])
-                    ->orWhere(function ($query) use ($start, $end) {
-                        $query->where('start_date', '<=', $start)
-                            ->where('end_date', '>=', $end);
-                    });
-            })
-            ->exists();
+            // Ambil data dari request
+            $employeeId = $request->input('employee_id');
+            $startDate = $request->input('start_date');
+            $endDate = $request->input('end_date');
 
-        if ($existingLeave) {
-            return redirect()->back()->withErrors(['error' => 'Karyawan sudah memiliki izin pada tanggal yang dipilih.']);
+            // Format tanggal
+            $start = Carbon::parse($startDate)->format('Y-m-d');
+            $end = Carbon::parse($endDate)->format('Y-m-d');
+
+            // Periksa apakah ada izin yang sudah ada pada tanggal yang sama untuk karyawan tersebut
+            $existingLeave = LeaveRequest::where('employee_id', $employeeId)
+                ->where(function ($query) use ($start, $end) {
+                    $query->whereBetween('start_date', [$start, $end])
+                        ->orWhereBetween('end_date', [$start, $end])
+                        ->orWhere(function ($query) use ($start, $end) {
+                            $query->where('start_date', '<=', $start)
+                                ->where('end_date', '>=', $end);
+                        });
+                })
+                ->exists();
+
+            if ($existingLeave) {
+                return redirect()->back()->withErrors(['error' => 'Kamu sudah memiliki izin pada tanggal yang dipilih.']);
+            }
+
+            LeaveRequest::create($request->validated());
+            return redirect()->route('attendance.user')->with('success', 'Berhasil mengajukan izin.');
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            dd($e);
+            return redirect()->back()->with('error', 'Terjadi Kesalahan.')->withInput();
         }
-
-        LeaveRequest::create($request->validated());
-
-        return redirect()->route('attendance.user')->with('success', 'Berhasil menambahkan data.');
     }
 
     public function update(RequestsLeaveRequest $request, LeaveRequest $leaveRequest)
@@ -104,45 +127,86 @@ class LeaveRequestController extends Controller
         return to_route('leave-requests.index')->with('success', 'Berhasil Hapus Leave request!');
     }
 
-    public function approve($id)
+    public function approve(LeaveRequest $id)
     {
-        // Temukan permintaan cuti berdasarkan ID
-        $leaveRequest = LeaveRequest::findOrFail($id);
+        DB::beginTransaction(); // Mulai transaksi
 
-        // Update status menjadi approved
-        $leaveRequest->status = 'approved';
-        $leaveRequest->save();
+        try {
+            $employee = EmployeeDetail::where('id', $id->employee_id)->first();
 
-        // Loop untuk setiap hari dalam periode cuti
-        $startDate = \Carbon\Carbon::parse($leaveRequest->start_date);
-        $endDate = \Carbon\Carbon::parse($leaveRequest->end_date);
-        $currentDate = $startDate;
+            Notification::create([
+                'user_id' => $employee->user->id,
+                'title' => 'Pengajuan Izin Diterima',
+                'message' => 'Pengajuan izin Anda telah diterima. Anda dapat melihat detailnya di portal manajemen.',
+                'type' => 'success'
+            ]);
 
-        while ($currentDate->lte($endDate)) {
-            // Tambahkan data ke tabel attendance untuk setiap hari
-            Attendance::updateOrCreate(
-                [
-                    'employee_id' => $leaveRequest->employee_id,
-                    'date' => $currentDate->toDateString(),
-                ],
-                [
-                    'status' => 'absent', // Gunakan nilai 'leave' jika itu yang diinginkan dan sesuai dengan tipe data kolom
-                ]
-            );
+            // Temukan permintaan cuti berdasarkan ID
+            $leaveRequest = $id;
 
-            $currentDate->addDay(); // Tambah satu hari
+            // Update status menjadi approved
+            $leaveRequest->status = 'approved';
+            $leaveRequest->save();
+
+            // Loop untuk setiap hari dalam periode cuti
+            $startDate = \Carbon\Carbon::parse($leaveRequest->start_date);
+            $endDate = \Carbon\Carbon::parse($leaveRequest->end_date);
+            $currentDate = $startDate;
+
+            while ($currentDate->lte($endDate)) {
+                // Tambahkan data ke tabel attendance untuk setiap hari
+                Attendance::updateOrCreate(
+                    [
+                        'employee_id' => $leaveRequest->employee_id,
+                        'date' => $currentDate->toDateString(),
+                    ],
+                    [
+                        'status' => 'absent', // Gunakan nilai 'leave' jika itu yang diinginkan dan sesuai dengan tipe data kolom
+                    ]
+                );
+
+                $currentDate->addDay(); // Tambah satu hari
+            }
+            DB::commit();
+
+            // Redirect kembali dengan pesan sukses
+            return redirect()->route('leave-requests.index')->with('success', 'Permintaan cuti telah disetujui dan data absensi telah ditambahkan.');
+        } catch (\Throwable $e) {
+            DB::rollBack(); // Rollback jika terjadi kesalahan
+
+            // Redirect kembali dengan pesan error
+            return redirect()->route('leave-requests.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        // Redirect kembali dengan pesan sukses
-        return redirect()->route('leave-requests.index')->with('success', 'Permintaan cuti telah disetujui dan data absensi telah ditambahkan.');
     }
 
-    public function reject($id)
+    public function reject(LeaveRequest $id)
     {
-        $leaveRequest = LeaveRequest::findOrFail($id);
-        $leaveRequest->status = 'rejected';
-        $leaveRequest->save();
+        DB::beginTransaction(); // Mulai transaksi
 
-        return redirect()->route('leave-requests.index')->with('success', 'Permintaan curi telah ditolak');
+        try {
+            $employee = EmployeeDetail::where('id', $id->employee_id)->first();
+
+            $leaveRequest = $id;
+
+            $leaveRequest->status = 'rejected';
+            $leaveRequest->save();
+
+            Notification::create([
+                'user_id' => $employee->user->id,
+                'title' => 'Pengajuan Izin Ditolak',
+                'message' => 'Permintaan izin Anda telah ditolak. Silakan cek portal manajemen untuk detail lebih lanjut.',
+                'type' => 'warning',
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('leave-requests.index')->with('success', 'Permintaan curi telah ditolak');
+        } catch (\Throwable $e) {
+            DB::rollBack(); // Rollback jika terjadi kesalahan
+            dd($e);
+
+            // Redirect kembali dengan pesan error
+            return redirect()->route('leave-requests.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }

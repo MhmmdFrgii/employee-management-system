@@ -19,14 +19,16 @@
                                 </button>
                                 <ul class="dropdown-menu mt-2" aria-labelledby="statusDropdown">
                                     <li>
-                                        <div class="form-check ms-4">
-                                            <input class="form-check-input" type="checkbox" name="status[]" value="active"
-                                                id="statusActive"
-                                                {{ in_array('active', request('status', [])) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="statusActive">
-                                                Aktif
-                                            </label>
-                                        </div>
+                                        <label for="statusActive" class="bg-danger w-100">
+                                            <div class="form-check ms-4">
+                                                <input class="form-check-input" type="checkbox" name="status[]" value="active"
+                                                    id="statusActive"
+                                                    {{ in_array('active', request('status', [])) ? 'checked' : '' }}>
+                                                <span class="form-check-label" for="statusActive">
+                                                    Aktif
+                                                </span>
+                                            </div>
+                                        </label>
                                         <div class="form-check ms-4">
                                             <input class="form-check-input" type="checkbox" name="status[]"
                                                 value="completed" id="statusCompleted"
@@ -98,7 +100,7 @@
                                     </div>
                                     @if ($project->kanban_board)
                                         <a class="btn btn-info btn-sm"
-                                            href="{{ route('kanban-board.index', ['id' => $project->kanban_board->id]) }}">Kanban</a>
+                                            href="{{ route('kanban-boards.index', ['id' => $project->kanban_board->id]) }}">Kanban</a>
                                     @endif
 
                                 </div>

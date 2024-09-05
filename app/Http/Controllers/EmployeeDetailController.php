@@ -35,6 +35,9 @@ class EmployeeDetailController extends Controller
         $sortDirection = $request->get('sortDirection', 'asc'); // Default sorting direction is ascending
         $employeeId = $request->get('employee_id'); // ID karyawan untuk menampilkan detail
 
+        $departments = Department::all();
+        $positions = Position::all();
+
         $validSortColumns = ['name', 'phone', 'address', 'department', 'hire_date', 'position'];
         if (!in_array($sortBy, $validSortColumns)) {
             $sortBy = 'name'; // Set default jika kolom tidak valid
@@ -92,7 +95,7 @@ class EmployeeDetailController extends Controller
             $employee_active[$employeeId] = $count;
         }
 
-        return view('employee.index', compact('employees', 'employee_completed', 'employee_active'));
+        return view('employee.index', compact('employees', 'employee_completed', 'employee_active','departments','positions'));
     }
 
     /**
@@ -121,6 +124,26 @@ class EmployeeDetailController extends Controller
 
         EmployeeDetail::create($validatedData);
         return redirect()->route('employee.index')->with('success', 'Berhasil menambahkan data employee.');
+    }
+
+    public function edit(EmployeeDetail $employee)
+    {
+        $departments = Department::all();
+        $positions = Position::all();
+
+        return view('employee.partial.edit-modal', compact('employee','departments', 'positions'));
+    }
+
+    public function update(Request $request, EmployeeDetail $employee)
+    {
+        $validatedData = $request->validate([
+            'department_id' => 'required|exists:departments,id',
+            'position_id' => 'required|exists:positions,id',
+        ]);
+    
+        $employee->update($validatedData);
+    
+        return redirect()->route('employees.index')->with('success', 'Data karyawan berhasil diperbarui.');
     }
 
     /**

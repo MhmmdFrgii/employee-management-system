@@ -59,7 +59,14 @@
                         <span class="hide-menu">Karyawan</span>
                     </a>
                 </li>
-
+                <li class="sidebar-item">
+                    <a href="{{ route('notifications.index') }}" class="sidebar-link">
+                        <div class="round-16 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-inbox"></i>
+                        </div>
+                        <span class="hide-menu">Kotak Masuk</span>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

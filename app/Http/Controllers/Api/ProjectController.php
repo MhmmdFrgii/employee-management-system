@@ -22,9 +22,30 @@ class ProjectController extends Controller
             ], 401);
         }
 
-        $projects = Project::get();
+        $projects = Project::where('company_id', $user->company_id)->with(['employee_details.department'])->get();
 
-        return response()->json(['projects' => $projects]);
+         $formattedProjects = $projects->map(function ($project) {
+        return [
+            'id' => $project->id,
+            'company_id' => $project->company_id,
+            'name' => $project->name,
+            'price' => $project->price,
+            'description' => $project->description,
+            'start_date' => $project->start_date,
+            'end_date' => $project->end_date,
+            'status' => $project->status,
+            'completed_at' => $project->completed_at,
+            'employee_details' => $project->employee_details->map(function ($employeeDetail) {
+                return [
+                    'id' => $employeeDetail->id,
+                    'name' => $employeeDetail->name,
+                    'department' => $employeeDetail->department ? $employeeDetail->department->name : null,
+                ];
+            }),
+        ];
+    });
+
+    return response()->json(['projects' => $formattedProjects]);
     }
 
     public function createProject(Request $request)
