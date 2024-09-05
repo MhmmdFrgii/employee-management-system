@@ -41,15 +41,24 @@
 
                             @auth
 
-                                @if (Auth::user()->hasRole('manager'))
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('manager.dashboard') }}">Dashboard</a>
-                                    </li>
-                                @else
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('employee.dashboard') }}">Dashboard</a>
-                                    </li>
-                                @endif
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    EMS
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    @if (Auth::user()->hasRole('manager'))
+                                        <li><a class="dropdown-item" href="{{ route('manager.dashboard') }}">Dashboard</a></li>
+                                    @else
+                                        <li><a class="dropdown-item" href="{{ route('employee.dashboard') }}">Dashboard</a></li>
+                                    @endif
+                                    <form id="logout" class="d-none" action="{{ route('logout') }}" method="post">
+                                        @csrf
+                                    </form>
+
+                                    <li><a class="dropdown-item"  onclick="document.getElementById('logout').submit();">Logout</a></li>
+                                </ul>
+                            </li>
+
                             @else
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('login') }}">Masuk</a>
