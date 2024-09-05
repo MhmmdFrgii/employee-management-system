@@ -51,14 +51,6 @@
                         <span class="hide-menu">Absensi</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('employee.user') }}" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-users"></i>
-                        </span>
-                        <span class="hide-menu">Karyawan</span>
-                    </a>
-                </li>
                 <li class="sidebar-item ">
                     <a href="{{ route('notifications.index') }}" class="sidebar-link d-flex align-items-center">
                         <span>
