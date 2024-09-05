@@ -30,8 +30,8 @@ class UserController extends Controller
 
     public function detail($id)
     {
-        $department = Department::all();
-        $positions = Position::all();
+        $department = Department::where('company_id', Auth::user()->company->id)->get();
+        $positions = Position::where('company_id', Auth::user()->company->id)->get();
         $applicant = EmployeeDetail::findOrFail($id);
         return view('applicant.detail', compact('applicant', 'department', 'positions'));
 

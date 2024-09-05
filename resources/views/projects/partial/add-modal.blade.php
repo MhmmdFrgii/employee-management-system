@@ -33,7 +33,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Deskripsi</label>
-                        <input type="text" name="description"
+                        <input placeholder="optional" type="text" name="description"
                             class="form-control @error('description') is-invalid @enderror" id="description"
                             value="{{ old('description') }}">
                         @error('description')

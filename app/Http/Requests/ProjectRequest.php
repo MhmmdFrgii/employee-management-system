@@ -23,7 +23,7 @@ class ProjectRequest extends FormRequest
     {
         return [
             'name' => 'required|max:250',
-            'description' => 'required|max:250',
+            'description' => 'max:250',
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'price' => 'required',
@@ -35,7 +35,7 @@ class ProjectRequest extends FormRequest
         return [
             'name.required' => 'Nama proyek harus diisi',
             'name.max' => 'Nama proyek tidak boleh lebih dari 250 karakter',
-            'description.required' => 'Deskripsi harus diisi',
+            // 'description.required' => 'Deskripsi harus diisi',
             'description.max' => 'Deskripsi tidak boleh lebih dari 250 karakter',
             'start_date.required' => 'Tanggal mulai harus diisi',
             'start_date.date' => 'Tanggal mulai harus berupa tanggal yang valid',

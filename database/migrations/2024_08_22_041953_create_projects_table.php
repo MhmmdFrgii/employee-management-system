@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained('companies', 'id')->onDelete('cascade');
             $table->string('name');
             $table->decimal('price', 15, 2);
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->date('start_date');
             $table->date('end_date');
             $table->enum('status', ['active', 'completed'])->default('active');
