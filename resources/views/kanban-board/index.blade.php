@@ -75,4 +75,5 @@
             'task' => new \App\Models\KanbanTask(),
         ])
     @endforeach
+
 @endsection

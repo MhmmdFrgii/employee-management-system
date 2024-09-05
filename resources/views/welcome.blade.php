@@ -41,15 +41,24 @@
 
                             @auth
 
-                                @if (Auth::user()->hasRole('manager'))
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('manager.dashboard') }}">Dashboard</a>
-                                    </li>
-                                @else
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('employee.dashboard') }}">Dashboard</a>
-                                    </li>
-                                @endif
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    EMS
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    @if (Auth::user()->hasRole('manager'))
+                                        <li><a class="dropdown-item" href="{{ route('manager.dashboard') }}">Dashboard</a></li>
+                                    @else
+                                        <li><a class="dropdown-item" href="{{ route('employee.dashboard') }}">Dashboard</a></li>
+                                    @endif
+                                    <form id="logout" class="d-none" action="{{ route('logout') }}" method="post">
+                                        @csrf
+                                    </form>
+
+                                    <li><a class="dropdown-item"  onclick="document.getElementById('logout').submit();">Logout</a></li>
+                                </ul>
+                            </li>
+
                             @else
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('login') }}">Masuk</a>
@@ -79,14 +88,15 @@
                             <div class="form-group" class="text-white">
                                 <div class="row">
                                     <div class="col-6">
-                                        <input type="text" class="form-control @error('applicant') is-invalid @enderror" id="applicant" name="applicant" placeholder="Kode Undangan">
+                                        <input type="text" class="form-control @error('applicant') is-invalid @enderror"
+                                            id="applicant" name="applicant" placeholder="Kode Undangan">
+                                        @error('applicant')
+                                            <div class="text-danger mt-2">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-6">
                                         <button type="submit" class="mt-2 btn btn-primary">Lanjutkan</button>
                                     </div>
-                                    @error('applicant')
-                                        <div class="text-danger mt-2">{{ $message }}</div>
-                                    @enderror
                                 </div>
 
                             </div>
@@ -130,9 +140,9 @@
                         <div class="counter-inner p-3 p-md-0">
                             <!-- Counter Item -->
                             <div class="counter-item d-inline-block mb-3">
-                                <span class="counter fw-7">{{ $employees }}</span>
+                                <span class="counter fw-7">{{ $company }}</span>
                             </div>
-                            <h5>Karyawan</h5>
+                            <h5>Perusahaan</h5>
                         </div>
                     </div>
                     <div class="col-5 col-sm-3 single-counter text-center">
@@ -150,7 +160,7 @@
                             <div class="counter-item d-inline-block mb-3">
                                 <span class="counter fw-7">{{ $projects }}</span>
                             </div>
-                            <h5>Proyek</h5>
+                            <h5>Proyek Selesai</h5>
                         </div>
                     </div>
                     <div class="col-5 col-sm-3 single-counter text-center">
@@ -192,7 +202,7 @@
                 <div class="row">
                     <div class="col-12 col-md-6 col-lg-4 res-margin">
                         <!-- Image Box -->
-                        <div class="image-box text-center icon-1 p-5 wow fadeInLeft" data-wow-delay="0.4s">
+                        <div class="image-box text-center icon-1 p-5">
                             <!-- Featured Image -->
                             <div class="featured-img mb-3">
                                 <img class="avatar-sm"
@@ -202,14 +212,14 @@
                             <!-- Icon Text -->
                             <div class="icon-text">
                                 <h3 class="mb-2">Manajemen Karyawan</h3>
-                                <p>EMS memungkinkan Anda mengelola data karyawan dengan mudah, mulai dari informasi
-                                    pribadi hingga riwayat pekerjaan, semuanya dalam satu platform terintegrasi.</p>
+                                <p>Kelola data karyawan dari informasi pribadi hingga riwayat pekerjaan di satu platform.
+                                </p>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 res-margin">
                         <!-- Image Box -->
-                        <div class="image-box text-center icon-1 p-5 wow fadeInUp" data-wow-delay="0.2s">
+                        <div class="image-box text-center icon-1 p-5">
                             <!-- Featured Image -->
                             <div class="featured-img mb-3">
                                 <img class="avatar-sm"
@@ -219,14 +229,13 @@
                             <!-- Icon Text -->
                             <div class="icon-text">
                                 <h3 class="mb-2">Penilaian Kinerja</h3>
-                                <p>Fitur penilaian kinerja memungkinkan Anda memantau dan mengevaluasi kinerja karyawan
-                                    secara berkala, membantu dalam pengembangan karier dan pemberian insentif.</p>
+                                <p>Pantau dan evaluasi kinerja karyawan secara berkala untuk pengembangan dan insentif.</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
                         <!-- Image Box -->
-                        <div class="image-box text-center icon-1 p-5 wow fadeInRight" data-wow-delay="0.4s">
+                        <div class="image-box text-center icon-1 p-5">
                             <!-- Featured Image -->
                             <div class="featured-img mb-3">
                                 <img class="avatar-sm"
@@ -235,9 +244,8 @@
                             </div>
                             <!-- Icon Text -->
                             <div class="icon-text">
-                                <h3 class="mb-2">Pengalaman Pengguna yang Optimal</h3>
-                                <p>Tampilan yang intuitif dan mudah digunakan memastikan bahwa setiap pengguna dapat
-                                    dengan cepat mengakses dan mengelola informasi tanpa hambatan.</p>
+                                <h3 class="mb-2">Pengalaman Pengguna</h3>
+                                <p>Antarmuka yang mudah digunakan memastikan pengelolaan data yang cepat dan efisien.</p>
                             </div>
                         </div>
                     </div>
@@ -247,7 +255,7 @@
         <!-- ***** Features Area End ***** -->
 
         <!-- ***** Service Area Start ***** -->
-        <section id="screenshots" class="section screenshots-area overflow-hidden ptb_100">
+        {{-- <section id="screenshots" class="section screenshots-area overflow-hidden ptb_100">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-12 col-md-10 col-lg-8">
@@ -291,7 +299,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
         <!-- ***** Service Area End ***** -->
 
         <!-- ***** Work Area Start ***** -->
@@ -302,11 +310,8 @@
                         <!-- Work Content -->
                         <div class="work-content text-center">
                             <h2 class="text-white">Bagaimana Employee Management System Bekerja?</h2>
-                            <p class="d-none d-sm-block text-white my-3 mt-sm-4 mb-sm-5">Sistem ini memudahkan Anda
-                                dalam mengelola karyawan, melacak proyek, dan mengatur alur kerja tim secara efisien.
-                                Semua data karyawan terintegrasi dalam satu platform yang mudah digunakan.</p>
-                            <p class="d-block d-sm-none text-white my-3">Sistem ini memudahkan Anda dalam mengelola
-                                karyawan, melacak proyek, dan mengatur alur kerja tim secara efisien.</p>
+                            <p class="text-white my-3">Sistem ini memudahkan Anda dalam mengelola karyawan, melacak proyek,
+                                dan mengatur alur kerja tim secara efisien.</p>
                         </div>
                     </div>
                 </div>
@@ -321,9 +326,8 @@
                                     alt="Download Icon">
                             </div>
                             <h3 class="text-white py-3">Buat Akun Karyawan</h3>
-                            <p class="text-white">Mulailah dengan membuat akun untuk setiap karyawan Anda. Dengan akun
-                                ini, karyawan dapat mengakses informasi mereka sendiri dan mengikuti perkembangan proyek
-                                secara real-time.</p>
+                            <p class="text-white">Daftarkan karyawan dan berikan mereka akses ke sistem untuk melihat
+                                informasi mereka dan mengikuti proyek.</p>
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
@@ -336,8 +340,7 @@
                                     alt="Settings Icon">
                             </div>
                             <h3 class="text-white py-3">Kelola Proyek</h3>
-                            <p class="text-white">Atur dan distribusikan tugas di antara tim. Sistem ini membantu Anda
-                                mengawasi kemajuan proyek, memastikan semua tugas diselesaikan tepat waktu.</p>
+                            <p class="text-white">Atur tugas untuk tim dan pantau kemajuan proyek dengan mudah.</p>
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
@@ -349,14 +352,13 @@
                                     alt="App Icon">
                             </div>
                             <h3 class="text-white py-3">Pantau Performa</h3>
-                            <p class="text-white">Lihat rekap pekerjaan karyawan untuk mengidentifikasi performa
-                                individu dan tim. Analisis ini membantu Anda mengambil keputusan strategis untuk
-                                pengembangan lebih lanjut.</p>
+                            <p class="text-white">Lihat performa karyawan dan ambil keputusan untuk pengembangan tim.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
 
         <!-- ***** Work Area End ***** -->
 
@@ -381,30 +383,10 @@
                                         src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/dark-logo.svg"
                                         alt="logo-brand">
                                 </a>
-                                <p class="mt-2 mb-3">Employee Management System adalah platform untuk mengelola
-                                    karyawan, mengawasi proyek, dan memfasilitasi komunikasi tim secara efisien. Mulai
-                                    kelola karyawan Anda dengan sistem kami sekarang!</p>
-                                <!-- Social Icons -->
-                                <div class="social-icons d-flex">
-                                    <a class="facebook" href="#">
-                                        <i class="fab fa-facebook-f"></i>
-                                        <i class="fab fa-facebook-f"></i>
-                                    </a>
-                                    <a class="twitter" href="#">
-                                        <i class="fab fa-twitter"></i>
-                                        <i class="fab fa-twitter"></i>
-                                    </a>
-                                    <a class="linkedin" href="#">
-                                        <i class="fab fa-linkedin-in"></i>
-                                        <i class="fab fa-linkedin-in"></i>
-                                    </a>
-                                    <a class="instagram" href="#">
-                                        <i class="fab fa-instagram"></i>
-                                        <i class="fab fa-instagram"></i>
-                                    </a>
-                                </div>
+                                <p class="mt-2 mb-3">Employee Management System membantu Anda mengelola karyawan dan proyek dengan mudah. Hubungi kami untuk mulai menggunakan sistem kami!</p>
                             </div>
                         </div>
+
                         <div class="col-12 col-sm-6 col-lg-3">
                             <!-- Footer Items -->
                             <div class="footer-items">
@@ -413,10 +395,7 @@
                                 <ul>
                                     <li class="py-2"><a class="scroll" href="#home">Home</a></li>
                                     <li class="py-2"><a class="scroll" href="#features">Fitur</a></li>
-                                    <li class="py-2"><a class="scroll" href="#projects">Proyek</a></li>
-                                    <li class="py-2"><a class="scroll" href="#teams">Tim</a></li>
                                     <li class="py-2"><a class="scroll" href="#workflow">Alur Kerja</a></li>
-                                    <li class="py-2"><a class="scroll" href="#employees">Karyawan</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -424,34 +403,47 @@
                             <!-- Footer Items -->
                             <div class="footer-items">
                                 <!-- Footer Title -->
-                                <h3 class="footer-title mb-2">Bantuan</h3>
+                                <h3 class="footer-title mb-2">Butuh Bantuan?</h3>
                                 <ul>
-                                    <li class="py-2"><a href="#">FAQ</a></li>
-                                    <li class="py-2"><a href="#">Kebijakan Privasi</a></li>
-                                    <li class="py-2"><a href="#">Dukungan</a></li>
-                                    <li class="py-2"><a href="#">Syarat &amp; Ketentuan</a></li>
-                                    <li class="py-2"><a href="#">Kontak</a></li>
+                                    <li class="py-2"><a href="https://wa.me/62859189566453?text=Proposal"
+                                            target="_blank">Proposal</a></li>
+                                    <li class="py-2"><a
+                                            href="https://wa.me/62859189566453?text=Kerjasama%20Industri"
+                                            target="_blank">Kerjasama Industri</a></li>
+                                    <li class="py-2"><a href="https://wa.me/62859189566453?text=Hubungi%20Kami"
+                                            target="_blank">Hubungi Kami</a></li>
                                 </ul>
                             </div>
                         </div>
+
                         <div class="col-12 col-sm-6 col-lg-3">
                             <!-- Footer Items -->
                             <div class="footer-items">
                                 <!-- Footer Title -->
-                                <h3 class="footer-title mb-2">Unduh Aplikasi</h3>
-                                <!-- Store Buttons -->
-                                <div class="button-group store-buttons store-black d-flex flex-wrap">
-                                    <a href="#">
-                                        <img src="{{ asset('assets/landing-page/img/icon/google-play-black.png') }}"
-                                            alt="Google Play">
-                                    </a>
-                                    <a href="#">
-                                        <img src="{{ asset('assets/landing-page/img/icon/app-store-black.png') }}"
-                                            alt="App Store">
-                                    </a>
-                                </div>
+                                <h3 class="footer-title mb-2">Hubungi Kami</h3>
+                                <!-- Contact Info -->
+                                <ul>
+                                    <li class="py-2">
+                                        <i class="fas fa-envelope"></i>
+                                        Email: <a href="mailto:support@emsystem.com">support@emsystem.com</a>
+                                    </li>
+                                    <li class="py-2">
+                                        <i class="fas fa-phone"></i>
+                                        Telepon: +62 812-3456-7890
+                                    </li>
+                                    <li class="py-2">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        Alamat: Jl. Mawar No. 123, Jakarta
+                                    </li>
+                                    <li class="py-2">
+                                        <i class="fas fa-clock"></i>
+                                        Jam Kerja: Senin-Jumat, 09:00 - 17:00
+                                    </li>
+                                </ul>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             </div>
@@ -466,8 +458,6 @@
                                 <!-- Copyright Left -->
                                 <div class="copyright-left">&copy; Copyrights 2024 Employee Management System. All
                                     rights reserved.</div>
-                                <!-- Copyright Right -->
-                                <div class="copyright-right">Made with <i class="fas fa-heart"></i></div>
                             </div>
                         </div>
                     </div>

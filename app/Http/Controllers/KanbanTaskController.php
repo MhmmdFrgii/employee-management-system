@@ -82,10 +82,18 @@ class KanbanTaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    // public function destroy($id)
+    // {
+    //     $kanbantasks = KanbanTask::findOrFail($id);
+    //     $kanbantasks->delete();
+    //     return redirect()->route('kanban-tasks.index')->with('status', 'Kanban Tasks berhasil dihapus.');
+    // }
+
     public function destroy($id)
     {
-        $kanbantasks = KanbanTask::findOrFail($id);
-        $kanbantasks->delete();
-        return redirect()->route('kanban-tasks.index')->with('status', 'Kanban Tasks berhasil dihapus.');
+        $task = KanbanTask::findOrFail($id);
+        $task->delete();
+
+        return redirect()->back()->with('success', 'Task berhasil dihapus.');
     }
 }
