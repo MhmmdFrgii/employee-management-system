@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('kanban_boards_id')->constrained('kanban_boards')->onDelete('cascade');
             $table->foreignId('employee_id')->nullable()->constrained('employee_details')->onDelete('cascade');
             $table->enum('status', ['todo', 'progress', 'done'])->default('todo');
+            $table->integer('order')->nullable();
             $table->date('date')->nullable();
             $table->string('color')->nullable();
             $table->timestamps();

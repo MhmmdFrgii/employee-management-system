@@ -1,5 +1,5 @@
 <!-- resources/views/components/task-card.blade.php -->
-<div class="card mb-3 bg-{{ $task->color }} text-white">
+<div class="card mb-3 bg-{{ $task->color }} text-white" data-task-id="{{ $task->id }}">
     <div class="p-2 px-3 card-body d-flex justify-content-between align-items-center">
         <p class="m-0">{{ $task->title }}</p>
         <div class="d-flex justify-content-between text-white">
@@ -40,40 +40,3 @@
         @endif
     </div>
 </div>
-
-<!-- Modal Konfirmasi Hapus -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteModalLabel">Konfirmasi Hapus</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Apakah Anda yakin ingin menghapus task ini?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <form id="deleteForm" method="post" action="">
-                    @method('delete')
-                    @csrf
-                    <button type="submit" class="btn btn-primary">Hapus</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- JavaScript untuk Menangani Modal Konfirmasi -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#confirmDeleteModal').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget); // Tombol yang memicu modal
-            var actionUrl = button.data('action'); // Ambil URL aksi dari tombol
-            var form = $('#deleteForm');
-            form.attr('action', actionUrl); // Atur URL aksi untuk form
-        });
-    });
-</script>

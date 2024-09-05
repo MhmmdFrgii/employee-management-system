@@ -35,7 +35,11 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('manager')->group(function () {
             // route attendence
+
             Route::get('/mark-absentees', [AttendanceController::class, 'markAbsentees']);
+
+            route::post('/kanban-tasks/update-order', [KanbanTaskController::class, 'updateOrder'])->name('kanban-tasks.update-order');
+            Route::post('/kanban-tasks/update-status', [KanbanTaskController::class, 'updateStatus'])->name('kanban-tasks.update-status');
 
             Route::get('dashboard', [DashboardController::class, 'index'])->name('manager.dashboard');
 

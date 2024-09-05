@@ -1,6 +1,9 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+
     <div class="container py-2">
         <div class="d-flex flex-column flex-md-row justify-content-between mb-4">
             <a href="{{ route(Auth::user()->hasRole('manager') ? 'projects.index' : 'project.user') }}"
@@ -21,7 +24,7 @@
                                 class="card-header bg-{{ $status === 'todo' ? 'primary' : ($status === 'progress' ? 'warning' : 'success') }} text-white">
                                 {{ $statusTitle }}
                             </div>
-                            <div class="card-body">
+                            <div class="card-body kanban-{{ $status }}" data-status="{{ $status }}">
                                 @forelse ($$status as $task)
                                     @include('kanban-board.partial.task-card', [
                                         'task' => $task,
@@ -41,7 +44,6 @@
                                         'task' => $task,
                                     ])
                                 @empty
-                                    <p class="text-center">Tidak ada tugas tersedia</p>
                                 @endforelse
                             </div>
                             <div class="card-footer text-center">
@@ -63,7 +65,6 @@
             @endisset
         </div>
     </div>
-
     @foreach (['todo' => 'To Do', 'progress' => 'In Progress', 'done' => 'Done'] as $status => $statusTitle)
         @include('kanban-board.partial.task-modal', [
             'modalId' => 'createTaskModal' . ucfirst($status) . ($kanbanboard->id ?? ''),
@@ -77,3 +78,75 @@
     @endforeach
 
 @endsection
+{{-- 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        ['todo', 'progress', 'done'].forEach(function(status) {
+            let el = document.querySelector(`.kanban-${status}`);
+
+            new Sortable(el, {
+                group: 'kanban',
+                animation: 150,
+                onEnd: function(evt) {
+                    // Ambil ID tugas yang dipindahkan dan status baru
+                    let taskId = evt.item.dataset.taskId;
+                    let newStatus = evt.to.dataset.status;
+
+                    // Kirim perubahan urutan ke server
+                    $.ajax({
+                        url: '{{ route('kanban-tasks.update-order') }}', // Tambahkan route untuk update order
+                        method: 'POST',
+                        data: {
+                            taskId: taskId,
+                            newStatus: newStatus,
+                            newOrder: evt.newIndex, // Posisi baru
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            console.log('Order updated successfully');
+                        },
+                        error: function(xhr) {
+                            console.error('Error updating order:', xhr);
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script> --}}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        ['todo', 'progress', 'done'].forEach(function(status) {
+            let el = document.querySelector(`.kanban-${status}`);
+
+            new Sortable(el, {
+                group: 'kanban',
+                animation: 150,
+                onEnd: function(evt) {
+                    // Ambil ID tugas yang dipindahkan dan status baru
+                    let taskId = evt.item.dataset.taskId;
+                    let newStatus = evt.to.dataset.status;
+
+                    // Kirim perubahan urutan ke server
+                    $.ajax({
+                        url: '{{ route('kanban-tasks.update-order') }}', // Tambahkan route untuk update order
+                        method: 'POST',
+                        data: {
+                            taskId: taskId,
+                            newStatus: newStatus,
+                            newOrder: evt.newIndex, // Posisi baru
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            console.log('Order updated successfully');
+                        },
+                        error: function(xhr) {
+                            console.error('Error updating order:', xhr);
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>

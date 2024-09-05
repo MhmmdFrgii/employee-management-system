@@ -13,6 +13,31 @@ use Illuminate\Support\Facades\Redis;
 
 class KanbanTaskController extends Controller
 {
+    public function updateStatus(Request $request)
+    {
+        $task = KanbanTask::findOrFail($request->task_id);
+        $task->status = $request->status;
+        $task->save();
+
+        return response()->json(['success' => 'Task status updated successfully.']);
+    }
+
+    public function updateOrder(Request $request)
+    {
+        $task = KanbanTask::find($request->taskId);
+
+        if ($task) {
+            // Update status dan urutan
+            $task->status = $request->newStatus;
+            $task->order = $request->newOrder;
+            $task->save();
+
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false], 400);
+    }   
+
     /**
      * Store a newly created resource in storage.
      */
