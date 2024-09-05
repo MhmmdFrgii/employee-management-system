@@ -23,7 +23,7 @@
                                             <input class="form-check-input" type="checkbox" name="status[]" value="pending"
                                                 id="statusPending"
                                                 {{ in_array('pending', request('status', [])) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="statusPending">Tertunda/label>
+                                            <label class="form-check-label" for="statusPending">Tertunda</label>
                                         </div>
                                     </li>
                                     <li>

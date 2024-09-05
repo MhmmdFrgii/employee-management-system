@@ -35,9 +35,9 @@
                                                         {{-- Input untuk lokasi dan tombol pencarian --}}
                                                         <div class="input-group mb-3">
                                                             <input type="text" id="location-search" class="form-control"
-                                                                placeholder="Search for a location">
+                                                                placeholder="Cari Lokasi">
                                                             <button id="search-button" class="btn btn-primary"
-                                                                type="button">Search</button>
+                                                                type="button">Cari</button>
                                                         </div>
 
                                                         {{-- Peta --}}
@@ -47,9 +47,9 @@
                                                         {{-- Input untuk latitude dan longitude --}}
                                                         <div class="mt-3">
                                                             <input type="text" id="latitude" class="form-control mb-2"
-                                                                placeholder="Latitude" name="latitude">
+                                                                placeholder="Lintang" name="latitude">
                                                             <input type="text" id="longitude" class="form-control"
-                                                                placeholder="Longitude" name="longitude">
+                                                                placeholder="Bujur" name="longitude">
                                                         </div>
                                                     </div>
                                                     <div class="d-flex justify-content-end">

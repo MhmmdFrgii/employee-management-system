@@ -1,7 +1,7 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
-    <h3>My Project</h3>
+    <h3>Proyek Saya</h3>
     @forelse ($kanbanBoards as $data)
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -32,7 +32,7 @@
                         </li>
                     </ul>
                 @empty
-                    <p class="text-center">No tasks available for this project.</p>
+                    <p class="text-center">Tidak ada tugas tersedia di proyek ini</p>
                 @endforelse
             </div>
 
@@ -127,7 +127,7 @@
         <div class="text-center py-3">
             <img src="{{ asset('assets/images/no-data.png') }}" alt="No Data" class="img-fluid"
                 style="width: clamp(150px, 50vw, 300px);">
-            <p class="mt-3">No Kanban boards available.</p>
+            <p class="mt-3">Tidak ada papan kanban yang tersedia</p>
         </div>
     @endforelse
 @endsection
