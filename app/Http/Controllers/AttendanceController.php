@@ -41,11 +41,12 @@ class AttendanceController extends Controller
     {
         $user = Auth::user()->employee_detail->id;
 
-        $total_attendance = Attendance::where('employee_id', $user)->count();
-        $total_present = Attendance::where('employee_id', $user)->where('status', 'present')->count();
-        $total_absent = Attendance::where('employee_id', $user)->where('status', 'absent')->count();
-        $total_alpha = Attendance::where('employee_id', $user)->where('status', 'alpha')->count();
-        $attendance_count = Attendance::where('employee_id', $user)->count();
+        $today = Carbon::today();
+        $total_attendance = Attendance::where('employee_id', $user)->whereDate('date', '<=', $today)->count();
+        $total_present = Attendance::where('employee_id', $user)->whereDate('date', '<=', $today)->where('status', 'present')->count();
+        $total_absent = Attendance::where('employee_id', $user)->whereDate('date', '<=', $today)->where('status', 'absent')->count();
+        $total_alpha = Attendance::where('employee_id', $user)->whereDate('date', '<=', $today)->where('status', 'alpha')->count();
+        $attendance_count = Attendance::where('employee_id', $user)->whereDate('date', '<=', $today)->count();
 
         $attendances = Attendance::where('employee_id', $user)->get();
 
@@ -72,7 +73,7 @@ class AttendanceController extends Controller
         }
 
         $today_attendance = Attendance::where('employee_id', $employee)
-            ->where('date', $today)
+            ->where('created_at', $today)
             ->exists();
 
         if ($today_attendance) {
@@ -119,8 +120,9 @@ class AttendanceController extends Controller
             $query->orderBy($request->sortBy, $direction);
         }
 
+        $today = Carbon::today()->format('Y-m-d');
         // Select relevant fields
-        $attendances = $query->select('attendances.*', 'employee_details.name as employee_name')->paginate(10);
+        $attendances = $query->whereDate('date', '<=', $today)->select('attendances.*', 'employee_details.name as employee_name')->paginate(10);
 
         return view('attendance.index', compact('attendances'));
     }

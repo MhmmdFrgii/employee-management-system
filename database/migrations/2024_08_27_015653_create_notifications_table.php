@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('message');
             $table->enum('type', ['info', 'warning', 'error', 'success']);
             $table->string('url')->nullable();
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
 
             // Foreign key constraint

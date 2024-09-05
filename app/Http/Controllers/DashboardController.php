@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Attendance;
 use App\Models\Department;
 use App\Models\EmployeeDetail;
+use App\Models\Notification;
 use App\Models\Project;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -14,6 +15,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $newNotificationCount = $this->getNewNotificationCount();
+
         $company_id = Auth::user()->company->id;
 
         $employee_count = EmployeeDetail::where('company_id', $company_id)
@@ -40,10 +43,10 @@ class DashboardController extends Controller
 
         $now = Carbon::now();
         $projectsWithNearestDeadlines = Project::where('end_date', '>=', $now)
-        ->where('company_id', $company_id)
-        ->where('status', '!=', 'completed') // Exclude completed projects
-        ->orderBy('end_date', 'asc')
-        ->get();
+            ->where('company_id', $company_id)
+            ->where('status', '!=', 'completed') // Exclude completed projects
+            ->orderBy('end_date', 'asc')
+            ->get();
 
         $months = [];
         $activeCounts = [];
@@ -87,57 +90,83 @@ class DashboardController extends Controller
             ->pluck('employee_details_count')
             ->toArray();
 
-            $now = Carbon::now();
-$currentYear = $now->year;
-$months = [];
-$attendanceData = [
-    'present' => [],
-    'absent' => [],
-    'alpha' => []
-];
+        $now = Carbon::now();
+        $currentYear = $now->year;
+        $months = [];
+        $attendanceData = [
+            'present' => [],
+            'absent' => [],
+            'alpha' => [],
+            'late' => []
+        ];
 
-// Loop untuk mendapatkan data 6 bulan terakhir termasuk bulan sekarang
-for ($i = 5; $i >= 0; $i--) {
-    $currentMonth = $now->copy()->subMonths($i);
+        // Loop untuk mendapatkan data 6 bulan terakhir termasuk bulan sekarang
+        for ($i = 5; $i >= 0; $i--) {
+            $currentMonth = $now->copy()->subMonths($i);
 
-    // Format bulan dan tahun
-    $months[] = $currentMonth->format('F Y');
+            // Format bulan dan tahun
+            $months[] = $currentMonth->format('F Y');
 
-    // Hitung jumlah kehadiran untuk setiap bulan
-    $attendanceData['present'][] = Attendance::where('status', 'present')
-        ->whereYear('created_at', $currentMonth->year)
-        ->whereMonth('created_at', $currentMonth->month)
-        ->count();
+            // Hitung jumlah kehadiran untuk setiap bulan
+            $attendanceData['present'][] = Attendance::where('status', 'present')
+                ->whereHas('employee_detail', function ($query) use ($company_id) {
+                    $query->where('company_id', $company_id);
+                })
+                ->whereYear('created_at', $currentMonth->year)
+                ->whereMonth('created_at', $currentMonth->month)
+                ->count();
 
-    $attendanceData['absent'][] = Attendance::where('status', 'absent')
-        ->whereYear('created_at', $currentMonth->year)
-        ->whereMonth('created_at', $currentMonth->month)
-        ->count();
+            $attendanceData['absent'][] = Attendance::where('status', 'absent')
+                ->whereHas('employee_detail', function ($query) use ($company_id) {
+                    $query->where('company_id', $company_id);
+                })
+                ->whereYear('created_at', $currentMonth->year)
+                ->whereMonth('created_at', $currentMonth->month)
+                ->count();
 
-    $attendanceData['alpha'][] = Attendance::where('status', 'alpha')
-        ->whereYear('created_at', $currentMonth->year)
-        ->whereMonth('created_at', $currentMonth->month)
-        ->count();
-}
+            $attendanceData['alpha'][] = Attendance::where('status', 'alpha')
+                ->whereHas('employee_detail', function ($query) use ($company_id) {
+                    $query->where('company_id', $company_id);
+                })
+                ->whereYear('created_at', $currentMonth->year)
+                ->whereMonth('created_at', $currentMonth->month)
+                ->count();
 
-// Balikkan array bulan untuk menampilkan bulan terlama terlebih dahulu
-$months = array_reverse($months);
+            $attendanceData['late'][] = Attendance::where('status', 'late')
+                ->whereHas('employee_detail', function ($query) use ($company_id) {
+                    $query->where('company_id', $company_id);
+                })
+                ->whereYear('created_at', $currentMonth->year)
+                ->whereMonth('created_at', $currentMonth->month)
+                ->count();
+        }
 
-return view('dashboard.index', [
-    'employee_count' => $employee_count,
-    'project_count' => $project_count,
-    'project_done' => $project_done,
-    'department_count' => $department_count,
-    'applicant_count' => $applicant_count,
-    'months' => $months,
-    'performance' => $performance,
-    'project_data' => $project_data,
-    'departments' => $departments,
-    'department_data' => $department_data,
-    'projectsWithNearestDeadlines' => $projectsWithNearestDeadlines,
-    'attendanceData' => $attendanceData,
-]);
+        // Balikkan array bulan untuk menampilkan bulan terlama terlebih dahulu
+        // $months = array_reverse($months);
 
+        // Ambil ID pengguna yang sedang login
+        $userId = Auth::id();
+
+        // Hitung jumlah notifikasi baru
+
+
+        $newNotificationCount = Notification::where('user_id', Auth::id())->where('is_read', false)->count();
+
+        return view('dashboard.index', [
+            'employee_count' => $employee_count,
+            'project_count' => $project_count,
+            'project_done' => $project_done,
+            'department_count' => $department_count,
+            'applicant_count' => $applicant_count,
+            'months' => $months,
+            'performance' => $performance,
+            'project_data' => $project_data,
+            'departments' => $departments,
+            'department_data' => $department_data,
+            'projectsWithNearestDeadlines' => $projectsWithNearestDeadlines,
+            'attendanceData' => $attendanceData,
+            'newNotificationCount' => $newNotificationCount,
+        ]);
     }
 
 
@@ -152,8 +181,9 @@ return view('dashboard.index', [
         $months = [];
         $activeCounts = [];
 
-        for ($i = 1; $i <= 12; $i++) {
-            $months[] = Carbon::create()->month($i)->format('F');
+        for ($i = 5; $i >= 0; $i--) {
+            $month = Carbon::now()->subMonths($i); // Mengurangi bulan secara iteratif
+            $months[] = $month->format('F'); // Ambil nama bulan
 
             $projectCounts[] = Project::where('status', 'completed')
                 ->whereHas('employee_details', function ($query) {
@@ -185,12 +215,30 @@ return view('dashboard.index', [
             $attendanceCounts[] = $attendanceData[$status] ?? 0;
         }
 
+        $userId = Auth::user()->id;
+
+        // Hitung notifikasi yang belum dibaca
+        $newNotificationCount = Notification::where('user_id', $userId)
+            ->where('is_read', false)
+            ->count();
 
         return view('dashboard.employee.index', [
             'months' => $months,
             'projectCounts' => $projectCounts,
             'statuses' => $statuses,
             'attendanceCounts' => $attendanceCounts,
+            'newNotificationCount' => $newNotificationCount,
         ]);
+    }
+
+    public function getNewNotificationCount()
+    {
+        // Mengambil ID pengguna yang sedang login
+        $userId = Auth::id();
+
+        // Menghitung jumlah notifikasi yang belum dibaca
+        return Notification::where('user_id', $userId)
+            ->where('is_read', false)
+            ->count();
     }
 }

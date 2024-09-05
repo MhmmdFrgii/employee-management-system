@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class LeaveRequestController extends Controller
 {
@@ -42,7 +43,7 @@ class LeaveRequestController extends Controller
         $sortDirection = $request->get('sortDirection', 'asc'); // Arah default
         $query->orderBy($sortBy, $sortDirection);
 
-        // Ambil data yang telah disortir dan difilter 
+        // Ambil data yang telah disortir dan difilter
         $employee = EmployeeDetail::all();
         $company = Company::all();
         $leaveRequest = $query->paginate(5);
@@ -71,8 +72,9 @@ class LeaveRequestController extends Controller
             Notification::create([
                 'user_id' => $manager->id,
                 'title' => 'Pengajuan Izin Karyawan',
-                'message' => 'Seorang karyawan telah mengajukan izin. Silakan tinjau dan proses pengajuan izin tersebut di portal manajemen.',
-                'type' => 'info'
+                'message' => 'Seorang karyawan telah mengajukan izin. Silakan tinjau dan proses pengajuan izin tersebut di halaman permintaan cuti.',
+                'type' => 'info',
+                'url' => 'leave-requests.index'
             ]);
 
             // Ambil data dari request
@@ -101,7 +103,11 @@ class LeaveRequestController extends Controller
                 return redirect()->back()->withErrors(['error' => 'Kamu sudah memiliki izin pada tanggal yang dipilih.']);
             }
 
-            LeaveRequest::create($request->validated());
+            $validatedData = $request->validated();
+            $leaveRequestPhoto = $request->file('photo')->store('leave-request', 'public');
+
+            $validatedData['photo'] = $leaveRequestPhoto;
+            LeaveRequest::create($validatedData);
 
             // Commit transaksi sebelum return
             DB::commit();
@@ -109,6 +115,10 @@ class LeaveRequestController extends Controller
             return redirect()->route('attendance.user')->with('success', 'Berhasil mengajukan izin.');
         } catch (\Throwable $e) {
             DB::rollBack();
+            if (isset($leaveRequestPhoto)) {
+                Storage::disk('public')->delete($leaveRequestPhoto);
+            }
+
             return redirect()->back()->with('error', 'Terjadi Kesalahan.')->withInput();
         }
     }
@@ -143,8 +153,9 @@ class LeaveRequestController extends Controller
             Notification::create([
                 'user_id' => $employee->user->id,
                 'title' => 'Pengajuan Izin Diterima',
-                'message' => 'Pengajuan izin Anda telah diterima. Anda dapat melihat detailnya di portal manajemen.',
-                'type' => 'success'
+                'message' => 'Pengajuan izin Anda telah diterima.',
+                'type' => 'success',
+                'url' => '#', // Tambahkan URL yang sesuai jika ada
             ]);
 
             // Temukan permintaan cuti berdasarkan ID
@@ -154,11 +165,17 @@ class LeaveRequestController extends Controller
             $leaveRequest->status = 'approved';
             $leaveRequest->save();
 
-            // Loop untuk setiap hari dalam periode cuti
+            // Hapus data kehadiran lama untuk periode cuti
             $startDate = \Carbon\Carbon::parse($leaveRequest->start_date);
             $endDate = \Carbon\Carbon::parse($leaveRequest->end_date);
             $currentDate = $startDate;
 
+            // Hapus data kehadiran lama
+            Attendance::where('employee_id', $leaveRequest->employee_id)
+                ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
+                ->delete();
+
+            // Loop untuk setiap hari dalam periode cuti
             while ($currentDate->lte($endDate)) {
                 // Tambahkan data ke tabel attendance untuk setiap hari
                 Attendance::updateOrCreate(
@@ -185,6 +202,7 @@ class LeaveRequestController extends Controller
         }
     }
 
+
     public function reject(LeaveRequest $id)
     {
         DB::beginTransaction(); // Mulai transaksi
@@ -200,8 +218,9 @@ class LeaveRequestController extends Controller
             Notification::create([
                 'user_id' => $employee->user->id,
                 'title' => 'Pengajuan Izin Ditolak',
-                'message' => 'Permintaan izin Anda telah ditolak. Silakan cek portal manajemen untuk detail lebih lanjut.',
+                'message' => 'Permintaan izin Anda telah ditolak.',
                 'type' => 'warning',
+                'url' => ''
             ]);
 
             DB::commit();

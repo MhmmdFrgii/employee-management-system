@@ -99,11 +99,17 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="{{ route('notifications.index') }}" class="sidebar-link">
-                        <div class="round-16 d-flex align-items-center justify-content-center">
+                    <a href="{{ route('notifications.index') }}" class="sidebar-link d-flex align-items-center">
+                        <span>
                             <i class="ti ti-inbox"></i>
-                        </div>
+                        </span>
                         <span class="hide-menu">Kotak Masuk</span>
+                        @if (isset($newNotificationCount) && $newNotificationCount > 0)
+                            <span class="badge bg-danger text-sm  rounded-pill ms-auto p-1">
+                                {{ $newNotificationCount }}
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        @endif
                     </a>
                 </li>
             </ul>

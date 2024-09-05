@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Mail\ApprovedMail;
+use App\Mail\RejectedMail;
 use App\Models\Company;
 use App\Models\Department;
 use App\Models\User;
@@ -34,66 +35,82 @@ class UserController extends Controller
         $positions = Position::where('company_id', Auth::user()->company->id)->get();
         $applicant = EmployeeDetail::findOrFail($id);
         return view('applicant.detail', compact('applicant', 'department', 'positions'));
-
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(UserRequest $request, EmployeeDetail $applicant)
-{
-    // Ambil data yang sudah divalidasi dari UserRequest
-    $validatedData = $request->validated();
+    {
+        // Ambil data yang sudah divalidasi dari UserRequest
+        $validatedData = $request->validated();
 
-    // Update departemen, posisi, dan set status menjadi 'approved'
-    $applicant->update([
-        'department_id' => $validatedData['department_id'],
-        'position_id' => $validatedData['position_id'],
-        'status' => 'approved', // Set status menjadi 'approved' secara otomatis
-    ]);
+        // Update departemen, posisi, dan set status menjadi 'approved'
+        $applicant->update([
+            'department_id' => $validatedData['department_id'],
+            'position_id' => $validatedData['position_id'],
+            'status' => 'approved', // Set status menjadi 'approved' secara otomatis
+        ]);
 
-    // Jika statusnya 'approved', buat kode undangan dan kirim email
-    $invitation_code = InvitationCode::create([
-        'code' => InvitationCode::invitation_generate(),
-        'company_id' => $applicant->company->id,
-    ]);
+        // Jika statusnya 'approved', buat kode undangan dan kirim email
+        $invitation_code = InvitationCode::create([
+            'code' => InvitationCode::invitation_generate(),
+            'company_id' => $applicant->company->id,
+        ]);
 
-    try {
-        Mail::to($applicant->email)->send(new ApprovedMail(
-            $applicant->name,
-            $applicant->company->name,
-            $applicant->company->email,
-            $invitation_code->code
-        ));
-    } catch (\Exception $e) {
-        return redirect()->route('applicants.index')->with('error', 'User approved but failed to send email.');
+        try {
+            Mail::to($applicant->email)->send(new ApprovedMail(
+                $applicant->name,
+                $applicant->company->name,
+                $applicant->company->email,
+                $invitation_code->code
+            ));
+        } catch (\Exception $e) {
+            return redirect()->route('applicants.index')->with('error', 'User approved but failed to send email.');
+        }
+
+        // Redirect ke index dengan pesan sukses
+        return redirect()->route('applicants.index')->with('success', 'User Applicant approved.');
     }
 
-    // Redirect ke index dengan pesan sukses
-    return redirect()->route('applicants.index')->with('success', 'User Applicant approved.');
-}
+    public function reject(EmployeeDetail $applicant)
+    {
+        // Update status menjadi 'rejected'
+        $applicant->update([
+            'status' => 'rejected',
+        ]);
 
+        try {
 
+            Mail::to($applicant->email)->send(new RejectedMail(
+                $applicant->name,
+                $applicant->company->name
+            ));
+        } catch (\Exception $e) {
+            return redirect()->route('applicants.index')->with('error', 'User rejected but failed to send email.');
+        }
 
+        // Redirect ke index dengan pesan sukses
+        return redirect()->route('applicants.index')->with('success', 'User Applicant rejected.');
+    }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-{
-    try {
-        // Temukan data applicant berdasarkan ID
-        $applicant = EmployeeDetail::findOrFail($id);
+    {
+        try {
+            // Temukan data applicant berdasarkan ID
+            $applicant = EmployeeDetail::findOrFail($id);
 
-        // Update status applicant menjadi 'rejected'
-        $applicant->update(['status' => 'rejected']);
+            // Update status applicant menjadi 'rejected'
+            $applicant->update(['status' => 'rejected']);
 
-        // Redirect ke index dengan pesan sukses
-        return redirect()->route('applicants.index')->with('success', 'Applicant rejected successfully.');
-    } catch (\Exception $e) {
-        // Jika ada kesalahan, redirect ke index dengan pesan error
-        return redirect()->route('applicants.index')->with('error', 'Failed to reject applicant.');
+            // Redirect ke index dengan pesan sukses
+            return redirect()->route('applicants.index')->with('success', 'Applicant rejected successfully.');
+        } catch (\Exception $e) {
+            // Jika ada kesalahan, redirect ke index dengan pesan error
+            return redirect()->route('applicants.index')->with('error', 'Failed to reject applicant.');
+        }
     }
-}
-
 }
