@@ -16,7 +16,9 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained('companies', 'id')->onDelete('cascade');
             $table->foreignId('employee_id')->nullable()->constrained('employee_details', 'id')->onDelete('cascade');
             $table->decimal('amount', 10, 2);
-            $table->date('payment_date');
+            $table->enum('type', ['income', 'expense']); //pemasukan dan pengeluaran
+            $table->string('description')->nullable();
+            $table->date('transaction_date');
             $table->timestamps();
         });
     }

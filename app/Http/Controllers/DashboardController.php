@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Project;
 use App\Models\Attendance;
 use App\Models\Department;
-use App\Models\EmployeeDetail;
 use App\Models\Notification;
-use App\Models\Project;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\EmployeeDetail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -16,6 +17,9 @@ class DashboardController extends Controller
     public function index()
     {
         $newNotificationCount = $this->getNewNotificationCount();
+
+        // Mengambil data untuk chart salaries
+        $monthlyData = $this->getMonthlyData();
 
         $company_id = Auth::user()->company->id;
 
@@ -141,6 +145,7 @@ class DashboardController extends Controller
                 ->count();
         }
 
+
         // Balikkan array bulan untuk menampilkan bulan terlama terlebih dahulu
         // $months = array_reverse($months);
 
@@ -166,8 +171,59 @@ class DashboardController extends Controller
             'projectsWithNearestDeadlines' => $projectsWithNearestDeadlines,
             'attendanceData' => $attendanceData,
             'newNotificationCount' => $newNotificationCount,
+            'monthlyData' => $monthlyData,
         ]);
     }
+
+    private function getMonthlyData()
+    {
+        $year = date('Y'); // Tahun saat ini
+        $data = DB::table('salaries')
+            ->select(
+                DB::raw('MONTH(transaction_date) as month'),
+                DB::raw('SUM(CASE WHEN type = "income" THEN amount ELSE 0 END) as income'),
+                DB::raw('SUM(CASE WHEN type = "expense" THEN amount ELSE 0 END) as expense')
+            )
+            ->where('company_id', Auth::user()->company->id)
+            ->whereYear('transaction_date', $year)
+            ->groupBy(DB::raw('MONTH(transaction_date)'))
+            ->orderBy('month')
+            ->get();
+
+        $months = [];
+        $income = [];
+        $expense = [];
+
+        // Daftar nama bulan dalam bahasa Indonesia
+        $monthNames = [
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember'
+        ];
+
+        foreach ($data as $item) {
+            $months[] = $monthNames[$item->month]; // Menggunakan nama bulan dalam bahasa Indonesia
+            $income[] = (float) $item->income; // Pastikan data adalah angka
+            $expense[] = (float) $item->expense; // Pastikan data adalah angka
+        }
+
+        return [
+            'months' => $months,
+            'income' => $income,
+            'expense' => $expense
+        ];
+    }
+
+
 
 
     // USER KARYAWAN
