@@ -95,7 +95,7 @@
                                         @enderror
                                     </div>
                                     <div class="col-6">
-                                        <button type="submit" class="mt-2 btn btn-primary">Lanjutkan</button>
+                                        <button type="submit" class="mt-2 btn btn-success">Lanjutkan</button>
                                     </div>
                                 </div>
 

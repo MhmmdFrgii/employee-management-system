@@ -1,140 +1,167 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="container py-4">
-                    @if (session()->has('success'))
-                        <div class="alert alert-success mt-3" role="alert">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h1 class="h3">Kehadiran</h1>
+    <div class="card">
+        <div class="card-header">
+            <div class="row g-2 mt-3">
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="row g-2">
+                        <h3 class="mx-1">Absensi Karyawan</h3>
                     </div>
-
-                    {{-- SEARCH & FILTER --}}
-                    <form method="GET" action="{{ route('attendance.index') }}" class="mb-4">
-                        <div class="row g-2">
-                            <!-- Input Pencarian -->
-                            <div class="col-md-9">
-                                <input type="text" name="search" class="form-control shadow-sm"
-                                    placeholder="Cari Data..." value="{{ request('search') }}">
-                            </div>
-
-                            <!-- Input Filter -->
-                            <div class="col-md-2">
-                                <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="statusDropdown"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        Filter Status
-                                    </button>
-                                    <ul class="dropdown-menu p-2" aria-labelledby="statusDropdown">
-                                        <li>
-                                            <div class="form-check">
-                                                <input type="checkbox" name="status[]" value="present"
-                                                    class="form-check-input" id="status_present"
-                                                    {{ is_array(request('status')) && in_array('present', request('status')) ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="status_present">Present</label>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="form-check">
-                                                <input type="checkbox" name="status[]" value="absent"
-                                                    class="form-check-input" id="status_absent"
-                                                    {{ is_array(request('status')) && in_array('absent', request('status')) ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="status_absent">Absent</label>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="form-check">
-                                                <input type="checkbox" name="status[]" value="late"
-                                                    class="form-check-input" id="status_late"
-                                                    {{ is_array(request('status')) && in_array('late', request('status')) ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="status_late">Late</label>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="form-check">
-                                                <input type="checkbox" name="status[]" value="alpha"
-                                                    class="form-check-input" id="status_alpha"
-                                                    {{ is_array(request('status')) && in_array('alpha', request('status')) ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="status_alpha">Alpha</label>
-                                            </div>
-                                        </li>
-                                    </ul>
+                </div>
+                <div class="col-lg-8 col-md-6 col-sm-12">
+                    <div class="d-flex flex-column flex-lg-row justify-content-end gap-2">
+                        <div class="search-box col-lg-3 col-12">
+                            <form action="{{ route('attendance.index') }}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="search"
+                                        value="{{ request('search') }}" id="searchMemberList" placeholder="Cari Karyawan">
+                                    <div class="input-group-append ">
+                                        <button type="submit" class="input-group-text rounded-end border border-1"><i
+                                                class="ri-search-line"></i></button>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary d-lg-none mt-2 w-100">Cari</button>
+                                </div>
+                        </div>
+                        <div class="search-box col-lg-3 col-12">
+                            <div class="input-group">
+                                <input type="text" class="form-control flatpickr-input" name="date"
+                                    value="{{ request('date') }}" data-provider="flatpickr" placeholder="Pilih tanggal">
+                                <div class="input-group-append ">
+                                    <button type="submit" class="input-group-text rounded-end border border-1"><i
+                                            class="ri-calendar-line"></i></button>
                                 </div>
                             </div>
-
-                            <!-- Tombol Cari -->
-                            <div class="col-md-1">
-                                <button class="btn btn-outline-secondary rounded shadow-sm" type="submit">Cari</button>
-                            </div>
+                            <button type="submit" class="btn btn-primary d-lg-none mt-2 w-100">Cari</button>
+                            </form>
                         </div>
-                    </form>
-
-                    <!-- Alert ketika data tidak ditemukan -->
-                    @if (request()->has('search') && $attendances->isEmpty())
-                        <div class="alert alert-warning" role="alert">
-                            Data tidak ditemukan.
-                        </div>
-                    @endif
-
-                    <!-- Tabel Kehadiran -->
-                    <div class="row mt-3">
-                        <table class="table table-bordered shadow">
-                            <thead>
-                                <tr>
-                                    <th class="mr-5">
-                                        <a href="#" class="sort-link" data-sort="employee_id"
-                                            data-direction="{{ request('sortDirection') === 'asc' ? 'desc' : 'asc' }}">
-                                            Nama Karyawan
-                                            @if (request('sortBy') === 'employee_id')
-                                                <span>{{ request('sortDirection') === 'asc' ? '▲' : '▼' }}</span>
-                                            @endif
-                                        </a>
-                                    </th>
-                                    <th>
-                                        <a href="#" class="sort-link" data-sort="date"
-                                            data-direction="{{ request('sortDirection') === 'asc' ? 'desc' : 'asc' }}">
-                                            Tanggal
-                                            @if (request('sortBy') === 'date')
-                                                <span>{{ request('sortDirection') === 'asc' ? '▲' : '▼' }}</span>
-                                            @endif
-                                        </a>
-                                    </th>
-                                    <th> Status </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($attendances as $attendance)
-                                    <tr>
-                                        <td>{{ $attendance->employee_detail->name }}</td>
-                                        <td>{{ $attendance->date }}</td>
-                                        <td>{{ $attendance->status }}</td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="4" class="text-center">
-                                            <img src="{{ asset('assets/images/no-data.png') }}" alt="No Data"
-                                                class="img-fluid" style="width: clamp(150px, 50vw, 300px);">
-                                            <p class="mt-3">Tidak ada data tersedia</p>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-
-                        <!-- Pagination Links -->
-                        <div class="mt-3 justify-content-end">
-                            {{ $attendances->links() }}
+                        <a href="{{ route('attendance.index') }}" class="btn btn-warning">Reset</a>
+                        <div class="form-check form-switch gap-3 col-lg-3 col-12 d-flex justify-content-between align-items-center mt-2 mt-lg-0"
+                            style="width: auto;">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exportExcelModal">
+                                Rekap Excel
+                            </button>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
+        <div class="card-body border-top">
+            <div class="table-responsive table-card p-3">
+                <div class="tab-pane fade show active">
+                    <table class="table align-middle shadow-sm mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" style="width: 1rem">No.</th>
+                                <th scope="col"><a href="#" class="sort-link text-black" data-sort="employee_id"
+                                        data-direction="{{ request('sortDirection') === 'asc' ? 'desc' : 'asc' }}">
+                                        Karyawan
+                                        @if (request('sortBy') === 'employee_id')
+                                            <span>{{ request('sortDirection') === 'asc' ? '▲' : '▼' }}</span>
+                                        @endif
+                                    </a>
+                                </th>
+                                <th scope="col">Departemen</th>
+                                <th scope="col">
+                                    <a href="#" class="sort-link text-black" data-sort="date"
+                                        data-direction="{{ request('sortDirection') === 'asc' ? 'desc' : 'asc' }}">
+                                        Tanggal
+                                        @if (request('sortBy') === 'date')
+                                            <span>{{ request('sortDirection') === 'asc' ? '▲' : '▼' }}</span>
+                                        @endif
+                                    </a>
+
+                                </th>
+                                <th scope="col" class="text-center">Keterangan</th>
+                                <th scope="col" class="text-center">Masuk</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($attendances as $attendance)
+                                <tr>
+                                    <td>{{ $loop->iteration }} .</td>
+                                    <td>{{ $attendance->employee_detail->name }}</td>
+                                    <td>{{ $attendance->employee_detail->department->name }}</td>
+                                    <td>{{ $attendance->date }}</td>
+                                    <td class="text-center">
+                                        @if ($attendance->status == 'present')
+                                            <span class="badge bg-success-subtle text-success py-2 px-3">masuk</span>
+                                        @elseif($attendance->status == 'late')
+                                            <span class="badge bg-danger-subtle text-danger py-2 px-3">telat</span>
+                                        @elseif($attendance->status == 'absent')
+                                            <span class="badge bg-warning-subtle text-warning py-2 px-3">izin</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($attendance->status == 'present')
+                                            <span class="badge bg-success-subtle text-success py-2 px-3">
+                                                {{ $attendance->created_at->format('H:i') }}
+                                            </span>
+                                        @elseif ($attendance->status == 'late')
+                                            <span class="badge bg-danger-subtle text-danger py-2 px-3">
+                                                {{ $attendance->created_at->format('H:i') }}
+                                            </span>
+                                        @else
+                                            <span class="badge bg-secondary-subtle text-secondary py-2 px-3">
+                                                Tidak Ada Waktu
+                                            </span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center">
+                                        <img src="{{ asset('assets/images/no-data.png') }}" alt="No Data"
+                                            class="img-fluid" style="width: clamp(150px, 50vw, 300px);">
+                                        <p class="mt-3">Tidak ada data tersedia</p>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Excel Modal -->
+        <div class="modal fade" id="exportExcelModal" tabindex="-1" aria-labelledby="exportExcelModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exportExcelModalLabel">Rekap Excel</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="" method="get">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="yearInput" class="form-label">Tahun</label>
+                                <select class="form-select" id="yearInput" name="year">
+
+                                </select>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label for="monthInput" class="form-label">Bulan</label>
+                                <select class="form-select" id="monthInput" name="month">
+
+                                </select>
+                            </div>
+
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Rekap</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- JavaScript for Sorting Links -->

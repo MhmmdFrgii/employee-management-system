@@ -114,6 +114,11 @@ class AttendanceController extends Controller
             $query->whereIn('attendances.status', $request->status);
         }
 
+        // Filter untuk tanggal absen
+        $selectedDate = $request->has('date') ? Carbon::parse($request->date) : Carbon::today();
+
+        $query->whereDate('attendances.date', $selectedDate);
+
         // Apply sorting
         if ($request->has('sortBy')) {
             $direction = $request->sortDirection === 'desc' ? 'desc' : 'asc';
@@ -124,6 +129,6 @@ class AttendanceController extends Controller
         // Select relevant fields
         $attendances = $query->whereDate('date', '<=', $today)->select('attendances.*', 'employee_details.name as employee_name')->paginate(10);
 
-        return view('attendance.index', compact('attendances'));
+        return view('attendance.index', compact('attendances', 'selectedDate'));
     }
 }

@@ -93,7 +93,7 @@
     --primary-p-color: #565656;
     --primary-l-color: rgba(0, 0, 0, 0.12);
     --secondary-l-color: rgba(45, 49, 54, 0.09);
-    --valid-color: #28a745;
+    --valid-color: #3dd9eb;
     --invalid-color: #ffa200;
     --primary-bg-color: #f6f9fe;
     --primary-bg-color-2: linear-gradient(-47deg, #5d87ff 0%, #4528dc 100%);
@@ -296,6 +296,10 @@ img {
 
 .text-secondary {
     color: var(--secondary-color) !important;
+}
+
+.next-text {
+    color: #ffffff !important;
 }
 
 .featured-icon > span::before {

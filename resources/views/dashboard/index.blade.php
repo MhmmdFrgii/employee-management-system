@@ -115,13 +115,12 @@
                         <h5 class="card-title">Projects</h5>
                     </div>
                     <div class="card-body">
-                        <div id="projectsChart"></div>
+                        <div id="projectsCompletedChart"></div>
                     </div>
                 </div>
             </div>
 
-
-            @if (isset($departments) && $department_data)
+           @if (isset($departments) && $department_data)
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-header">
@@ -153,11 +152,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-
-
-
     </div>
 
     <div class="col-md-12">
@@ -187,81 +181,116 @@
         </div>
     </div>
     @if (isset($project_data))
-        <script>
-            var projectData = @json($project_data);
+    <script>
+        var projectData = @json($project_data);
 
-            var projectOptions = {
-                series: [{
-                        name: 'Jumlah Proyek Selesai',
-                        data: projectData.map(function(data) {
-                            return {
-                                x: data[0],
-                                y: data[1]
-                            };
-                        })
-                    },
-                    {
-                        name: 'Pendapatan',
-                        data: projectData.map(function(data) {
-                            return {
-                                x: data[0],
-                                y: data[2]
-                            };
-                        })
-                    }
-                ],
-                chart: {
-                    type: 'line',
-                    height: 350
-                },
-                stroke: {
-                    curve: 'smooth',
-                    width: [2, 2]
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                xaxis: {
-                    categories: @json($months),
-                    title: {
-                        text: 'Bulan'
-                    }
-                },
-                yaxis: [{
-                        title: {
-                            text: 'Jumlah Proyek Selesai'
-                        }
-                    },
-                    {
-                        opposite: true,
-                        title: {
-                            text: 'Pendapatan'
-                        }
-                    }
-                ],
-                tooltip: {
-                    y: {
-                        formatter: function(val, {
-                            seriesIndex
-                        }) {
-                            return seriesIndex === 0 ? val + " proyek" : val + " pendapatan";
-                        }
-                    }
-                },
-                markers: {
-                    size: 4
-                },
-                fill: {
-                    opacity: 1
+        // Chart untuk Jumlah Proyek Selesai
+        var projectCompletedOptions = {
+            series: [{
+                name: 'Jumlah Proyek Selesai',
+                data: projectData.map(function(data) {
+                    return {
+                        x: data[0],
+                        y: data[1]
+                    };
+                })
+            }],
+            chart: {
+                type: 'line',
+                height: 350
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 2
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: @json($months),
+                title: {
+                    text: 'Bulan'
                 }
-            };
+            },
+            yaxis: {
+                title: {
+                    text: 'Jumlah Proyek Selesai'
+                }
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return val + " proyek";
+                    }
+                }
+            },
+            markers: {
+                size: 4
+            },
+            fill: {
+                opacity: 1
+            }
+        };
 
-            var projectChart = new ApexCharts(document.querySelector("#projectsChart"), projectOptions);
-            projectChart.render();
-        </script>
-    @else
-        <p>Data tidak ditemukan.</p>
-    @endif
+        var projectCompletedChart = new ApexCharts(document.querySelector("#projectsCompletedChart"), projectCompletedOptions);
+        projectCompletedChart.render();
+
+        // Chart untuk Pendapatan
+        var revenueOptions = {
+            series: [{
+                name: 'Pendapatan',
+                data: projectData.map(function(data) {
+                    return {
+                        x: data[0],
+                        y: data[2]
+                    };
+                })
+            }],
+            chart: {
+                type: 'line',
+                height: 350
+            },
+            stroke: {
+                colors: ['#00ff00'], // Warna hijau untuk garis
+                curve: 'smooth',
+                width: 2
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: @json($months),
+                title: {
+                    text: 'Bulan'
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Pendapatan'
+                }
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return val + " pendapatan";
+                    }
+                }
+            },
+            markers: {
+                size: 4
+            },
+            fill: {
+                opacity: 1
+            }
+        };
+
+        var revenueChart = new ApexCharts(document.querySelector("#revenueChart"), revenueOptions);
+        revenueChart.render();
+    </script>
+@else
+    <p>Data tidak ditemukan.</p>
+@endif
+
 
     <!-- Script untuk Attendance Bar Chart -->
     @if (isset($attendanceData))
