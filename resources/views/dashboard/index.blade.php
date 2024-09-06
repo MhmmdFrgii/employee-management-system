@@ -120,34 +120,19 @@
                 </div>
             </div>
 
-            @if (isset($departments) && $department_data)
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Department</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="pieChart"></div>
-                    </div>
-                </div>
-            </div>
-            @endif
-            @if (isset($departments) && $department_data)
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Pendapatan</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="revenueChart"></div>
+           @if (isset($departments) && $department_data)
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Department</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="pieChart"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
             @endif
-
-
-
-            <div class="col-md-12">
+            <div class="col-md-5">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Kehadiran Karyawan</h5>
@@ -157,7 +142,16 @@
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Pemasukan & Pengeluaran</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="transactionChart"></div>
+                    </div>
+                </div>
+            </div>
     </div>
 
     <div class="col-md-12">
@@ -299,75 +293,75 @@
 
 
     <!-- Script untuk Attendance Bar Chart -->
-@if (isset($attendanceData))
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var attendanceOptions = {
-            series: [
-                {
-                    name: 'Present',
-                    data: @json($attendanceData['present'])
-                },
-                {
-                    name: 'Absent',
-                    data: @json($attendanceData['absent'])
-                },
-                {
-                    name: 'Alpha',
-                    data: @json($attendanceData['alpha'])
-                },
-                {
-                    name: 'Late',
-                    data: @json($attendanceData['late'])
-                }
-            ],
-            chart: {
-                type: 'bar',
-                height: 350
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false, // Set horizontal ke false jika ingin bar vertical
-                    columnWidth: '55%',
-                    endingShape: 'rounded',
-                    reverse: true
-                }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                show: true,
-                width: 2,
-                colors: ['transparent']
-            },
-            xaxis: {
-                categories: @json($months) // Data bulan untuk sumbu x
-            },
-            yaxis: {
-                title: {
-                    text: 'Jumlah Kehadiran'
-                }
-            },
-            fill: {
-                opacity: 1
-            },
-            tooltip: {
-                y: {
-                    formatter: function (val) {
-                        return val + " Karyawan";
+    @if (isset($attendanceData))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var attendanceOptions = {
+                    series: [{
+                            name: 'Present',
+                            data: @json($attendanceData['present'])
+                        },
+                        {
+                            name: 'Absent',
+                            data: @json($attendanceData['absent'])
+                        },
+                        {
+                            name: 'Alpha',
+                            data: @json($attendanceData['alpha'])
+                        },
+                        {
+                            name: 'Late',
+                            data: @json($attendanceData['late'])
+                        }
+                    ],
+                    chart: {
+                        type: 'bar',
+                        height: 350
+                    },
+                    plotOptions: {
+                        bar: {
+                            horizontal: false, // Set horizontal ke false jika ingin bar vertical
+                            columnWidth: '55%',
+                            endingShape: 'rounded',
+                            reverse: true
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        show: true,
+                        width: 2,
+                        colors: ['transparent']
+                    },
+                    xaxis: {
+                        categories: @json($months) // Data bulan untuk sumbu x
+                    },
+                    yaxis: {
+                        title: {
+                            text: 'Jumlah Kehadiran'
+                        }
+                    },
+                    fill: {
+                        opacity: 1
+                    },
+                    tooltip: {
+                        y: {
+                            formatter: function(val) {
+                                return val + " Karyawan";
+                            }
+                        }
                     }
-                }
-            }
-        };
+                };
 
-        var attendanceBarChart = new ApexCharts(document.querySelector("#attendanceBarChart"), attendanceOptions);
-        attendanceBarChart.render();
-    });
-</script>
-@else
-<p>Data kehadiran tidak ditemukan.</p>
-@endif
+                var attendanceBarChart = new ApexCharts(document.querySelector("#attendanceBarChart"),
+                    attendanceOptions);
+                attendanceBarChart.render();
+            });
+        </script>
+    @else
+        <p>Data kehadiran tidak ditemukan.</p>
+    @endif
 
 
     @if (isset($departments))
@@ -414,6 +408,67 @@
     @else
         <p>Data tidak ditemukan.</p>
     @endif
+
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var monthlyData = @json($monthlyData);
+
+            if (!monthlyData || !monthlyData.months || !monthlyData.income || !monthlyData.expense) {
+                console.error('Data untuk chart tidak tersedia atau tidak valid.');
+                return;
+            }
+
+            // Opsi chart dengan kategori bulan sebagai string
+            var options = {
+                series: [{
+                    name: 'Pemasukan',
+                    data: monthlyData.income
+                }, {
+                    name: 'Pengeluaran',
+                    data: monthlyData.expense
+                }],
+                chart: {
+                    height: 350,
+                    type: 'area'
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth'
+                },
+                xaxis: {
+                    type: 'category', // Ubah ke 'category' untuk menampilkan nama bulan
+                    categories: monthlyData.months, // Gunakan data nama bulan dari backend
+                    title: {
+                        text: 'Bulan'
+                    },
+                    labels: {
+                        rotate: -45, // Putar label bulan agar lebih terbaca
+                        style: {
+                            fontSize: '12px'
+                        }
+                    }
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(val) {
+                            return 'Rp ' + val.toLocaleString(); // Format angka dengan pemisah ribuan
+                        }
+                    }
+                },
+            };
+
+            // Render chart di dalam elemen dengan id "transactionChart"
+            var chart = new ApexCharts(document.querySelector("#transactionChart"), options);
+            chart.render();
+        });
+    </script>
+
+
+
 
     <style>
         .card-danger {
