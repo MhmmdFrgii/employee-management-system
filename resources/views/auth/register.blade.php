@@ -24,18 +24,18 @@
                             <div class="col-sm-8 col-md-8 col-xl-12">
 
                                 <div class="card-body  wizard-content">
-                                    <h4 class="card-title">Step wizard with validation</h4>
+                                    <h4 class="card-title">Pendaftaran Perusahaan</h4>
                                     <form action="{{ route('register') }}" class="validation-wizard wizard-circle mt-5"
                                         method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <!-- Step 1 -->
-                                        <h6>Step 1</h6>
+                                        <h6>Tahap 1</h6>
                                         <section>
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="mb-3">
-                                                        <label for="company_name"> Nama Perusahaan : <span
-                                                                class="danger">*</span></label>
+                                                        <label for="company_name"> Nama Perusahaan <span
+                                                                class="text-danger">*</span></label>
                                                         <input type="text"
                                                             class="form-control @error('company_name') is-invalid @enderror"
                                                             id="company_name" name="company_name"
@@ -50,8 +50,8 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="mb-3">
-                                                        <label for="company_address">Alamat : <span
-                                                                class="danger">*</span></label>
+                                                        <label for="company_address">Alamat <span
+                                                                class="text-danger">*</span></label>
                                                         <textarea type="text" class="form-control @error('company_address') is-invalid @enderror" id="company_address"
                                                             name="company_address" placeholder="Alamat Kantor">{{ old('company_address') }}</textarea>
                                                         @error('company_address')
@@ -63,8 +63,8 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="mb-3">
-                                                        <label for="contact_email">Contact Email : <span
-                                                                class="danger">*</span></label>
+                                                        <label for="contact_email">Contact Email <span
+                                                                class="text-danger">*</span></label>
                                                         <input type="text"
                                                             class="form-control @error('contact_email') is-invalid @enderror"
                                                             id="contact_email" name="contact_email"
@@ -78,7 +78,7 @@
                                             </div>
                                         </section>
 
-                                        <h6>Step 2</h6>
+                                        <h6>Tahap 2</h6>
                                         <section>
                                             <div class="row">
                                                 <div class="col-md-6">

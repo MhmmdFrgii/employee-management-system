@@ -11,12 +11,12 @@ class Salary extends Model
     use HasFactory;
     protected $table = 'salaries';
 
-    protected $fillable = [
-        'employee_id',
-        'amount',
-        'payment_date',
-        'company_id'
-    ];
+    protected $guarded = [];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id');
+    }
 
     public function employee_detail()
     {

@@ -71,17 +71,51 @@
                                         @endif
                                     </a>
                                 </th>
+                                <th>
+                                    <a
+                                        href="{{ route('salaries.index', array_merge(request()->query(), ['sortBy' => 'payment_date', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        Jenis Transaksi
+                                        @if (request('sortBy') === 'payment_date')
+                                            @if (request('sortDirection') === 'asc')
+                                                &#9650;
+                                            @else
+                                                &#9660;
+                                            @endif
+                                        @endif
+                                    </a>
+                                </th>
+                                <th>
+                                    <a
+                                        href="{{ route('salaries.index', array_merge(request()->query(), ['sortBy' => 'payment_date', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        Deskripsi
+                                        @if (request('sortBy') === 'payment_date')
+                                            @if (request('sortDirection') === 'asc')
+                                                &#9650;
+                                            @else
+                                                &#9660;
+                                            @endif
+                                        @endif
+                                    </a>
+                                </th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($salaries as $salary)
                                 <tr>
-
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $salary->employee_detail->name }}</td>
+                                    <td>{{ $salary->employee_detail->name ?? 'N/A' }}</td>
                                     <td>Rp {{ number_format($salary->amount, 2, ',', '.') }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($salary->payment_date)->format('d M Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($salary->transaction_date)->format('d M Y') }}</td>
+                                    @php
+                                        $types = [
+                                            'income' => 'Pemasukan',
+                                            'expense' => 'Pengeluaran',
+                                        ];
+                                    @endphp
+
+                                    <td>{{ $types[$salary->type] ?? 'Tidak Diketahui' }}</td>
+                                    <td>{{ $salary->description ?? 'N/A' }}</td>
                                     <td class="text-center">
                                         <button data-bs-target="#editSalariesModal{{ $salary->id }}"
                                             data-bs-toggle="modal" class="btn btn-warning btn-sm">Edit</button>
@@ -105,17 +139,23 @@
                                             </div>
                                             <div class="modal-body">
                                                 <form action="{{ route('salaries.update', $salary->id) }}" method="POST">
-                                                    @method('PUT')
                                                     @csrf
+                                                    @method('PUT')
+
+                                                    <input type="hidden" name="company_id"
+                                                        value="{{ Auth::user()->company->id }}">
                                                     <div class="mb-3">
                                                         <label for="employee_id" class="form-label">Nama Karyawan</label>
-                                                        <input type="hidden" value="{{ $salary->employee_id }}"
-                                                            name="employee_id">
-                                                        <input readonly type="text"
-                                                            class="form-control  @error('employee') is-invalid @enderror"
-                                                            id="employee"
-                                                            value="{{ old('employee', $salary->employee_detail->name) }}">
-                                                        @error('employee')
+                                                        <select name="employee_id" id="employee_id"
+                                                            class="form-control @error('employee_id') is-invalid @enderror">
+                                                            @foreach ($employees as $employee)
+                                                                <option value="{{ $employee->id }}"
+                                                                    {{ $employee->id == old('employee_id', $salary->employee_id) ? 'selected' : '' }}>
+                                                                    {{ $employee->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                        @error('employee_id')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
@@ -129,22 +169,49 @@
                                                         @enderror
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="payment_date" class="form-label">Tanggal
-                                                            Pembayaran</label>
-                                                        <input type="date" name="payment_date"
-                                                            class="form-control @error('payment_date') is-invalid @enderror"
-                                                            id="payment_date"
-                                                            value="{{ old('payment_date', $salary->payment_date) }}">
-                                                        @error('payment_date')
+                                                        <label for="type" class="form-label">Jenis Transaksi</label>
+                                                        <select name="type" id="type"
+                                                            class="form-control @error('type') is-invalid @enderror">
+                                                            <option value="income"
+                                                                {{ old('type', $salary->type) == 'income' ? 'selected' : '' }}>
+                                                                Pemasukan</option>
+                                                            <option value="expense"
+                                                                {{ old('type', $salary->type) == 'expense' ? 'selected' : '' }}>
+                                                                Pengeluaran</option>
+                                                        </select>
+                                                        @error('type')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary">Edit</button>
+                                                    <div class="mb-3">
+                                                        <label for="description" class="form-label">Deskripsi</label>
+                                                        <input type="text" name="description"
+                                                            class="form-control @error('description') is-invalid @enderror"
+                                                            id="description"
+                                                            value="{{ old('description', $salary->description) }}">
+                                                        @error('description')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="transaction_date" class="form-label">Tanggal
+                                                            Transaksi</label>
+                                                        <input type="date" name="transaction_date"
+                                                            class="form-control @error('transaction_date') is-invalid @enderror"
+                                                            id="transaction_date"
+                                                            value="{{ old('transaction_date', $salary->transaction_date) }}">
+                                                        @error('transaction_date')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Simpan
+                                                        Perubahan</button>
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
 
                                 <!-- Modal Delete -->
                                 <div class="modal fade" id="deleteSalariesModal{{ $salary->id }}" tabindex="-1"
@@ -207,19 +274,20 @@
                 <div class="modal-body">
                     <form action="{{ route('salaries.store') }}" method="POST">
                         @csrf
+
                         <div class="mb-3">
-                            <label for="employee_id" class="form-label">Nama Karywan</label>
-                            <select name="employee_id" id="employee_id" class="form-control">
-                                @forelse ($employees as $employee)
+
+                            <input type="hidden" name="company_id" value="{{ Auth::user()->company->id }}">
+
+                            <label for="employee_id" class="form-label">Nama Karyawan</label>
+                            <select name="employee_id" id="employee_id"
+                                class="form-control @error('employee_id') is-invalid @enderror">
+                                @foreach ($employees as $employee)
                                     <option value="{{ $employee->id }}"
-                                        {{ $employee->id == old('employee_id', $employee->id) ? 'selected' : '' }}>
+                                        {{ old('employee_id') == $employee->id ? 'selected' : '' }}>
                                         {{ $employee->name }}
                                     </option>
-                                @empty
-                                    <option selected disabled>
-                                        - Data Kosong -
-                                    </option>
-                                @endforelse
+                                @endforeach
                             </select>
                             @error('employee_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -227,19 +295,39 @@
                         </div>
                         <div class="mb-3">
                             <label for="amount" class="form-label">Jumlah</label>
-                            <input type="text" name="amount"
-                                class="form-control @error('amount') is-invalid @enderror" id="amount"
-                                value="{{ old('amount') }}">
+                            <input type="text" name="amount" id="amount"
+                                class="form-control @error('amount') is-invalid @enderror" value="{{ old('amount') }}">
                             @error('amount')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="mb-3">
-                            <label for="payment_date" class="form-label">Tanggal Pembayaran</label>
-                            <input type="date" name="payment_date"
-                                class="form-control @error('payment_date') is-invalid @enderror" id="payment_date"
-                                value="{{ old('payment_date') }}">
-                            @error('payment_date')
+                            <label for="type" class="form-label">Jenis Transaksi</label>
+                            <select name="type" id="type"
+                                class="form-control @error('type') is-invalid @enderror">
+                                <option value="income" {{ old('type') == 'income' ? 'selected' : '' }}>Pemasukan</option>
+                                <option value="expense" {{ old('type') == 'expense' ? 'selected' : '' }}>Pengeluaran
+                                </option>
+                            </select>
+                            @error('type')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Deskripsi</label>
+                            <input type="text" name="description" id="description"
+                                class="form-control @error('description') is-invalid @enderror"
+                                value="{{ old('description') }}">
+                            @error('description')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="transaction_date" class="form-label">Tanggal Transaksi</label>
+                            <input type="date" name="transaction_date" id="transaction_date"
+                                class="form-control @error('transaction_date') is-invalid @enderror"
+                                value="{{ old('transaction_date') }}">
+                            @error('transaction_date')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -249,4 +337,5 @@
             </div>
         </div>
     </div>
+
 @endsection

@@ -47,6 +47,11 @@
 
     {{-- APEX Chart --}}
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    </style>
 </head>
 
 <body>
@@ -291,6 +296,7 @@
     <script src="{{ asset('dist/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('dist/js/datatable/datatable-basic.init.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     {{-- Select2 --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -342,6 +348,18 @@
             $('.search-input').trigger('input');
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            flatpickr("[data-provider='flatpickr']", {
+                dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "F j, Y",
+                allowInput: true,
+                maxDate: "today"
+            });
+        });
+    </script>
+
 </body>
 
 </html>
