@@ -95,6 +95,7 @@
                                             @endif
                                             <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#editModal{{ $project->id }}" type="button">Ubah</button>
+
                                         @endif
                                         <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#vertical-center-modal{{ $project->id }}"
@@ -131,4 +132,17 @@
     </div>
 
     @include('projects.partial.add-modal')
+
+    <script>
+        $(document).ready(function() {
+    // Event ketika tombol Edit ditekan
+    $('.btn-edit').on('click', function() {
+        var projectId = $(this).data('id');
+
+        // Buka modal edit
+        $('#editModal').modal('show');
+            });
+        });                                                         
+
+    </script>
 @endsection
