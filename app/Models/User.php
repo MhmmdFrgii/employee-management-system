@@ -26,10 +26,6 @@ class User extends Authenticatable
         'company_id',
     ];
 
-    protected $attributes = [
-        'status' => 'disapprove', // Default status
-    ];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -68,7 +64,7 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class);
     }
     public function department()
-{
-    return $this->belongsTo(Department::class);
-}
+    {
+        return $this->belongsTo(Department::class);
+    }
 }

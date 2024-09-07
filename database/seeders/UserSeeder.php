@@ -21,7 +21,6 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => 'manager',
                 'company_id' => 1,
-                'status' => 'approved'
             ],
             [
                 'name' => 'Manager1',
@@ -29,7 +28,6 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => 'manager',
                 'company_id' => 2,
-                'status' => 'approved'
             ],
             [
                 'name' => 'Employee User',
@@ -37,7 +35,6 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => 'employee',
                 'company_id' => 1,
-                'status' => 'approved'
             ],
             [
                 'name' => 'Employee 2',
@@ -45,7 +42,6 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => 'employee',
                 'company_id' => 1,
-                'status' => 'approved'
             ],
             [
                 'name' => 'Employee 3',
@@ -53,7 +49,6 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => 'employee',
                 'company_id' => 2,
-                'status' => 'approved'
             ],
             [
                 'name' => 'Employee 4',
@@ -61,7 +56,6 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => 'employee',
                 'company_id' => 2,
-                'status' => 'approved'
             ],
         ];
 
@@ -71,7 +65,6 @@ class UserSeeder extends Seeder
                 'email' => $userData['email'],
                 'password' => $userData['password'],
                 'company_id' => $userData['company_id'],
-                'status' => $userData['status']
             ]);
 
             // Assign role if Spatie Laravel Permission is used
