@@ -24,6 +24,12 @@ Route::middleware('guest')->group(function () {
     Route::post('apply-applicant', [RegisteredUserController::class, 'store_applicant'])
         ->name('store.applicant');
 
+    Route::get('register-invite', [RegisteredUserController::class, 'create_invite'])
+        ->name('create.invite');
+
+    Route::post('register-invite', [RegisteredUserController::class, 'store_invite'])
+        ->name('store.invite');
+
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
