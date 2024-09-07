@@ -1,31 +1,6 @@
 @extends('dashboard.layouts.main')
 @section('content')
     <div class="row">
-        <div class="col d-flex align-items-stretch">
-            <div class="card w-100 overflow-hidden shadow-none" style="background-color: #cacae8;">
-                <div class="card-body position-relative">
-                    <div class="row">
-                        <div class="col-sm-7">
-                            <div class="d-flex align-items-center mb-7">
-
-                                <h5 class="fw-semibold mb-0 fs-5 ">Kehadiran yang Baik Membangun Kepercayaan
-                                    dan Meningkatkan Produktivitas
-                                </h5>
-                            </div>
-
-                        </div>
-                        <div class="col-sm-5">
-                            <div class="welcome-bg-img mb-n7 text-end">
-                                <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/backgrounds/welcome-bg.svg"
-                                    alt="" class="img-fluid">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-12">
             <div class="card mb-4 bg-light-primary">
                 <a href="" class="stretched-link"></a>

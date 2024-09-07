@@ -1,52 +1,52 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
-    <div class="card">
-        <div class="card-header">
-            <div class="row g-2 mt-3">
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                    <div class="row g-2">
-                        <h3 class="mx-1">Absensi Karyawan</h3>
-                    </div>
-                </div>
-                <div class="col-lg-8 col-md-6 col-sm-12">
-                    <div class="d-flex flex-column flex-lg-row justify-content-end gap-2">
-                        <div class="search-box col-lg-3 col-12">
-                            <form action="{{ route('attendance.index') }}">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="search"
-                                        value="{{ request('search') }}" id="searchMemberList" placeholder="Cari Karyawan">
-                                    <div class="input-group-append ">
-                                        <button type="submit" class="input-group-text rounded-end border border-1"><i
-                                                class="ri-search-line"></i></button>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary d-lg-none mt-2 w-100">Cari</button>
-                                </div>
-                        </div>
-                        <div class="search-box col-lg-3 col-12">
-                            <div class="input-group">
-                                <input type="text" class="form-control flatpickr-input" name="date"
-                                    value="{{ request('date') }}" data-provider="flatpickr" placeholder="Pilih tanggal">
-                                <div class="input-group-append ">
-                                    <button type="submit" class="input-group-text rounded-end border border-1"><i
-                                            class="ri-calendar-line"></i></button>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary d-lg-none mt-2 w-100">Cari</button>
-                            </form>
-                        </div>
-                        <a href="{{ route('attendance.index') }}" class="btn btn-warning">Reset</a>
-                        <div class="form-check form-switch gap-3 col-lg-3 col-12 d-flex justify-content-between align-items-center mt-2 mt-lg-0"
-                            style="width: auto;">
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exportExcelModal">
-                                Rekap Excel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
+<div class="card px-3 pb-4 mb-1 pt-1 rounded-sm">
+    <div class="row g-2 mt-3">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="row g-2">
+                <h3 class="mx-1">Absensi Karyawan</h3>
             </div>
         </div>
+        <div class="col-lg-8 col-md-6 col-sm-12">
+            <div class="d-flex flex-column flex-lg-row justify-content-end gap-2">
+                <div class="search-box col-lg-3 col-12">
+                    <form action="{{ route('attendance.index') }}">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="search"
+                                value="{{ request('search') }}" id="searchMemberList" placeholder="Cari Karyawan">
+                            <div class="input-group-append ">
+                                <button type="submit" class="input-group-text rounded-end border border-1"><i
+                                        class="ri-search-line"></i></button>
+                            </div>
+                            <button type="submit" class="btn btn-primary d-lg-none mt-2 w-100">Cari</button>
+                        </div>
+                </div>
+                <div class="search-box col-lg-3 col-12">
+                    <div class="input-group">
+                        <input type="text" class="form-control flatpickr-input" name="date"
+                            value="{{ request('date') }}" data-provider="flatpickr" placeholder="Pilih tanggal">
+                        <div class="input-group-append ">
+                            <button type="submit" class="input-group-text rounded-end border border-1"><i
+                                    class="ri-calendar-line"></i></button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary d-lg-none mt-2 w-100">Cari</button>
+                    </form>
+                </div>
+                <a href="{{ route('attendance.index') }}" class="btn btn-warning">Reset</a>
+                <div class="form-check form-switch gap-3 col-lg-3 col-12 d-flex justify-content-between align-items-center mt-2 mt-lg-0"
+                    style="width: auto;">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exportExcelModal">
+                        Rekap Excel
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+    <div class="card">
         <div class="card-body border-top">
             <div class="table-responsive table-card p-3">
                 <div class="tab-pane fade show active">
@@ -81,8 +81,8 @@
                             @forelse ($attendances as $attendance)
                                 <tr>
                                     <td>{{ $loop->iteration }} .</td>
-                                    <td>{{ $attendance->employee_detail->name }}</td>
-                                    <td>{{ $attendance->employee_detail->department->name }}</td>
+                                    <td class="text-uppercase">{{ $attendance->employee_detail->name }}</td>
+                                    <td class="text-uppercase">{{ $attendance->employee_detail->department->name }}</td>
                                     <td>{{ $attendance->date }}</td>
                                     <td class="text-center">
                                         @if ($attendance->status == 'present')
@@ -93,7 +93,7 @@
                                             <span class="badge bg-warning-subtle text-warning py-2 px-3">izin</span>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         @if ($attendance->status == 'present')
                                             <span class="badge bg-success-subtle text-success py-2 px-3">
                                                 {{ $attendance->created_at->format('H:i') }}

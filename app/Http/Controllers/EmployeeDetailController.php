@@ -40,6 +40,7 @@ class EmployeeDetailController extends Controller
         $sortBy = $request->get('sortBy', 'name'); // Default sorting by name
         $sortDirection = $request->get('sortDirection', 'asc'); // Default sorting direction is ascending
         $employeeId = $request->get('employee_id'); // ID karyawan untuk menampilkan detail
+        $department = $request->get('department');
 
         $departments = Department::where('company_id', Auth::user()->company->id)->get();
         $positions = Position::where('company_id', Auth::user()->company->id)->get();
@@ -65,6 +66,9 @@ class EmployeeDetailController extends Controller
                         ->orWhere('departments.name', 'like', "%{$search}%")
                         ->orWhere('positions.name', 'like', "%{$search}%");
                 });
+            })
+            ->when($department, function ($query) use ($department) {
+                $query->where('departments.name', $department);
             })
             ->orderBy(
                 $sortBy === 'department' ? 'departments.name' : ($sortBy === 'name' ? 'users.name' : ($sortBy === 'position' ? 'positions.name' : 'employee_details.' . $sortBy)),
