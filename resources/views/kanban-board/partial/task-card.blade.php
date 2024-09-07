@@ -23,8 +23,7 @@
 
             <!-- Tombol Hapus Task -->
             @if ($task->status === 'done')
-                <button class="btn btn-sm btn-primary m-1" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-                    data-action="{{ route('kanban-tasks.destroy', $task->id) }}">
+                <button class="btn btn-sm m-1 text-white" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ $task->id }}">
                     <i class='bx bx-trash'></i>
                 </button>
             @endif
@@ -38,5 +37,31 @@
         @if ($task->employee_id)
             <p class="small m-0">{{ $task->employee->name }}</p>
         @endif
+    </div>
+</div>
+
+
+<!-- Modal Delete -->
+<div class="modal fade" id="confirmDeleteModal{{ $task->id }}" tabindex="-1" aria-labelledby="vertical-center-modal"
+    style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+                <h5 class="modal-title" id="myLargeModalLabel">Konfirmasi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Apakah anda yakin ingin menghapus data ini?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-danger text-danger font-medium waves-effect text-start"
+                    data-bs-dismiss="modal">Batal</button>
+                <form action="{{ route('kanban-tasks.destroy', $task->id) }}" method="post">
+                    @csrf
+                    @method('DELETE')
+                    <button class="btn btn-danger" type="submit">Hapus</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
