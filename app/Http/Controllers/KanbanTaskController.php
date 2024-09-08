@@ -36,20 +36,20 @@ class KanbanTaskController extends Controller
         }
 
         return response()->json(['success' => false], 400);
-    }   
+    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(KanbanTaskRequest $request)
     {
-        KanbanTask::create($request->all());
-        return redirect()->route('kanban-boards.index', ['id' => $request->kanban_boards_id])->with('status', 'Kanban Tasks berhasil disimpan.');
+        KanbanTask::create($request->validated());
+        return redirect()->route('kanban-boards.index', ['id' => $request->kanban_boards_id])->with('success', 'Kanban Tasks berhasil disimpan.');
     }
 
-    public function update(Request $request, KanbanTask $kanban_task)
+    public function update(KanbanTaskRequest $request, KanbanTask $kanban_task)
     {
-        $data = $request->all();
+        $data = $request->validated();
         $data['title'] = $data['title'] ?? $kanban_task->title;
 
         try {
@@ -96,7 +96,7 @@ class KanbanTaskController extends Controller
             DB::commit();
 
             return redirect()->route('kanban-boards.index', ['id' => $kanban_task->kanban_boards_id])
-                ->with('status', 'Kanban Tasks berhasil diupdate');
+                ->with('success', 'Kanban Tasks berhasil diupdate');
         } catch (\Exception $e) {
             DB::rollBack();
 

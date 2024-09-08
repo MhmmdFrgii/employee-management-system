@@ -46244,3 +46244,7 @@ ul {
 .title-part-padding {
     padding: 15px 30px;
 }
+
+.rounded-end {
+    border-radius: 0 0.25rem 0.25rem 0; /* Melengkungkan hanya sisi kanan */
+}

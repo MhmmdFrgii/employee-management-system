@@ -32,39 +32,6 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="department" class="form-label">Departemen</label>
-                        <select name="department_id" id="edit-department-{{ $project->id }}" class="form-control">
-                            <option value="">Pilih Departemen</option>
-                            @foreach ($departments as $department)
-                                <option value="{{ $department->id }}"
-                                    {{ old('department_id', $project->department_id) == $department->id ? 'selected' : '' }}>
-                                    {{ $department->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('department_id')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="employee_id" class="form-label">Ditugaskan kepada</label>
-                        <select class="js-example-basic-multiple form-control w-100" name="employee_id[]"
-                            id="edit-employee-{{ $project->id }}" multiple="multiple">
-                            @foreach ($employees as $employee)
-                                <option value="{{ $employee->id }}" @selected(in_array($employee->id, old('employee_id[]', $project->employee_details->pluck('id')->toArray())))>
-                                    {{ $employee->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('employee_id[]')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
                         <label for="start_date" class="form-label">Tanggal Mulai</label>
                         <input type="date" name="start_date"
                             class="form-control @error('start_date') is-invalid @enderror" id="start_date"
@@ -86,6 +53,35 @@
                             </div>
                         @enderror
                     </div>
+                    <div class="mb-3">
+                        <label for="department" class="form-label">Departemen</label>
+                        <select name="department_id" id="edit-department-{{ $project->id }}" class="form-control">
+                            <option value="">Pilih Departemen</option>
+                            @foreach ($departments as $department)
+                                <option value="{{ $department->id }}"
+                                    {{ old('department_id', $project->department_id) == $department->id ? 'selected' : '' }}>
+                                    {{ $department->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('department_id')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="employee_id" class="form-label">Karyawan</label>
+                        <select class="js-example-basic-multiple form-control w-100" name="employee_id[]"
+                            id="edit-employee-{{ $project->id }}" multiple="multiple">
+                            <!-- Options for employees will be loaded dynamically via AJAX -->
+                        </select>
+                        @error('employee_id[]')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </form>
             </div>
@@ -93,9 +89,24 @@
     </div>
 </div>
 
+    <style>
+        /* Gaya Select2 untuk tampilan yang lebih baik */
+    .select2-container--default .select2-selection--multiple {
+        background-color: #fff !important;
+        border: 1px solid #ccc !important;
+    }
+
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background-color: #bcb9b9 !important;
+    }
+
+    .select2-container--default .select2-dropdown {
+        z-index: 9999; /* Pastikan dropdown muncul di atas elemen lain */
+    }
+    </style>
+
 <script>
     $(document).ready(function() {
-        // Inisialisasi Select2 pada modal edit ketika modal ditampilkan
         $('#editModal{{ $project->id }}').on('shown.bs.modal', function() {
             // Inisialisasi Select2 untuk employee_id
             $('#edit-employee-{{ $project->id }}').select2({
@@ -103,6 +114,31 @@
                 allowClear: true,
                 width: '100%'
             });
+
+            // Ambil nilai lama dari employee_id
+            var selectedEmployees = {!! json_encode(old('employee_id', $project->employee_details->pluck('id')->toArray())) !!};
+
+            // Ketika modal ditampilkan, otomatis ambil karyawan berdasarkan departemen yang sudah terpilih
+            var departmentId = $('#edit-department-{{ $project->id }}').val();
+            var employeeSelect = $('#edit-employee-{{ $project->id }}');
+
+            if (departmentId) {
+                $.ajax({
+                    url: '/manager/get-employees/' + departmentId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        var options = '<option></option>'; // Placeholder for Select2
+                        $.each(data, function(key, value) {
+                            options += '<option value="' + value.id + '" ' + (selectedEmployees.includes(value.id) ? 'selected' : '') + '>' + value.name + '</option>';
+                        });
+                        employeeSelect.html(options).trigger('change');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Gagal memuat data karyawan:', error);
+                    }
+                });
+            }
 
             // Event ketika departemen dipilih
             $('#edit-department-{{ $project->id }}').on('change', function() {
@@ -118,11 +154,9 @@
                         type: 'GET',
                         dataType: 'json',
                         success: function(data) {
-                            var options =
-                                '<option></option>'; // Placeholder for Select2
+                            var options = '<option></option>'; // Placeholder for Select2
                             $.each(data, function(key, value) {
-                                options += '<option value="' + value.id +
-                                    '">' + value.name + '</option>';
+                                options += '<option value="' + value.id + '">' + value.name + '</option>';
                             });
                             employeeSelect.html(options).trigger('change');
                         },

@@ -78,7 +78,7 @@
     @endforeach
 
 @endsection
-{{-- 
+{{--
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         ['todo', 'progress', 'done'].forEach(function(status) {

@@ -49,12 +49,12 @@ Route::middleware('auth')->group(function () {
             Route::resource('positions', PositionController::class);
             Route::resource('attendance', AttendanceController::class);
 
-            Route::get('/get-employees/{department_id}', [EmployeeDetailController::class, 'get_employees'])->name('employee.get');
             Route::resource('employees', EmployeeDetailController::class);
-
+            
             Route::patch('/projects/{id}/complete', [ProjectController::class, 'mark_completed'])->name('projects.complete');
             Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
             Route::resource('projects', ProjectController::class);
+            Route::get('/get-employees/{department_id}', [ProjectController::class, 'getEmployees']);
 
             Route::get('/candidates', [UserController::class, 'index'])->name('candidates.index');
             Route::patch('/invite/{company}', [CompanyController::class, 'reset_invite'])->name('invited.reset');

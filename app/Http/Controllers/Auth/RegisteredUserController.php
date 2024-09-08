@@ -67,7 +67,7 @@ class RegisteredUserController extends Controller
             event(new Registered($user));
 
             DB::commit();
-            return redirect(route('login'));
+            return redirect(route('login'))->with('success', 'Berhasil Membuat akun!');
         } catch (\Throwable $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Terjadi kesalahan saat registrasi.')->withInput();
