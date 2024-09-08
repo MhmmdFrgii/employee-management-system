@@ -28,6 +28,7 @@ class EmployeeDetailsSeeder extends Seeder
                 'gender' => 'female',
                 'address' => 'Jl. Thamrin No. 5, Jakarta',
                 'hire_date' => '2022-03-15',
+                'salary' => '1000000'
             ],
         ]);
 
@@ -46,6 +47,7 @@ class EmployeeDetailsSeeder extends Seeder
                 'gender' => 'male',
                 'address' => 'Jl. Sudirman No. 10, Jakarta',
                 'hire_date' => '2021-08-20',
+                'salary' => '1000000'
             ],
             [
                 'company_id' => 2,
@@ -61,6 +63,7 @@ class EmployeeDetailsSeeder extends Seeder
                 'gender' => 'female',
                 'address' => 'Jl. Karya No. 12, Bandung',
                 'hire_date' => '2023-01-10',
+                'salary' => '1000000'
             ],
         ]);
 
@@ -79,6 +82,7 @@ class EmployeeDetailsSeeder extends Seeder
                 'gender' => 'male',
                 'address' => 'Jl. Maju No. 7, Surabaya',
                 'hire_date' => '2023-03-22',
+                'salary' => '1000000'
             ],
         ]);
     }
