@@ -56,15 +56,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
             Route::resource('projects', ProjectController::class);
 
-
-            Route::get('/invited', [UserController::class, 'invited_index'])->name('invited.index');
-            Route::get('/invited/detail/{id}', [UserController::class, 'detail'])->name('invited.detail');
-            Route::patch('invited/reject/{user}', [UserController::class, 'reject'])->name('invited.reject');
+            Route::get('/candidates', [UserController::class, 'index'])->name('candidates.index');
             Route::patch('/invite/{company}', [CompanyController::class, 'reset_invite'])->name('invited.reset');
 
-            Route::get('/applicants/detail/{id}', [UserController::class, 'detail'])->name('applicants.detail');
-            Route::patch('applicants/reject/{applicant}', [UserController::class, 'reject'])->name('applicants.reject');
-            Route::resource('applicants', UserController::class);
+            Route::get('/candidates/detail/{applicant}', [UserController::class, 'detail'])->name('candidates.detail');
+            Route::patch('/candidates/reject/{applicant}', [UserController::class, 'reject'])->name('candidates.reject');
+            Route::patch('/candidates/update/{applicant}', [UserController::class, 'update'])->name('candidates.update');
 
             Route::patch('/company/{company}', [CompanyController::class, 'reset_code'])->name('companies.reset');
         });
