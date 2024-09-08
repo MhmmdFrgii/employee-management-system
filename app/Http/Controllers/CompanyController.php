@@ -15,4 +15,13 @@ class CompanyController extends Controller
 
         return redirect()->route('applicants.index')->with('success', 'berhasil mereset kode rekrut!');
     }
+
+    public function reset_invite(Company $company): mixed
+    {
+        $company->update([
+            'company_invite' => Company::company_generate()
+        ]);
+
+        return redirect()->route('invited.index')->with('success', 'berhasil mereset kode undangan!');
+    }
 }

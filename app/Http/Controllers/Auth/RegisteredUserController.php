@@ -30,11 +30,7 @@ class RegisteredUserController extends Controller
         return view('auth.register');
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
+    // Handling Create a new company Account
     public function store(Request $request): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
@@ -58,6 +54,7 @@ class RegisteredUserController extends Controller
                 'address' => $request->company_address,
                 'contact_email' => $request->contact_email,
                 'company_code' => Company::company_generate(),
+                'company_invite' => Company::company_generate()
             ]);
 
             $user = User::create([
@@ -65,7 +62,6 @@ class RegisteredUserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'status' => 'approved',
             ])->assignRole('manager');
 
             event(new Registered($user));
@@ -78,6 +74,7 @@ class RegisteredUserController extends Controller
         }
     }
 
+    // Checking if applicant code exist and return apply applicant view
     public function apply_applicant(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -93,6 +90,7 @@ class RegisteredUserController extends Controller
         return view('auth.apply-applicant');
     }
 
+    // store the applicant data to company
     public function store_applicant(Request $request)
     {
         $company = Company::where('company_code', $request->company_code)->first();
@@ -154,6 +152,7 @@ class RegisteredUserController extends Controller
         }
     }
 
+    // cek the company single use code, return employee regist based on company code 
     public function create_employee(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -177,6 +176,7 @@ class RegisteredUserController extends Controller
         return view('auth.register-employee');
     }
 
+    // store employee account to spesific company
     public function store_employee(Request $request)
     {
         $request->validate([
@@ -200,7 +200,6 @@ class RegisteredUserController extends Controller
                 'name' => $applicant->name,
                 'email' => $applicant->email,
                 'password' => Hash::make($request->password),
-                'status' => 'approved',
             ])->assignRole('employee');
 
             Notification::create([
@@ -230,11 +229,86 @@ class RegisteredUserController extends Controller
         }
     }
 
+    public function create_invite(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'invite' => 'required|string|exists:companies,company_invite',
+        ], [
+            'invite.exists' => 'Kode undangan tidak valid!',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('landing-page')->withErrors($validator)->withInput();
+        }
+
+        return view('auth.register-invite');
+    }
+
+    public function store_invite(Request $request)
+    {
+        // dd($request);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'photo' => 'required|mimes:png,jpg,jpeg|max:1024',
+            'gender' => 'required|string|in:male,female',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        // Jika validasi gagal, kembali dengan error
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        DB::beginTransaction(); // Memulai transaksi
+
+        try {
+            // Upload photo
+            $photo = $request->file('photo')->store('employee_photos', 'public');
+
+            // Buat user baru
+            $user = User::create([
+                'company_id' => '1',
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+
+            // Buat detail karyawan
+            EmployeeDetail::create([
+                'user_id' => $user->id,
+                'name' => $request->name,
+                'email' => $request->email,
+                'photo' => $photo,
+                'phone' => $request->phone,
+                'gender' => $request->gender,
+                'address' => $request->address,
+                'company_id' => '1',
+                'source' => 'applicant'
+            ]);
+
+            DB::commit();
+            return view('auth.login');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            if (isset($photo)) {
+                Storage::disk('public')->delete($photo);
+            }
+
+            dd($e);
+            // Kembalikan ke halaman sebelumnya dengan pesan error
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data.')->withInput();
+        }
+    }
+
+    // return single use setup page for location
     public function setup_location()
     {
         return view('auth.location-setup');
     }
 
+    // store the setted location to a spesific company
     public function store_location(Request $request)
     {
 

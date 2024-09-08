@@ -33,7 +33,9 @@ class Company extends Model
         while (!$unique) {
             $code = strtoupper(Str::random($length));
 
-            $unique = !Company::where('company_code', $code)->exists();
+            $unique = !Company::where('company_code', $code)
+                ->where('company_invite', $code)
+                ->exists();
         }
 
         return $code;
