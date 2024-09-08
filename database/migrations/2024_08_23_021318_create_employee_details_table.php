@@ -20,12 +20,14 @@ return new class extends Migration
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->string('name');
             $table->string('photo');
-            $table->string('cv');
+            $table->string('cv')->nullable();
             $table->string('phone', 16)->unique();
             $table->string('email')->unique();
             $table->enum('gender', ['male', 'female']);
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->date('hire_date')->nullable();
+            $table->decimal('salary', 15, 2)->nullable();
+            $table->enum('source', ['invited', 'applicant']);
             $table->timestamps();
         });
     }
