@@ -41,24 +41,27 @@
 
                             @auth
 
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    EMS
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    @if (Auth::user()->hasRole('manager'))
-                                        <li><a class="dropdown-item" href="{{ route('manager.dashboard') }}">Dashboard</a></li>
-                                    @else
-                                        <li><a class="dropdown-item" href="{{ route('employee.dashboard') }}">Dashboard</a></li>
-                                    @endif
-                                    <form id="logout" class="d-none" action="{{ route('logout') }}" method="post">
-                                        @csrf
-                                    </form>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        EMS
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        @if (Auth::user()->hasRole('manager'))
+                                            <li><a class="dropdown-item" href="{{ route('manager.dashboard') }}">Dashboard</a>
+                                            </li>
+                                        @else
+                                            <li><a class="dropdown-item" href="{{ route('employee.dashboard') }}">Dashboard</a>
+                                            </li>
+                                        @endif
+                                        <form id="logout" class="d-none" action="{{ route('logout') }}" method="post">
+                                            @csrf
+                                        </form>
 
-                                    <li><button class="dropdown-item border-0"  onclick="document.getElementById('logout').submit();">Logout</button></li>
-                                </ul>
-                            </li>
-
+                                        <li><button class="dropdown-item border-0"
+                                                onclick="document.getElementById('logout').submit();">Logout</button></li>
+                                    </ul>
+                                </li>
                             @else
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('login') }}">Masuk</a>
@@ -89,8 +92,26 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <input type="text" class="form-control @error('applicant') is-invalid @enderror"
-                                            id="applicant" name="applicant" placeholder="Kode Undangan">
+                                            id="applicant" name="applicant" placeholder="Kode Lamaran">
                                         @error('applicant')
+                                            <div class="text-danger mt-2">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-6">
+                                        <button type="submit" class="mt-2 btn btn-primary">Lanjutkan</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                        <form action="{{ route('create.invite') }}">
+                            <div class="form-group" class="text-white">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="text" class="form-control @error('invite') is-invalid @enderror"
+                                            id="invite" name="invite" value="{{ request('invite') }}"
+                                            placeholder="Kode Undangan">
+                                        @error('invite')
                                             <div class="text-danger mt-2">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -383,7 +404,8 @@
                                         src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/dark-logo.svg"
                                         alt="logo-brand">
                                 </a>
-                                <p class="mt-2 mb-3">Employee Management System membantu Anda mengelola karyawan dan proyek dengan mudah. Hubungi kami untuk mulai menggunakan sistem kami!</p>
+                                <p class="mt-2 mb-3">Employee Management System membantu Anda mengelola karyawan dan proyek
+                                    dengan mudah. Hubungi kami untuk mulai menggunakan sistem kami!</p>
                             </div>
                         </div>
 
@@ -407,8 +429,7 @@
                                 <ul>
                                     <li class="py-2"><a href="https://wa.me/62859189566453?text=Proposal"
                                             target="_blank">Proposal</a></li>
-                                    <li class="py-2"><a
-                                            href="https://wa.me/62859189566453?text=Kerjasama%20Industri"
+                                    <li class="py-2"><a href="https://wa.me/62859189566453?text=Kerjasama%20Industri"
                                             target="_blank">Kerjasama Industri</a></li>
                                     <li class="py-2"><a href="https://wa.me/62859189566453?text=Hubungi%20Kami"
                                             target="_blank">Hubungi Kami</a></li>
