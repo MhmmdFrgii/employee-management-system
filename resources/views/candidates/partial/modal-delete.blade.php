@@ -13,7 +13,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-light-danger text-danger font-medium waves-effect text-start"
                     data-bs-dismiss="modal">Batal</button>
-                <form action="{{ route('applicants.reject', $applicant->id) }}" method="POST">
+                <form action="{{ route('candidates.reject', $applicant->id) }}" method="POST">
                     @csrf
                     @method('patch')
                     <button type="submit" class="btn btn-danger btn-md">Tolak</button>

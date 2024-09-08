@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\EmployeeDetail;
 use App\Models\InvitationCode;
 use App\Models\Position;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -22,19 +23,24 @@ class UserController extends Controller
     {
         $company = Company::where('id', Auth::user()->company_id)->first();
 
-        $applicants = EmployeeDetail::where('status', 'pending')
+        $invitedApplicants = EmployeeDetail::where('status', 'pending')
+            ->where('source', 'invited')
             ->where('company_id', $company->id)
             ->paginate(6);
 
-        return view('applicant.index', compact('applicants', 'company'));
+        $applicants = EmployeeDetail::where('status', 'pending')
+            ->where('source', 'applicant')
+            ->where('company_id', $company->id)
+            ->paginate(6);
+
+        return view('candidates.index', compact('applicants', 'invitedApplicants', 'company'));
     }
 
-    public function detail($id)
+    public function detail(EmployeeDetail $applicant)
     {
         $department = Department::where('company_id', Auth::user()->company->id)->get();
         $positions = Position::where('company_id', Auth::user()->company->id)->get();
-        $applicant = EmployeeDetail::findOrFail($id);
-        return view('applicant.detail', compact('applicant', 'department', 'positions'));
+        return view('candidates.detail', compact('applicant', 'department', 'positions'));
     }
 
     /**
@@ -66,11 +72,11 @@ class UserController extends Controller
                 $invitation_code->code
             ));
         } catch (\Exception $e) {
-            return redirect()->route('applicants.index')->with('error', 'User approved but failed to send email.');
+            return redirect()->route('candidates.index')->with('error', 'User approved but failed to send email.');
         }
 
         // Redirect ke index dengan pesan sukses
-        return redirect()->route('applicants.index')->with('success', 'User Applicant approved.');
+        return redirect()->route('candidates.index')->with('success', 'User Applicant approved.');
     }
 
     public function reject(EmployeeDetail $applicant)
@@ -87,11 +93,11 @@ class UserController extends Controller
                 $applicant->company->name
             ));
         } catch (\Exception $e) {
-            return redirect()->route('applicants.index')->with('error', 'User rejected but failed to send email.');
+            return redirect()->route('candidates.index')->with('error', 'User rejected but failed to send email.');
         }
 
         // Redirect ke index dengan pesan sukses
-        return redirect()->route('applicants.index')->with('success', 'User Applicant rejected.');
+        return redirect()->route('candidates.index')->with('success', 'User Applicant rejected.');
     }
 
     /**
@@ -107,10 +113,10 @@ class UserController extends Controller
             $applicant->update(['status' => 'rejected']);
 
             // Redirect ke index dengan pesan sukses
-            return redirect()->route('applicants.index')->with('success', 'Applicant rejected successfully.');
+            return redirect()->route('candidates.index')->with('success', 'Applicant rejected successfully.');
         } catch (\Exception $e) {
             // Jika ada kesalahan, redirect ke index dengan pesan error
-            return redirect()->route('applicants.index')->with('error', 'Failed to reject applicant.');
+            return redirect()->route('candidates.index')->with('error', 'Failed to reject applicant.');
         }
     }
 }
