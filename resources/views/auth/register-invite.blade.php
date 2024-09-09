@@ -28,6 +28,8 @@
                                     <form action="{{ route('store.invite') }}" class="validation-wizard wizard-circle mt-5"
                                         method="POST" enctype="multipart/form-data">
                                         @csrf
+
+                                        <input type="hidden" name="invite" value="{{ request('invite') }}">
                                         <!-- Step 1 -->
                                         <h6>Data Diri</h6>
                                         <section>
@@ -128,7 +130,7 @@
                                                         <label for="password_confirmation">Konfirmasi Password</label>
                                                         <input type="password" name="password_confirmation"
                                                             class="form-control" id="password_confirmation"
-                                                            placeholder="Password Confirmation" />
+                                                            placeholder="Konfirmasi Password" />
                                                     </div>
                                                 </div>
                                             </div>

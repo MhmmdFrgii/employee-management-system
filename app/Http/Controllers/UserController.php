@@ -55,7 +55,8 @@ class UserController extends Controller
         $applicant->update([
             'department_id' => $validatedData['department_id'],
             'position_id' => $validatedData['position_id'],
-            'status' => 'approved', // Set status menjadi 'approved' secara otomatis
+            'status' => 'approved',
+            'salary' => $validatedData['salary']
         ]);
 
         // Jika statusnya 'approved', buat kode undangan dan kirim email

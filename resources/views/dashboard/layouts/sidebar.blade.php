@@ -107,7 +107,7 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item {{ Request::is('notifications*') ? 'selected' : '' }}">
+                {{-- <li class="sidebar-item {{ Request::is('notifications*') ? 'selected' : '' }}">
                     <a href="{{ route('notifications.index') }}" class="sidebar-link d-flex align-items-center">
                         <span>
                             <i class="ti ti-inbox"></i>
@@ -120,7 +120,7 @@
                             </span>
                         @endif
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

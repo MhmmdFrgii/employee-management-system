@@ -29,7 +29,7 @@
                                         method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <!-- Step 1 -->
-                                        <h6>Tahap 1</h6>
+                                        <h6>Data Perusahaan</h6>
                                         <section>
                                             <div class="row">
                                                 <div class="col-md-12">
@@ -63,7 +63,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="mb-3">
-                                                        <label for="contact_email">Contact Email <span
+                                                        <label for="contact_email">Kontak Email <span
                                                                 class="text-danger">*</span></label>
                                                         <input type="text"
                                                             class="form-control @error('contact_email') is-invalid @enderror"
@@ -78,15 +78,15 @@
                                             </div>
                                         </section>
 
-                                        <h6>Tahap 2</h6>
+                                        <h6>Data Diri</h6>
                                         <section>
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="name">Username</label>
+                                                        <label for="name">Nama</label>
                                                         <input type="text"
                                                             class="form-control @error('name') is-invalid @enderror"
-                                                            id="name" name="name" placeholder="Username"
+                                                            id="name" name="name" placeholder="Nama"
                                                             value="{{ old('name') }}" />
                                                         @error('name')
                                                             <div class="text-danger">{{ $message }}</div>
@@ -120,10 +120,10 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="password_confirmation">Password Confirmation</label>
+                                                        <label for="password_confirmation">Konfirmasi Password</label>
                                                         <input type="password" name="password_confirmation"
                                                             class="form-control" id="password_confirmation"
-                                                            placeholder="Password Confirmation" />
+                                                            placeholder="Konfirmasi Password" />
                                                     </div>
                                                 </div>
                                             </div>

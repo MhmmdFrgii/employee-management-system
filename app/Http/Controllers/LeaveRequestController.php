@@ -11,11 +11,22 @@ use App\Models\Notification;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class LeaveRequestController extends Controller
 {
+    public function calendar()
+    {
+        $leave_datas = LeaveRequest::where('company_id', Auth::user()->company->id)
+            ->where('status', 'approved')
+            ->get();
+
+        // dd($leave_datas->start_date);
+        return view('leave-request.calendar', compact('leave_datas'));
+    }
+
     /**
      * Display a listing of the resource.
      */
