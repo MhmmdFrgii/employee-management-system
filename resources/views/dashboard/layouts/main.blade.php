@@ -355,7 +355,6 @@
                 altInput: true,
                 altFormat: "F j, Y",
                 allowInput: true,
-                maxDate: "today"
             });
         });
     </script>
