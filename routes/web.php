@@ -49,7 +49,10 @@ Route::middleware('auth')->group(function () {
             Route::get('/getEmployeeSalary/{employeeId}', [SalaryController::class, 'getEmployeeSalary'])->name('salary.getEmployeeSalary');
 
             Route::resource('positions', PositionController::class);
-            Route::resource('attendance', AttendanceController::class);
+
+            // Route::resource('attendance', AttendanceController::class);
+            Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+            Route::get('attendance/export', [AttendanceController::class, 'export'])->name('attendance.export');
 
             Route::resource('employees', EmployeeDetailController::class);
 

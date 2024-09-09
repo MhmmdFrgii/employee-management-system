@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attendance;
-use App\Models\EmployeeDetail;
-use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Attendance;
 use Illuminate\Http\Request;
+use App\Models\EmployeeDetail;
+use App\Exports\AttendanceExport;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Redis;
 
 class AttendanceController extends Controller
@@ -97,6 +99,7 @@ class AttendanceController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+
         $selectedDate = $request->has('date') ? Carbon::parse($request->date) : Carbon::today();
 
         $employees = EmployeeDetail::where('company_id', $user->company_id)
@@ -105,18 +108,42 @@ class AttendanceController extends Controller
             }])
             ->get();
 
-        if ($request->has('search')) {
-            $employees = $employees->filter(function ($employee) use ($request) {
-                return stripos($employee->name, $request->search) !== false;
-            });
+        $statusFilters = $request->status ?? [];
+
+        if (in_array('alpha', $statusFilters)) {
+            $employeesAlpha = EmployeeDetail::where('company_id', $user->company_id)
+                ->whereDoesntHave('attendances', function ($query) use ($selectedDate) {
+                    $query->whereDate('date', $selectedDate);
+                })
+                ->get();
+
+            $employees = $employees->merge($employeesAlpha);
         }
 
-        if ($request->has('status') && is_array($request->status)) {
-            $employees = $employees->filter(function ($employee) use ($request) {
-                return $employee->attendances->whereIn('status', $request->status)->isNotEmpty();
+        if (!empty($statusFilters)) {
+            $employees = $employees->filter(function ($employee) use ($statusFilters) {
+                if (in_array('alpha', $statusFilters) && $employee->attendances->isEmpty()) {
+                    return true;
+                }
+
+                foreach ($employee->attendances as $attendance) {
+                    if (in_array($attendance->status, $statusFilters)) {
+                        return true;
+                    }
+                }
+                return false;
             });
         }
 
         return view('attendance.index', compact('employees', 'selectedDate'));
+    }
+
+    public function export(Request $request)
+    {
+        $year = $request->input('year', date('Y'));
+        $month = $request->input('month');
+
+
+        return Excel::download(new AttendanceExport($year, $month), 'attendance_report.xlsx');
     }
 }

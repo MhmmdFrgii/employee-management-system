@@ -57,12 +57,12 @@
             </ul>
         </div>
 
-        <div class="form-check form-switch gap-3 col-lg-3 col-12 d-flex justify-content-between align-items-center mt-2 mt-lg-0"
-            style="width: auto;">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exportExcelModal">
-                Rekap Excel
-            </button>
-        </div>
-        </form>
+    </form>
+    <div class="form-check form-switch gap-3 col-lg-3 col-12 d-flex justify-content-between align-items-center mt-2 mt-lg-0"
+        style="width: auto;">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exportExcelModal">
+            Rekap Excel
+        </button>
+    </div>
     </div>
 </div>
