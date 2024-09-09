@@ -9,6 +9,10 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class AttendanceExport implements FromCollection, WithHeadings, WithMapping, WithStyles
 {
@@ -41,32 +45,41 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
         $daysInMonth = Carbon::create($this->year, $this->month, 1)->daysInMonth;
 
         foreach ($employees as $employee) {
-            // Jika karyawan memiliki absensi
-            if (isset($attendances[$employee->id])) {
-                foreach ($attendances[$employee->id] as $attendance) {
-                    $data[] = [
-                        'employee_name' => $employee->name,
-                        'department_name' => $employee->department->name ?? 'N/A',
-                        'date' => Carbon::parse($attendance->date)->format('Y-m-d'),
-                        'status' => $this->mapStatus($attendance->status),
-                        'time' => $attendance->status === 'present' || $attendance->status === 'late'
+            // Periksa apakah karyawan memiliki absensi
+            $employeeAttendances = $attendances->get($employee->id, collect());
+
+            // Untuk setiap hari dalam bulan
+            for ($date = 1; $date <= $daysInMonth; $date++) {
+                $currentDate = Carbon::create($this->year, $this->month, $date);
+                $formattedDate = $currentDate->format('Y-m-d');
+
+                if (!$currentDate->isWeekend()) { // Hanya tambahkan hari kerja
+                    if ($employeeAttendances->where('date', $formattedDate)->isNotEmpty()) {
+                        $attendance = $employeeAttendances->where('date', $formattedDate)->first();
+                        $status = $this->mapStatus($attendance->status);
+                        $time = $attendance->status === 'present' || $attendance->status === 'late'
                             ? $attendance->created_at->format('H:i')
-                            : 'Tidak Ada Waktu',
-                    ];
-                }
-            } else {
-                // Karyawan tidak memiliki absensi di bulan ini
-                for ($date = 1; $date <= $daysInMonth; $date++) {
+                            : '';
+                    } else {
+                        $status = 'Alpha';
+                        $time = '';
+                    }
+
                     $data[] = [
                         'employee_name' => $employee->name,
                         'department_name' => $employee->department->name ?? 'N/A',
-                        'date' => Carbon::create($this->year, $this->month, $date)->format('Y-m-d'),
-                        'status' => 'Alpha',
-                        'time' => 'Tidak Ada Waktu',
+                        'date' => $formattedDate,
+                        'status' => $status,
+                        'time' => $time,
                     ];
                 }
             }
         }
+
+        // Mengurutkan data berdasarkan tanggal
+        usort($data, function ($a, $b) {
+            return strcmp($a['date'], $b['date']);
+        });
 
         return collect($data);
     }
@@ -112,12 +125,38 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
     }
 
     public function styles(Worksheet $sheet)
-    {
-        $sheet->getStyle('A1:F1')->getFont()->setBold(true);
-        $sheet->getStyle('A1:F1')->getAlignment()->setHorizontal('center');
+{
+    // Format header
+    $sheet->getStyle('A1:F1')->getFont()->setBold(true)->setSize(12);
+    $sheet->getStyle('A1:F1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+    $sheet->getStyle('A1:F1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFFF00'); // Header color: yellow
 
-        foreach (range('A', 'F') as $columnID) {
-            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+    // Format columns
+    foreach (range('A', 'F') as $columnID) {
+        $sheet->getColumnDimension($columnID)->setAutoSize(true);
+    }
+
+    // Format borders
+    $sheet->getStyle('A1:F100')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+
+    $highestRow = $sheet->getHighestRow();
+    for ($row = 2; $row <= $highestRow; $row++) {
+        $status = $sheet->getCell('E' . $row)->getValue();
+        switch ($status) {
+            case 'Alpha':
+                $sheet->getStyle('E' . $row)->getFont()->getColor()->setARGB('FF0000'); // Red
+                break;
+            case 'Masuk':
+                $sheet->getStyle('E' . $row)->getFont()->getColor()->setARGB('008000'); // Green
+                break;
+            case 'Telat':
+                $sheet->getStyle('E' . $row)->getFont()->getColor()->setARGB('FFFF00'); // Yellow
+                break;
+            case 'Izin':
+                $sheet->getStyle('E' . $row)->getFont()->getColor()->setARGB('0000FF'); // Blue
+                break;
         }
     }
+}
+
 }
