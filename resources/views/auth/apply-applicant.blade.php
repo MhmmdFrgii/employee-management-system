@@ -31,7 +31,8 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="name"> Nama : <span class="danger">*</span></label>
+                                                        <label for="name"> Nama<span
+                                                                class="text-danger">*</span></label>
                                                         <input type="text"
                                                             class="form-control @error('name') is-invalid @enderror"
                                                             id="name" name="name" placeholder="Nama Karyawan"
@@ -43,7 +44,8 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="email"> Email : <span class="danger">*</span></label>
+                                                        <label for="email"> Email<span
+                                                                class="text-danger">*</span></label>
                                                         <input type="text"
                                                             class="form-control @error('email') is-invalid @enderror"
                                                             id="email" name="email" placeholder="Masukkan Email"
@@ -57,7 +59,7 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="photo">Foto : <span class="danger">*</span></label>
+                                                        <label for="photo">Foto<span class="text-danger">*</span></label>
                                                         <input type="file"
                                                             class="form-control @error('photo') is-invalid @enderror"
                                                             id="photo" name="photo" placeholder="Nomor Telepon"
@@ -72,7 +74,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="cv">CV : <span class="danger">*</span></label>
+                                                        <label for="cv">CV<span class="text-danger">*</span></label>
                                                         <input type="file"
                                                             class="form-control @error('cv') is-invalid @enderror"
                                                             id="cv" name="cv" placeholder="Nomor Telepon"
@@ -88,8 +90,8 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <label for="phone"> Nomor Telepon : <span
-                                                            class="danger">*</span></label>
+                                                    <label for="phone"> Nomor Telepon<span
+                                                            class="text-danger">*</span></label>
                                                     <input type="number"
                                                         class="form-control @error('phone') is-invalid @enderror"
                                                         id="phone" name="phone" placeholder="Nomor Telepon"
@@ -100,8 +102,8 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="gender">Jenis Kelamin : <span
-                                                                class="danger">*</span></label>
+                                                        <label for="gender">Jenis Kelamin<span
+                                                                class="text-danger">*</span></label>
                                                         <div class="form-check">
                                                             <input type="radio" id="male" name="gender"
                                                                 value="male"
@@ -128,8 +130,8 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="mb-3">
-                                                        <label for="address">Alamat : <span
-                                                                class="danger">*</span></label>
+                                                        <label for="address">Alamat<span
+                                                                class="text-danger">*</span></label>
                                                         <textarea type="text" class="form-control @error('address') is-invalid @enderror" id="address" name="address"
                                                             placeholder="Alamat">{{ old('address') }}</textarea>
                                                         @error('address')
@@ -144,7 +146,7 @@
                                                         {!! htmlFormSnippet([
                                                             'theme' => 'light',
                                                             'size' => 'normal',
-                                                        'tabindex' => '2',
+                                                            'tabindex' => '2',
                                                             'callback' => 'callbackFunction',
                                                             'expired-callback' => 'expiredCallbackFunction',
                                                             'error-callback' => 'errorCallbackFunction',
