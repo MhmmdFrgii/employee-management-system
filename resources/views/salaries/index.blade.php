@@ -6,6 +6,7 @@
             <div class="container py-2">
                 <h1 class="h3">Gaji</h1>
 
+
                 <div class="d-flex justify-content-between align-items-center mb-2 mt-3">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSalariesModal">
                         Tambah
@@ -48,7 +49,20 @@
                                 <th>
                                     <a
                                         href="{{ route('salaries.index', array_merge(request()->query(), ['sortBy' => 'amount', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
-                                        Jumlah
+                                        Gaji
+                                        @if (request('sortBy') === 'amount')
+                                            @if (request('sortDirection') === 'asc')
+                                                &#9650;
+                                            @else
+                                                &#9660;
+                                            @endif
+                                        @endif
+                                    </a>
+                                </th>
+                                <th>
+                                    <a
+                                        href="{{ route('salaries.index', array_merge(request()->query(), ['sortBy' => 'amount', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        Bonus
                                         @if (request('sortBy') === 'amount')
                                             @if (request('sortDirection') === 'asc')
                                                 &#9650;
@@ -97,6 +111,9 @@
                                         @endif
                                     </a>
                                 </th>
+                                <th>Total Gaji</th>
+
+
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -106,6 +123,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $salary->employee_detail->name ?? 'N/A' }}</td>
                                     <td>Rp {{ number_format($salary->amount, 2, ',', '.') }}</td>
+                                    <td>Rp {{ number_format($salary->extra, 2, ',', '.') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($salary->transaction_date)->format('d M Y') }}</td>
                                     @php
                                         $types = [
@@ -116,6 +134,7 @@
 
                                     <td>{{ $types[$salary->type] ?? 'Tidak Diketahui' }}</td>
                                     <td>{{ $salary->description ?? 'N/A' }}</td>
+                                    <td>Rp {{ number_format($salary->total_amount, 2, ',', '.') }}</td>
                                     <td class="text-center">
                                         <button data-bs-target="#editSalariesModal{{ $salary->id }}"
                                             data-bs-toggle="modal" class="btn btn-warning btn-sm">Edit</button>
@@ -160,15 +179,25 @@
                                                         @enderror
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="amount" class="form-label">Jumlah</label>
+                                                        <label for="amount" class="form-label">Gaji</label>
                                                         <input type="text" name="amount"
                                                             class="form-control @error('amount') is-invalid @enderror"
-                                                            id="amount" value="{{ old('amount', $salary->amount) }}">
+                                                            readonly id="amount"
+                                                            value="{{ old('amount', $salary->amount) }}">
                                                         @error('amount')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
                                                     <div class="mb-3">
+                                                        <label for="extra" class="form-label">Bonus Gaji</label>
+                                                        <input type="text" name="extra"
+                                                            class="form-control @error('extra') is-invalid @enderror"
+                                                            id="extra" value="{{ old('extra', $salary->extra) }}">
+                                                        @error('extra')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="mb-3" style="display: none;">
                                                         <label for="type" class="form-label">Jenis Transaksi</label>
                                                         <select name="type" id="type"
                                                             class="form-control @error('type') is-invalid @enderror">
@@ -277,65 +306,108 @@
 
                         <div class="mb-3">
 
-                            <input type="hidden" name="company_id" value="{{ Auth::user()->company->id }}">
+                            <div class="mb-3">
+                                <input type="hidden" name="company_id" value="{{ Auth::user()->company->id }}">
 
-                            <label for="employee_id" class="form-label">Nama Karyawan</label>
-                            <select name="employee_id" id="employee_id"
-                                class="form-control @error('employee_id') is-invalid @enderror">
-                                @foreach ($employees as $employee)
-                                    <option value="{{ $employee->id }}"
-                                        {{ old('employee_id') == $employee->id ? 'selected' : '' }}>
-                                        {{ $employee->name }}
+                                <label for="employee_id" class="form-label">Nama Karyawan</label>
+                                <select name="employee_id" id="employee_id"
+                                    class="form-control @error('employee_id') is-invalid @enderror">
+                                    <option value="">Pilih Karyawan</option>
+                                    @foreach ($employees as $employee)
+                                        <option value="{{ $employee->id }}"
+                                            {{ old('employee_id') == $employee->id ? 'selected' : '' }}>
+                                            {{ $employee->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('employee_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <div class="mb-3">
+                                    <label for="amount" class="form-label">Gaji</label>
+                                    <input type="text" class="form-control" id="amount" name="amount" readonly>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="extra" class="form-label">Bonus Gaji</label>
+                                <input type="text" name="extra" id="extra"
+                                    class="form-control @error('extra') is-invalid @enderror"
+                                    value="{{ old('extra') }}">
+                                @error('extra')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3" style="display: none;">
+                                <label for="type" class="form-label">Jenis Transaksi</label>
+                                <select name="type" id="type"
+                                    class="form-control @error('type') is-invalid @enderror">
+                                    <option value="expense" {{ old('type') == 'expense' ? 'selected' : '' }}>Pengeluaran
                                     </option>
-                                @endforeach
-                            </select>
-                            @error('employee_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="amount" class="form-label">Jumlah</label>
-                            <input type="text" name="amount" id="amount"
-                                class="form-control @error('amount') is-invalid @enderror" value="{{ old('amount') }}">
-                            @error('amount')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="type" class="form-label">Jenis Transaksi</label>
-                            <select name="type" id="type"
-                                class="form-control @error('type') is-invalid @enderror">
-                                <option value="income" {{ old('type') == 'income' ? 'selected' : '' }}>Pemasukan</option>
-                                <option value="expense" {{ old('type') == 'expense' ? 'selected' : '' }}>Pengeluaran
-                                </option>
-                            </select>
-                            @error('type')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Deskripsi</label>
-                            <input type="text" name="description" id="description"
-                                class="form-control @error('description') is-invalid @enderror"
-                                value="{{ old('description') }}">
-                            @error('description')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="transaction_date" class="form-label">Tanggal Transaksi</label>
-                            <input type="date" name="transaction_date" id="transaction_date"
-                                class="form-control @error('transaction_date') is-invalid @enderror"
-                                value="{{ old('transaction_date') }}">
-                            @error('transaction_date')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <button type="submit" class="btn btn-primary">Buat</button>
+                                    <option value="income" {{ old('type') == 'income' ? 'selected' : '' }}>Pemasukan
+                                    </option>
+                                </select>
+                                @error('type')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Deskripsi</label>
+                                <input type="text" name="description" id="description"
+                                    class="form-control @error('description') is-invalid @enderror"
+                                    value="{{ old('description') }}">
+                                @error('description')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="transaction_date" class="form-label">Tanggal Transaksi</label>
+                                <input type="date" name="transaction_date" id="transaction_date"
+                                    class="form-control @error('transaction_date') is-invalid @enderror"
+                                    value="{{ old('transaction_date') }}">
+                                @error('transaction_date')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <button type="submit" class="btn btn-primary">Buat</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.getElementById('employee_id').addEventListener('change', function() {
+            const employeeId = this.value;
+
+            if (employeeId) {
+                fetch(`{{ route('salary.getEmployeeSalary', '') }}/${employeeId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Received data:', data);
+                        if (data.salary !== undefined) {
+                            document.getElementById('amount').value = data.salary;
+                        } else {
+                            console.log('Salary data is undefined');
+                            document.getElementById('amount').value = '';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching salary:', error);
+                        document.getElementById('amount').value = '';
+                    });
+            } else {
+                document.getElementById('amount').value = '';
+            }
+        });
+    </script>
+
 
 @endsection
