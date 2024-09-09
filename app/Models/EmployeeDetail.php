@@ -23,6 +23,8 @@ class EmployeeDetail extends Model
         'phone',
         'address',
         'hire_date',
+        'salary',
+        'source'
     ];
 
     function company()

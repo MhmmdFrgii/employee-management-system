@@ -124,6 +124,7 @@ class RegisteredUserController extends Controller
                 'gender' => $request->gender,
                 'address' => $request->address,
                 'company_id' => $company->id,
+                'source' => 'applicant'
             ]);
 
             $manager = User::where('company_id', $company->id)
@@ -246,7 +247,6 @@ class RegisteredUserController extends Controller
 
     public function store_invite(Request $request)
     {
-        // dd($request);
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
@@ -261,6 +261,8 @@ class RegisteredUserController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        $company = Company::where('company_invite', $request->invite)->first();
+
         DB::beginTransaction(); // Memulai transaksi
 
         try {
@@ -269,7 +271,7 @@ class RegisteredUserController extends Controller
 
             // Buat user baru
             $user = User::create([
-                'company_id' => '1',
+                'company_id' => $company,
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
@@ -285,11 +287,11 @@ class RegisteredUserController extends Controller
                 'gender' => $request->gender,
                 'address' => $request->address,
                 'company_id' => '1',
-                'source' => 'applicant'
+                'source' => 'invited'
             ]);
 
             DB::commit();
-            return view('auth.login');
+            return redirect()->route('confirmation')->with('success', 'Berhasil Daftar, Menunggu Konfirmasi!');
         } catch (\Exception $e) {
             DB::rollBack();
             if (isset($photo)) {
