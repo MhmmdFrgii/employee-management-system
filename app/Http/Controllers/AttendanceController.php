@@ -139,13 +139,17 @@ class AttendanceController extends Controller
     }
 
     public function export(Request $request)
-{
-    $year = $request->input('year', date('Y'));
-    $month = $request->input('month', null); // Default to null if not specified
+    {
+          // Validasi input year dan month
+          $validated = $request->validate([
+            'year' => 'required|integer|digits:4',
+            'month' => 'required|integer|between:1,12',
+        ]);
 
-    // Validasi input jika diperlukan
+        $year = $validated['year'];
+        $month = $validated['month'];
 
-    return Excel::download(new AttendanceExport($year, $month), 'attendance_report.xlsx');
-}
-
+        // Proses export
+        return Excel::download(new AttendanceExport($year, $month), 'rekap_absensi_' . $month . '_' . $year . '.xlsx');
+    }
 }

@@ -150,41 +150,77 @@
         });
     </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Isi pilihan tahun (5 tahun terakhir hingga tahun ini)
-        const currentYear = new Date().getFullYear();
-        const yearInput = document.getElementById('yearInput');
-        for (let year = currentYear; year >= currentYear - 1; year--) {
-            const option = document.createElement('option');
-            option.value = year;
-            option.textContent = year;
-            yearInput.appendChild(option);
-        }
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Isi pilihan tahun (5 tahun terakhir hingga tahun ini)
+            const currentYear = new Date().getFullYear();
+            const yearInput = document.getElementById('yearInput');
+            for (let year = currentYear; year >= currentYear - 1; year--) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearInput.appendChild(option);
+            }
 
-        // Isi pilihan bulan
-        const monthInput = document.getElementById('monthInput');
-        const months = [
-            { value: '01', name: 'Januari' },
-            { value: '02', name: 'Februari' },
-            { value: '03', name: 'Maret' },
-            { value: '04', name: 'April' },
-            { value: '05', name: 'Mei' },
-            { value: '06', name: 'Juni' },
-            { value: '07', name: 'Juli' },
-            { value: '08', name: 'Agustus' },
-            { value: '09', name: 'September' },
-            { value: '10', name: 'Oktober' },
-            { value: '11', name: 'November' },
-            { value: '12', name: 'Desember' }
-        ];
+            // Isi pilihan bulan
+            const monthInput = document.getElementById('monthInput');
+            const months = [{
+                    value: 1,
+                    name: 'Januari'
+                },
+                {
+                    value: 2,
+                    name: 'Februari'
+                },
+                {
+                    value: 3,
+                    name: 'Maret'
+                },
+                {
+                    value: 4,
+                    name: 'April'
+                },
+                {
+                    value: 5,
+                    name: 'Mei'
+                },
+                {
+                    value: 6,
+                    name: 'Juni'
+                },
+                {
+                    value: 7,
+                    name: 'Juli'
+                },
+                {
+                    value: 8,
+                    name: 'Agustus'
+                },
+                {
+                    value: 9,
+                    name: 'September'
+                },
+                {
+                    value: 10,
+                    name: 'Oktober'
+                },
+                {
+                    value: 11,
+                    name: 'November'
+                },
+                {
+                    value: 12,
+                    name: 'Desember'
+                }
+            ];
 
-        months.forEach(function (month) {
-            const option = document.createElement('option');
-            option.value = month.value;
-            option.textContent = month.name;
-            monthInput.appendChild(option);
+
+            months.forEach(function(month) {
+                const option = document.createElement('option');
+                option.value = month.value;
+                option.textContent = month.name;
+                monthInput.appendChild(option);
+            });
         });
-    });
-</script>
+    </script>
 @endsection

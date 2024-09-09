@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Exports;
 
 use App\Models\Attendance;
@@ -15,38 +14,61 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
 {
     protected $year;
     protected $month;
-    protected $selectedDate;
 
     public function __construct($year, $month)
     {
         $this->year = $year;
         $this->month = $month;
-        $this->selectedDate = Carbon::createFromDate($year, $month, 1);
     }
 
     public function collection()
     {
-        // Dapatkan user yang sedang lox`gin
         $user = auth()->user();
 
         // Ambil karyawan berdasarkan perusahaan user
         $employees = EmployeeDetail::where('company_id', $user->company_id)
-            ->with(['attendances' => function ($query) {
-                $query->whereYear('date', $this->year)
-                      ->whereMonth('date', $this->month);
-            }])
             ->get();
 
-        // Dapatkan karyawan yang tidak memiliki data absensi pada bulan yang dipilih
-        $employeesAlpha = EmployeeDetail::where('company_id', $user->company_id)
-            ->whereDoesntHave('attendances', function ($query) {
-                $query->whereYear('date', $this->year)
-                      ->whereMonth('date', $this->month);
-            })
-            ->get();
+        // Ambil absensi untuk bulan dan tahun yang dipilih
+        $attendances = Attendance::whereYear('date', $this->year)
+            ->whereMonth('date', $this->month)
+            ->get()
+            ->groupBy('employee_id');
 
-        // Gabungkan karyawan dengan absensi dan yang alpha
-        return $employees->merge($employeesAlpha);
+        $data = [];
+
+        // Menghitung jumlah hari dalam bulan
+        $daysInMonth = Carbon::create($this->year, $this->month, 1)->daysInMonth;
+
+        foreach ($employees as $employee) {
+            // Jika karyawan memiliki absensi
+            if (isset($attendances[$employee->id])) {
+                foreach ($attendances[$employee->id] as $attendance) {
+                    $data[] = [
+                        'employee_name' => $employee->name,
+                        'department_name' => $employee->department->name ?? 'N/A',
+                        'date' => Carbon::parse($attendance->date)->format('Y-m-d'),
+                        'status' => $this->mapStatus($attendance->status),
+                        'time' => $attendance->status === 'present' || $attendance->status === 'late'
+                            ? $attendance->created_at->format('H:i')
+                            : 'Tidak Ada Waktu',
+                    ];
+                }
+            } else {
+                // Karyawan tidak memiliki absensi di bulan ini
+                for ($date = 1; $date <= $daysInMonth; $date++) {
+                    $data[] = [
+                        'employee_name' => $employee->name,
+                        'department_name' => $employee->department->name ?? 'N/A',
+                        'date' => Carbon::create($this->year, $this->month, $date)->format('Y-m-d'),
+                        'status' => 'Alpha',
+                        'time' => 'Tidak Ada Waktu',
+                    ];
+                }
+            }
+        }
+
+        return collect($data);
     }
 
     public function headings(): array
@@ -61,33 +83,19 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
         ];
     }
 
-    public function map($employee): array
-{
-    static $index = 1;
-
-    if ($employee->attendances->isNotEmpty()) {
-        $attendance = $employee->attendances->first();
+    public function map($attendance): array
+    {
+        static $index = 1;
 
         return [
             $index++,
-            $employee->name,
-            $employee->department->name ?? 'N/A',
-            Carbon::parse($attendance->date)->format('Y-m-d'),  // Menggunakan Carbon::parse()
-            $this->mapStatus($attendance->status),
-            $attendance->status === 'present' || 'late' || 'absent' ? $attendance->created_at->format('H:i') : 'Tidak Ada Waktu',
-        ];
-    } else {
-        return [
-            $index++,
-            $employee->name,
-            $employee->department->name ?? 'N/A',
-            $this->selectedDate->format('Y-m-d'), // Tanggal default untuk Alpha
-            'Alpha',
-            'Tidak Ada Waktu',
+            $attendance['employee_name'],
+            $attendance['department_name'],
+            $attendance['date'],
+            $attendance['status'],
+            $attendance['time'],
         ];
     }
-}
-
 
     private function mapStatus($status)
     {
