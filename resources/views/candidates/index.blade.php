@@ -87,7 +87,7 @@
                                                 <div class="card-body p-0 mt-2">
                                                     <h5 class="card-title">{{ $applicant->name }}</h5>
                                                 </div>
-                                                <a href="{{ route('applicants.detail', $applicant->id) }}"
+                                                <a href="{{ route('candidates.detail', $applicant->id) }}"
                                                     class="btn btn-primary mt-3">Rincian</a>
                                             </div>
                                         </div>

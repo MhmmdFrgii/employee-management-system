@@ -24,7 +24,7 @@ class UserRequest extends FormRequest
         return [
             'department_id' => 'required|exists:departments,id',
             'position_id' => 'required|exists:positions,id',
-            // Tambahkan aturan lain jika diperlukan
+            'salary' => 'required|numeric|min:0'
         ];
     }
 }
