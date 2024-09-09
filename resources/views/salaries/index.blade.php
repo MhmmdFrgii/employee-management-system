@@ -5,8 +5,6 @@
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="container py-2">
                 <h1 class="h3">Gaji</h1>
-
-
                 <div class="d-flex justify-content-between align-items-center mb-2 mt-3">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSalariesModal">
                         Tambah
@@ -85,7 +83,7 @@
                                         @endif
                                     </a>
                                 </th>
-                                <th>
+                                {{-- <th>
                                     <a
                                         href="{{ route('salaries.index', array_merge(request()->query(), ['sortBy' => 'payment_date', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
                                         Jenis Transaksi
@@ -97,7 +95,7 @@
                                             @endif
                                         @endif
                                     </a>
-                                </th>
+                                </th> --}}
                                 <th>
                                     <a
                                         href="{{ route('salaries.index', array_merge(request()->query(), ['sortBy' => 'payment_date', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
@@ -125,14 +123,14 @@
                                     <td>Rp {{ number_format($salary->amount, 2, ',', '.') }}</td>
                                     <td>Rp {{ number_format($salary->extra, 2, ',', '.') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($salary->transaction_date)->format('d M Y') }}</td>
-                                    @php
+                                    {{-- @php
                                         $types = [
                                             'income' => 'Pemasukan',
                                             'expense' => 'Pengeluaran',
                                         ];
                                     @endphp
 
-                                    <td>{{ $types[$salary->type] ?? 'Tidak Diketahui' }}</td>
+                                    <td>{{ $types[$salary->type] ?? 'Tidak Diketahui' }}</td> --}}
                                     <td>{{ $salary->description ?? 'N/A' }}</td>
                                     <td>Rp {{ number_format($salary->total_amount, 2, ',', '.') }}</td>
                                     <td class="text-center">
