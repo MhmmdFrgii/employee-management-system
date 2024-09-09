@@ -112,7 +112,7 @@
             <div class="col-md-{{ isset($departments) && $department_data ? '8' : '12' }}">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">Projects</h5>
+                        <h5 class="card-title">Proyek</h5>
                     </div>
                     <div class="card-body">
                         <div id="projectsCompletedChart"></div>
@@ -124,7 +124,7 @@
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title">Department</h5>
+                            <h5 class="card-title">Departemen</h5>
                         </div>
                         <div class="card-body">
                             <div id="pieChart"></div>
@@ -135,7 +135,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">Proyek Selesai</h5>
+                        <h5 class="card-title">Proyek Departemen</h5>
                     </div>
                     <div class="card-body">
                         <div id="projectsBarChart"></div>
@@ -214,7 +214,7 @@
             },
             yaxis: {
                 title: {
-                    text: 'Jumlah Proyek Selesai'
+                    // text: 'Jumlah Proyek Selesai'
                 }
             },
             tooltip: {
@@ -320,10 +320,10 @@
             enabled: false
         },
         stroke: {
-                        show: true,
-                        width: 2,
-                        colors: ['transparent']
-                    },
+                    show: true,
+                    width: 2,
+                    colors: ['transparent']
+                },
         xaxis: {
             categories: months,
             title: {
@@ -332,7 +332,7 @@
         },
         yaxis: {
             title: {
-                text: 'Jumlah Proyek Selesai'
+                // text: 'Jumlah Proyek Selesai'
             }
         },
         fill: {

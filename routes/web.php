@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeDetailController;
+use App\Http\Controllers\FinanceRecordController;
 use App\Http\Controllers\KanbanBoardController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LeaveRequestController;
@@ -45,7 +46,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('project-assignments', ProjectAssignmentController::class);
             Route::resource('departments', DepartmentController::class);
             Route::resource('salaries', SalaryController::class);
-            // routes/web.php
+            Route::resource('finance', FinanceRecordController::class);
             Route::get('/getEmployeeSalary/{employeeId}', [SalaryController::class, 'getEmployeeSalary'])->name('salary.getEmployeeSalary');
 
             Route::resource('positions', PositionController::class);
