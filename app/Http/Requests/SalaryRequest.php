@@ -24,9 +24,10 @@ class SalaryRequest extends FormRequest
         return [
             'company_id' => 'required|exists:companies,id',
             'employee_id' => 'required',
-            'amount' => 'required|numeric',
+            'amount' => 'required|numeric|min:0',
+            'extra' => 'nullable',
             'type' => 'required|in:income,expense',
-            'transaction_date' => 'required|date',
+            'transaction_date' => 'nullable|date',
             'description' => 'nullable|string',
         ];
     }
