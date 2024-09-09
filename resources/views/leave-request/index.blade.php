@@ -6,7 +6,10 @@
             <div class="container py-2">
                 <h1 class="h3">Permintaan Cuti</h1>
 
-                <div class="d-flex justify-content-end mb-3 mt-3">
+                <div class="d-flex justify-content-between mb-3 mt-3">
+                    <div>
+                        <a href="{{ route('calendar') }}" class="btn btn-primary">Kalender</a>
+                    </div>
                     <form id="searchForm" action="{{ route('leave-requests.index') }}" method="GET"
                         class="d-flex align-items-center gap-2">
                         @csrf
@@ -147,13 +150,16 @@
                                         @switch($data->status)
                                             @case('pending')
                                                 Tertunda
-                                                @break
+                                            @break
+
                                             @case('approved')
                                                 Disetujui
-                                                @break
+                                            @break
+
                                             @case('rejected')
                                                 Ditolak
-                                                @break
+                                            @break
+
                                             @default
                                                 {{ ucfirst($data->status) }}
                                         @endswitch
@@ -184,10 +190,11 @@
                                                 <i class="ti ti-trash"></i>
                                             </button>
                                         </form>
-                                        <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $data->id }}">
-                                            <i class="bx bx-info-circle"></i> 
+                                        <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#detailModal{{ $data->id }}">
+                                            <i class="bx bx-info-circle"></i>
                                         </button>
-                                    
+
                                         <!-- Approve Modal -->
                                         <div class="modal fade" id="approveModal{{ $data->id }}" tabindex="-1"
                                             aria-labelledby="approveModalLabel{{ $data->id }}" aria-hidden="true"
@@ -202,8 +209,8 @@
                                                             <h5 class="modal-title"
                                                                 id="approveModalLabel{{ $data->id }}">Approve
                                                                 Permintaan Cuti</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <p>Apakah Anda yakin ingin menyetujui permintaan cuti ini?</p>
@@ -374,12 +381,15 @@
                                 </div>
 
                                 <!-- Detail Modal -->
-                                <div class="modal fade" id="detailModal{{ $data->id }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $data->id }}" aria-hidden="true">
+                                <div class="modal fade" id="detailModal{{ $data->id }}" tabindex="-1"
+                                    aria-labelledby="detailModalLabel{{ $data->id }}" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="detailModalLabel{{ $data->id }}">Detail Permintaan Cuti</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <h5 class="modal-title" id="detailModalLabel{{ $data->id }}">Detail
+                                                    Permintaan Cuti</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="col-md-12">
@@ -387,56 +397,62 @@
                                                     <div class="row mb-3">
                                                         <div class="col-md-6">
                                                             <h6 class="text-muted">Nama:</h6>
-                                                            <p id="modal-fullname" class="fw-semibold">{{ $data->employee_detail->name }}</p>
+                                                            <p id="modal-fullname" class="fw-semibold">
+                                                                {{ $data->employee_detail->name }}</p>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <h6 class="text-muted">Tanggal Mulai:</h6>
-                                                            <p id="modal-start_date" class="fw-semibold">{{ $data->start_date }}</p>
+                                                            <p id="modal-start_date" class="fw-semibold">
+                                                                {{ $data->start_date }}</p>
                                                         </div>
                                                     </div>
                                                     <div class="row mb-3">
                                                         <div class="col-md-6">
                                                             <h6 class="text-muted">Tipe:</h6>
-                                                            <p id="modal-type" class="fw-semibold">{{ $data->type }}</p>
+                                                            <p id="modal-type" class="fw-semibold">{{ $data->type }}
+                                                            </p>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <h6 class="text-muted">Tanggal Selesai:</h6>
-                                                            <p id="modal-end_date" class="fw-semibold">{{ $data->end_date }}</p>
+                                                            <p id="modal-end_date" class="fw-semibold">
+                                                                {{ $data->end_date }}</p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <h6 class="text-muted">Bukti: </h6>
-                                                        <img id="modal-photo" src="{{ asset('storage/'.$data->photo) }}" 
-                                                            class="img-fluid mb-3" 
-                                                            alt="Employee photo" onerror="this.src='{{ asset('assets/images/no-data.png') }}';" 
+                                                        <img id="modal-photo"
+                                                            src="{{ asset('storage/' . $data->photo) }}"
+                                                            class="img-fluid mb-3" alt="Employee photo"
+                                                            onerror="this.src='{{ asset('assets/images/no-data.png') }}';"
                                                             width="200" height="200">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                
-                            @empty
-                                <tr>
-                                    <td colspan="7" class="text-center">
-                                        <img src="{{ asset('assets/images/no-data.png') }}" alt="No Data"
-                                            class="img-fluid" style="width: clamp(150px, 50vw, 300px);">
-                                        <p class="mt-3">Tidak ada data tersedia</p>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
 
-                    <div class="mt-3 justify-content-end">
-                        {{ $leaveRequest->links() }}
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center">
+                                            <img src="{{ asset('assets/images/no-data.png') }}" alt="No Data"
+                                                class="img-fluid" style="width: clamp(150px, 50vw, 300px);">
+                                            <p class="mt-3">Tidak ada data tersedia</p>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+
+                        <div class="mt-3 justify-content-end">
+                            {{ $leaveRequest->links() }}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-@endsection
+    @endsection

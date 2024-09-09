@@ -35,7 +35,6 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('manager')->group(function () {
             // route attendence
-
             Route::get('/mark-absentees', [AttendanceController::class, 'markAbsentees']);
 
             route::post('/kanban-tasks/update-order', [KanbanTaskController::class, 'updateOrder'])->name('kanban-tasks.update-order');
@@ -50,7 +49,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('attendance', AttendanceController::class);
 
             Route::resource('employees', EmployeeDetailController::class);
-            
+
             Route::patch('/projects/{id}/complete', [ProjectController::class, 'mark_completed'])->name('projects.complete');
             Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
             Route::resource('projects', ProjectController::class);
@@ -64,6 +63,10 @@ Route::middleware('auth')->group(function () {
             Route::patch('/candidates/update/{applicant}', [UserController::class, 'update'])->name('candidates.update');
 
             Route::patch('/company/{company}', [CompanyController::class, 'reset_code'])->name('companies.reset');
+
+            route::get('/leave-requests/calendar', [LeaveRequestController::class, 'calendar'])->name('calendar');
+            Route::put('/leave-requests/{id}/approve', [LeaveRequestController::class, 'approve'])->name('leave-requests.approve');
+            Route::post('/leave-requests/{id}/reject', [LeaveRequestController::class, 'reject'])->name('leave-requests.reject');
         });
     });
 
@@ -90,10 +93,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('leave-requests', LeaveRequestController::class);
     Route::resource('kanban-boards', KanbanBoardController::class);
     Route::resource('kanban-tasks', KanbanTaskController::class);
-
-    // Route untuk approve leave request
-    Route::put('/leave-requests/{id}/approve', [LeaveRequestController::class, 'approve'])->name('leave-requests.approve');
-    Route::post('/leave-requests/{id}/reject', [LeaveRequestController::class, 'reject'])->name('leave-requests.reject');
 });
 
 require __DIR__ . '/auth.php';
