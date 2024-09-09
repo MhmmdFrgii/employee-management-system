@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\EmployeeDetail;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -95,7 +96,18 @@ class AttendanceController extends Controller
      */
     public function index(Request $request)
     {
+
+        $user = Auth::user();
+
         $query = Attendance::query();
+
+        $selectedDate = $request->has('date') ? Carbon::parse($request->date) : Carbon::today();
+
+        $employees = EmployeeDetail::where('company_id', $user->company_id)
+            ->with(['attendances' => function ($query) use ($selectedDate) {
+                $query->whereDate('date', $selectedDate);
+            }])
+            ->get();
 
         // Join with EmployeeDetail to get employee names and filter by the current company
         $query->join('employee_details', 'attendances.employee_id', '=', 'employee_details.id')
@@ -115,7 +127,6 @@ class AttendanceController extends Controller
         }
 
         // Filter untuk tanggal absen
-        $selectedDate = $request->has('date') ? Carbon::parse($request->date) : Carbon::today();
 
         $query->whereDate('attendances.date', $selectedDate);
 
@@ -129,6 +140,7 @@ class AttendanceController extends Controller
         // Select relevant fields
         $attendances = $query->whereDate('date', '<=', $today)->select('attendances.*', 'employee_details.name as employee_name')->paginate(10);
 
-        return view('attendance.index', compact('attendances', 'selectedDate'));
+
+        return view('attendance.index', compact('attendances', 'selectedDate', 'employees'));
     }
 }
