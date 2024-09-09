@@ -58,6 +58,12 @@
                         <select name="department_id" id="edit-department-{{ $project->id }}" class="form-control">
                             <option value="">Pilih Departemen</option>
                             @foreach ($departments as $department)
+                                {{-- <option value="{{ $department->id }}"
+                                    {{ old('department_id') == $department->id ? 'selected' : '' }}>
+                                    {{-- {{ old('department_id', $project->department_id) == $department->id ? 'selected' : '' }}
+                                    {{ $department->name }}
+                                </option> --}}
+
                                 <option value="{{ $department->id }}"
                                     {{ old('department_id', $project->department_id) == $department->id ? 'selected' : '' }}>
                                     {{ $department->name }}
@@ -105,7 +111,7 @@
     }
     </style>
 
-<script>
+{{-- <script>
     $(document).ready(function() {
         $('#editModal{{ $project->id }}').on('shown.bs.modal', function() {
             // Inisialisasi Select2 untuk employee_id
@@ -164,6 +170,67 @@
                             console.error('Gagal memuat data karyawan:', error);
                         }
                     });
+                }
+            });
+        });
+    });
+</script> --}}
+
+<script>
+    $(document).ready(function() {
+        $('#editModal{{ $project->id }}').on('shown.bs.modal', function() {
+            // Inisialisasi Select2 untuk employee_id
+            $('#edit-employee-{{ $project->id }}').select2({
+                placeholder: "Pilih Karyawan",
+                allowClear: true,
+                width: '100%'
+            });
+
+            // Ambil nilai lama (old) atau nilai dari relasi karyawan terkait proyek
+            var selectedEmployees = {!! json_encode(old('employee_id', $project->employee_details->pluck('id')->toArray())) !!};
+
+            // Ambil department_id terpilih untuk memuat karyawan terkait
+            var departmentId = $('#edit-department-{{ $project->id }}').val();
+            var employeeSelect = $('#edit-employee-{{ $project->id }}');
+
+            // Fungsi untuk memuat karyawan berdasarkan department_id
+            function loadEmployees(departmentId, selectedEmployees) {
+                if (departmentId) {
+                    $.ajax({
+                        url: '/manager/get-employees/' + departmentId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            var options = '<option></option>'; // Placeholder
+                            $.each(data, function(key, value) {
+                                options += '<option value="' + value.id + '" ' + 
+                                    (selectedEmployees.includes(value.id) ? 'selected' : '') + '>' + 
+                                    value.name + '</option>';
+                            });
+                            employeeSelect.html(options).trigger('change');
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Gagal memuat data karyawan:', error);
+                        }
+                    });
+                }
+            }
+
+            // Muat karyawan saat modal ditampilkan
+            if (departmentId) {
+                loadEmployees(departmentId, selectedEmployees);
+            }
+
+            // Event ketika departemen diubah
+            $('#edit-department-{{ $project->id }}').on('change', function() {
+                var departmentId = $(this).val();
+                
+                // Kosongkan dropdown employee saat departemen diubah
+                employeeSelect.empty().trigger('change');
+
+                // Muat karyawan baru berdasarkan departemen yang baru dipilih
+                if (departmentId) {
+                    loadEmployees(departmentId, []);
                 }
             });
         });
