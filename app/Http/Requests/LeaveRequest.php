@@ -22,14 +22,11 @@ class LeaveRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'company_id' => 'required|exists:companies,id',  // Validasi company_id
-            'employee_id' => 'required|numeric',
             'start_date' => ['required', 'date', 'after_or_equal:today', 'before_or_equal:end_date'],
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'photo' => ['required', 'mimes:png,jpg,jpeg', 'max:2048'],
             'description' => ['nullable', 'max:300'],
             'type' => 'required|string|max:255',
-            // 'status' => 'required',
         ];
     }
 
