@@ -145,6 +145,7 @@
                                 </tr>
 
                                 <!-- Modal Edit -->
+                                <!-- Modal Edit -->
                                 <div class="modal fade" id="editSalariesModal{{ $salary->id }}" tabindex="-1"
                                     aria-labelledby="editSalariesModalLabel{{ $salary->id }}" aria-hidden="true"
                                     data-bs-backdrop="static">
@@ -160,12 +161,12 @@
                                                 <form action="{{ route('salaries.update', $salary->id) }}" method="POST">
                                                     @csrf
                                                     @method('PUT')
-
                                                     <input type="hidden" name="company_id"
                                                         value="{{ Auth::user()->company->id }}">
                                                     <div class="mb-3">
-                                                        <label for="employee_id" class="form-label">Nama Karyawan</label>
-                                                        <select name="employee_id" id="employee_id"
+                                                        <label for="edit_employee_id" class="form-label">Nama
+                                                            Karyawan</label>
+                                                        <select name="employee_id" id="edit_employee_id"
                                                             class="form-control @error('employee_id') is-invalid @enderror">
                                                             @foreach ($employees as $employee)
                                                                 <option value="{{ $employee->id }}"
@@ -179,27 +180,27 @@
                                                         @enderror
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="amount" class="form-label">Gaji</label>
+                                                        <label for="edit_amount" class="form-label">Gaji</label>
                                                         <input type="text" name="amount"
                                                             class="form-control @error('amount') is-invalid @enderror"
-                                                            readonly id="amount"
+                                                            readonly id="edit_amount"
                                                             value="{{ old('amount', $salary->amount) }}">
                                                         @error('amount')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="extra" class="form-label">Bonus Gaji</label>
+                                                        <label for="edit_extra" class="form-label">Bonus Gaji</label>
                                                         <input type="text" name="extra"
                                                             class="form-control @error('extra') is-invalid @enderror"
-                                                            id="extra" value="{{ old('extra', $salary->extra) }}">
+                                                            id="edit_extra" value="{{ old('extra', $salary->extra) }}">
                                                         @error('extra')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
                                                     <div class="mb-3" style="display: none;">
-                                                        <label for="type" class="form-label">Jenis Transaksi</label>
-                                                        <select name="type" id="type"
+                                                        <label for="edit_type" class="form-label">Jenis Transaksi</label>
+                                                        <select name="type" id="edit_type"
                                                             class="form-control @error('type') is-invalid @enderror">
                                                             <option value="income"
                                                                 {{ old('type', $salary->type) == 'income' ? 'selected' : '' }}>
@@ -213,33 +214,33 @@
                                                         @enderror
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="description" class="form-label">Deskripsi</label>
+                                                        <label for="edit_description" class="form-label">Deskripsi</label>
                                                         <input type="text" name="description"
                                                             class="form-control @error('description') is-invalid @enderror"
-                                                            id="description"
+                                                            id="edit_description"
                                                             value="{{ old('description', $salary->description) }}">
                                                         @error('description')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="transaction_date" class="form-label">Tanggal
+                                                        <label for="edit_transaction_date" class="form-label">Tanggal
                                                             Transaksi</label>
                                                         <input type="date" name="transaction_date"
                                                             class="form-control @error('transaction_date') is-invalid @enderror"
-                                                            id="transaction_date"
+                                                            id="edit_transaction_date"
                                                             value="{{ old('transaction_date', $salary->transaction_date) }}">
                                                         @error('transaction_date')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary">Simpan
-                                                        Perubahan</button>
+                                                    <button type="submit" class="btn btn-primary">Update</button>
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
 
 
                                 <!-- Modal Delete -->
@@ -303,83 +304,75 @@
                 <div class="modal-body">
                     <form action="{{ route('salaries.store') }}" method="POST">
                         @csrf
-
+                        <input type="hidden" name="company_id" value="{{ Auth::user()->company->id }}">
                         <div class="mb-3">
-
-                            <div class="mb-3">
-                                <input type="hidden" name="company_id" value="{{ Auth::user()->company->id }}">
-
-                                <label for="employee_id" class="form-label">Nama Karyawan</label>
-                                <select name="employee_id" id="employee_id"
-                                    class="form-control @error('employee_id') is-invalid @enderror">
-                                    <option value="">Pilih Karyawan</option>
-                                    @foreach ($employees as $employee)
-                                        <option value="{{ $employee->id }}"
-                                            {{ old('employee_id') == $employee->id ? 'selected' : '' }}>
-                                            {{ $employee->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('employee_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <div class="mb-3">
-                                    <label for="amount" class="form-label">Gaji</label>
-                                    <input type="text" class="form-control" id="amount" name="amount" readonly>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="extra" class="form-label">Bonus Gaji</label>
-                                <input type="text" name="extra" id="extra"
-                                    class="form-control @error('extra') is-invalid @enderror"
-                                    value="{{ old('extra') }}">
-                                @error('extra')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3" style="display: none;">
-                                <label for="type" class="form-label">Jenis Transaksi</label>
-                                <select name="type" id="type"
-                                    class="form-control @error('type') is-invalid @enderror">
-                                    <option value="expense" {{ old('type') == 'expense' ? 'selected' : '' }}>Pengeluaran
+                            <label for="create_employee_id" class="form-label">Nama Karyawan</label>
+                            <select name="employee_id" id="create_employee_id"
+                                class="form-control @error('employee_id') is-invalid @enderror">
+                                <option value="">Pilih Karyawan</option>
+                                @foreach ($employees as $employee)
+                                    <option value="{{ $employee->id }}"
+                                        {{ old('employee_id') == $employee->id ? 'selected' : '' }}>
+                                        {{ $employee->name }}
                                     </option>
-                                    <option value="income" {{ old('type') == 'income' ? 'selected' : '' }}>Pemasukan
-                                    </option>
-                                </select>
-                                @error('type')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Deskripsi</label>
-                                <input type="text" name="description" id="description"
-                                    class="form-control @error('description') is-invalid @enderror"
-                                    value="{{ old('description') }}">
-                                @error('description')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="transaction_date" class="form-label">Tanggal Transaksi</label>
-                                <input type="date" name="transaction_date" id="transaction_date"
-                                    class="form-control @error('transaction_date') is-invalid @enderror"
-                                    value="{{ old('transaction_date') }}">
-                                @error('transaction_date')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <button type="submit" class="btn btn-primary">Buat</button>
+                                @endforeach
+                            </select>
+                            @error('employee_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="create_amount" class="form-label">Gaji</label>
+                            <input type="text" class="form-control" id="create_amount" name="amount" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="create_extra" class="form-label">Bonus Gaji</label>
+                            <input type="text" name="extra" id="create_extra"
+                                class="form-control @error('extra') is-invalid @enderror" value="{{ old('extra') }}">
+                            @error('extra')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3" style="display: none;">
+                            <label for="create_type" class="form-label">Jenis Transaksi</label>
+                            <select name="type" id="create_type"
+                                class="form-control @error('type') is-invalid @enderror">
+                                <option value="expense" {{ old('type') == 'expense' ? 'selected' : '' }}>Pengeluaran
+                                </option>
+                                <option value="income" {{ old('type') == 'income' ? 'selected' : '' }}>Pemasukan</option>
+                            </select>
+                            @error('type')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="create_description" class="form-label">Deskripsi</label>
+                            <input type="text" name="description" id="create_description"
+                                class="form-control @error('description') is-invalid @enderror"
+                                value="{{ old('description') }}">
+                            @error('description')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="create_transaction_date" class="form-label">Tanggal Transaksi</label>
+                            <input type="date" name="transaction_date" id="create_transaction_date"
+                                class="form-control @error('transaction_date') is-invalid @enderror"
+                                value="{{ old('transaction_date') }}">
+                            @error('transaction_date')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <button type="submit" class="btn btn-primary">Buat</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        document.getElementById('employee_id').addEventListener('change', function() {
+        document.getElementById('create_employee_id').addEventListener('change', function() {
             const employeeId = this.value;
 
             if (employeeId) {
@@ -393,21 +386,20 @@
                     .then(data => {
                         console.log('Received data:', data);
                         if (data.salary !== undefined) {
-                            document.getElementById('amount').value = data.salary;
+                            document.getElementById('create_amount').value = data.salary;
                         } else {
                             console.log('Salary data is undefined');
-                            document.getElementById('amount').value = '';
+                            document.getElementById('create_amount').value = '';
                         }
                     })
                     .catch(error => {
                         console.error('Error fetching salary:', error);
-                        document.getElementById('amount').value = '';
+                        document.getElementById('create_amount').value = '';
                     });
             } else {
-                document.getElementById('amount').value = '';
+                document.getElementById('create_amount').value = '';
             }
         });
     </script>
-
 
 @endsection
