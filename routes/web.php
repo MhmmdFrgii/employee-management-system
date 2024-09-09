@@ -46,11 +46,14 @@ Route::middleware('auth')->group(function () {
             Route::resource('project-assignments', ProjectAssignmentController::class);
             Route::resource('departments', DepartmentController::class);
             Route::resource('salaries', SalaryController::class);
+            // routes/web.php
+            Route::get('/getEmployeeSalary/{employeeId}', [SalaryController::class, 'getEmployeeSalary'])->name('salary.getEmployeeSalary');
+
             Route::resource('positions', PositionController::class);
             Route::resource('attendance', AttendanceController::class);
 
             Route::resource('employees', EmployeeDetailController::class);
-            
+
             Route::patch('/projects/{id}/complete', [ProjectController::class, 'mark_completed'])->name('projects.complete');
             Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
             Route::resource('projects', ProjectController::class);
