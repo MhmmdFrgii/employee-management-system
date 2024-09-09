@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\KanbanBoard;
 use App\Models\Project;
+use App\Models\ProjectAssignment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,99 +15,49 @@ class ProjectController extends Controller
 {
     public function getAllProject()
     {
+        // Get the currently logged-in user
         $user = Auth::guard('sanctum')->user();
 
+        // Check if the user is authenticated
         if (!$user) {
             return response()->json([
                 'message' => 'Unauthenticated'
             ], 401);
         }
 
-        $projects = Project::where('company_id', $user->company_id)->with(['employee_details.department'])->get();
+        // Get the employee ID from the logged-in user's employee detail
+        $employeeId = $user->employee_detail->id;
 
-         $formattedProjects = $projects->map(function ($project) {
-        return [
-            'id' => $project->id,
-            'company_id' => $project->company_id,
-            'name' => $project->name,
-            'price' => $project->price,
-            'description' => $project->description,
-            'start_date' => $project->start_date,
-            'end_date' => $project->end_date,
-            'status' => $project->status,
-            'completed_at' => $project->completed_at,
-            'employee_details' => $project->employee_details->map(function ($employeeDetail) {
-                return [
-                    'id' => $employeeDetail->id,
-                    'name' => $employeeDetail->name,
-                    'department' => $employeeDetail->department ? $employeeDetail->department->name : null,
-                ];
-            }),
-        ];
-    });
+        // Get the list of projects assigned to the employee associated with the logged-in user
+        $assignedProjects = ProjectAssignment::where('employee_id', $employeeId)
+            ->with(['project.kanban_board.kanbantasks' => function ($query) use ($employeeId) {
+                // Load only the Kanban tasks assigned to the employee
+                $query->where('employee_id', $employeeId);
+            }])
+            ->get();
 
-    return response()->json(['projects' => $formattedProjects]);
-    }
+        // Extract the Kanban boards associated with the assigned projects
+        $projects = $assignedProjects->map(function ($assignment) {
+            return $assignment->project->kanban_board;
+        })->filter()->unique()->values(); // Remove null values and unique Kanban boards
 
-    public function createProject(Request $request)
-    {
-        $user = Auth::guard('sanctum')->user();
+        // Format Kanban boards and tasks for response
+        $formattedProjects = $projects->map(function ($kanbanBoard) {
+            return [
+                'id' => $kanbanBoard->id,
+                'name' => $kanbanBoard->name,
+                'kanban_tasks' => $kanbanBoard->kanbantasks->map(function ($task) {
+                    return [
+                        'id' => $task->id,
+                        'title' => $task->title,
+                        'status' => $task->status,
+                        'date' => $task->date,
+                        'color' => $task->color,
+                    ];
+                }),
+            ];
+        });
 
-        if (!$user) {
-            return response()->json([
-                'message' => 'Unauthenticated'
-            ], 401);
-        }
-
-        $rules = [
-            'name' => 'required|max:250',
-            'description' => 'required|max:250',
-            'start_date' => 'required|date',
-            'price' => 'required|numeric',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'employee_id' => 'required|array',
-            'employee_id.*' => 'exists:employee_details,id'
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) return response()->json(['message' => 'Invalid fields', 'errors' => $validator->errors()], 422);
-
-        $company = Auth::user()->company->id;
-
-        try {
-            DB::beginTransaction();
-
-            $project = Project::create([
-                'company_id' => $company,
-                'employee_id' => $request->employee_id,
-                'name' => $request->name,
-                'price' => $request->price,
-                'description' => $request->description,
-                'start_date' => $request->start_date,
-                'end_date' => $request->end_date
-            ]);
-
-            KanbanBoard::create([
-                'name' => $project->name,
-                'project_id' => $project->id
-            ]);
-
-            $project->employee_details()->attach($request->employee_id);
-
-            DB::commit();
-
-            return response()->json([
-                'message' => 'Berhsil Membuat Project!',
-                'project' => $project
-            ]);
-        } catch (\Throwable $e) {
-
-            DB::rollBack();
-
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json(['kanban_boards' => $formattedProjects]);
     }
 }
