@@ -1,6 +1,8 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
+
+
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="container py-2">
@@ -62,10 +64,10 @@
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h4 class="card-title m-0">{{ $project->name }}</h4>
-                                    <span class="badge 
-                                        @if($project->status === 'completed') bg-success 
-                                        @elseif($project->status === 'active') bg-primary 
-                                        @else bg-secondary 
+                                    <span class="badge
+                                        @if($project->status === 'completed') bg-success
+                                        @elseif($project->status === 'active') bg-primary
+                                        @else bg-secondary
                                         @endif me-1">
                                         {{ ucfirst($project->status) }}
                                     </span>
@@ -148,7 +150,8 @@
         // Buka modal edit
         $('#editModal').modal('show');
             });
-        });                                                         
+        });
 
     </script>
+
 @endsection
