@@ -60,25 +60,31 @@
                     @forelse ($projects as $project)
                         <div class="col-md-4 mb-3">
                             <div class="card">
-                                <div class="card-header">
-                                    <h5 class="card-title">{{ $project->name }}</h5>
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h4 class="card-title m-0">{{ $project->name }}</h4>
+                                    <span class="badge 
+                                        @if($project->status === 'completed') bg-success 
+                                        @elseif($project->status === 'active') bg-primary 
+                                        @else bg-secondary 
+                                        @endif me-1">
+                                        {{ ucfirst($project->status) }}
+                                    </span>
                                 </div>
                                 <div class="card-body">
                                     <p class="card-text">{{ Str::limit($project->description, 100) }}</p>
                                     <p class="card-text">
+                                    <div class="d-flex flex-wrap gap-1">
                                         <strong>Departemen:</strong>
                                         @if ($project->employee_details->isNotEmpty())
-                                            <ul>
                                                 @foreach ($project->employee_details->unique('department_id') as $employee_detail)
-                                                    <li>{{ $employee_detail->department->name ?? 'Tidak Diketahui' }}</li>
+                                                    <span class="badge bg-primary me-1">
+                                                        {{ $employee_detail->department->name ?? 'Tidak Diketahui' }}
+                                                    </span>
                                                 @endforeach
-                                            </ul>
                                         @else
                                             <span>-</span>
                                         @endif
-                                    </p>
-                                    <p class="card-text">
-                                        <strong>Status:</strong> {{ ucfirst($project->status) }}
+                                    </div>
                                     </p>
                                     <p class="card-text">
                                         <strong>Selesai pada: </strong>
@@ -91,15 +97,15 @@
                                             @if ($project->employee_details->isNotEmpty())
                                                 <button class="btn btn-success btn-sm" data-bs-toggle="modal"
                                                     data-bs-target="#completeModal{{ $project->id }}"
-                                                    type="button">Selesai</button>
+                                                    type="button"><i class='bx bx-check-square'></i></button>
                                             @endif
                                             <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                                data-bs-target="#editModal{{ $project->id }}" type="button">Ubah</button>
+                                                data-bs-target="#editModal{{ $project->id }}" type="button"><i class='bx bx-edit-alt' ></i></button>
 
                                         @endif
                                         <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#vertical-center-modal{{ $project->id }}"
-                                            type="button">Hapus</button>
+                                            type="button"><i class='bx bx-trash' ></i></button>
                                     </div>
                                     @if ($project->kanban_board)
                                         <a class="btn btn-info btn-sm"

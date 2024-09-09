@@ -132,17 +132,17 @@
                     </div>
                 </div>
             @endif
-            <div class="col-md-5">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">Kehadiran Karyawan</h5>
+                        <h5 class="card-title">Proyek Selesai</h5>
                     </div>
                     <div class="card-body">
-                        <div id="attendanceBarChart"></div>
+                        <div id="projectsBarChart"></div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-4">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Pemasukan & Pengeluaran</h5>
@@ -286,83 +286,74 @@
 
         var revenueChart = new ApexCharts(document.querySelector("#revenueChart"), revenueOptions);
         revenueChart.render();
-    </script>
-@else
-    <p>Data tidak ditemukan.</p>
-@endif
 
+         // Bar chart untuk proyek per departemen
+         var completedProjectsData = @json($completedProjects);
+    var departmentNames = @json($departmentNames);
+    var months = @json($months);
 
-    <!-- Script untuk Attendance Bar Chart -->
-    @if (isset($attendanceData))
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var attendanceOptions = {
-                    series: [{
-                            name: 'Present',
-                            data: @json($attendanceData['present'])
-                        },
-                        {
-                            name: 'Absent',
-                            data: @json($attendanceData['absent'])
-                        },
-                        {
-                            name: 'Alpha',
-                            data: @json($attendanceData['alpha'])
-                        },
-                        {
-                            name: 'Late',
-                            data: @json($attendanceData['late'])
-                        }
-                    ],
-                    chart: {
-                        type: 'bar',
-                        height: 350
-                    },
-                    plotOptions: {
-                        bar: {
-                            horizontal: false, // Set horizontal ke false jika ingin bar vertical
-                            columnWidth: '55%',
-                            endingShape: 'rounded',
-                            reverse: true
-                        }
-                    },
-                    dataLabels: {
-                        enabled: false
-                    },
-                    stroke: {
+    var seriesData = [];
+    departmentNames.forEach(function(department) {
+        var departmentData = months.map(function(month) {
+            return completedProjectsData[department][month] || 0;
+        });
+        seriesData.push({
+            name: department,
+            data: departmentData
+        });
+    });
+
+    var projectsBarOptions = {
+        series: seriesData,
+        chart: {
+            type: 'bar',
+            height: 350
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                endingShape: 'rounded'
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
                         show: true,
                         width: 2,
                         colors: ['transparent']
                     },
-                    xaxis: {
-                        categories: @json($months) // Data bulan untuk sumbu x
-                    },
-                    yaxis: {
-                        title: {
-                            text: 'Jumlah Kehadiran'
-                        }
-                    },
-                    fill: {
-                        opacity: 1
-                    },
-                    tooltip: {
-                        y: {
-                            formatter: function(val) {
-                                return val + " Karyawan";
-                            }
-                        }
-                    }
-                };
+        xaxis: {
+            categories: months,
+            title: {
+                text: 'Bulan'
+            }
+        },
+        yaxis: {
+            title: {
+                text: 'Jumlah Proyek Selesai'
+            }
+        },
+        fill: {
+            opacity: 1
+        },
+        tooltip: {
+            y: {
+                formatter: function(val) {
+                    return val + " proyek";
+                }
+            }
+        }
+    };
 
-                var attendanceBarChart = new ApexCharts(document.querySelector("#attendanceBarChart"),
-                    attendanceOptions);
-                attendanceBarChart.render();
-            });
-        </script>
-    @else
-        <p>Data kehadiran tidak ditemukan.</p>
-    @endif
+    var projectsBarChart = new ApexCharts(document.querySelector("#projectsBarChart"), projectsBarOptions);
+    projectsBarChart.render();
 
+    </script>
+@else
+    <p>Data tidak ditemukan.</p>
+@endif
 
     @if (isset($departments))
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>

@@ -279,6 +279,17 @@
 
     <!--  Customizer -->
     <!--  Import Js Files -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    {{-- Select2 --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+    
+    <script src="{{ asset('dist/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('dist/js/datatable/datatable-basic.init.js') }}"></script>
     <script src="{{ asset('dist/libs/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('dist/libs/simplebar/dist/simplebar.min.js') }}"></script>
     <script src="{{ asset('dist/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
@@ -293,16 +304,6 @@
     <script src="{{ asset('dist/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
     <script src="{{ asset('dist/js/dashboard.js') }}"></script>
 
-    <script src="{{ asset('dist/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('dist/js/datatable/datatable-basic.init.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-    {{-- Select2 --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
     <script>
         @if (session('success'))
             iziToast.success({
@@ -355,7 +356,6 @@
                 altInput: true,
                 altFormat: "F j, Y",
                 allowInput: true,
-                maxDate: "today"
             });
         });
     </script>

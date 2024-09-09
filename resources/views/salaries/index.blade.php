@@ -6,6 +6,7 @@
             <div class="container py-2">
                 <h1 class="h3">Gaji</h1>
 
+
                 <div class="d-flex justify-content-between align-items-center mb-2 mt-3">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSalariesModal">
                         Tambah
@@ -48,7 +49,20 @@
                                 <th>
                                     <a
                                         href="{{ route('salaries.index', array_merge(request()->query(), ['sortBy' => 'amount', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
-                                        Jumlah
+                                        Gaji
+                                        @if (request('sortBy') === 'amount')
+                                            @if (request('sortDirection') === 'asc')
+                                                &#9650;
+                                            @else
+                                                &#9660;
+                                            @endif
+                                        @endif
+                                    </a>
+                                </th>
+                                <th>
+                                    <a
+                                        href="{{ route('salaries.index', array_merge(request()->query(), ['sortBy' => 'amount', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        Bonus
                                         @if (request('sortBy') === 'amount')
                                             @if (request('sortDirection') === 'asc')
                                                 &#9650;
@@ -97,6 +111,9 @@
                                         @endif
                                     </a>
                                 </th>
+                                <th>Total Gaji</th>
+
+
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -106,6 +123,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $salary->employee_detail->name ?? 'N/A' }}</td>
                                     <td>Rp {{ number_format($salary->amount, 2, ',', '.') }}</td>
+                                    <td>Rp {{ number_format($salary->extra, 2, ',', '.') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($salary->transaction_date)->format('d M Y') }}</td>
                                     @php
                                         $types = [
@@ -116,6 +134,7 @@
 
                                     <td>{{ $types[$salary->type] ?? 'Tidak Diketahui' }}</td>
                                     <td>{{ $salary->description ?? 'N/A' }}</td>
+                                    <td>Rp {{ number_format($salary->total_amount, 2, ',', '.') }}</td>
                                     <td class="text-center">
                                         <button data-bs-target="#editSalariesModal{{ $salary->id }}"
                                             data-bs-toggle="modal" class="btn btn-warning btn-sm">Edit</button>
@@ -125,6 +144,7 @@
                                     </td>
                                 </tr>
 
+                                <!-- Modal Edit -->
                                 <!-- Modal Edit -->
                                 <div class="modal fade" id="editSalariesModal{{ $salary->id }}" tabindex="-1"
                                     aria-labelledby="editSalariesModalLabel{{ $salary->id }}" aria-hidden="true"
@@ -141,12 +161,12 @@
                                                 <form action="{{ route('salaries.update', $salary->id) }}" method="POST">
                                                     @csrf
                                                     @method('PUT')
-
                                                     <input type="hidden" name="company_id"
                                                         value="{{ Auth::user()->company->id }}">
                                                     <div class="mb-3">
-                                                        <label for="employee_id" class="form-label">Nama Karyawan</label>
-                                                        <select name="employee_id" id="employee_id"
+                                                        <label for="edit_employee_id" class="form-label">Nama
+                                                            Karyawan</label>
+                                                        <select name="employee_id" id="edit_employee_id"
                                                             class="form-control @error('employee_id') is-invalid @enderror">
                                                             @foreach ($employees as $employee)
                                                                 <option value="{{ $employee->id }}"
@@ -160,17 +180,27 @@
                                                         @enderror
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="amount" class="form-label">Jumlah</label>
+                                                        <label for="edit_amount" class="form-label">Gaji</label>
                                                         <input type="text" name="amount"
                                                             class="form-control @error('amount') is-invalid @enderror"
-                                                            id="amount" value="{{ old('amount', $salary->amount) }}">
+                                                            readonly id="edit_amount"
+                                                            value="{{ old('amount', $salary->amount) }}">
                                                         @error('amount')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="type" class="form-label">Jenis Transaksi</label>
-                                                        <select name="type" id="type"
+                                                        <label for="edit_extra" class="form-label">Bonus Gaji</label>
+                                                        <input type="text" name="extra"
+                                                            class="form-control @error('extra') is-invalid @enderror"
+                                                            id="edit_extra" value="{{ old('extra', $salary->extra) }}">
+                                                        @error('extra')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="mb-3" style="display: none;">
+                                                        <label for="edit_type" class="form-label">Jenis Transaksi</label>
+                                                        <select name="type" id="edit_type"
                                                             class="form-control @error('type') is-invalid @enderror">
                                                             <option value="income"
                                                                 {{ old('type', $salary->type) == 'income' ? 'selected' : '' }}>
@@ -184,33 +214,33 @@
                                                         @enderror
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="description" class="form-label">Deskripsi</label>
+                                                        <label for="edit_description" class="form-label">Deskripsi</label>
                                                         <input type="text" name="description"
                                                             class="form-control @error('description') is-invalid @enderror"
-                                                            id="description"
+                                                            id="edit_description"
                                                             value="{{ old('description', $salary->description) }}">
                                                         @error('description')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="transaction_date" class="form-label">Tanggal
+                                                        <label for="edit_transaction_date" class="form-label">Tanggal
                                                             Transaksi</label>
                                                         <input type="date" name="transaction_date"
                                                             class="form-control @error('transaction_date') is-invalid @enderror"
-                                                            id="transaction_date"
+                                                            id="edit_transaction_date"
                                                             value="{{ old('transaction_date', $salary->transaction_date) }}">
                                                         @error('transaction_date')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary">Simpan
-                                                        Perubahan</button>
+                                                    <button type="submit" class="btn btn-primary">Update</button>
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
 
 
                                 <!-- Modal Delete -->
@@ -274,14 +304,12 @@
                 <div class="modal-body">
                     <form action="{{ route('salaries.store') }}" method="POST">
                         @csrf
-
+                        <input type="hidden" name="company_id" value="{{ Auth::user()->company->id }}">
                         <div class="mb-3">
-
-                            <input type="hidden" name="company_id" value="{{ Auth::user()->company->id }}">
-
-                            <label for="employee_id" class="form-label">Nama Karyawan</label>
-                            <select name="employee_id" id="employee_id"
+                            <label for="create_employee_id" class="form-label">Nama Karyawan</label>
+                            <select name="employee_id" id="create_employee_id"
                                 class="form-control @error('employee_id') is-invalid @enderror">
+                                <option value="">Pilih Karyawan</option>
                                 @foreach ($employees as $employee)
                                     <option value="{{ $employee->id }}"
                                         {{ old('employee_id') == $employee->id ? 'selected' : '' }}>
@@ -294,28 +322,32 @@
                             @enderror
                         </div>
                         <div class="mb-3">
-                            <label for="amount" class="form-label">Jumlah</label>
-                            <input type="text" name="amount" id="amount"
-                                class="form-control @error('amount') is-invalid @enderror" value="{{ old('amount') }}">
-                            @error('amount')
+                            <label for="create_amount" class="form-label">Gaji</label>
+                            <input type="text" class="form-control" id="create_amount" name="amount" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="create_extra" class="form-label">Bonus Gaji</label>
+                            <input type="text" name="extra" id="create_extra"
+                                class="form-control @error('extra') is-invalid @enderror" value="{{ old('extra') }}">
+                            @error('extra')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3">
-                            <label for="type" class="form-label">Jenis Transaksi</label>
-                            <select name="type" id="type"
+                        <div class="mb-3" style="display: none;">
+                            <label for="create_type" class="form-label">Jenis Transaksi</label>
+                            <select name="type" id="create_type"
                                 class="form-control @error('type') is-invalid @enderror">
-                                <option value="income" {{ old('type') == 'income' ? 'selected' : '' }}>Pemasukan</option>
                                 <option value="expense" {{ old('type') == 'expense' ? 'selected' : '' }}>Pengeluaran
                                 </option>
+                                <option value="income" {{ old('type') == 'income' ? 'selected' : '' }}>Pemasukan</option>
                             </select>
                             @error('type')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="mb-3">
-                            <label for="description" class="form-label">Deskripsi</label>
-                            <input type="text" name="description" id="description"
+                            <label for="create_description" class="form-label">Deskripsi</label>
+                            <input type="text" name="description" id="create_description"
                                 class="form-control @error('description') is-invalid @enderror"
                                 value="{{ old('description') }}">
                             @error('description')
@@ -323,8 +355,8 @@
                             @enderror
                         </div>
                         <div class="mb-3">
-                            <label for="transaction_date" class="form-label">Tanggal Transaksi</label>
-                            <input type="date" name="transaction_date" id="transaction_date"
+                            <label for="create_transaction_date" class="form-label">Tanggal Transaksi</label>
+                            <input type="date" name="transaction_date" id="create_transaction_date"
                                 class="form-control @error('transaction_date') is-invalid @enderror"
                                 value="{{ old('transaction_date') }}">
                             @error('transaction_date')
@@ -337,5 +369,37 @@
             </div>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.getElementById('create_employee_id').addEventListener('change', function() {
+            const employeeId = this.value;
+
+            if (employeeId) {
+                fetch(`{{ route('salary.getEmployeeSalary', '') }}/${employeeId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Received data:', data);
+                        if (data.salary !== undefined) {
+                            document.getElementById('create_amount').value = data.salary;
+                        } else {
+                            console.log('Salary data is undefined');
+                            document.getElementById('create_amount').value = '';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching salary:', error);
+                        document.getElementById('create_amount').value = '';
+                    });
+            } else {
+                document.getElementById('create_amount').value = '';
+            }
+        });
+    </script>
 
 @endsection

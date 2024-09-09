@@ -41,7 +41,7 @@
                         <select name="department_id" id="department_id" class="form-control">
                             <option value="">Pilih Departemen</option>
                             @foreach ($departments as $department)
-                                <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                <option value="{{ $department->id }}"  {{ old('department_id') == $department->id ? 'selected' : '' }}>{{ $department->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -49,7 +49,6 @@
                     <div class="mb-3">
                         <label for="employee_id" class="form-label">Karyawan</label>
                         <select name="employee_id[]" id="employee_id" class="form-control js-example-basic-multiple" multiple="multiple">
-                            <!-- Options akan dimuat dinamis menggunakan AJAX -->
                         </select>
                     </div>
                     
@@ -79,35 +78,54 @@
 }
 </style>
 
-
 <script>
     $(document).ready(function() {
-    // Inisialisasi Select2
-    $('#employee_id').select2({
-        placeholder: "Pilih Karyawan",
-        allowClear: true,
-        width: '100%'
-    });
+        // Inisialisasi Select2 untuk employee_id
+        $('#employee_id').select2({
+            placeholder: "Pilih Karyawan",
+            allowClear: true,
+            width: '100%'
+        });
 
-    // Event ketika departemen dipilih
-    $('#department_id').on('change', function() {
-        var departmentId = $(this).val();
-
-        // Kosongkan dropdown employee saat departemen diubah
-        $('#employee_id').empty().trigger('change'); 
+        // Jika ada old values dari karyawan sebelumnya, maka load data ini
+        var oldEmployeeIds = {!! json_encode(old('employee_id', [])) !!}; // Array of employee ids from old()
+        var departmentId = $('#department_id').val(); // Get selected department
 
         if (departmentId) {
-            // Lakukan AJAX untuk mengambil data karyawan berdasarkan departemen
+            loadEmployees(departmentId, oldEmployeeIds);
+        }
+
+        // Ketika departemen dipilih, muat karyawan terkait
+        $('#department_id').on('change', function() {
+            var departmentId = $(this).val();
+            var employeeSelect = $('#employee_id');
+
+            // Kosongkan pilihan karyawan jika departemen diubah
+            employeeSelect.empty().trigger('change');
+
+            if (departmentId) {
+                loadEmployees(departmentId, []); // Load employees based on selected department
+            }
+        });
+
+        // Fungsi untuk memuat data karyawan berdasarkan departemen yang dipilih
+        function loadEmployees(departmentId, selectedEmployees) {
+            var employeeSelect = $('#employee_id');
             $.ajax({
                 url: '/manager/get-employees/' + departmentId,
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
                     var options = '<option></option>'; // Placeholder untuk Select2
-                    $.each(data, function(key, employee) {
-                        options += '<option value="' + employee.id + '">' + employee.name + '</option>';
+                    $.each(data, function(key, value) {
+                        options += '<option value="' + value.id + '">' + value.name + '</option>';
                     });
-                    $('#employee_id').html(options).trigger('change');
+                    employeeSelect.html(options);
+
+                    // Jika ada karyawan yang sebelumnya dipilih (old value), set kembali
+                    if (selectedEmployees.length > 0) {
+                        employeeSelect.val(selectedEmployees).trigger('change');
+                    }
                 },
                 error: function(xhr, status, error) {
                     console.error('Gagal memuat data karyawan:', error);
@@ -115,5 +133,4 @@
             });
         }
     });
-});
 </script>
