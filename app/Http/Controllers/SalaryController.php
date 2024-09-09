@@ -8,6 +8,7 @@ use App\Models\EmployeeDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\SalaryRequest;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class SalaryController extends Controller
@@ -55,12 +56,31 @@ class SalaryController extends Controller
      */
     public function store(SalaryRequest $request)
     {
+
         $validatedData = $request->validated();
+
+        // Tambahkan ID perusahaan
         $validatedData['company_id'] = Auth::user()->company->id;
 
-        Salary::create($validatedData);
+        // Hitung total gaji
+        $totalAmount = $validatedData['amount'] + ($validatedData['extra'] ?? 0);
 
+        if (empty($validatedData['transaction_date'])) {
+            $validatedData['transaction_date'] = Carbon::today()->toDateString(); // Menggunakan Carbon untuk mendapatkan tanggal hari ini
+        }
+        // Buat entri baru di tabel salaries
+        Salary::create(array_merge($validatedData, ['total_amount' => $totalAmount]));
+
+        // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('salaries.index')->with('success', 'Gaji berhasil dibuat.');
+    }
+
+
+
+    public function getEmployeeSalary($employeeId)
+    {
+        $employee = EmployeeDetail::findOrFail($employeeId);
+        return response()->json(['salary' => $employee->salary]);
     }
 
     /**
@@ -69,7 +89,17 @@ class SalaryController extends Controller
     public function update(SalaryRequest $request, $id)
     {
         $salarie = Salary::findOrFail($id);
-        $salarie->update($request->validated());
+
+
+        $validatedData = $request->validated();
+
+        // Hitung total gaji baru
+        $totalAmount = $validatedData['amount'] + ($validatedData['extra'] ?? 0);
+
+        // Update data gaji
+        $salarie->update(array_merge($validatedData, ['total_amount' => $totalAmount]));
+
+        return redirect()->route('salaries.index')->with('success', 'Gaji berhasil diperbarui.');
 
         return redirect()->route('salaries.index')->with('success', 'Gaji berhasil di edit');
     }

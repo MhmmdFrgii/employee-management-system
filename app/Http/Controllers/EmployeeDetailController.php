@@ -136,6 +136,17 @@ class EmployeeDetailController extends Controller
         return redirect()->route('employee.index')->with('success', 'Berhasil menambahkan data employee.');
     }
 
+    public function getEmployeeSalary($id)
+    {
+        $employee = EmployeeDetail::find($id);
+
+        if ($employee) {
+            return response()->json(['salary' => $employee->salary]);
+        }
+
+        return response()->json(['salary' => null], 404);
+    }
+
     public function edit(EmployeeDetail $employee)
     {
         $companyId = Auth::user()->company_id;

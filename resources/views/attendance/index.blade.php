@@ -1,51 +1,16 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
-<div class="card px-3 pb-4 mb-1 pt-1 rounded-sm">
-    <div class="row g-2 mt-3">
-        <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="row g-2">
-                <h3 class="mx-1">Absensi Karyawan</h3>
-            </div>
-        </div>
-        <div class="col-lg-8 col-md-6 col-sm-12">
-            <div class="d-flex flex-column flex-lg-row justify-content-end gap-2">
-                <div class="search-box col-lg-3 col-12">
-                    <form action="{{ route('attendance.index') }}">
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="search"
-                                value="{{ request('search') }}" id="searchMemberList" placeholder="Cari Karyawan">
-                            <div class="input-group-append ">
-                                <button type="submit" class="input-group-text rounded-end border border-1"><i
-                                        class="ri-search-line"></i></button>
-                            </div>
-                            <button type="submit" class="btn btn-primary d-lg-none mt-2 w-100">Cari</button>
-                        </div>
-                </div>
-                <div class="search-box col-lg-3 col-12">
-                    <div class="input-group">
-                        <input type="text" class="form-control flatpickr-input" name="date"
-                            value="{{ request('date') }}" data-provider="flatpickr" placeholder="Pilih tanggal">
-                        <div class="input-group-append ">
-                            <button type="submit" class="input-group-text rounded-end border border-1"><i
-                                    class="ri-calendar-line"></i></button>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary d-lg-none mt-2 w-100">Cari</button>
-                    </form>
-                </div>
-                <a href="{{ route('attendance.index') }}" class="btn btn-warning">Reset</a>
-                <div class="form-check form-switch gap-3 col-lg-3 col-12 d-flex justify-content-between align-items-center mt-2 mt-lg-0"
-                    style="width: auto;">
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exportExcelModal">
-                        Rekap Excel
-                    </button>
+    <div class="card px-3 pb-4 mb-1 pt-1 rounded-sm">
+        <div class="row g-2 mt-3">
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="row g-2">
+                    <h3 class="mx-1">Absensi Karyawan</h3>
                 </div>
             </div>
+            @include('attendance.partials.filter')
         </div>
-
     </div>
-</div>
     <div class="card">
         <div class="card-body border-top">
             <div class="table-responsive table-card p-3">
@@ -78,36 +43,47 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($attendances as $attendance)
+                            @forelse ($employees as $employee)
                                 <tr>
                                     <td>{{ $loop->iteration }} .</td>
-                                    <td class="text-uppercase">{{ $attendance->employee_detail->name }}</td>
-                                    <td class="text-uppercase">{{ $attendance->employee_detail->department->name }}</td>
-                                    <td>{{ $attendance->date }}</td>
-                                    <td class="text-center">
-                                        @if ($attendance->status == 'present')
-                                            <span class="badge bg-success-subtle text-success py-2 px-3">masuk</span>
-                                        @elseif($attendance->status == 'late')
-                                            <span class="badge bg-danger-subtle text-danger py-2 px-3">telat</span>
-                                        @elseif($attendance->status == 'absent')
-                                            <span class="badge bg-warning-subtle text-warning py-2 px-3">izin</span>
-                                        @endif
-                                    </td>
-                                    <td class="text-center">
-                                        @if ($attendance->status == 'present')
-                                            <span class="badge bg-success-subtle text-success py-2 px-3">
-                                                {{ $attendance->created_at->format('H:i') }}
-                                            </span>
-                                        @elseif ($attendance->status == 'late')
-                                            <span class="badge bg-danger-subtle text-danger py-2 px-3">
-                                                {{ $attendance->created_at->format('H:i') }}
-                                            </span>
-                                        @else
-                                            <span class="badge bg-secondary-subtle text-secondary py-2 px-3">
-                                                Tidak Ada Waktu
-                                            </span>
-                                        @endif
-                                    </td>
+                                    <td class="text-uppercase">{{ $employee->name }}</td>
+                                    <td class="text-uppercase">{{ $employee->department->name }}</td>
+                                    <td>{{ $selectedDate->format('Y-m-d') }}</td>
+                                    @php $attendance = $employee->attendances->first(); @endphp
+
+                                    @if ($employee->attendances->isNotEmpty())
+                                        <td class="text-center">
+                                            @if ($attendance->status == 'present')
+                                                <span class="badge bg-success-subtle text-success py-2 px-3">masuk</span>
+                                            @elseif($attendance->status == 'late')
+                                                <span class="badge bg-danger-subtle text-danger py-2 px-3">telat</span>
+                                            @elseif($attendance->status == 'absent')
+                                                <span class="badge bg-warning-subtle text-warning py-2 px-3">izin</span>
+                                            @else
+                                                <span class="badge bg-warning-subtle text-warning py-2 px-3">alpha</span>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($attendance->status == 'present')
+                                                <span class="badge bg-success-subtle text-success py-2 px-3">
+                                                    {{ $attendance->created_at->format('H:i') }}
+                                                </span>
+                                            @elseif ($attendance->status == 'late')
+                                                <span class="badge bg-danger-subtle text-danger py-2 px-3">
+                                                    {{ $attendance->created_at->format('H:i') }}
+                                                </span>
+                                            @else
+                                                <span class="badge bg-secondary-subtle text-secondary py-2 px-3">
+                                                    Tidak Ada Waktu
+                                                </span>
+                                            @endif
+                                        </td>
+                                    @else
+                                        <td class="text-center">
+                                            <span class="badge bg-danger-subtle text-danger py-2 px-3">alpha</span>
+                                        </td>
+                                        <td></td>
+                                    @endif
                                 </tr>
                             @empty
                                 <tr>
@@ -141,17 +117,12 @@
 
                                 </select>
                             </div>
-
-
                             <div class="mb-3">
                                 <label for="monthInput" class="form-label">Bulan</label>
                                 <select class="form-select" id="monthInput" name="month">
 
                                 </select>
                             </div>
-
-
-
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Rekap</button>

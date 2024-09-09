@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\EmployeeDetail;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -95,40 +96,27 @@ class AttendanceController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Attendance::query();
+        $user = Auth::user();
+        $selectedDate = $request->has('date') ? Carbon::parse($request->date) : Carbon::today();
 
-        // Join with EmployeeDetail to get employee names and filter by the current company
-        $query->join('employee_details', 'attendances.employee_id', '=', 'employee_details.id')
-            ->where('employee_details.company_id', Auth::user()->company->id);
+        $employees = EmployeeDetail::where('company_id', $user->company_id)
+            ->with(['attendances' => function ($query) use ($selectedDate) {
+                $query->whereDate('date', $selectedDate);
+            }])
+            ->get();
 
-        // Search by employee name
         if ($request->has('search')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('employee_details.name', 'like', '%' . $request->search . '%')
-                    ->orWhere('attendances.date', 'like', '%' . $request->search . '%');
+            $employees = $employees->filter(function ($employee) use ($request) {
+                return stripos($employee->name, $request->search) !== false;
             });
         }
 
-        // Apply status filter
         if ($request->has('status') && is_array($request->status)) {
-            $query->whereIn('attendances.status', $request->status);
+            $employees = $employees->filter(function ($employee) use ($request) {
+                return $employee->attendances->whereIn('status', $request->status)->isNotEmpty();
+            });
         }
 
-        // Filter untuk tanggal absen
-        $selectedDate = $request->has('date') ? Carbon::parse($request->date) : Carbon::today();
-
-        $query->whereDate('attendances.date', $selectedDate);
-
-        // Apply sorting
-        if ($request->has('sortBy')) {
-            $direction = $request->sortDirection === 'desc' ? 'desc' : 'asc';
-            $query->orderBy($request->sortBy, $direction);
-        }
-
-        $today = Carbon::today()->format('Y-m-d');
-        // Select relevant fields
-        $attendances = $query->whereDate('date', '<=', $today)->select('attendances.*', 'employee_details.name as employee_name')->paginate(10);
-
-        return view('attendance.index', compact('attendances', 'selectedDate'));
+        return view('attendance.index', compact('employees', 'selectedDate'));
     }
 }
