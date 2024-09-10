@@ -4,7 +4,7 @@
         <p class="m-0">{{ $task->title }}</p>
         <div class="d-flex justify-content-between text-white">
             <!-- Form untuk mengubah status task -->
-            @if ($task->status !== 'done')
+            {{-- @if ($task->status !== 'done')
                 <form action="{{ route('kanban-tasks.update', $task->id) }}" method="post" class="m-1">
                     @method('patch')
                     @csrf
@@ -13,7 +13,7 @@
                         <i class='bx bx-check-circle'></i>
                     </button>
                 </form>
-            @endif
+            @endif --}}
 
             <!-- Tombol Edit Task -->
             <button type="button" class="btn btn-sm btn-{{ $task->color }} m-1" data-bs-toggle="modal"
@@ -22,11 +22,13 @@
             </button>
 
             <!-- Tombol Hapus Task -->
-            @if ($task->status === 'done')
-                <button class="btn btn-sm m-1 text-white" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ $task->id }}">
-                    <i class='bx bx-trash'></i>
-                </button>
-            @endif
+            <button class="btn btn-sm m-1 text-white" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ $task->id }}">
+                @if ($task->status === 'done')
+                        <i class='bx bx-trash'></i>
+                    @else
+                        <i class='bx bx-trash'></i>
+                @endif
+            </button>
         </div>
     </div>
 

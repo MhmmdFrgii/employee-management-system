@@ -55,8 +55,8 @@
                                 <div class="mb-3">
                                     <label for="position_id" class="form-label">Gaji Pokok</label>
                                     <input type="number" class="form-control @error('salary') is-invalid @enderror"
-                                        id="salary" name="salary" placeholder="Gaji Pokok"
-                                        value="{{ old('salary') }}" min="0" />
+                                        name="salary" placeholder="Gaji Pokok" value="{{ old('salary') }}"
+                                        min="0" />
                                     @error('salary')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
