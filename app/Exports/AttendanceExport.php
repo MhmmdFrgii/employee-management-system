@@ -4,6 +4,7 @@ namespace App\Exports;
 use App\Models\Attendance;
 use App\Models\EmployeeDetail;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -27,7 +28,7 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
 
     public function collection()
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         // Ambil karyawan berdasarkan perusahaan user
         $employees = EmployeeDetail::where('company_id', $user->company_id)
@@ -41,19 +42,16 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
 
         $data = [];
 
-        // Menghitung jumlah hari dalam bulan
         $daysInMonth = Carbon::create($this->year, $this->month, 1)->daysInMonth;
 
         foreach ($employees as $employee) {
-            // Periksa apakah karyawan memiliki absensi
             $employeeAttendances = $attendances->get($employee->id, collect());
 
-            // Untuk setiap hari dalam bulan
             for ($date = 1; $date <= $daysInMonth; $date++) {
                 $currentDate = Carbon::create($this->year, $this->month, $date);
                 $formattedDate = $currentDate->format('Y-m-d');
 
-                if (!$currentDate->isWeekend()) { // Hanya tambahkan hari kerja
+                if (!$currentDate->isWeekend()) {
                     if ($employeeAttendances->where('date', $formattedDate)->isNotEmpty()) {
                         $attendance = $employeeAttendances->where('date', $formattedDate)->first();
                         $status = $this->mapStatus($attendance->status);
@@ -150,7 +148,7 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
                 $sheet->getStyle('E' . $row)->getFont()->getColor()->setARGB('008000'); // Green
                 break;
             case 'Telat':
-                $sheet->getStyle('E' . $row)->getFont()->getColor()->setARGB('FFFF00'); // Yellow
+                $sheet->getStyle('E' . $row)->getFont()->getColor()->setARGB('d9941a'); // Yellow
                 break;
             case 'Izin':
                 $sheet->getStyle('E' . $row)->getFont()->getColor()->setARGB('0000FF'); // Blue

@@ -87,41 +87,6 @@
                                 mengelola karyawan secara efisien. Dapatkan wawasan mendalam tentang kinerja, absensi,
                                 dan pengembangan karyawan Anda.</p>
                         </div>
-                        <form action="{{ route('create.applicant') }}">
-                            <div class="form-group" class="text-white">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <input type="text" class="form-control @error('applicant') is-invalid @enderror"
-                                            id="applicant" name="applicant" placeholder="Kode Lamaran">
-                                        @error('applicant')
-                                            <div class="text-danger mt-2">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="col-6">
-                                        <button type="submit" class="mt-2 btn btn-success">Lanjutkan</button>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </form>
-                        <form action="{{ route('create.invite') }}">
-                            <div class="form-group" class="text-white">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <input type="text" class="form-control @error('invite') is-invalid @enderror"
-                                            id="invite" name="invite" value="{{ request('invite') }}"
-                                            placeholder="Kode Undangan">
-                                        @error('invite')
-                                            <div class="text-danger mt-2">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="col-6">
-                                        <button type="submit" class="mt-2 btn btn-primary">Lanjutkan</button>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </form>
                     </div>
                     <div class="col-12 col-md-5 col-lg-6">
                         <!-- Welcome Thumb -->
@@ -152,6 +117,7 @@
             </div>
         </section>
         <!-- ***** Welcome Area End ***** -->
+
 
         <!-- ***** Counter Area Start ***** -->
         <section class="section counter-area ptb_50">
@@ -275,54 +241,6 @@
         </section>
         <!-- ***** Features Area End ***** -->
 
-        <!-- ***** Service Area Start ***** -->
-        {{-- <section id="screenshots" class="section screenshots-area overflow-hidden ptb_100">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-12 col-md-10 col-lg-8">
-                        <!-- Section Heading -->
-                        <div class="section-heading text-center">
-                            <span class="d-inline-block rounded-pill shadow-sm fw-5 px-4 py-2 mb-3">
-                                <i class="far fa-lightbulb text-primary mr-1"></i>
-                                <span class="text-primary">Tampilan</span>
-                                Layar
-                            </span>
-                            <h2>Lihat Bagaimana EMS Bekerja</h2>
-                            <p class="d-none d-sm-block mt-4">Intip beberapa tampilan layar EMS yang menunjukkan
-                                bagaimana aplikasi ini bekerja dalam mengelola karyawan dan proyek Anda secara efektif
-                                dan efisien.</p>
-                            <p class="d-block d-sm-none mt-4">Intip beberapa tampilan layar EMS yang menunjukkan
-                                bagaimana aplikasi ini bekerja dalam mengelola karyawan dan proyek Anda secara efektif
-                                dan efisien.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <!-- Single Screenshot -->
-                    <div class="col-12 col-sm-6 col-lg-4">
-                        <div class="single-screenshot text-center wow fadeInUp" data-wow-delay="0.2s">
-                            <img src="{{ asset('assets/images/screenshots/dashboard.png') }}" alt="EMS Dashboard">
-                        </div>
-                    </div>
-                    <!-- Single Screenshot -->
-                    <div class="col-12 col-sm-6 col-lg-4">
-                        <div class="single-screenshot text-center wow fadeInUp" data-wow-delay="0.4s">
-                            <img src="{{ asset('assets/images/screenshots/employee-management.png') }}"
-                                alt="Employee Management">
-                        </div>
-                    </div>
-                    <!-- Single Screenshot -->
-                    <div class="col-12 col-sm-6 col-lg-4">
-                        <div class="single-screenshot text-center wow fadeInUp" data-wow-delay="0.6s">
-                            <img src="{{ asset('assets/images/screenshots/performance-review.png') }}"
-                                alt="Performance Review">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section> --}}
-        <!-- ***** Service Area End ***** -->
-
         <!-- ***** Work Area Start ***** -->
         <section id="workflow" class="section work-area bg-overlay overflow-hidden ptb_100">
             <div class="container">
@@ -336,7 +254,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row align-items-center justify-content-center">
                     <div class="col-12 col-md-4">
                         <!-- Single Work -->
                         <div class="text-center p-3">
@@ -376,18 +294,42 @@
                             <p class="text-white">Lihat performa karyawan dan ambil keputusan untuk pengembangan tim.</p>
                         </div>
                     </div>
+                    <div class="col-12 col-md-8 col-lg-6 mt-5 mb-0">
+                        <div class="code-input-form p-5 text-center bg-white rounded shadow">
+                            <h3 class="text-dark mb-4">Masukkan Kode Lamaran atau Kode Undangan</h3>
+                            <form action="{{ route('create.applicant') }}">
+                                <div class="form-group mb-3">
+                                    <input type="text" class="form-control @error('applicant') is-invalid @enderror"
+                                        id="applicant" name="applicant" placeholder="Kode Lamaran">
+                                    @error('applicant')
+                                        <div class="text-danger mt-2">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <button type="submit" class="btn btn-success btn-block">Lanjutkan dengan Kode
+                                    Lamaran</button>
+                            </form>
+                            <div class="my-4">
+                                <span class="text-muted">Atau</span>
+                            </div>
+                            <form action="{{ route('create.invite') }}">
+                                <div class="form-group mb-3">
+                                    <input type="text" class="form-control @error('invite') is-invalid @enderror"
+                                        id="invite" name="invite" value="{{ request('invite') }}"
+                                        placeholder="Kode Undangan">
+                                    @error('invite')
+                                        <div class="text-danger mt-2">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Lanjutkan dengan Kode
+                                    Undangan</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-
         <!-- ***** Work Area End ***** -->
-
-
-
-        <!--====== Height Emulator Area Start ======-->
-        {{-- <div class="height-emulator d-none d-lg-block"></div> --}}
-        <!--====== Height Emulator Area End ======-->
 
         <!--====== Footer Area Start ======-->
         <footer class="footer-area">
