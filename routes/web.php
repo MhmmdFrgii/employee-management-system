@@ -8,6 +8,7 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeDetailController;
@@ -28,13 +29,14 @@ Route::get('confirmation', function () {
 })->name('confirmation');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::middleware(['role:manager', 'auth', 'check_location'])->group(function () {
 
         Route::prefix('manager')->group(function () {
+            Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+            Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+            Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
             // route attendence
             Route::get('/mark-absentees', [AttendanceController::class, 'markAbsentees']);
 
@@ -50,6 +52,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/getEmployeeSalary/{employeeId}', [SalaryController::class, 'getEmployeeSalary'])->name('salary.getEmployeeSalary');
 
             Route::resource('positions', PositionController::class);
+            Route::resource('comment', CommentController::class);
 
             // Route::resource('attendance', AttendanceController::class);
             Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
@@ -74,15 +77,15 @@ Route::middleware('auth')->group(function () {
             route::get('/leave-requests/calendar', [LeaveRequestController::class, 'calendar'])->name('calendar');
             Route::put('/leave-requests/{id}/approve', [LeaveRequestController::class, 'approve'])->name('leave-requests.approve');
             Route::post('/leave-requests/{id}/reject', [LeaveRequestController::class, 'reject'])->name('leave-requests.reject');
+
+            Route::patch('company-location', [RegisteredUserController::class, 'store_location'])
+            ->name('company.location.store');
         });
     });
 
     Route::middleware(['role:manager', 'check_exists_location'])->group(function () {
         Route::get('company-location', [RegisteredUserController::class, 'setup_location'])
             ->name('company.location.setup');
-
-        Route::patch('company-location', [RegisteredUserController::class, 'store_location'])
-            ->name('company.location.store');
     });
 
     Route::middleware('role:employee')->group(function () {

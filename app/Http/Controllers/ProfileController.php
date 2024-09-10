@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
+use App\Models\Project;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use App\Models\EmployeeDetail;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\ProfileUpdateRequest;
 
 class ProfileController extends Controller
 {
@@ -16,8 +18,19 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $company_id = Auth::user()->company->id;
+
+        $project_count = Project::where('company_id', $company_id)->count();
+
+        $employee_count = EmployeeDetail::where('company_id', $company_id)
+            ->where('status', 'approved')
+            ->whereHas('user')
+            ->count();
+
         return view('profile.edit', [
             'user' => $request->user(),
+            'employees' => $employee_count,
+            'projects' => $project_count
         ]);
     }
 
@@ -34,7 +47,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('profile.edit')->with('success', 'Berhasil update profile!');
     }
 
     /**

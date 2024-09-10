@@ -51,6 +51,13 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
+    {{-- Leaflet --}}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     </style>
 </head>
 
@@ -241,7 +248,7 @@
                                                 </div>
                                             </div>
                                             <div class="message-body">
-                                                <a href="/profile" class="py-8 px-7 mt-8 d-flex align-items-center">
+                                                <a href="/manager/profile" class="py-8 px-7 mt-8 d-flex align-items-center">
                                                     <span
                                                         class="d-flex align-items-center justify-content-center bg-light rounded-1 p-6">
                                                         <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/icon-account.svg"
