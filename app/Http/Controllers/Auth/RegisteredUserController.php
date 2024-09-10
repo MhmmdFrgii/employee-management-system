@@ -153,7 +153,7 @@ class RegisteredUserController extends Controller
         }
     }
 
-    // cek the company single use code, return employee regist based on company code 
+    // cek the company single use code, return employee regist based on company code
     public function create_employee(Request $request)
     {
         $validator = Validator::make($request->all(), [

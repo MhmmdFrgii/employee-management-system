@@ -305,7 +305,7 @@
                                         <div class="text-danger mt-2">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <button type="submit" class="btn btn-success btn-block">Lanjutkan dengan Kode
+                                <button type="submit" class="btn btn-primary btn-block">Lanjutkan dengan Kode
                                     Lamaran</button>
                             </form>
                             <div class="my-4">
