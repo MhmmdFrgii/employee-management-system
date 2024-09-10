@@ -60,4 +60,27 @@ class ProjectController extends Controller
 
         return response()->json(['kanban_boards' => $formattedProjects]);
     }
+
+    public function show($id)
+    {
+        $project = Project::find($id);
+
+        if (!$project) {
+            return response()->json([
+                'message' => 'Project not found.'
+            ], 404);
+        }
+
+        return response()->json([
+            'id' => $project->id,
+            'company_id' => $project->company_id,
+            'name' => $project->name,
+            'price' => $project->price,
+            'description' => $project->description,
+            'start_date' => $project->start_date,
+            'end_date' => $project->end_date,
+            'status' => $project->status,
+            'completed_at' => $project->completed_at,
+        ]);
+    }
 }

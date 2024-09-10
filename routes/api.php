@@ -22,6 +22,7 @@ Route::prefix('auth')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:employee')->group(function () {
         Route::get('projects', [ProjectController::class, 'getAllProject']);
+        Route::get('/projects/{id}', [ProjectController::class, 'show']);
 
         Route::get('kanban-board', [KanbanController::class, 'index']);
         Route::post('kanban-task', [KanbanController::class, 'storeTask']);
