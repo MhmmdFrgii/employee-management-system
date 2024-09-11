@@ -1,5 +1,4 @@
 <script>
-
     // Bar chart untuk proyek per departemen
 var completedProjectsData = @json($completedProjects);
 var departmentNames = @json($departmentNames);
@@ -62,5 +61,4 @@ var projectsBarOptions = {
 
 var projectsBarChart = new ApexCharts(document.querySelector("#projectsBarChart"), projectsBarOptions);
 projectsBarChart.render();
-
     </script>
