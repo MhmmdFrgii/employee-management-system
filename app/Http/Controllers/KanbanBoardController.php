@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\KanbanBoardRequest;
+use App\Models\Comment;
 use App\Models\EmployeeDetail;
 use App\Models\KanbanBoard;
 use App\Models\KanbanTask;
@@ -18,9 +19,12 @@ class KanbanBoardController extends Controller
      */
     public function index(Request $request)
     {
-        $kanbanboardID = $request->id ?  $request->id : 1;
+        $kanbanboardID = $request->id ? $request->id : 1;
 
-        $kanbanboards = KanbanBoard::all(); // Perbaikan nama variabel 
+        // Ambil semua komentar yang terkait dengan KanbanBoard tertentu
+        $comments = Comment::where('project_id', $kanbanboardID)->get();
+
+        $kanbanboards = KanbanBoard::all();
         $todo = KanbanTask::where('kanban_boards_id', $kanbanboardID)
             ->where('status', 'todo')
             ->get();
@@ -33,10 +37,11 @@ class KanbanBoardController extends Controller
         $users = EmployeeDetail::whereHas('projects')
             ->get();
 
-        // $employees = EmployeeDetail::where('company_id', Auth::user()->company->id);
         $kanbanboard = KanbanBoard::where('id', $kanbanboardID)->first();
-        return view('kanban-board.index', compact('kanbanboards', 'kanbanboard', 'todo', 'progress', 'done', 'users'));
+
+        return view('kanban-board.index', compact('kanbanboards', 'kanbanboard', 'todo', 'progress', 'done', 'users', 'comments'));
     }
+
 
     /**
      * Store a newly created resource in storage.
