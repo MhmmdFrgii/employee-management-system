@@ -181,62 +181,12 @@
                 @endforelse
             </div>
         </div>
+        @include('dashboard.partial.department-project')
+        @include('dashboard.partial.department')
+        @include('dashboard.partial.project')
+
         @if (isset($project_data))
             <script>
-                var projectData = @json($project_data);
-
-                // Chart untuk Jumlah Proyek Selesai
-                var projectCompletedOptions = {
-                    series: [{
-                        name: 'Jumlah Proyek Selesai',
-                        data: projectData.map(function(data) {
-                            return {
-                                x: data[0],
-                                y: data[1]
-                            };
-                        })
-                    }],
-                    chart: {
-                        type: 'line',
-                        height: 350
-                    },
-                    stroke: {
-                        curve: 'smooth',
-                        width: 2
-                    },
-                    dataLabels: {
-                        enabled: false
-                    },
-                    xaxis: {
-                        categories: @json($months),
-                        title: {
-                            text: 'Bulan'
-                        }
-                    },
-                    yaxis: {
-                        title: {
-                            // text: 'Jumlah Proyek Selesai'
-                        }
-                    },
-                    tooltip: {
-                        y: {
-                            formatter: function(val) {
-                                return val + " proyek";
-                            }
-                        }
-                    },
-                    markers: {
-                        size: 4
-                    },
-                    fill: {
-                        opacity: 1
-                    }
-                };
-
-                var projectCompletedChart = new ApexCharts(document.querySelector("#projectsCompletedChart"),
-                    projectCompletedOptions);
-                projectCompletedChart.render();
-
                 // Chart untuk Pendapatan
                 var revenueOptions = {
                     series: [{
@@ -288,118 +238,12 @@
 
                 var revenueChart = new ApexCharts(document.querySelector("#revenueChart"), revenueOptions);
                 revenueChart.render();
-
-                // Bar chart untuk proyek per departemen
-                var completedProjectsData = @json($completedProjects);
-                var departmentNames = @json($departmentNames);
-                var months = @json($months);
-
-                var seriesData = [];
-                departmentNames.forEach(function(department) {
-                    var departmentData = months.map(function(month) {
-                        return completedProjectsData[department][month] || 0;
-                    });
-                    seriesData.push({
-                        name: department,
-                        data: departmentData
-                    });
-                });
-
-                var projectsBarOptions = {
-                    series: seriesData,
-                    chart: {
-                        type: 'bar',
-                        height: 350
-                    },
-                    plotOptions: {
-                        bar: {
-                            horizontal: false,
-                            columnWidth: '55%',
-                            endingShape: 'rounded'
-                        }
-                    },
-                    dataLabels: {
-                        enabled: false
-                    },
-                    stroke: {
-                        show: true,
-                        width: 2,
-                        colors: ['transparent']
-                    },
-                    xaxis: {
-                        categories: months,
-                        title: {
-                            text: 'Bulan'
-                        }
-                    },
-                    yaxis: {
-                        title: {
-                            // text: 'Jumlah Proyek Selesai'
-                        }
-                    },
-                    fill: {
-                        opacity: 1
-                    },
-                    tooltip: {
-                        y: {
-                            formatter: function(val) {
-                                return val + " proyek";
-                            }
-                        }
-                    }
-                };
-
-                var projectsBarChart = new ApexCharts(document.querySelector("#projectsBarChart"), projectsBarOptions);
-                projectsBarChart.render();
             </script>
         @else
             <p>Data tidak ditemukan.</p>
         @endif
 
-        @if (isset($departments))
-            <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-            <script>
-                // Data untuk pie chart
-                var pieData = [1, 5, 5,
-                    2
-                ] // Format data: [{ name: 'Kategori A', value: 20 }, { name: 'Kategori B', value: 30 }, ...]
 
-                // Opsi konfigurasi pie chart
-                var pieOptions = {
-                    // series: pieData.map(function(item) {
-                    //     return item.value;
-                    // }),
-                    // labels: pieData.map(function(item) {
-                    //     return item.name;
-                    // }),
-                    series: @json($department_data),
-                    labels: @json($departments),
-                    chart: {
-                        type: 'pie',
-                        height: 350
-                    },
-                    legend: {
-                        position: 'bottom'
-                    },
-                    dataLabels: {
-                        enabled: true
-                    },
-                    tooltip: {
-                        y: {
-                            formatter: function(val) {
-                                return val + " orang";
-                            }
-                        }
-                    }
-                };
-
-                // Membuat dan merender pie chart
-                var pieChart = new ApexCharts(document.querySelector("#pieChart"), pieOptions);
-                pieChart.render();
-            </script>
-        @else
-            <p>Data tidak ditemukan.</p>
-        @endif
 
 
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
