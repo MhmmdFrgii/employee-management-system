@@ -91,7 +91,6 @@ class DashboardController extends Controller
             
             // Ambil total expenses (pengeluaran) bulan ini
             $monthlyExpenses = Salary::where('company_id', $company_id)
-                ->where('type', 'expense')
                 ->whereYear('created_at', $monthData->year)
                 ->whereMonth('created_at', $monthData->month)
                 ->sum('total_amount')*-1;
