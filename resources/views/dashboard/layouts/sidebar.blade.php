@@ -99,7 +99,7 @@
                 </li>
 
                 <li class="sidebar-item {{ Request::is('manager/finance*') ? 'selected' : '' }}">
-                    <a href="{{ route('finance.index') }}" class="sidebar-link">
+                    <a href="{{ route('transactions.index') }}" class="sidebar-link">
                         <div class="round-16 d-flex align-items-center justify-content-center">
                             <i class="ti ti-businessplan"></i>
                         </div>

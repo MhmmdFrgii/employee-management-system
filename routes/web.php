@@ -12,7 +12,6 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeDetailController;
-use App\Http\Controllers\FinanceRecordController;
 use App\Http\Controllers\KanbanBoardController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LeaveRequestController;
@@ -20,6 +19,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\KanbanTaskController;
 use App\Http\Controllers\ProjectAssignmentController;
 use App\Http\Controllers\SalaryController;
+use App\Http\Controllers\TransactionController;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');
 
@@ -52,7 +52,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('project-assignments', ProjectAssignmentController::class);
             Route::resource('departments', DepartmentController::class);
             Route::resource('salaries', SalaryController::class);
-            Route::resource('finance', FinanceRecordController::class);
+            Route::resource('transactions', TransactionController::class);
             Route::get('/getEmployeeSalary/{employeeId}', [SalaryController::class, 'getEmployeeSalary'])->name('salary.getEmployeeSalary');
 
             Route::resource('positions', PositionController::class);
@@ -83,15 +83,15 @@ Route::middleware('auth')->group(function () {
             Route::post('/leave-requests/{id}/reject', [LeaveRequestController::class, 'reject'])->name('leave-requests.reject');
 
             Route::patch('company-location/update', [RegisteredUserController::class, 'store_location'])
-            ->name('company.location.update');
+                ->name('company.location.update');
         });
     });
 
     Route::middleware(['role:manager', 'check_exists_location'])->group(function () {
         Route::get('company-location', [RegisteredUserController::class, 'setup_location'])
-        ->name('company.location.setup');
+            ->name('company.location.setup');
         Route::patch('company-location', [RegisteredUserController::class, 'store_location'])
-        ->name('company.location.store');
+            ->name('company.location.store');
     });
 
     Route::middleware('role:employee')->group(function () {
