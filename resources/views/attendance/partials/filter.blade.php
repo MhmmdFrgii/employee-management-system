@@ -33,36 +33,40 @@
                 <li>
                     <label class="dropdown-item">
                         <input type="checkbox" name="status[]" value="present"
-                            {{ in_array('present', request('status', [])) ? 'checked' : '' }} onchange="this.form.submit()"> Masuk
+                            {{ in_array('present', request('status', [])) ? 'checked' : '' }}
+                            onchange="this.form.submit()"> Masuk
                     </label>
                 </li>
                 <li>
                     <label class="dropdown-item">
                         <input type="checkbox" name="status[]" value="late"
-                            {{ in_array('late', request('status', [])) ? 'checked' : '' }} onchange="this.form.submit()"> Telat
+                            {{ in_array('late', request('status', [])) ? 'checked' : '' }}
+                            onchange="this.form.submit()"> Telat
                     </label>
                 </li>
                 <li>
                     <label class="dropdown-item">
                         <input type="checkbox" name="status[]" value="absent"
-                            {{ in_array('absent', request('status', [])) ? 'checked' : '' }} onchange="this.form.submit()"> Izin
+                            {{ in_array('absent', request('status', [])) ? 'checked' : '' }}
+                            onchange="this.form.submit()"> Izin
                     </label>
                 </li>
                 <li>
                     <label class="dropdown-item">
                         <input type="checkbox" name="status[]" value="alpha"
-                            {{ in_array('alpha', request('status', [])) ? 'checked' : '' }} onchange="this.form.submit()"> Alpha
+                            {{ in_array('alpha', request('status', [])) ? 'checked' : '' }}
+                            onchange="this.form.submit()"> Alpha
                     </label>
                 </li>
             </ul>
         </div>
 
-    </form>
-    <div class="form-check form-switch gap-3 col-lg-3 col-12 d-flex justify-content-between align-items-center mt-2 mt-lg-0"
-        style="width: auto;">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exportExcelModal">
-            Rekap Excel
-        </button>
-    </div>
+        </form>
+        <div class="form-check form-switch gap-3 col-lg-3 col-12 d-flex justify-content-between align-items-center mt-2 mt-lg-0"
+            style="width: auto;">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exportExcelModal">
+                Rekap Excel
+            </button>
+        </div>
     </div>
 </div>

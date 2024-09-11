@@ -11,6 +11,7 @@
             @include('finance.partial.filter')
         </div>
     </div>
+
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="container py-2">
@@ -96,7 +97,7 @@
                                                 class="img-fluid" style="width: clamp(150px, 50vw, 300px);">
                                             <p class="mt-3">Tidak ada data tersedia</p>
                                         </div>
-                                    </td>
+                                    </td>   
                                 </tr>
                             @endforelse
                         </tbody>
@@ -162,4 +163,78 @@
         </div>
     </div>
 
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Isi pilihan tahun (5 tahun terakhir hingga tahun ini)
+            const currentYear = new Date().getFullYear();
+            const yearInput = document.getElementById('yearInput');
+            for (let year = currentYear; year >= currentYear - 1; year--) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearInput.appendChild(option);
+            }
+
+            // Isi pilihan bulan
+            const monthInput = document.getElementById('monthInput');
+            const months = [{
+                    value: 1,
+                    name: 'Januari'
+                },
+                {
+                    value: 2,
+                    name: 'Februari'
+                },
+                {
+                    value: 3,
+                    name: 'Maret'
+                },
+                {
+                    value: 4,
+                    name: 'April'
+                },
+                {
+                    value: 5,
+                    name: 'Mei'
+                },
+                {
+                    value: 6,
+                    name: 'Juni'
+                },
+                {
+                    value: 7,
+                    name: 'Juli'
+                },
+                {
+                    value: 8,
+                    name: 'Agustus'
+                },
+                {
+                    value: 9,
+                    name: 'September'
+                },
+                {
+                    value: 10,
+                    name: 'Oktober'
+                },
+                {
+                    value: 11,
+                    name: 'November'
+                },
+                {
+                    value: 12,
+                    name: 'Desember'
+                }
+            ];
+
+
+            months.forEach(function(month) {
+                const option = document.createElement('option');
+                option.value = month.value;
+                option.textContent = month.name;
+                monthInput.appendChild(option);
+            });
+        });
+    </script>
 @endsection
