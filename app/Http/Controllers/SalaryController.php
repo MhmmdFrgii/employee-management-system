@@ -30,6 +30,13 @@ class SalaryController extends Controller
                 ->orWhereDate('created_at', 'like', '%' . $search . '%'); // Gunakan created_at sebagai transaction_date
         }
 
+        // Filter berdasarkan tanggal
+        $date = $request->input('date');
+        if ($date) {
+            $query->whereDate('transaction_date', $date);
+        }
+
+
         // Sorting
         $sortBy = $request->get('sortBy', 'created_at'); // Gunakan created_at untuk urutan waktu
         $sortDirection = $request->get('sortDirection', 'asc');

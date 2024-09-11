@@ -61,11 +61,22 @@
             <strong>{{ $company_name }}</strong>. Selamat bergabung! Kami sangat antusias untuk melihat kontribusi Anda
             dan bekerja sama dengan Anda.
         </p>
-        <p><strong>Apa yang harus dilakukan selanjutnya?</strong></p>
+
+        {{-- <p><strong>Apa yang harus dilakukan selanjutnya?</strong></p>
         <p>Untuk memulai, silakan klik tombol di bawah ini untuk mendaftar akun di sistem kami.</p>
         <a href="http://127.0.0.1:8000/register-employee?company={{ $invitation_code }}" class="btn">
             <span style="color: white; font-size: 22px; padding: 20px 20px">Daftar Akun</span>
-        </a>
+        </a> --}}
+
+        <!-- Kondisi jika pelamar bukan pelamar invite -->
+        @if (!$isInvited)
+            <p><strong>Apa yang harus dilakukan selanjutnya?</strong></p>
+            <p>Untuk memulai, silakan klik tombol di bawah ini untuk mendaftar akun di sistem kami.</p>
+            <a href="http://127.0.0.1:8000/register-employee?company={{ $invitation_code }}" class="btn">
+                <span style="color: white; font-size: 22px; padding: 20px 20px">Daftar Akun</span>
+            </a>
+        @endif
+
         <div class="footer">
             <p>Jika Anda memiliki pertanyaan, jangan ragu untuk menghubungi kami di <a style="text-decoration: none"
                     href="mailto:{{ $company_email }}">{{ $company_email }}</a>.</p>

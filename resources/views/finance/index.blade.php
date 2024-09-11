@@ -1,6 +1,16 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
+<div class="card px-3 pb-4 mb-1 pt-1 rounded-sm">
+    <div class="row g-2 mt-3">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="row g-2">
+                <h3 class="mx-1">Catatan Keuangan</h3>
+            </div>
+        </div>
+        @include('finance.partial.filter')
+    </div>
+</div>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="container py-2">
