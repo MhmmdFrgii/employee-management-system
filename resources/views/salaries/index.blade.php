@@ -59,9 +59,9 @@
                                 </th>
                                 <th>
                                     <a
-                                        href="{{ route('salaries.index', array_merge(request()->query(), ['sortBy' => 'amount', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        href="{{ route('salaries.index', array_merge(request()->query(), ['sortBy' => 'extra', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
                                         Bonus
-                                        @if (request('sortBy') === 'amount')
+                                        @if (request('sortBy') === 'extra')
                                             @if (request('sortDirection') === 'asc')
                                                 &#9650;
                                             @else
@@ -83,11 +83,11 @@
                                         @endif
                                     </a>
                                 </th>
-                                {{-- <th>
+                                <th>
                                     <a
-                                        href="{{ route('salaries.index', array_merge(request()->query(), ['sortBy' => 'payment_date', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
-                                        Jenis Transaksi
-                                        @if (request('sortBy') === 'payment_date')
+                                        href="{{ route('salaries.index', array_merge(request()->query(), ['sortBy' => 'created_at', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        Tanggal Pembayaran
+                                        @if (request('sortBy') === 'created_at')
                                             @if (request('sortDirection') === 'asc')
                                                 &#9650;
                                             @else
@@ -95,12 +95,12 @@
                                             @endif
                                         @endif
                                     </a>
-                                </th> --}}
+                                </th>
                                 <th>
                                     <a
-                                        href="{{ route('salaries.index', array_merge(request()->query(), ['sortBy' => 'payment_date', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
+                                        href="{{ route('salaries.index', array_merge(request()->query(), ['sortBy' => 'description', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
                                         Deskripsi
-                                        @if (request('sortBy') === 'payment_date')
+                                        @if (request('sortBy') === 'description')
                                             @if (request('sortDirection') === 'asc')
                                                 &#9650;
                                             @else
@@ -122,15 +122,8 @@
                                     <td>{{ $salary->employee_detail->name ?? 'N/A' }}</td>
                                     <td>Rp {{ number_format($salary->amount, 2, ',', '.') }}</td>
                                     <td>Rp {{ number_format($salary->extra, 2, ',', '.') }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($salary->transaction_date)->format('d M Y') }}</td>
-                                    {{-- @php
-                                        $types = [
-                                            'income' => 'Pemasukan',
-                                            'expense' => 'Pengeluaran',
-                                        ];
-                                    @endphp
-
-                                    <td>{{ $types[$salary->type] ?? 'Tidak Diketahui' }}</td> --}}
+                                    <td>{{ \Carbon\Carbon::parse($salary->transactions->transaction_date)->format('d M Y') }}
+                                    </td>
                                     <td>{{ $salary->description ?? 'N/A' }}</td>
                                     <td>Rp {{ number_format($salary->total_amount, 2, ',', '.') }}</td>
                                     <td class="text-center">
@@ -193,21 +186,6 @@
                                                             class="form-control @error('extra') is-invalid @enderror"
                                                             id="edit_extra" value="{{ old('extra', $salary->extra) }}">
                                                         @error('extra')
-                                                            <div class="invalid-feedback">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                    <div class="mb-3" style="display: none;">
-                                                        <label for="edit_type" class="form-label">Jenis Transaksi</label>
-                                                        <select name="type" id="edit_type"
-                                                            class="form-control @error('type') is-invalid @enderror">
-                                                            <option value="income"
-                                                                {{ old('type', $salary->type) == 'income' ? 'selected' : '' }}>
-                                                                Pemasukan</option>
-                                                            <option value="expense"
-                                                                {{ old('type', $salary->type) == 'expense' ? 'selected' : '' }}>
-                                                                Pengeluaran</option>
-                                                        </select>
-                                                        @error('type')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
@@ -328,18 +306,6 @@
                             <input type="text" name="extra" id="create_extra"
                                 class="form-control @error('extra') is-invalid @enderror" value="{{ old('extra') }}">
                             @error('extra')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3" style="display: none;">
-                            <label for="create_type" class="form-label">Jenis Transaksi</label>
-                            <select name="type" id="create_type"
-                                class="form-control @error('type') is-invalid @enderror">
-                                <option value="expense" {{ old('type') == 'expense' ? 'selected' : '' }}>Pengeluaran
-                                </option>
-                                <option value="income" {{ old('type') == 'income' ? 'selected' : '' }}>Pemasukan</option>
-                            </select>
-                            @error('type')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
