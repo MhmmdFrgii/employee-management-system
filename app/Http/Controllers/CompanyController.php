@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class CompanyController extends Controller
 {
@@ -23,5 +25,22 @@ class CompanyController extends Controller
         ]);
 
         return redirect()->route('invited.index')->with('success', 'berhasil mereset kode undangan!');
+    }
+
+    public function updateOfficeHour(Request $request)
+    {
+        $request->validate([
+            'checkin_start' => 'required',
+            'checkin_end' => 'required',
+        ]);
+
+        $company = Auth::user()->company;
+
+        $company->update([
+            'checkin_start' => $request->checkin_start,
+            'checkin_end' => $request->checkin_end,
+        ]);
+
+        return redirect()->back()->with('success', 'Jam masuk kantor berhasil diperbarui!');
     }
 }

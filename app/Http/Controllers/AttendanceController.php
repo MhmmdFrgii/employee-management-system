@@ -62,27 +62,37 @@ class AttendanceController extends Controller
     public function user_attendance(Request $request)
     {
         $employee = Auth::user()->employee_detail->id;
+        $company = Auth::user()->company; // Ambil perusahaan tempat user bekerja
 
         $today = Carbon::today()->format('Y-m-d');
         $now = Carbon::now();
 
-        $limit = (Carbon::parse(date('Y-m-d') . ' 08:00:00'));
+        // Mengambil waktu check-in yang diatur oleh perusahaan
+        $checkin_start = Carbon::parse($company->checkin_start);
+        $checkin_end = Carbon::parse($company->checkin_end);
 
-
-        if ($now->greaterThan($limit)) {
-            $status = 'late';
-        } else {
-            $status = 'present';
-        }
-
+        // Cek apakah sudah absen hari ini
         $today_attendance = Attendance::where('employee_id', $employee)
             ->where('date', $today)
             ->exists();
 
         if ($today_attendance) {
-            return redirect()->route($request->route)->with('info', 'Kamu sudah absen!');
+            return redirect()->route($request->route)->with('info', 'Kamu sudah absen hari ini!');
         }
 
+        // Validasi jika waktu sekarang kurang dari checkin_start
+        if ($now->lessThan($checkin_start)) {
+            return redirect()->route($request->route)->with('danger', 'Belum bisa absen, waktu absen belum dimulai!');
+        }
+
+
+        if ($now->lessThanOrEqualTo($checkin_end)) {
+            $status = 'present';
+        } else {
+            $status = 'late';  // Jika absen setelah checkin_end, status 'late'
+        }
+
+        // Buat entri absensi baru
         Attendance::create([
             'employee_id' => $employee,
             'date' => $today,
@@ -91,6 +101,8 @@ class AttendanceController extends Controller
 
         return redirect()->route($request->route)->with('success', 'Berhasil absen!');
     }
+
+
 
 
     /**
@@ -140,8 +152,8 @@ class AttendanceController extends Controller
 
     public function export(Request $request)
     {
-          // Validasi input year dan month
-          $validated = $request->validate([
+        // Validasi input year dan month
+        $validated = $request->validate([
             'year' => 'required|integer|digits:4',
             'month' => 'required|integer|between:1,12',
         ]);

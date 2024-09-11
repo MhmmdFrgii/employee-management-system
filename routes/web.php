@@ -62,6 +62,7 @@ Route::middleware('auth')->group(function () {
             Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
             Route::get('attendance/export', [AttendanceController::class, 'export'])->name('attendance.export');
 
+
             Route::resource('employees', EmployeeDetailController::class);
 
             Route::patch('/projects/{id}/complete', [ProjectController::class, 'mark_completed'])->name('projects.complete');
@@ -77,6 +78,7 @@ Route::middleware('auth')->group(function () {
             Route::patch('/candidates/update/{applicant}', [UserController::class, 'update'])->name('candidates.update');
 
             Route::patch('/company/{company}', [CompanyController::class, 'reset_code'])->name('companies.reset');
+            Route::patch('/company', [CompanyController::class, 'updateOfficeHour'])->name('update.officeHour');
 
             route::get('/leave-requests/calendar', [LeaveRequestController::class, 'calendar'])->name('calendar');
             Route::put('/leave-requests/{id}/approve', [LeaveRequestController::class, 'approve'])->name('leave-requests.approve');
