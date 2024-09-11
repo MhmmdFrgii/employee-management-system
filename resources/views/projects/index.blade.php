@@ -2,62 +2,20 @@
 
 @section('content')
 
+<div class="card px-3 pb-4 mb-1 pt-1 rounded-sm">
+    <div class="row g-2 mt-3">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="row g-2">
+                <h3 class="mx-1">Proyek</h3>
+            </div>
+        </div>
+        @include('projects.partial.filter')
+    </div>
+</div>
 
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="container py-2">
-                <h1 class="h3">Proyek</h1>
-                <div class="d-flex justify-content-between align-items-center mb-4 mt-3">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
-                        Tambah Proyek
-                    </button>
-                    <form action="{{ route('projects.index') }}" method="GET">
-                        <div class="d-flex gap-2">
-                            <!-- Dropdown Filter Status -->
-                            <div class="dropdown ms-2">
-                                <button class="btn btn-secondary dropdown-toggle shadow" type="button" id="statusDropdown"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Status
-                                </button>
-                                <ul class="dropdown-menu mt-2" aria-labelledby="statusDropdown">
-                                    <li>
-                                        <label for="statusActive" class="w-100">
-                                            <div class="form-check ms-4">
-                                                <input class="form-check-input" type="checkbox" name="status[]"
-                                                    value="active" id="statusActive"
-                                                    {{ in_array('active', request('status', [])) ? 'checked' : '' }}>
-                                                <span class="form-check-label" for="statusActive">
-                                                    Aktif
-                                                </span>
-                                            </div>
-                                        </label>
-                                        <label for="statusCompleted" class="w-100">
-                                            <div class="form-check ms-4">
-                                                <input class="form-check-input" type="checkbox" name="status[]"
-                                                    value="completed" id="statusCompleted"
-                                                    {{ in_array('completed', request('status', [])) ? 'checked' : '' }}>
-                                                <span class="form-check-label" for="statusCompleted">
-                                                    Selesai
-                                                </span>
-                                            </div>
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="position-relative">
-                                <input type="text" name="search" class="form-control rounded shadow search-input"
-                                    placeholder="Cari Proyek..." value="{{ request('search') }}">
-                                <a href="{{ route('projects.index') }}"
-                                    class="clear-search btn btn-sm position-absolute top-50 translate-middle-y end-0 me-2"
-                                    style="z-index: 10; padding: 0.2rem 0.4rem; line-height: 1; display: none;">
-                                    X
-                                </a>
-                            </div>
-                            <button type="submit" class="btn btn-secondary">Cari</button>
-                        </div>
-                    </form>
-                </div>
-
                 <div class="row">
                     @forelse ($projects as $project)
                         <div class="col-md-4 mb-3">

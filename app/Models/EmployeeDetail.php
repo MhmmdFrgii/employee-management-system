@@ -35,6 +35,10 @@ class EmployeeDetail extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
     function department()
     {
         return $this->belongsTo(Department::class);

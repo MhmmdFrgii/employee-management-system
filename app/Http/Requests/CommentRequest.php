@@ -23,7 +23,6 @@ class CommentRequest extends FormRequest
     {
         return [
             'project_id' => ['required', 'exists:projects,id'],
-            'employee_id' => ['required', 'exists:employee_details,id'],
             'comment' => 'required',
         ];
     }
@@ -31,9 +30,9 @@ class CommentRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'project_id.required' => 'Project harus diisi',
-            'employee_id.required' => 'Nama karyawan harus diisi',
-            'comment.required' => 'Komentar harus di isi',
+            'project_id.required' => 'Project harus diisi.',
+            'project_id.exists' => 'Project yang dipilih tidak valid.',
+            'comment.required' => 'Komentar harus diisi.',
         ];
     }
 }
