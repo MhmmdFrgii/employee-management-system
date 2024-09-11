@@ -109,18 +109,18 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-{{ isset($departments) && $department_data ? '8' : '12' }}">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">Proyek</h5>
+                        <h5 class="card-title">Proyek Departemen</h5>
                     </div>
                     <div class="card-body">
-                        <div id="projectsCompletedChart"></div>
+                        <div id="projectsBarChart"></div>
                     </div>
                 </div>
             </div>
 
-           @if (isset($departments) && $department_data)
+            @if (isset($departments) && $department_data)
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-header">
@@ -132,17 +132,7 @@
                     </div>
                 </div>
             @endif
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Proyek Departemen</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="projectsBarChart"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Pemasukan & Pengeluaran</h5>
@@ -152,340 +142,350 @@
                     </div>
                 </div>
             </div>
-    </div>
-
-    <div class="col-md-12">
-        <h5 class="mt-4">Proyek Dengan Tenggat Waktu Terdekat</h5>
-        <div class="list-group">
-            @forelse ($projectsWithNearestDeadlines as $project)
-                @php
-                    $endDate = \Carbon\Carbon::parse($project->end_date);
-                    $now = \Carbon\Carbon::now();
-
-                    $daysRemaining = $now->diffInDays($endDate, false);
-
-                    $isUrgent = $daysRemaining <= 20;
-                    $cardClass = $isUrgent ? 'card-danger' : 'card-primary';
-                @endphp
-                <a href="{{ route('projects.show', ['project' => $project->id]) }}"
-                    class="list-group-item list-group-item-action {{ $cardClass }}">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{ $project->name }}</h5>
-                        <small>{{ $endDate->locale('id')->diffForHumans() }}</small>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Proyek</h5>
                     </div>
-                    <small class="text-muted">Tenggat Waktu: {{ $endDate->format('d M Y') }}</small>
-                </a>
-            @empty
-                <p class="list-group-item">Tidak ada proyek dengan tenggat waktu yang akan datang.</p>
-            @endforelse
+                    <div class="card-body">
+                        <div id="projectsCompletedChart"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    @if (isset($project_data))
-    <script>
-        var projectData = @json($project_data);
 
-        // Chart untuk Jumlah Proyek Selesai
-        var projectCompletedOptions = {
-            series: [{
-                name: 'Jumlah Proyek Selesai',
-                data: projectData.map(function(data) {
-                    return {
-                        x: data[0],
-                        y: data[1]
-                    };
-                })
-            }],
-            chart: {
-                type: 'line',
-                height: 350
-            },
-            stroke: {
-                curve: 'smooth',
-                width: 2
-            },
-            dataLabels: {
-                enabled: false
-            },
-            xaxis: {
-                categories: @json($months),
-                title: {
-                    text: 'Bulan'
-                }
-            },
-            yaxis: {
-                title: {
-                    // text: 'Jumlah Proyek Selesai'
-                }
-            },
-            tooltip: {
-                y: {
-                    formatter: function(val) {
-                        return val + " proyek";
+        <div class="col-md-12">
+            <h5 class="mt-4">Proyek Dengan Tenggat Waktu Terdekat</h5>
+            <div class="list-group">
+                @forelse ($projectsWithNearestDeadlines as $project)
+                    @php
+                        $endDate = \Carbon\Carbon::parse($project->end_date);
+                        $now = \Carbon\Carbon::now();
+
+                        $daysRemaining = $now->diffInDays($endDate, false);
+
+                        $isUrgent = $daysRemaining <= 20;
+                        $cardClass = $isUrgent ? 'card-danger' : 'card-primary';
+                    @endphp
+                    <a href="{{ route('projects.show', ['project' => $project->id]) }}"
+                        class="list-group-item list-group-item-action {{ $cardClass }}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ $project->name }}</h5>
+                            <small>{{ $endDate->locale('id')->diffForHumans() }}</small>
+                        </div>
+                        <small class="text-muted">Tenggat Waktu: {{ $endDate->format('d M Y') }}</small>
+                    </a>
+                @empty
+                    <p class="list-group-item">Tidak ada proyek dengan tenggat waktu yang akan datang.</p>
+                @endforelse
+            </div>
+        </div>
+        @if (isset($project_data))
+            <script>
+                var projectData = @json($project_data);
+
+                // Chart untuk Jumlah Proyek Selesai
+                var projectCompletedOptions = {
+                    series: [{
+                        name: 'Jumlah Proyek Selesai',
+                        data: projectData.map(function(data) {
+                            return {
+                                x: data[0],
+                                y: data[1]
+                            };
+                        })
+                    }],
+                    chart: {
+                        type: 'line',
+                        height: 350
+                    },
+                    stroke: {
+                        curve: 'smooth',
+                        width: 2
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    xaxis: {
+                        categories: @json($months),
+                        title: {
+                            text: 'Bulan'
+                        }
+                    },
+                    yaxis: {
+                        title: {
+                            // text: 'Jumlah Proyek Selesai'
+                        }
+                    },
+                    tooltip: {
+                        y: {
+                            formatter: function(val) {
+                                return val + " proyek";
+                            }
+                        }
+                    },
+                    markers: {
+                        size: 4
+                    },
+                    fill: {
+                        opacity: 1
                     }
-                }
-            },
-            markers: {
-                size: 4
-            },
-            fill: {
-                opacity: 1
-            }
-        };
+                };
 
-        var projectCompletedChart = new ApexCharts(document.querySelector("#projectsCompletedChart"), projectCompletedOptions);
-        projectCompletedChart.render();
+                var projectCompletedChart = new ApexCharts(document.querySelector("#projectsCompletedChart"),
+                    projectCompletedOptions);
+                projectCompletedChart.render();
 
-        // Chart untuk Pendapatan
-        var revenueOptions = {
-            series: [{
-                name: 'Pendapatan',
-                data: projectData.map(function(data) {
-                    return {
-                        x: data[0],
-                        y: data[2]
-                    };
-                })
-            }],
-            chart: {
-                type: 'line',
-                height: 350
-            },
-            stroke: {
-                colors: ['#00ff00'], // Warna hijau untuk garis
-                curve: 'smooth',
-                width: 2
-            },
-            dataLabels: {
-                enabled: false
-            },
-            xaxis: {
-                categories: @json($months),
-                title: {
-                    text: 'Bulan'
-                }
-            },
-            yaxis: {
-                title: {
-                    text: 'Pendapatan'
-                }
-            },
-            tooltip: {
-                y: {
-                    formatter: function(val) {
-                        return val + " pendapatan";
+                // Chart untuk Pendapatan
+                var revenueOptions = {
+                    series: [{
+                        name: 'Pendapatan',
+                        data: projectData.map(function(data) {
+                            return {
+                                x: data[0],
+                                y: data[2]
+                            };
+                        })
+                    }],
+                    chart: {
+                        type: 'line',
+                        height: 350
+                    },
+                    stroke: {
+                        colors: ['#00ff00'], // Warna hijau untuk garis
+                        curve: 'smooth',
+                        width: 2
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    xaxis: {
+                        categories: @json($months),
+                        title: {
+                            text: 'Bulan'
+                        }
+                    },
+                    yaxis: {
+                        title: {
+                            text: 'Pendapatan'
+                        }
+                    },
+                    tooltip: {
+                        y: {
+                            formatter: function(val) {
+                                return val + " pendapatan";
+                            }
+                        }
+                    },
+                    markers: {
+                        size: 4
+                    },
+                    fill: {
+                        opacity: 1
                     }
-                }
-            },
-            markers: {
-                size: 4
-            },
-            fill: {
-                opacity: 1
-            }
-        };
+                };
 
-        var revenueChart = new ApexCharts(document.querySelector("#revenueChart"), revenueOptions);
-        revenueChart.render();
+                var revenueChart = new ApexCharts(document.querySelector("#revenueChart"), revenueOptions);
+                revenueChart.render();
 
-         // Bar chart untuk proyek per departemen
-         var completedProjectsData = @json($completedProjects);
-    var departmentNames = @json($departmentNames);
-    var months = @json($months);
+                // Bar chart untuk proyek per departemen
+                var completedProjectsData = @json($completedProjects);
+                var departmentNames = @json($departmentNames);
+                var months = @json($months);
 
-    var seriesData = [];
-    departmentNames.forEach(function(department) {
-        var departmentData = months.map(function(month) {
-            return completedProjectsData[department][month] || 0;
-        });
-        seriesData.push({
-            name: department,
-            data: departmentData
-        });
-    });
+                var seriesData = [];
+                departmentNames.forEach(function(department) {
+                    var departmentData = months.map(function(month) {
+                        return completedProjectsData[department][month] || 0;
+                    });
+                    seriesData.push({
+                        name: department,
+                        data: departmentData
+                    });
+                });
 
-    var projectsBarOptions = {
-        series: seriesData,
-        chart: {
-            type: 'bar',
-            height: 350
-        },
-        plotOptions: {
-            bar: {
-                horizontal: false,
-                columnWidth: '55%',
-                endingShape: 'rounded'
-            }
-        },
-        dataLabels: {
-            enabled: false
-        },
-        stroke: {
-                    show: true,
-                    width: 2,
-                    colors: ['transparent']
-                },
-        xaxis: {
-            categories: months,
-            title: {
-                text: 'Bulan'
-            }
-        },
-        yaxis: {
-            title: {
-                // text: 'Jumlah Proyek Selesai'
-            }
-        },
-        fill: {
-            opacity: 1
-        },
-        tooltip: {
-            y: {
-                formatter: function(val) {
-                    return val + " proyek";
-                }
-            }
-        }
-    };
+                var projectsBarOptions = {
+                    series: seriesData,
+                    chart: {
+                        type: 'bar',
+                        height: 350
+                    },
+                    plotOptions: {
+                        bar: {
+                            horizontal: false,
+                            columnWidth: '55%',
+                            endingShape: 'rounded'
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        show: true,
+                        width: 2,
+                        colors: ['transparent']
+                    },
+                    xaxis: {
+                        categories: months,
+                        title: {
+                            text: 'Bulan'
+                        }
+                    },
+                    yaxis: {
+                        title: {
+                            // text: 'Jumlah Proyek Selesai'
+                        }
+                    },
+                    fill: {
+                        opacity: 1
+                    },
+                    tooltip: {
+                        y: {
+                            formatter: function(val) {
+                                return val + " proyek";
+                            }
+                        }
+                    }
+                };
 
-    var projectsBarChart = new ApexCharts(document.querySelector("#projectsBarChart"), projectsBarOptions);
-    projectsBarChart.render();
+                var projectsBarChart = new ApexCharts(document.querySelector("#projectsBarChart"), projectsBarOptions);
+                projectsBarChart.render();
+            </script>
+        @else
+            <p>Data tidak ditemukan.</p>
+        @endif
 
-    </script>
-@else
-    <p>Data tidak ditemukan.</p>
-@endif
+        @if (isset($departments))
+            <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+            <script>
+                // Data untuk pie chart
+                var pieData = [1, 5, 5,
+                    2
+                ] // Format data: [{ name: 'Kategori A', value: 20 }, { name: 'Kategori B', value: 30 }, ...]
 
-    @if (isset($departments))
+                // Opsi konfigurasi pie chart
+                var pieOptions = {
+                    // series: pieData.map(function(item) {
+                    //     return item.value;
+                    // }),
+                    // labels: pieData.map(function(item) {
+                    //     return item.name;
+                    // }),
+                    series: @json($department_data),
+                    labels: @json($departments),
+                    chart: {
+                        type: 'pie',
+                        height: 350
+                    },
+                    legend: {
+                        position: 'bottom'
+                    },
+                    dataLabels: {
+                        enabled: true
+                    },
+                    tooltip: {
+                        y: {
+                            formatter: function(val) {
+                                return val + " orang";
+                            }
+                        }
+                    }
+                };
+
+                // Membuat dan merender pie chart
+                var pieChart = new ApexCharts(document.querySelector("#pieChart"), pieOptions);
+                pieChart.render();
+            </script>
+        @else
+            <p>Data tidak ditemukan.</p>
+        @endif
+
+
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         <script>
-            // Data untuk pie chart
-            var pieData = [1, 5, 5,
-                2
-            ] // Format data: [{ name: 'Kategori A', value: 20 }, { name: 'Kategori B', value: 30 }, ...]
+            document.addEventListener('DOMContentLoaded', function() {
+                var monthlyData = @json($monthlyData);
 
-            // Opsi konfigurasi pie chart
-            var pieOptions = {
-                // series: pieData.map(function(item) {
-                //     return item.value;
-                // }),
-                // labels: pieData.map(function(item) {
-                //     return item.name;
-                // }),
-                series: @json($department_data),
-                labels: @json($departments),
-                chart: {
-                    type: 'pie',
-                    height: 350
-                },
-                legend: {
-                    position: 'bottom'
-                },
-                dataLabels: {
-                    enabled: true
-                },
-                tooltip: {
-                    y: {
-                        formatter: function(val) {
-                            return val + " orang";
-                        }
-                    }
+                if (!monthlyData || !monthlyData.months || !monthlyData.income || !monthlyData.expense) {
+                    console.error('Data untuk chart tidak tersedia atau tidak valid.');
+                    return;
                 }
-            };
 
-            // Membuat dan merender pie chart
-            var pieChart = new ApexCharts(document.querySelector("#pieChart"), pieOptions);
-            pieChart.render();
+                // Opsi chart dengan kategori bulan sebagai string
+                var options = {
+                    series: [{
+                        name: 'Pemasukan',
+                        data: monthlyData.income
+                    }, {
+                        name: 'Pengeluaran',
+                        data: monthlyData.expense
+                    }],
+                    chart: {
+                        height: 350,
+                        type: 'area'
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        curve: 'smooth'
+                    },
+                    xaxis: {
+                        type: 'category', // Ubah ke 'category' untuk menampilkan nama bulan
+                        categories: monthlyData.months, // Gunakan data nama bulan dari backend
+                        title: {
+                            text: 'Bulan'
+                        },
+                        labels: {
+                            rotate: -45, // Putar label bulan agar lebih terbaca
+                            style: {
+                                fontSize: '12px'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        y: {
+                            formatter: function(val) {
+                                return 'Rp ' + val.toLocaleString(); // Format angka dengan pemisah ribuan
+                            }
+                        }
+                    },
+                };
+
+                // Render chart di dalam elemen dengan id "transactionChart"
+                var chart = new ApexCharts(document.querySelector("#transactionChart"), options);
+                chart.render();
+            });
         </script>
-    @else
-        <p>Data tidak ditemukan.</p>
-    @endif
 
 
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var monthlyData = @json($monthlyData);
 
-            if (!monthlyData || !monthlyData.months || !monthlyData.income || !monthlyData.expense) {
-                console.error('Data untuk chart tidak tersedia atau tidak valid.');
-                return;
+
+        <style>
+            .card-danger {
+                border: 2px solid #dc3545;
+                /* Red color for urgent deadlines */
+                background-color: #f8d7da;
+                /* Light red background */
+                border-radius: 4px;
+                /* Optional: for rounded corners */
+                padding: 10px;
+                /* Optional: for inner spacing */
+                margin-bottom: 10px;
+                /* Spacing between cards */
             }
 
-            // Opsi chart dengan kategori bulan sebagai string
-            var options = {
-                series: [{
-                    name: 'Pemasukan',
-                    data: monthlyData.income
-                }, {
-                    name: 'Pengeluaran',
-                    data: monthlyData.expense
-                }],
-                chart: {
-                    height: 350,
-                    type: 'area'
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                stroke: {
-                    curve: 'smooth'
-                },
-                xaxis: {
-                    type: 'category', // Ubah ke 'category' untuk menampilkan nama bulan
-                    categories: monthlyData.months, // Gunakan data nama bulan dari backend
-                    title: {
-                        text: 'Bulan'
-                    },
-                    labels: {
-                        rotate: -45, // Putar label bulan agar lebih terbaca
-                        style: {
-                            fontSize: '12px'
-                        }
-                    }
-                },
-                tooltip: {
-                    y: {
-                        formatter: function(val) {
-                            return 'Rp ' + val.toLocaleString(); // Format angka dengan pemisah ribuan
-                        }
-                    }
-                },
-            };
-
-            // Render chart di dalam elemen dengan id "transactionChart"
-            var chart = new ApexCharts(document.querySelector("#transactionChart"), options);
-            chart.render();
-        });
-    </script>
-
-
-
-
-    <style>
-        .card-danger {
-            border: 2px solid #dc3545;
-            /* Red color for urgent deadlines */
-            background-color: #f8d7da;
-            /* Light red background */
-            border-radius: 4px;
-            /* Optional: for rounded corners */
-            padding: 10px;
-            /* Optional: for inner spacing */
-            margin-bottom: 10px;
-            /* Spacing between cards */
-        }
-
-        .card-primary {
-            border: 2px solid #007bff;
-            /* Blue color for non-urgent deadlines */
-            background-color: #cce5ff;
-            /* Light blue background */
-            border-radius: 4px;
-            /* Optional: for rounded corners */
-            padding: 10px;
-            /* Optional: for inner spacing */
-            margin-bottom: 10px;
-            /* Spacing between cards */
-        }
-    </style>
-@endsection
+            .card-primary {
+                border: 2px solid #007bff;
+                /* Blue color for non-urgent deadlines */
+                background-color: #cce5ff;
+                /* Light blue background */
+                border-radius: 4px;
+                /* Optional: for rounded corners */
+                padding: 10px;
+                /* Optional: for inner spacing */
+                margin-bottom: 10px;
+                /* Spacing between cards */
+            }
+        </style>
+    @endsection

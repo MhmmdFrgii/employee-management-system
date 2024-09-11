@@ -103,7 +103,7 @@ class DashboardController extends Controller
     private function getMonthlyData()
     {
         $year = date('Y');
-        $data = DB::table('salaries')
+        $data = DB::table('transactions')
             ->select(
                 DB::raw('MONTH(transaction_date) as month'),
                 DB::raw('SUM(CASE WHEN type = "income" THEN amount ELSE 0 END) as income'),
@@ -119,9 +119,18 @@ class DashboardController extends Controller
         $income = [];
         $expense = [];
         $monthNames = [
-            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
-            5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
-            9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember'
         ];
 
         foreach ($data as $item) {
@@ -228,5 +237,4 @@ class DashboardController extends Controller
             'months' => $months
         ];
     }
-
 }

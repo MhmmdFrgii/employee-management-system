@@ -26,9 +26,6 @@ class SalaryRequest extends FormRequest
             'employee_id' => 'required',
             'amount' => 'required|numeric|min:0',
             'extra' => 'nullable',
-            'type' => 'required|in:income,expense',
-            'transaction_date' => 'nullable|date',
-            'description' => 'nullable|string',
         ];
     }
 
@@ -38,7 +35,6 @@ class SalaryRequest extends FormRequest
             'employee_id.required' => 'Karyawan harus diisi.',
             'amount.required' => 'Gaji harus diisi.',
             'type' => 'Jenis transaksi harus di isi',
-            'transaction_date.required' => 'Tanggal transaksi harus diisi'
         ];
     }
 }

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Salary;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class FinanceRecordController extends Controller
+class TransactionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,13 +15,13 @@ class FinanceRecordController extends Controller
     public function index(Request $request)
     {
         // Menggunakan query builder alih-alih mengambil semua data terlebih dahulu
-        $query = Salary::query();
+        $query = Transaction::query();
 
         // Pencarian
         $search = $request->input('search');
         if ($search) {
             $query->where(function ($query) use ($search) {
-                $query->where('total_amount', 'like', '%' . $search . '%')
+                $query->where('amount', 'like', '%' . $search . '%')
                     ->orWhere('type', 'like', '%' . $search . '%')
                     ->orWhere('transaction_date', 'like', '%' . $search . '%')
                     ->orWhere('description', 'like', '%' . $search . '%');
@@ -33,6 +35,12 @@ class FinanceRecordController extends Controller
             $query->whereIn('type', $statuses);
         }
 
+        // Filter berdasarkan tanggal
+        $date = $request->input('date');
+        if ($date) {
+            $query->whereDate('transaction_date', $date);
+        }
+
         // Sorting
         $sortBy = $request->get('sortBy', 'transaction_date');
         $sortDirection = $request->get('sortDirection', 'asc');
@@ -44,52 +52,25 @@ class FinanceRecordController extends Controller
         return view('finance.index', compact('finance', 'sortBy', 'sortDirection'));
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'salary_id' => 'nullable|exists:salaries,id',
+            'type' => 'required|in:income,expense',
+            'amount' => 'required|numeric|min:0',
+            'description' => 'nullable|string',
+            'transaction_date' => 'required|date',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        Transaction::create([
+            'company_id' => Auth::user()->company_id,
+            'salary_id' => $request->salary_id,
+            'type' => $request->type,
+            'amount' => $request->amount,
+            'description' => $request->description,
+            'transaction_date' => $request->transaction_date,
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('transactions.index')->with('success', 'Transaction added successfully');
     }
 }

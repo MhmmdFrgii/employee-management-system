@@ -46,6 +46,12 @@ class LeaveRequestController extends Controller
             $query->whereIn('status', $statuses);
         }
 
+        // Filter berdasarkan tanggal
+        $date = $request->input('date');
+        if ($date) {
+            $query->whereDate('start_date', $date);
+        }
+
         // Menambahkan urutan untuk status 'pending' di atas
         $query->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END");
 
