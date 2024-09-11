@@ -9,6 +9,7 @@ use App\Models\Department;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Models\EmployeeDetail;
+use App\Models\Salary;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -72,6 +73,38 @@ class DashboardController extends Controller
             ];
         }
 
+        $monthtransa = []; // Inisialisasi array kosong untuk menampung bulan
+        $incomes = [];
+        $expenses = [];
+
+        // Loop untuk 6 bulan terakhir
+        for ($i = 5; $i >= 0; $i--) {
+            $monthData = Carbon::now()->subMonths($i); // Mendapatkan data bulan yang diinginkan
+            $monthtransa[] = $monthData->format('F'); // Format nama bulan dan tambahkan ke array
+
+            // Ambil total income (pendapatan) bulan ini
+            $monthlyIncomes = Project::where('company_id', $company_id)
+                // ->where('type', 'income')
+                ->whereYear('created_at', $monthData->year)
+                ->whereMonth('created_at', $monthData->month)
+                ->sum('price');
+            
+            // Ambil total expenses (pengeluaran) bulan ini
+            $monthlyExpenses = Salary::where('company_id', $company_id)
+                ->where('type', 'expense')
+                ->whereYear('created_at', $monthData->year)
+                ->whereMonth('created_at', $monthData->month)
+                ->sum('total_amount')*-1;
+
+            $incomes[] = $monthlyIncomes;
+            $expenses[] = $monthlyExpenses;
+        }
+
+    
+        // Jumlah total earnings dan expenses bulan ini
+        $totalIncomes = array_sum($incomes);
+        $totalExpenses = array_sum($expenses);
+
         $departments = Department::where('company_id', $company_id)->pluck('name')->toArray();
         $department_data = Department::where('company_id', $company_id)
             ->withCount('employee_details')
@@ -87,7 +120,12 @@ class DashboardController extends Controller
             'project_done' => $project_done,
             'department_count' => $department_count,
             'applicant_count' => $applicant_count,
-            'months' => $months,
+            'months' => $months, // Data bulan untuk proyek
+            'monthtransa' => $monthtransa, // Data bulan untuk transaksi
+            'incomes' => $incomes, // Pendapatan per bulan
+            'expenses' => $expenses, // Pengeluaran per bulan
+            'totalIncomes' => $totalIncomes,
+            'totalExpenses' => $totalExpenses,
             'performance' => $performance,
             'project_data' => $project_data,
             'departments' => $departments,

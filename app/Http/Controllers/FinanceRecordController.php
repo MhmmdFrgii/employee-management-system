@@ -14,7 +14,7 @@ class FinanceRecordController extends Controller
     {
         // Menggunakan query builder alih-alih mengambil semua data terlebih dahulu
         $query = Salary::query();
-
+        
         // Pencarian
         $search = $request->input('search');
         if ($search) {

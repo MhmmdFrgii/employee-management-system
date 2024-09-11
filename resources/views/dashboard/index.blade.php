@@ -142,13 +142,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Pemasukan & Pengeluaran</h5>
                     </div>
                     <div class="card-body">
-                        <div id="transactionChart"></div>
+                        {{-- <div id="transactionChart"></div> --}}
+                        <canvas id="transactionChart" width="400" height="200"></canvas>
                     </div>
                 </div>
             </div>
@@ -288,7 +288,7 @@
         revenueChart.render();
 
          // Bar chart untuk proyek per departemen
-         var completedProjectsData = @json($completedProjects);
+    var completedProjectsData = @json($completedProjects);
     var departmentNames = @json($departmentNames);
     var months = @json($months);
 
@@ -400,66 +400,70 @@
         <p>Data tidak ditemukan.</p>
     @endif
 
-
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    {{-- PENDAPATAN & PENGELUARAN --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var monthlyData = @json($monthlyData);
+        window.onload = function() {
+            var ctx = document.getElementById('transactionChart').getContext('2d');
 
-            if (!monthlyData || !monthlyData.months || !monthlyData.income || !monthlyData.expense) {
-                console.error('Data untuk chart tidak tersedia atau tidak valid.');
-                return;
-            }
+            // Gradient for Pendapatan (Income)
+            var gradientIncome = ctx.createLinearGradient(0, 0, 0, 400);
+            gradientIncome.addColorStop(0, 'rgba(0, 115, 255, 1)');
+            gradientIncome.addColorStop(1, 'rgba(0, 162, 255, 0.6)');
 
-            // Opsi chart dengan kategori bulan sebagai string
-            var options = {
-                series: [{
-                    name: 'Pemasukan',
-                    data: monthlyData.income
-                }, {
-                    name: 'Pengeluaran',
-                    data: monthlyData.expense
-                }],
-                chart: {
-                    height: 350,
-                    type: 'area'
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                stroke: {
-                    curve: 'smooth'
-                },
-                xaxis: {
-                    type: 'category', // Ubah ke 'category' untuk menampilkan nama bulan
-                    categories: monthlyData.months, // Gunakan data nama bulan dari backend
-                    title: {
-                        text: 'Bulan'
+            // Gradient for Pengeluaran (Expenses)
+            var gradientExpense = ctx.createLinearGradient(0, 0, 0, 400);
+            gradientExpense.addColorStop(0, 'rgba(255, 99, 132, 1)'); // Red gradient
+            gradientExpense.addColorStop(1, 'rgba(255, 159, 64, 0.6)'); // Lighter red-orange gradient
+
+            var transactionChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: @json($monthtransa),
+                    datasets: [
+                    {
+                        label: 'Pendapatan', // Income
+                        data: @json($incomes),
+                        backgroundColor: gradientIncome,
+                        borderColor: 'rgba(0, 115, 255, 1)',
+                        borderWidth: 1
                     },
-                    labels: {
-                        rotate: -45, // Putar label bulan agar lebih terbaca
-                        style: {
-                            fontSize: '12px'
+                    {
+                        label: 'Pengeluaran', // Expenses
+                        data: @json($expenses),
+                        backgroundColor: gradientExpense,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'Rp' + value.toLocaleString(); // Add 'Rp' prefix and format the numbers
+                                }
+                            }
+                        }
+                    },
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return 'Rp' + tooltipItem.raw.toLocaleString(); // Format the tooltip numbers with 'Rp'
+                                }
+                            }
                         }
                     }
-                },
-                tooltip: {
-                    y: {
-                        formatter: function(val) {
-                            return 'Rp ' + val.toLocaleString(); // Format angka dengan pemisah ribuan
-                        }
-                    }
-                },
-            };
-
-            // Render chart di dalam elemen dengan id "transactionChart"
-            var chart = new ApexCharts(document.querySelector("#transactionChart"), options);
-            chart.render();
-        });
+                }
+            });
+        };
     </script>
-
-
-
 
     <style>
         .card-danger {
