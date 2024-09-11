@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     <div class="col-lg-4 order-last">
-                        
+
                     </div>
                 </div>
                 <ul class="nav nav-pills user-profile-tab justify-content-end mt-2 bg-light-info rounded-2" id="pills-tab"
@@ -141,7 +141,7 @@
 
                     <div class="card-body  wizard-content">
                         <h4 class="card-title">Atur Lokasi Perusahaan Anda!</h4>
-                        <form action="{{ route('company.location.store') }}" method="post" class="mt-4">
+                        <form action="{{ route('company.location.update') }}" method="post" class="mt-4">
                             @csrf
                             @method('patch')
                             <section>
