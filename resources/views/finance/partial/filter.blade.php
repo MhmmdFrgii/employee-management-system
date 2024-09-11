@@ -1,7 +1,7 @@
 <div class="col-lg-8 col-md-6 col-sm-12">
     <div class="d-flex flex-column flex-lg-row justify-content-end gap-2">
         <div class="search-box col-lg-3 col-12">
-            <form action="{{ route('finance.index') }}">
+            <form action="{{ route('transactions.index') }}">
         </div>
         <div class="search-box col-lg-3 col-12">
             <div class="input-group">
@@ -24,18 +24,23 @@
                 <li>
                     <label class="dropdown-item">
                         <input type="checkbox" name="status[]" value="income"
-                            {{ in_array('income', request('status', [])) ? 'checked' : '' }} onchange="this.form.submit()"> Pemasukan
+                            {{ in_array('income', request('status', [])) ? 'checked' : '' }}
+                            onchange="this.form.submit()"> Pemasukan
                     </label>
                 </li>
                 <li>
                     <label class="dropdown-item">
                         <input type="checkbox" name="status[]" value="expense"
-                            {{ in_array('expense', request('status', [])) ? 'checked' : '' }} onchange="this.form.submit()"> Pengeluaran
+                            {{ in_array('expense', request('status', [])) ? 'checked' : '' }}
+                            onchange="this.form.submit()"> Pengeluaran
                     </label>
                 </li>
             </ul>
         </div>
 
-    </form>
+        </form>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTransactionModal">
+            Tambah Transaksi
+        </button>
     </div>
 </div>
