@@ -66,6 +66,12 @@ class AttendanceController extends Controller
             ->where('status', 'present')
             ->count();
 
+        // Hitung Terlambat
+        $totalLate = Attendance::where('employee_id', $employeeId)
+            ->whereDate('date', '<=', $today)
+            ->where('status', 'late')
+            ->count();
+
         // Hitung total ketidakhadiran
         $totalAbsent = Attendance::where('employee_id', $employeeId)
             ->whereDate('date', '<=', $today)
@@ -87,6 +93,7 @@ class AttendanceController extends Controller
             'data' => [
                 'total_attendance' => $totalAttendance,
                 'total_present' => $totalPresent,
+                'total_present' => $totalLate,
                 'total_absent' => $totalAbsent,
                 'total_alpha' => $totalAlpha,
                 'attendances' => $attendances->map(function ($attendance) {
