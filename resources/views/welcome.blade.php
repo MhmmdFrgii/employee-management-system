@@ -294,37 +294,6 @@
                             <p class="text-white">Lihat performa karyawan dan ambil keputusan untuk pengembangan tim.</p>
                         </div>
                     </div>
-                    <div class="col-12 col-md-8 col-lg-6 mt-5 mb-0">
-                        <div class="code-input-form p-5 text-center bg-white rounded shadow">
-                            <h3 class="text-dark mb-4">Masukkan Kode Lamaran atau Kode Undangan</h3>
-                            <form action="{{ route('create.applicant') }}">
-                                <div class="form-group mb-3">
-                                    <input type="text" class="form-control @error('applicant') is-invalid @enderror"
-                                        id="applicant" name="applicant" placeholder="Kode Lamaran">
-                                    @error('applicant')
-                                        <div class="text-danger mt-2">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-block">Lanjutkan dengan Kode
-                                    Lamaran</button>
-                            </form>
-                            <div class="my-4">
-                                <span class="text-muted">Atau</span>
-                            </div>
-                            <form action="{{ route('create.invite') }}">
-                                <div class="form-group mb-3">
-                                    <input type="text" class="form-control @error('invite') is-invalid @enderror"
-                                        id="invite" name="invite" value="{{ request('invite') }}"
-                                        placeholder="Kode Undangan">
-                                    @error('invite')
-                                        <div class="text-danger mt-2">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-block">Lanjutkan dengan Kode
-                                    Undangan</button>
-                            </form>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>

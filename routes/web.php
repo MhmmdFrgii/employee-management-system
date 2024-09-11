@@ -78,14 +78,16 @@ Route::middleware('auth')->group(function () {
             Route::put('/leave-requests/{id}/approve', [LeaveRequestController::class, 'approve'])->name('leave-requests.approve');
             Route::post('/leave-requests/{id}/reject', [LeaveRequestController::class, 'reject'])->name('leave-requests.reject');
 
-            Route::patch('company-location', [RegisteredUserController::class, 'store_location'])
-            ->name('company.location.store');
+            Route::patch('company-location/update', [RegisteredUserController::class, 'store_location'])
+            ->name('company.location.update');
         });
     });
 
     Route::middleware(['role:manager', 'check_exists_location'])->group(function () {
         Route::get('company-location', [RegisteredUserController::class, 'setup_location'])
-            ->name('company.location.setup');
+        ->name('company.location.setup');
+        Route::patch('company-location', [RegisteredUserController::class, 'store_location'])
+        ->name('company.location.store');
     });
 
     Route::middleware('role:employee')->group(function () {

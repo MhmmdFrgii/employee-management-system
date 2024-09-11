@@ -77,29 +77,47 @@
         ])
     @endforeach
 
-        <div class="container">
-            <h4>Komentar</h3>
-            <div class="comments-section">
-                {{-- @foreach($comments as $comment) --}}
-                <div class="comment-box mb-3 p-3 bg-light rounded">
-                    <div class="d-flex">
-                        <div class="avatar">
-                            {{-- <img src="{{ asset('images/default-avatar.png') }}" alt="{{ $comment->user->name }}" class="rounded-circle" width="50" height="50"> --}}
-                        </div>
-                        <div class="comment-content ms-3">
-                            {{-- <h5 class="mb-0">{{ $comment->user->name }} <span class="text-muted">•</span></h5>
-                            <p class="text-muted">{{ $comment->created_at->diffForHumans() }}</p>
-                            <p>{{ $comment->content }}</p> --}}
+    <div class="container mt-4">
 
-                            <h5 class="mb-0"> Manager Lucu <span class="text-muted">•</span></h5>
-                            <p class="text-muted">10 September</p>
-                            <p>Bagus banget kinerjanyaaa</p>
+        @if (Auth::user()->hasRole('manager'))
+            <div class="container mt-4">
+                <form action="{{ route('comment.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="project_id" value="{{ $kanbanboard->id }}">
+                    <div class="mb-3">
+                        <textarea class="form-control" placeholder="Tulis komentar anda..." id="comment" name="comment" rows="3"
+                            required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm">Kirim Komentar</button>
+                </form>
+            </div>
+        @endif
+
+        <div class="comments-section mt-4">
+            <h4>Komentar</h3>
+                @foreach ($comments as $comment)
+                    <div class="comment-box mb-3 p-2 bg-light rounded">
+                        <div class="d-flex">
+                            {{-- <div class="avatar">
+                            <img src="{{ asset('images/default-avatar.png') }}" alt="{{ $comment->employee->name }}"
+                                class="rounded-circle" width="50" height="50">
+                        </div> --}}
+                            <div class="comment-content ms-3">
+                                <h5 class="mb-0">{{ $comment->user->name }} <span class="text-muted">•</span>
+                                </h5>
+                                <p class="text-muted">{{ $comment->created_at->diffForHumans() }}</p>
+                                <p>{{ $comment->comment }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                {{-- @endforeach --}}
-            </div>
+                @endforeach
         </div>
+    </div>
+
+
+
+
+
 
 @endsection
 {{--
