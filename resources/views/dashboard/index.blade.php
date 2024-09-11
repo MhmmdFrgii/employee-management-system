@@ -140,7 +140,7 @@
                     </div>
                     <div class="card-body">
                         {{-- <div id="transactionChart"></div> --}}
-                        <canvas id="transactionChart" width="400" height="200"></canvas>
+                        <canvas id="transactionChart" width="400" height="345"></canvas>
                     </div>
                 </div>
             </div>
