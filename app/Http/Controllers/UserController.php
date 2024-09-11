@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use App\Models\EmployeeDetail;
 use App\Models\InvitationCode;
 use App\Models\Position;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -59,18 +58,26 @@ class UserController extends Controller
             'salary' => $validatedData['salary']
         ]);
 
-        // Jika statusnya 'approved', buat kode undangan dan kirim email
-        $invitation_code = InvitationCode::create([
-            'code' => InvitationCode::invitation_generate(),
-            'company_id' => $applicant->company->id,
-        ]);
+        // Buat variabel isInvited berdasarkan sumber
+        $isInvited = $applicant->source === 'invited';
 
+        // Jika kandidat bukan dari undangan, buat kode undangan
+        $invitation_code = null;
+        if (!$isInvited) {
+            $invitation_code = InvitationCode::create([
+                'code' => InvitationCode::invitation_generate(),
+                'company_id' => $applicant->company->id,
+            ]);
+        }
+
+        // Kirim email persetujuan
         try {
             Mail::to($applicant->email)->send(new ApprovedMail(
                 $applicant->name,
                 $applicant->company->name,
                 $applicant->company->email,
-                $invitation_code->code
+                $invitation_code ? $invitation_code->code : null, // Cek apakah ada kode undangan
+                $isInvited // Kirim variabel ini ke email
             ));
         } catch (\Exception $e) {
             return redirect()->route('candidates.index')->with('error', 'User approved but failed to send email.');
@@ -88,7 +95,6 @@ class UserController extends Controller
         ]);
 
         try {
-
             Mail::to($applicant->email)->send(new RejectedMail(
                 $applicant->name,
                 $applicant->company->name

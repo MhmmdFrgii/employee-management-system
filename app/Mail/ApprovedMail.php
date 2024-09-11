@@ -16,16 +16,18 @@ class ApprovedMail extends Mailable
     public $company_name;
     public $company_email;
     public $invitation_code;
+    public $isInvited;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($applicant_name, $company_name, $company_email, $invitation_code)
+    public function __construct($applicant_name, $company_name, $company_email, $invitation_code, $isInvited)
     {
         $this->applicant_name = $applicant_name;
         $this->company_name = $company_name;
         $this->company_email = $company_email;
         $this->invitation_code = $invitation_code;
+        $this->isInvited = $isInvited;
     }
 
     /**
@@ -50,6 +52,7 @@ class ApprovedMail extends Mailable
                 'company_name' => $this->company_name,
                 'company_email' => $this->company_email,
                 'invitation_code' => $this->invitation_code,
+                'isInvited' => $this->isInvited,
             ]
         );
     }
