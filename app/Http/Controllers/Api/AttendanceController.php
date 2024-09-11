@@ -93,7 +93,7 @@ class AttendanceController extends Controller
             'data' => [
                 'total_attendance' => $totalAttendance,
                 'total_present' => $totalPresent,
-                'total_present' => $totalLate,
+                'total_late' => $totalLate,
                 'total_absent' => $totalAbsent,
                 'total_alpha' => $totalAlpha,
                 'attendances' => $attendances->map(function ($attendance) {
