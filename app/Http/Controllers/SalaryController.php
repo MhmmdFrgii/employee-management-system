@@ -34,6 +34,13 @@ class SalaryController extends Controller
             $query->whereIn('type', $types);
         }
 
+        // Filter berdasarkan tanggal
+        $date = $request->input('date');
+        if ($date) {
+            $query->whereDate('transaction_date', $date);
+        }
+
+
         // Sorting
         $sortBy = $request->get('sortBy', 'transaction_date'); // Kolom default yang valid
         $sortDirection = $request->get('sortDirection', 'asc'); // Arah default

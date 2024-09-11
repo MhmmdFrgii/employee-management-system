@@ -57,6 +57,12 @@ class ProjectController extends Controller
             $query->whereIn('status', $statuses);
         }
 
+        // Filter berdasarkan tanggal
+        $date = $request->input('date');
+        if ($date) {
+            $query->whereDate('start_date', $date);
+        }
+
         // Validasi Sort Direction
         $request->validate([
             'sortDirection' => 'in:asc,desc',
@@ -304,7 +310,7 @@ class ProjectController extends Controller
     public function getEmployees($department_id)
     {
         // Mengambil data karyawan yang sesuai dengan department_id
-        $employees = EmployeeDetail::where('department_id', $department_id)->get(['id', 'name']); 
+        $employees = EmployeeDetail::where('department_id', $department_id)->get(['id', 'name']);
 
     // Pastikan response dalam bentuk JSON
     return response()->json($employees);

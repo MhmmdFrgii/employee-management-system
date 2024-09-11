@@ -1,67 +1,19 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
+<div class="card px-3 pb-4 mb-1 pt-1 rounded-sm">
+    <div class="row g-2 mt-3">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="row g-2">
+                <h3 class="mx-1">Permintaan Cuti</h3>
+            </div>
+        </div>
+        @include('leave-request.partial.filter')
+    </div>
+</div>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="container py-2">
-                <h1 class="h3">Permintaan Cuti</h1>
-
-                <div class="d-flex justify-content-between mb-3 mt-3">
-                    <div>
-                        <a href="{{ route('calendar') }}" class="btn btn-primary">Kalender</a>
-                    </div>
-                    <form id="searchForm" action="{{ route('leave-requests.index') }}" method="GET"
-                        class="d-flex align-items-center gap-2">
-                        @csrf
-                        <div class="form-group mb-0 position-relative">
-                            <label class="sr-only">Filter Status:</label>
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="statusDropdown"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Filter Status
-                                </button>
-                                <ul class="dropdown-menu p-3" aria-labelledby="statusDropdown">
-                                    <li>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="status[]" value="pending"
-                                                id="statusPending"
-                                                {{ in_array('pending', request('status', [])) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="statusPending">Tertunda</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="status[]" value="approved"
-                                                id="statusApproved"
-                                                {{ in_array('approved', request('status', [])) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="statusApproved">Disetujui</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="status[]" value="rejected"
-                                                id="statusRejected"
-                                                {{ in_array('rejected', request('status', [])) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="statusRejected">Ditolak</label>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="form-group mb-0 position-relative">
-                            <label for="search" class="sr-only">Cari:</label>
-                            <input type="text" id="search" placeholder="Cari data..." name="search"
-                                value="{{ request('search') }}" class="form-control rounded shadow search-input">
-                            <a href="{{ route('leave-requests.index') }}"
-                                class="clear-search btn btn-sm position-absolute top-50 translate-middle-y end-0 me-2"
-                                style="z-index: 10; padding: 0.2rem 0.4rem; line-height: 1; display: none;">
-                                X
-                            </a>
-                        </div>
-                        <button type="submit" class="btn btn-secondary">Cari</button>
-                    </form>
-                </div>
-
                 <div class="mt-3">
                     <table class="table border text-nowrap customize-table mb-0 align-middle">
                         <thead>
