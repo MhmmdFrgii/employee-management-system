@@ -59,8 +59,8 @@
                             class="nav-link position-relative rounded-0 d-flex align-items-center justify-content-center bg-transparent fs-3 py-6"
                             id="pills-followers-tab" data-bs-toggle="pill" data-bs-target="#pills-followers" type="button"
                             role="tab" aria-controls="pills-followers" aria-selected="false">
-                            <i class="ti ti-map-pin me-2 fs-6"></i>
-                            <span class="d-none d-md-block">Lokasi Perusahaan</span>
+                            <i class="ti ti-settings me-2 fs-6"></i>
+                            <span class="d-none d-md-block">Pengaturan</span>
                         </button>
                     </li>
                 </ul>
@@ -117,11 +117,10 @@
                                     <div class="mb-4">
                                         <label for="exampleInputPassword1" class="form-label fw-semibold">Email</label>
                                         <div class="input-group border rounded-1">
-                                            <span class="input-group-text bg-transparent px-6 border-0" id="basic-addon1"><i
-                                                    class="ti ti-mail fs-6"></i></span>
+                                            <span class="input-group-text bg-transparent px-6 border-0"
+                                                id="basic-addon1"><i class="ti ti-mail fs-6"></i></span>
                                             <input type="text" class="form-control border-0 ps-2" name="email"
-                                                value="{{ $user->email }}"
-                                                placeholder="{{ $user->email }}">
+                                                value="{{ $user->email }}" placeholder="{{ $user->email }}">
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-end">
@@ -136,17 +135,15 @@
             <div class="tab-pane fade" id="pills-followers" role="tabpanel" aria-labelledby="pills-followers-tab"
                 tabindex="0">
                 <div class="col-xl-12 col-xxl-12">
-
-
-
-                    <div class="card-body  wizard-content">
-                        <h4 class="card-title">Atur Lokasi Perusahaan Anda!</h4>
-                        <form action="{{ route('company.location.update') }}" method="post" class="mt-4">
-                            @csrf
-                            @method('patch')
-                            <section>
-                                <div class="row">
-                                    <div class="col-md-12">
+                    <div class="row">
+                        <!-- Atur Lokasi Perusahaan -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Atur Lokasi Perusahaan Anda!</h5>
+                                    <form action="{{ route('company.location.update') }}" method="post">
+                                        @csrf
+                                        @method('patch')
                                         <div class="mb-3">
                                             {{-- Input untuk lokasi dan tombol pencarian --}}
                                             <div class="input-group mb-3">
@@ -157,28 +154,54 @@
                                             </div>
 
                                             {{-- Peta --}}
-                                            <div id="map" class="border rounded" style="height: 300px;">
-                                            </div>
+                                            <div id="map" class="border rounded" style="height: 300px;"></div>
 
                                             {{-- Input untuk latitude dan longitude --}}
                                             <div class="mt-3">
                                                 <input type="hidden" id="latitude" class="form-control mb-2"
-                                                    placeholder="Lintang" name="latitude">
+                                                    name="latitude" placeholder="Lintang">
                                                 <input type="hidden" id="longitude" class="form-control"
-                                                    placeholder="Bujur" name="longitude">
+                                                    name="longitude" placeholder="Bujur">
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-end">
                                             <button class="btn btn-primary" type="submit">Simpan</button>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
-                            </section>
-                        </form>
-                    </div>
+                            </div>
+                        </div>
 
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+
+                                    <h5 class="card-title">Atur Jam Masuk Kantor</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form action="{{ route('update.officeHour') }}" method="POST">
+                                        @csrf
+                                        @method('patch')
+                                        <label for="exampleInputtime" class="form-label">Masuk :</label>
+                                        <div class="d-flex">
+                                            <input type="time" class="form-control" id="exampleInputtime"
+                                                name="checkin_start" value="{{ $user->company->checkin_start }}">
+                                            <h2 class="ms-2">-</h2>
+                                            <input type="time" class="form-control ms-2" id="exampleInputtime"
+                                                name="checkin_end" value="{{ $user->company->checkin_end }}">
+                                        </div>
+                                        <div class="mt-4">
+                                            <button type="submit" class="btn btn-primary">Simpan Pengaturan</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 

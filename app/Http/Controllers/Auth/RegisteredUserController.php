@@ -9,6 +9,7 @@ use App\Models\EmployeeDetail;
 use App\Models\InvitationCode;
 use App\Models\Notification;
 use App\Models\User;
+use App\Rules\UniqueEmail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -38,7 +39,7 @@ class RegisteredUserController extends Controller
             'company_address' => 'required|string|max:500',
             'contact_email' => 'required|email|unique:companies,contact_email',
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'email' => ['required','email','unique:users,email', new UniqueEmail],
             'password' => 'required|string|min:8|confirmed',
         ]);
 
@@ -96,7 +97,7 @@ class RegisteredUserController extends Controller
         $company = Company::where('company_code', $request->company_code)->first();
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'email' => ['required','email','unique:users,email', new UniqueEmail],
             'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'cv' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'phone' => 'required|string|max:15',
@@ -250,7 +251,7 @@ class RegisteredUserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
-            'photo' => 'required|mimes:png,jpg,jpeg|max:1024',
+            'photo' => 'required|mimes:png,jpg,jpeg|max:3024',
             'gender' => 'required|string|in:male,female',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
@@ -271,7 +272,7 @@ class RegisteredUserController extends Controller
 
             // Buat user baru
             $user = User::create([
-                'company_id' => $company,
+                'company_id' => $company->id,
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),

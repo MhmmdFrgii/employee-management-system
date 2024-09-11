@@ -6,6 +6,7 @@ use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
 use App\Models\EmployeeDetail;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,7 +20,8 @@ class CommentController extends Controller
         $comment = Comment::all();
         $project = Project::where('company_id', Auth::user()->company->id)->get();
         $employees = EmployeeDetail::where('company_id', Auth::user()->company->id)->get();
-        return view('comment.index', compact('comment', 'employees', 'project'));
+        $user = User::all();
+        return view('comment.index', compact('comment', 'employees', 'project', 'user'));
     }
 
     /**
@@ -35,10 +37,16 @@ class CommentController extends Controller
      */
     public function store(CommentRequest $request)
     {
-        $validatedData = $request->validated();
+        // Mengambil ID user yang sedang login
+        $userId = Auth::id();
 
-        Comment::create($validatedData);
-        return redirect()->route('comment.index')->with('success', 'Komentar berhasil dibuat.');
+
+        Comment::create([
+            'project_id' => $request->project_id,
+            'user_id' => $userId,
+            'comment' => $request->comment,
+        ]);
+        return redirect()->back()->with('success', 'Komentar berhasil ditambahkan.');
     }
 
     /**

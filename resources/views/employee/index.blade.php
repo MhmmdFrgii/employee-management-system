@@ -34,7 +34,6 @@
                                 <button type="submit" class="btn btn-primary d-lg-none mt-2 w-100">Cari</button>
                             </div>
                         </div>
-                        <button class="btn btn-primary">Cari</a>
                     </div>
                 </form>
             </div>

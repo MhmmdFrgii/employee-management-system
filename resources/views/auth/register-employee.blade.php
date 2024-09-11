@@ -7,7 +7,7 @@
             class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
             <div class="d-flex align-items-center justify-content-center w-100">
                 <div class="row justify-content-center w-100">
-                    <div class="col-md-6 col-lg-5 col-xxl-3">
+                    <div class="col-md-6 col-lg-4 col-xxl-4">
                         <div class="card mb-0">
                             <div class="card-body">
                                 <a href="index-2.html" class="text-nowrap logo-img text-center d-block mb-5 w-100">

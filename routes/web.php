@@ -12,7 +12,6 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeDetailController;
-use App\Http\Controllers\FinanceRecordController;
 use App\Http\Controllers\KanbanBoardController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LeaveRequestController;
@@ -20,6 +19,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\KanbanTaskController;
 use App\Http\Controllers\ProjectAssignmentController;
 use App\Http\Controllers\SalaryController;
+use App\Http\Controllers\TransactionController;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');
 
@@ -27,6 +27,10 @@ Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');
 Route::get('confirmation', function () {
     return view('confirmation');
 })->name('confirmation');
+
+Route::get('/invitation', function () {
+    return view('invitation');
+})->name('invitation');
 
 Route::middleware('auth')->group(function () {
 
@@ -48,7 +52,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('project-assignments', ProjectAssignmentController::class);
             Route::resource('departments', DepartmentController::class);
             Route::resource('salaries', SalaryController::class);
-            Route::resource('finance', FinanceRecordController::class);
+            Route::resource('transactions', TransactionController::class);
             Route::get('/getEmployeeSalary/{employeeId}', [SalaryController::class, 'getEmployeeSalary'])->name('salary.getEmployeeSalary');
 
             Route::resource('positions', PositionController::class);
@@ -57,6 +61,7 @@ Route::middleware('auth')->group(function () {
             // Route::resource('attendance', AttendanceController::class);
             Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
             Route::get('attendance/export', [AttendanceController::class, 'export'])->name('attendance.export');
+
 
             Route::resource('employees', EmployeeDetailController::class);
 
@@ -73,21 +78,22 @@ Route::middleware('auth')->group(function () {
             Route::patch('/candidates/update/{applicant}', [UserController::class, 'update'])->name('candidates.update');
 
             Route::patch('/company/{company}', [CompanyController::class, 'reset_code'])->name('companies.reset');
+            Route::patch('/company', [CompanyController::class, 'updateOfficeHour'])->name('update.officeHour');
 
             route::get('/leave-requests/calendar', [LeaveRequestController::class, 'calendar'])->name('calendar');
             Route::put('/leave-requests/{id}/approve', [LeaveRequestController::class, 'approve'])->name('leave-requests.approve');
             Route::post('/leave-requests/{id}/reject', [LeaveRequestController::class, 'reject'])->name('leave-requests.reject');
 
             Route::patch('company-location/update', [RegisteredUserController::class, 'store_location'])
-            ->name('company.location.update');
+                ->name('company.location.update');
         });
     });
 
     Route::middleware(['role:manager', 'check_exists_location'])->group(function () {
         Route::get('company-location', [RegisteredUserController::class, 'setup_location'])
-        ->name('company.location.setup');
+            ->name('company.location.setup');
         Route::patch('company-location', [RegisteredUserController::class, 'store_location'])
-        ->name('company.location.store');
+            ->name('company.location.store');
     });
 
     Route::middleware('role:employee')->group(function () {

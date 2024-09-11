@@ -46,19 +46,10 @@ class ProjectController extends Controller
             return [
                 'id' => $kanbanBoard->id,
                 'name' => $kanbanBoard->name,
-                'kanban_tasks' => $kanbanBoard->kanbantasks->map(function ($task) {
-                    return [
-                        'id' => $task->id,
-                        'title' => $task->title,
-                        'status' => $task->status,
-                        'date' => $task->date,
-                        'color' => $task->color,
-                    ];
-                }),
             ];
         });
 
-        return response()->json(['kanban_boards' => $formattedProjects]);
+        return response()->json(['project' => $formattedProjects]);
     }
 
     public function show($id)

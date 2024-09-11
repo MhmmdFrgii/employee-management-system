@@ -20,4 +20,9 @@ class Comment extends Model
     {
         return $this->belongsTo(EmployeeDetail::class, 'employee_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

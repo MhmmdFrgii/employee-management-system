@@ -33,6 +33,7 @@
     </div>
     <!--====== Scroll To Top Area End ======-->
 
+    
     @yield('content')
 
 

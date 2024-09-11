@@ -36,7 +36,7 @@
                                 <a class="nav-link scroll" href="#workflow">Alur Kerja</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link scroll" href="#projects">Proyek</a>
+                                <a class="nav-link" href="/invitation">Kode Undangan</a>
                             </li>
 
                             @auth
@@ -294,6 +294,7 @@
                             <p class="text-white">Lihat performa karyawan dan ambil keputusan untuk pengembangan tim.</p>
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>

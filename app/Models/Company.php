@@ -16,7 +16,9 @@ class Company extends Model
         'contact_email',
         'company_code',
         'latitude',
-        'longitude'
+        'longitude',
+        'checkin_start',
+        'checkin_end'
     ];
 
     public function users(): mixed
