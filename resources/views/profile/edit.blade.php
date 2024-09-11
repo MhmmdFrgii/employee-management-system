@@ -141,7 +141,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Atur Lokasi Perusahaan Anda!</h5>
-                                    <form action="{{ route('company.location.update') }}" method="post">
+                                    <form action="{{ route('company.location.update', ['route' => 'profile.edit']) }}" method="post">
                                         @csrf
                                         @method('patch')
                                         <div class="mb-3">
