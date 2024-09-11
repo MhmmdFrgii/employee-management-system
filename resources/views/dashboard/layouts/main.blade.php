@@ -320,7 +320,7 @@
         @endif
         @if (session('danger'))
             iziToast.error({
-                title: 'Sukses!',
+                title: 'Error!',
                 message: "{{ session('danger') }}",
                 position: 'topRight'
             });

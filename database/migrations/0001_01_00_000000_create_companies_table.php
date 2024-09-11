@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('contact_email');
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
+            $table->time('checkin_start')->nullable();
+            $table->time('checkin_end')->nullable();
             $table->string('company_code')->unique()->nullable();
             $table->string('company_invite')->unique()->nullable();
             $table->timestamps();
