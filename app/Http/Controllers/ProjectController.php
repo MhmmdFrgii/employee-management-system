@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ProjectRequest;
 use App\Models\Notification;
 use App\Models\ProjectAssignment;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller
@@ -28,15 +29,32 @@ class ProjectController extends Controller
     {
         $project = Project::findOrFail($id);
 
-        Project::where('id', $id)->update([
-            'status' => 'Completed',
-            'completed_at' => Carbon::now(),
-            'name' => $project->name, // Pastikan 'name' diambil dari proyek yang ada
-        ]);
+        DB::beginTransaction();
+        try {
+            Project::where('id', $id)->update([
+                'status' => 'Completed',
+                'completed_at' => Carbon::now(),
+                'name' => $project->name, // Pastikan 'name' diambil dari proyek yang ada
+            ]);
 
-        return redirect()->route('projects.index')->with('success', 'Proyek telah berhasil diselesaikan.');
+            Transaction::create([
+                'type' => 'expense',
+                'amount' => $project->price,
+                'description' => $project->description,
+                'transaction_date' => date('Y-m-d'),
+                'company_id' => Auth::user()->company_id
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('projects.index')->with('success', 'Proyek telah berhasil diselesaikan.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            dd($e);
+
+            return redirect()->route('projects.index')->with('success', 'Terjadi kesalahan saat menyimpan menyelesaikan.');
+        }
     }
-
 
     /**
      * Display a listing of the resource.
@@ -304,9 +322,9 @@ class ProjectController extends Controller
     public function getEmployees($department_id)
     {
         // Mengambil data karyawan yang sesuai dengan department_id
-        $employees = EmployeeDetail::where('department_id', $department_id)->get(['id', 'name']); 
+        $employees = EmployeeDetail::where('department_id', $department_id)->get(['id', 'name']);
 
-    // Pastikan response dalam bentuk JSON
-    return response()->json($employees);
+        // Pastikan response dalam bentuk JSON
+        return response()->json($employees);
     }
 }
