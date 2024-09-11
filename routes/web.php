@@ -28,6 +28,10 @@ Route::get('confirmation', function () {
     return view('confirmation');
 })->name('confirmation');
 
+Route::get('/invitation', function () {
+    return view('invitation');
+})->name('invitation');
+
 Route::middleware('auth')->group(function () {
 
     Route::middleware(['role:manager', 'auth', 'check_location'])->group(function () {
