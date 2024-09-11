@@ -77,10 +77,10 @@
         ])
     @endforeach
 
-    <div class="container mt-4">
-
+    <div class="container mt-3">
+        <h5>Tambah Komentar</h5>
         @if (Auth::user()->hasRole('manager'))
-            <div class="container mt-4">
+            <div class="container mt-3">
                 <form action="{{ route('comment.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="project_id" value="{{ $kanbanboard->id }}">
@@ -94,23 +94,19 @@
         @endif
 
         <div class="comments-section mt-4">
-            <h4>Komentar</h3>
-                @foreach ($comments as $comment)
-                    <div class="comment-box mb-3 p-2 bg-light rounded">
-                        <div class="d-flex">
-                            {{-- <div class="avatar">
-                            <img src="{{ asset('images/default-avatar.png') }}" alt="{{ $comment->employee->name }}"
-                                class="rounded-circle" width="50" height="50">
-                        </div> --}}
-                            <div class="comment-content ms-3">
-                                <h5 class="mb-0">{{ $comment->user->name }} <span class="text-muted">•</span>
-                                </h5>
-                                <p class="text-muted">{{ $comment->created_at->diffForHumans() }}</p>
-                                <p>{{ $comment->comment }}</p>
-                            </div>
+            <h5>Komentar</h5>
+            @foreach ($comments as $comment)
+                <div class="comment-box mb-3 p-2 bg-light rounded">
+                    <div class="d-flex">
+                        <div class="comment-content ms-3">
+                            <h6 class="mb-0">{{ $comment->user->name }} <span class="text-muted">•</span>
+                            </h6>
+                            <p class="text-muted">{{ $comment->created_at->diffForHumans() }}</p>
+                            <p>{{ $comment->comment }}</p>
                         </div>
                     </div>
-                @endforeach
+                </div>
+            @endforeach
         </div>
     </div>
 
