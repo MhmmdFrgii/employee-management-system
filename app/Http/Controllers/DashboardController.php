@@ -10,6 +10,7 @@ use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Models\EmployeeDetail;
 use App\Models\Salary;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -83,23 +84,23 @@ class DashboardController extends Controller
             $monthtransa[] = $monthData->format('F'); // Format nama bulan dan tambahkan ke array
 
             // Ambil total income (pendapatan) bulan ini
-            $monthlyIncomes = Project::where('company_id', $company_id)
-                // ->where('type', 'income')
+            $monthlyIncomes = Transaction::where('company_id', $company_id)
+                ->where('type', 'income')
                 ->whereYear('created_at', $monthData->year)
                 ->whereMonth('created_at', $monthData->month)
-                ->sum('price');
-            
+                ->sum('amount');
+
             // Ambil total expenses (pengeluaran) bulan ini
-            $monthlyExpenses = Salary::where('company_id', $company_id)
+            $monthlyExpenses = Transaction::where('company_id', $company_id)
+                ->where('type', 'expense')
                 ->whereYear('created_at', $monthData->year)
                 ->whereMonth('created_at', $monthData->month)
-                ->sum('total_amount')*-1;
+                ->sum('amount') * -1;
 
             $incomes[] = $monthlyIncomes;
             $expenses[] = $monthlyExpenses;
         }
 
-    
         // Jumlah total earnings dan expenses bulan ini
         $totalIncomes = array_sum($incomes);
         $totalExpenses = array_sum($expenses);
