@@ -32,6 +32,17 @@
                         @enderror
                     </div>
                     <div class="mb-3">
+                        <label for="description" class="form-label">Deskripsi</label>
+                        <input type="text" name="description"
+                            class="form-control @error('description') is-invalid @enderror" id="description"
+                            value="{{ old('description', $project->description) }}">
+                        @error('description')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
                         <label for="start_date" class="form-label">Tanggal Mulai</label>
                         <input type="date" name="start_date"
                             class="form-control @error('start_date') is-invalid @enderror" id="start_date"
@@ -55,19 +66,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="department" class="form-label">Departemen</label>
-                        <select name="department_id" id="edit-department-{{ $project->id }}" class="form-control">
+                        <select name="department_id" id="edit-department-{{ $project->id }}"
+                            class="form-control @error('department_id') is-invalid @enderror">
                             <option value="">Pilih Departemen</option>
                             @foreach ($departments as $department)
-                                {{-- <option value="{{ $department->id }}"
-                                    {{ old('department_id') == $department->id ? 'selected' : '' }}>
-                                    {{-- {{ old('department_id', $project->department_id) == $department->id ? 'selected' : '' }}
-                                    {{ $department->name }}
-                                </option> --}}
-
-                                <option value="{{ $department->id }}"
-                                    {{ old('department_id', $project->department_id) == $department->id ? 'selected' : '' }}>
-                                    {{ $department->name }}
-                                </option>
+                                <option value="{{ $department->id }}">{{ $department->name }}</option>
                             @endforeach
                         </select>
                         @error('department_id')
@@ -78,16 +81,22 @@
                     </div>
                     <div class="mb-3">
                         <label for="employee_id" class="form-label">Karyawan</label>
-                        <select class="js-example-basic-multiple form-control w-100" name="employee_id[]"
-                            id="edit-employee-{{ $project->id }}" multiple="multiple">
-                            <!-- Options for employees will be loaded dynamically via AJAX -->
+                        <select
+                            class="js-example-basic-multiple form-control w-100 @error('employee_id') is-invalid @enderror"
+                            name="employee_id[]" id="edit-employee-{{ $project->id }}" multiple="multiple">
+                            @foreach ($employees as $employee)
+                                <option value="{{ $employee->id }}" @if (in_array($employee->id, old('employee_id', $project->employee_details->pluck('id')->toArray()))) selected @endif>
+                                    {{ $employee->name }}
+                                </option>
+                            @endforeach
                         </select>
-                        @error('employee_id[]')
+                        @error('employee_id')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
                         @enderror
                     </div>
+
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </form>
             </div>
@@ -95,8 +104,8 @@
     </div>
 </div>
 
-    <style>
-        /* Gaya Select2 untuk tampilan yang lebih baik */
+<style>
+    /* Gaya Select2 untuk tampilan yang lebih baik */
     .select2-container--default .select2-selection--multiple {
         background-color: #fff !important;
         border: 1px solid #ccc !important;
@@ -107,9 +116,10 @@
     }
 
     .select2-container--default .select2-dropdown {
-        z-index: 9999; /* Pastikan dropdown muncul di atas elemen lain */
+        z-index: 9999;
+        /* Pastikan dropdown muncul di atas elemen lain */
     }
-    </style>
+</style>
 
 {{-- <script>
     $(document).ready(function() {
@@ -203,8 +213,9 @@
                         success: function(data) {
                             var options = '<option></option>'; // Placeholder
                             $.each(data, function(key, value) {
-                                options += '<option value="' + value.id + '" ' + 
-                                    (selectedEmployees.includes(value.id) ? 'selected' : '') + '>' + 
+                                options += '<option value="' + value.id + '" ' +
+                                    (selectedEmployees.includes(value.id) ?
+                                        'selected' : '') + '>' +
                                     value.name + '</option>';
                             });
                             employeeSelect.html(options).trigger('change');
@@ -224,7 +235,7 @@
             // Event ketika departemen diubah
             $('#edit-department-{{ $project->id }}').on('change', function() {
                 var departmentId = $(this).val();
-                
+
                 // Kosongkan dropdown employee saat departemen diubah
                 employeeSelect.empty().trigger('change');
 

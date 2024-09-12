@@ -52,7 +52,10 @@ Route::middleware('auth')->group(function () {
             Route::resource('project-assignments', ProjectAssignmentController::class);
             Route::resource('departments', DepartmentController::class);
             Route::resource('salaries', SalaryController::class);
+
             Route::resource('transactions', TransactionController::class);
+            Route::get('transaction/export', [TransactionController::class, 'export'])->name('transaction.export');
+
             Route::get('/getEmployeeSalary/{employeeId}', [SalaryController::class, 'getEmployeeSalary'])->name('salary.getEmployeeSalary');
 
             Route::resource('positions', PositionController::class);

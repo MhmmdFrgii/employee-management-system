@@ -153,14 +153,18 @@ class ProjectController extends Controller
     {
         // Ambil proyek dan karyawan terkait
         $project = Project::findOrFail($id);
+        $departments = Department::all();
         $employees = $project->employee_details()->get(['id', 'fullname']);
 
         // Kembalikan dalam format JSON untuk AJAX
         return response()->json([
             'project' => $project,
-            'employees' => $employees
+            'employees' => $employees,
+            'departments' => $departments,
+            'selectedEmployees' => $project->employee_details->pluck('id')->toArray(), // Include selected employee IDs
         ]);
     }
+
 
 
     /**
@@ -230,8 +234,11 @@ class ProjectController extends Controller
         try {
             DB::beginTransaction();
 
-            // Update proyek
-            $project->update($request->validated());
+            // Update proyek termasuk department_id
+            $project->update([
+                'name' => $request->name,
+                'department_id' => $request->department_id // Pastikan department_id juga diperbarui
+            ]);
 
             // Sinkronisasi karyawan
             $newEmployeeIds = $request->employee_id ?? [];
@@ -273,6 +280,7 @@ class ProjectController extends Controller
             return redirect()->route('projects.index')->with('error', 'Gagal memperbarui proyek: ' . $e->getMessage());
         }
     }
+
 
     /**
      * Remove the specified resource from storage.

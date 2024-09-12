@@ -97,6 +97,7 @@
     --invalid-color: #ffa200;
     --primary-bg-color: #f6f9fe;
     --primary-bg-color-2: linear-gradient(-47deg, #5d87ff 0%, #4528dc 100%);
+    --danger-bg-color: linear-gradient(-47deg, #f00a0a 0%, #912714 100%);
     --primary-bg-color-3: #ffffff;
     --primary-bg-color-4: rgba(16, 16, 45, 1);
     --nav-bg-color: #d3d3d3;
@@ -521,6 +522,11 @@ img {
 .btn-success {
     background: var(--valid-color) !important;
     border-color: var(--valid-color) !important;
+}
+
+.btn-danger {
+    background-color: var(--danger-bg-color) !important;
+    background: var(--danger-bg-color) !important;
 }
 
 .button-group {

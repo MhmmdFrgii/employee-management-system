@@ -25,7 +25,7 @@
 
                                 <div class="card-body  wizard-content">
                                     <h4 class="card-title">Atur Lokasi Perusahaan Anda!</h4>
-                                    <form action="{{ route('company.location.store') }}" method="post" class="mt-4">
+                                    <form action="{{ route('company.location.store', ['route' => 'manager.dashboard']) }}" method="post" class="mt-4">
                                         @csrf
                                         @method('patch')
                                         <section>

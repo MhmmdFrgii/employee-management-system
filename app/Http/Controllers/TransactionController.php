@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Salary;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Exports\FinanceExport;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TransactionController extends Controller
 {
@@ -72,5 +74,19 @@ class TransactionController extends Controller
         ]);
 
         return redirect()->route('transactions.index')->with('success', 'Transaction added successfully');
-    }
+   }
+
+   public function export(Request $request)
+   {
+         $validated = $request->validate([
+            'year' => 'required|integer|digits:4',
+            'month' => 'required|integer|between:1,12',
+        ]);
+
+        $year = $validated['year'];
+        $month = $validated['month'];
+
+        // Proses export
+        return Excel::download(new FinanceExport($year, $month), 'Data_Keuangan_' . $month . '_' . $year . '.xlsx');
+   }
 }

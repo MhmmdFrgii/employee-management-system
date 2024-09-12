@@ -337,6 +337,6 @@ class RegisteredUserController extends Controller
             'longitude' => $request->longitude
         ]);
 
-        return redirect()->route('manager.dashboard')->with('success', 'Berhasil Update Lokasi!');
+        return redirect()->route($request->route)->with('success', 'Berhasil Update Lokasi!');
     }
 }
