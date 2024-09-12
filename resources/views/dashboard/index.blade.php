@@ -140,7 +140,7 @@
                     </div>
                     <div class="card-body">
                         {{-- <div id="transactionChart"></div> --}}
-                        <canvas id="transactionChart" width="400" height="345"></canvas>
+                        <div id="transactionChart"></div>
                     </div>
                 </div>
             </div>
@@ -162,31 +162,31 @@
         @include('dashboard.partial.pendapatan-pengeluaran')
         @include('dashboard.partial.tenggat-project')
 
-<style>
-    .card-danger {
-        border: 2px solid #dc3545;
-        /* Red color for urgent deadlines */
-        background-color: #f8d7da;
-        /* Light red background */
-        border-radius: 4px;
-        /* Optional: for rounded corners */
-        padding: 10px;
-        /* Optional: for inner spacing */
-        margin-bottom: 10px;
-        /* Spacing between cards */
-    }
+        <style>
+            .card-danger {
+                border: 2px solid #dc3545;
+                /* Red color for urgent deadlines */
+                background-color: #f8d7da;
+                /* Light red background */
+                border-radius: 4px;
+                /* Optional: for rounded corners */
+                padding: 10px;
+                /* Optional: for inner spacing */
+                margin-bottom: 10px;
+                /* Spacing between cards */
+            }
 
-    .card-primary {
-        border: 2px solid #007bff;
-        /* Blue color for non-urgent deadlines */
-        background-color: #cce5ff;
-        /* Light blue background */
-        border-radius: 4px;
-        /* Optional: for rounded corners */
-        padding: 10px;
-        /* Optional: for inner spacing */
-        margin-bottom: 10px;
-        /* Spacing between cards */
-    }
-</style>
-@endsection
+            .card-primary {
+                border: 2px solid #007bff;
+                /* Blue color for non-urgent deadlines */
+                background-color: #cce5ff;
+                /* Light blue background */
+                border-radius: 4px;
+                /* Optional: for rounded corners */
+                padding: 10px;
+                /* Optional: for inner spacing */
+                margin-bottom: 10px;
+                /* Spacing between cards */
+            }
+        </style>
+    @endsection
