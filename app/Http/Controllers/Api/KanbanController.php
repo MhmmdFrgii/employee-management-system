@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\KanbanTaskRequest;
+use App\Models\Comment;
 use App\Models\EmployeeDetail;
 use App\Models\KanbanBoard;
 use App\Models\KanbanTask;
@@ -25,6 +26,9 @@ class KanbanController extends Controller
         }
 
         $kanbanboardID = $request->id;
+
+        // Ambil semua komentar yang terkait dengan KanbanBoard tertentu
+        $comments = Comment::where('project_id', $kanbanboardID)->latest()->get();
 
         $todo = KanbanTask::where('kanban_boards_id', $kanbanboardID)
             ->where('status', 'todo')
@@ -65,6 +69,12 @@ class KanbanController extends Controller
                     'assigned_to' => $task->employee ? $task->employee->name : null,
                     'due_date' => $task->due_date,
                     'status' => $task->status,
+                ];
+            }),
+            'comment' => $comments->map(function ($comment) {
+                return [
+                    'comment' => $comment->comment,
+                    'comment_time' => $comment->created_at,
                 ];
             }),
         ];
