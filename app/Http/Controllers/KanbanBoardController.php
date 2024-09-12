@@ -22,7 +22,7 @@ class KanbanBoardController extends Controller
         $kanbanboardID = $request->id ? $request->id : 1;
 
         // Ambil semua komentar yang terkait dengan KanbanBoard tertentu
-        $comments = Comment::where('project_id', $kanbanboardID)->get();
+        $comments = Comment::where('project_id', $kanbanboardID)->latest()->get();
 
         $kanbanboards = KanbanBoard::all();
         $todo = KanbanTask::where('kanban_boards_id', $kanbanboardID)
