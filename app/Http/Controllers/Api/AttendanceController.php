@@ -12,38 +12,58 @@ class AttendanceController extends Controller
 {
     public function userAttendance(Request $request)
     {
-        $employeeId = Auth::user()->employee_detail->id;
+        $employee = Auth::user()->employee_detail->id;
+        $company = Auth::user()->company; // Ambil perusahaan tempat user bekerja
+
         $today = Carbon::today()->format('Y-m-d');
         $now = Carbon::now();
-        $limit = Carbon::parse(date('Y-m-d') . ' 08:00:00');
 
-        // Tentukan status berdasarkan waktu
-        $status = $now->greaterThan($limit) ? 'late' : 'present';
+        // Mengambil waktu check-in yang diatur oleh perusahaan
+        $checkin_start = Carbon::parse($company->checkin_start);
+        $checkin_end = Carbon::parse($company->checkin_end);
 
-        // Cek apakah absensi hari ini sudah ada
-        $todayAttendance = Attendance::where('employee_id', $employeeId)
+        // Cek apakah sudah absen hari ini
+        $today_attendance = Attendance::where('employee_id', $employee)
             ->where('date', $today)
             ->exists();
 
-        if ($todayAttendance) {
-            // Kembalikan respons jika sudah absen
+        if ($today_attendance) {
             return response()->json([
-                'success' => false,
-                'message' => 'Kamu sudah absen!',
-            ], 400);
+                'status' => 'info',
+                'message' => 'Kamu sudah absen hari ini!',
+            ], 200);
         }
 
-        // Simpan absensi baru
+        // Validasi jika waktu sekarang kurang dari checkin_start
+        if ($now->lessThan($checkin_start)) {
+            return response()->json([
+                'status' => 'danger',
+                'message' => 'Belum bisa absen, waktu absen belum dimulai!',
+            ], 403);
+        }
+
+        // Tentukan status absensi
+        if ($now->lessThanOrEqualTo($checkin_end)) {
+            $status = 'present';
+        } else {
+            $status = 'late'; // Jika absen setelah checkin_end, status 'late'
+        }
+
+        // Buat entri absensi baru
         Attendance::create([
-            'employee_id' => $employeeId,
+            'employee_id' => $employee,
             'date' => $today,
             'status' => $status,
         ]);
 
-        // Kembalikan respons sukses
         return response()->json([
-            'success' => true,
+            'status' => 'success',
             'message' => 'Berhasil absen!',
+            'attendance' => [
+                'employee_id' => $employee,
+                'date' => $today,
+                'status' => $status,
+            ],
         ], 201);
     }
 
