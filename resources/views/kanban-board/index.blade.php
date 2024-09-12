@@ -94,20 +94,20 @@
         @endif
 
         <div class="comments-section mt-4">
-            <h5>Komentar</h5>
+            <h5 class="mb-3">Komentar</h5>
             @foreach ($comments as $comment)
-                <div class="comment-box mb-3 p-2 bg-light rounded">
-                    <div class="d-flex">
-                        <div class="comment-content ms-3">
-                            <h6 class="mb-0">{{ $comment->user->name }} <span class="text-muted">•</span>
-                            </h6>
-                            <p class="text-muted">{{ $comment->created_at->diffForHumans() }}</p>
-                            <p>{{ $comment->comment }}</p>
+                <div class="comment-box mb-2 p-2 rounded-1 border border-light shadow-sm">
+                    <div class="comment-content ms-2">
+                        <div class="mb-2 d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 text-primary">{{ $comment->user->name }}</h5>
+                            <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
                         </div>
+                        <p class="mb-1">{{ $comment->comment }}</p>
                     </div>
                 </div>
             @endforeach
         </div>
+
     </div>
 
 

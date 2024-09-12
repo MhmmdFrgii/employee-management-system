@@ -98,7 +98,7 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item {{ Request::is('manager/finance*') ? 'selected' : '' }}">
+                <li class="sidebar-item {{ Request::is('manager/transactions*') ? 'selected' : '' }}">
                     <a href="{{ route('transactions.index') }}" class="sidebar-link">
                         <div class="round-16 d-flex align-items-center justify-content-center">
                             <i class="ti ti-businessplan"></i>
@@ -107,7 +107,7 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item {{ Request::is('manager/leave-requests*') ? 'selected' : '' }}">
+                <li class="sidebar-item {{ Request::is('leave-requests*') ? 'selected' : '' }}">
                     <a href="{{ route('leave-requests.index') }}" class="sidebar-link">
                         <div class="round-16 d-flex align-items-center justify-content-center">
                             <i class="ti ti-license"></i>
