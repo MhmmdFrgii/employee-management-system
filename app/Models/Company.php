@@ -15,6 +15,7 @@ class Company extends Model
         'address',
         'contact_email',
         'company_code',
+        'company_invite',
         'latitude',
         'longitude',
         'checkin_start',

@@ -26,7 +26,7 @@
                             </div>
                             <div class="d-flex justify-content-between align-items-center mb-3 gap-4">
                                 <input type="text" readonly value="{{ $company->company_invite }}" class="form-control">
-                                <form action="{{ route('companies.reset', $company->id) }}" method="post">
+                                <form action="{{ route('invited.reset', $company->id) }}" method="post">
                                     @csrf
                                     @method('patch')
                                     <button type="submit" class="btn btn-primary">Reset</button>
