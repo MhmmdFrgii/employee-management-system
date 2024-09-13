@@ -87,6 +87,18 @@
                                 mengelola karyawan secara efisien. Dapatkan wawasan mendalam tentang kinerja, absensi,
                                 dan pengembangan karyawan Anda.</p>
                         </div>
+                        <!-- Invitation Code Form -->
+                        <div class="mt-4">
+                            <form action="{{ route('apply_or_invite') }}" method="POST" class="d-flex">
+                                @csrf
+                                <input type="text" name="code" class="form-control me-2 mr-3"
+                                    placeholder="Masukkan Kode Undangan atau Rekrut">
+                                @error('code')
+                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                @enderror
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
                     </div>
                     <div class="col-12 col-md-5 col-lg-6">
                         <!-- Welcome Thumb -->
