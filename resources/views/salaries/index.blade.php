@@ -120,7 +120,7 @@
 
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center">
+                                    <td colspan="8" class="text-center">
                                         <img src="{{ asset('assets/images/no-data.png') }}" alt="No Data"
                                             class="img-fluid" style="width: clamp(150px, 50vw, 300px);">
                                         <p class="mt-3">Tidak ada data tersedia</p>

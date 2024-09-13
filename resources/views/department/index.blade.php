@@ -1,16 +1,16 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
-<div class="card px-3 pb-4 mb-1 pt-1 rounded-sm">
-    <div class="row g-2 mt-3">
-        <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="row g-2">
-                <h3 class="mx-1">Departemen</h3>
+    <div class="card px-3 pb-4 mb-1 pt-1 rounded-sm">
+        <div class="row g-2 mt-3">
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="row g-2">
+                    <h3 class="mx-1">Departemen</h3>
+                </div>
             </div>
+            @include('department.partial.search')
         </div>
-        @include('department.partial.search')
     </div>
-</div>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="container py-2">
@@ -62,14 +62,13 @@
                                             type="button">Hapus</button>
                                     </td>
                                 </tr>
-                                @include('department.partial.add-modal')
                                 @include('department.partial.edit-modal')
                                 @include('department.partial.delete-modal')
                             @empty
                                 <tr>
                                     <td colspan="4" class="text-center">
-                                        <img src="{{ asset('assets/images/no-data.png') }}" alt="No Data"
-                                            class="img-fluid" style="width: clamp(150px, 50vw, 300px);">
+                                        <img src="{{ asset('assets/images/no-data.png') }}" alt="No Data" class="img-fluid"
+                                            style="width: clamp(150px, 50vw, 300px);">
                                         <p class="mt-3">Tidak ada data tersedia</p>
                                     </td>
                                 </tr>
@@ -84,6 +83,5 @@
             </div>
         </div>
     </div>
-
-
+    @include('department.partial.add-modal')
 @endsection
