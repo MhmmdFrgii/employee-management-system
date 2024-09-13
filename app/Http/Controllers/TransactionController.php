@@ -17,7 +17,7 @@ class TransactionController extends Controller
     public function index(Request $request)
     {
         // Menggunakan query builder alih-alih mengambil semua data terlebih dahulu
-        $query = Transaction::query();
+        $query = Transaction::query()->where('company_id', Auth::user()->id);
 
         // Pencarian
         $search = $request->input('search');
@@ -74,11 +74,11 @@ class TransactionController extends Controller
         ]);
 
         return redirect()->route('transactions.index')->with('success', 'Transaction added successfully');
-   }
+    }
 
-   public function export(Request $request)
-   {
-         $validated = $request->validate([
+    public function export(Request $request)
+    {
+        $validated = $request->validate([
             'year' => 'required|integer|digits:4',
             'month' => 'required|integer|between:1,12',
         ]);
@@ -88,5 +88,5 @@ class TransactionController extends Controller
 
         // Proses export
         return Excel::download(new FinanceExport($year, $month), 'Data_Keuangan_' . $month . '_' . $year . '.xlsx');
-   }
+    }
 }

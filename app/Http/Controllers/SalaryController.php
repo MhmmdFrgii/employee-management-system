@@ -17,7 +17,7 @@ class SalaryController extends Controller
     public function index(Request $request)
     {
         // Ambil query Salary dengan relasi employee_detail
-        $query = Salary::with('employee_detail');
+        $query = Salary::with('employee_detail')->where('company_id', Auth::user()->id);
 
         // Pencarian berdasarkan karyawan atau jumlah gaji
         $search = $request->input('search');
@@ -27,7 +27,7 @@ class SalaryController extends Controller
             })
                 ->orWhere('amount', 'like', '%' . $search . '%')
                 ->orWhere('total_amount', 'like', '%' . $search . '%')
-                ->orWhereDate('created_at', 'like', '%' . $search . '%'); // Gunakan created_at sebagai transaction_date
+                ->orWhereDate('created_at', 'like', '%' . $search . '%');
         }
 
         // Filter berdasarkan tanggal
