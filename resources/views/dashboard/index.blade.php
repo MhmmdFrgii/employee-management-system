@@ -121,18 +121,16 @@
                 </div>
             </div>
 
-            @if (isset($departments) && $department_data)
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title">Departemen</h5>
-                        </div>
-                        <div class="card-body">
-                            <div id="pieChart"></div>
-                        </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Departemen</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="pieChart"></div>
                     </div>
                 </div>
-            @endif
+            </div>
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
