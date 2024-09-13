@@ -39,7 +39,7 @@ class RegisteredUserController extends Controller
             'company_address' => 'required|string|max:500',
             'contact_email' => 'required|email|unique:companies,contact_email',
             'name' => 'required|string|max:255',
-            'email' => ['required','email','unique:users,email', new UniqueEmail],
+            'email' => ['required', 'email', 'unique:users,email', new UniqueEmail],
             'password' => 'required|string|min:8|confirmed',
         ]);
 
@@ -97,7 +97,7 @@ class RegisteredUserController extends Controller
         $company = Company::where('company_code', $request->company_code)->first();
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => ['required','email','unique:users,email', new UniqueEmail],
+            'email' => ['required', 'email', 'unique:users,email', new UniqueEmail],
             'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'cv' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'phone' => 'required|string|max:15',

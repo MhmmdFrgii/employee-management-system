@@ -24,7 +24,7 @@ class CompanyController extends Controller
             'company_invite' => Company::company_generate()
         ]);
 
-        return redirect()->route('invited.index')->with('success', 'berhasil mereset kode undangan!');
+        return redirect()->route('candidates.index')->with('success', 'berhasil mereset kode undangan!');
     }
 
     public function updateOfficeHour(Request $request)
