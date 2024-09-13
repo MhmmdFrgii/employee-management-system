@@ -23,6 +23,41 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
+    public function apply_or_invite(Request $request)
+    {
+        // Validate the input
+        $validator = Validator::make($request->all(), [
+            'invitation_code' => 'required|string',
+        ], [
+            'invitation_code.required' => 'Kode tidak boleh kosong!',
+        ]);
+
+        // If validation fails
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $code = $request->invitation_code;
+
+        // Check if the code is an invitation code or an applicant code
+        $companyInvite = Company::where('company_invite', $code)->first();
+        $companyApplicant = Company::where('company_code', $code)->first();
+
+        // If it's an invitation code
+        if ($companyInvite) {
+            return view('auth.register-invite'); // Redirect to invite registration view
+        }
+
+        // If it's an applicant code
+        if ($companyApplicant) {
+            return view('auth.apply-applicant'); // Redirect to applicant registration view
+        }
+
+        // If the code is invalid
+        return redirect()->back()->withErrors(['invitation_code' => 'Kode tidak valid!'])->withInput();
+    }
+
+
     /**
      * Display the registration view.
      */
@@ -73,22 +108,6 @@ class RegisteredUserController extends Controller
             DB::rollBack();
             return redirect()->back()->with('error', 'Terjadi kesalahan saat registrasi.')->withInput();
         }
-    }
-
-    // Checking if applicant code exist and return apply applicant view
-    public function apply_applicant(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'applicant' => 'required|string|exists:companies,company_code',
-        ], [
-            'applicant.exists' => 'Kode lamaran tidak valid!',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        return view('auth.apply-applicant');
     }
 
     // store the applicant data to company
@@ -229,21 +248,6 @@ class RegisteredUserController extends Controller
             DB::rollBack();
             return redirect()->back()->with('error', 'Terjadi kesalahan saat pembuatan akun.')->withInput();
         }
-    }
-
-    public function create_invite(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'invite' => 'required|string|exists:companies,company_invite',
-        ], [
-            'invite.exists' => 'Kode undangan tidak valid!',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('landing-page')->withErrors($validator)->withInput();
-        }
-
-        return view('auth.register-invite');
     }
 
     public function store_invite(Request $request)
