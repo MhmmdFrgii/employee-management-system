@@ -32,7 +32,7 @@ Route::get('/invitation', function () {
     return view('invitation');
 })->name('invitation');
 
-Route::post('/apply_or_invite', [RegisteredUserController::class, 'apply_or_invite'])->name('apply_or_invite');
+Route::get('/apply_or_invite', [RegisteredUserController::class, 'apply_or_invite'])->name('apply_or_invite');
 
 Route::middleware('auth')->group(function () {
 

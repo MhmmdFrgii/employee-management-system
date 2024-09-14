@@ -29,7 +29,7 @@
                                         method="POST" enctype="multipart/form-data">
                                         @csrf
 
-                                        <input type="hidden" name="invite" value="{{ request('invite') }}">
+                                        <input type="hidden" name="code" value="{{ request('code') }}">
                                         <!-- Step 1 -->
                                         <h6>Data Diri</h6>
                                         <section>

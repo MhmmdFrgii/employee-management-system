@@ -27,9 +27,9 @@ class RegisteredUserController extends Controller
     {
         // Validate the input
         $validator = Validator::make($request->all(), [
-            'invitation_code' => 'required|string',
+            'code' => 'required|string',
         ], [
-            'invitation_code.required' => 'Kode tidak boleh kosong!',
+            'code.required' => 'Kode tidak boleh kosong!',
         ]);
 
         // If validation fails
@@ -37,7 +37,7 @@ class RegisteredUserController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $code = $request->invitation_code;
+        $code = $request->code;
 
         // Check if the code is an invitation code or an applicant code
         $companyInvite = Company::where('company_invite', $code)->first();
@@ -52,6 +52,7 @@ class RegisteredUserController extends Controller
         if ($companyApplicant) {
             return view('auth.apply-applicant'); // Redirect to applicant registration view
         }
+
 
         // If the code is invalid
         return redirect()->back()->withErrors(['invitation_code' => 'Kode tidak valid!'])->withInput();
@@ -113,7 +114,7 @@ class RegisteredUserController extends Controller
     // store the applicant data to company
     public function store_applicant(Request $request)
     {
-        $company = Company::where('company_code', $request->company_code)->first();
+        $company = Company::where('company_code', $request->code)->first();
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', 'unique:users,email', new UniqueEmail],
@@ -266,7 +267,7 @@ class RegisteredUserController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $company = Company::where('company_invite', $request->invite)->first();
+        $company = Company::where('company_invite', $request->code)->first();
 
         DB::beginTransaction(); // Memulai transaksi
 
@@ -291,7 +292,7 @@ class RegisteredUserController extends Controller
                 'phone' => $request->phone,
                 'gender' => $request->gender,
                 'address' => $request->address,
-                'company_id' => '1',
+                'company_id' => $company->id,
                 'source' => 'invited'
             ]);
 

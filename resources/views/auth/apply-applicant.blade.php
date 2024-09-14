@@ -27,7 +27,7 @@
                                         enctype="multipart/form-data">
                                         @csrf
                                         <section>
-                                            <input type="hidden" name="company_code" value="{{ request('applicant') }}">
+                                            <input type="hidden" name="code" value="{{ request('code') }}">
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">

@@ -51,12 +51,14 @@ class UserController extends Controller
         $validatedData = $request->validated();
 
         // Update departemen, posisi, dan set status menjadi 'approved'
-        $applicant->update([
+        $employee = $applicant->update([
             'department_id' => $validatedData['department_id'],
             'position_id' => $validatedData['position_id'],
             'status' => 'approved',
             'salary' => $validatedData['salary']
         ]);
+
+        $applicant->user->assignRole('employee');
 
         // Buat variabel isInvited berdasarkan sumber
         $isInvited = $applicant->source === 'invited';
