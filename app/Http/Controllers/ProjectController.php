@@ -38,7 +38,7 @@ class ProjectController extends Controller
             ]);
 
             Transaction::create([
-                'type' => 'expense',
+                'type' => 'income',
                 'amount' => $project->price,
                 'description' => $project->description,
                 'transaction_date' => date('Y-m-d'),
