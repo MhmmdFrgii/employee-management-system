@@ -17,7 +17,7 @@ class TransactionController extends Controller
     public function index(Request $request)
     {
         // Menggunakan query builder alih-alih mengambil semua data terlebih dahulu
-        $query = Transaction::query()->where('company_id', Auth::user()->id);
+        $query = Transaction::query()->where('company_id', Auth::user()->company_id);
 
         // Pencarian
         $search = $request->input('search');

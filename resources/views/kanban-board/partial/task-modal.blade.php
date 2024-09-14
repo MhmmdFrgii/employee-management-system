@@ -78,6 +78,8 @@
                         @enderror
                     </div>
 
+                    <input type="hidden" name="status" value="{{ $status }}">
+
                     <!-- Submit Button -->
                     <button type="submit" class="btn btn-primary">{{ $buttonText }}</button>
                 </form>

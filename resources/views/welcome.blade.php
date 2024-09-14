@@ -89,7 +89,7 @@
                         </div>
                         <!-- Invitation Code Form -->
                         <div class="mt-4">
-                            <form action="{{ route('apply_or_invite') }}" method="POST" class="d-flex">
+                            <form action="{{ route('apply_or_invite') }}" method="GET" class="d-flex">
                                 @csrf
                                 <input type="text" name="code" class="form-control me-2 mr-3"
                                     placeholder="Masukkan Kode Undangan atau Rekrut">

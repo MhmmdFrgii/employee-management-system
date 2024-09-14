@@ -17,7 +17,7 @@ class SalaryController extends Controller
     public function index(Request $request)
     {
         // Ambil query Salary dengan relasi employee_detail
-        $query = Salary::with('employee_detail')->where('company_id', Auth::user()->id);
+        $query = Salary::with('employee_detail')->where('company_id', Auth::user()->company_id);
 
         // Pencarian berdasarkan karyawan atau jumlah gaji
         $search = $request->input('search');
