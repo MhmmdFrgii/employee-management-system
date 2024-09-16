@@ -27,7 +27,18 @@ class RegisteredUserController extends Controller
     {
         // Validate the input
         $validator = Validator::make($request->all(), [
-            'code' => 'required|string',
+            'code' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) {
+                    $companyInviteExists = Company::where('company_invite', $value)->exists();
+                    $companyApplicantExists = Company::where('company_code', $value)->exists();
+
+                    if (!$companyInviteExists && !$companyApplicantExists) {
+                        $fail('Kode tidak valid!');
+                    }
+                }
+            ],
         ], [
             'code.required' => 'Kode tidak boleh kosong!',
         ]);
@@ -77,6 +88,32 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', 'unique:users,email', new UniqueEmail],
             'password' => 'required|string|min:8|confirmed',
+        ],  [
+            'company_name.required' => 'Nama perusahaan wajib diisi.',
+            'company_name.string' => 'Nama perusahaan harus berupa teks.',
+            'company_name.max' => 'Nama perusahaan maksimal 255 karakter.',
+
+            'company_address.required' => 'Alamat perusahaan wajib diisi.',
+            'company_address.string' => 'Alamat perusahaan harus berupa teks.',
+            'company_address.max' => 'Alamat perusahaan maksimal 500 karakter.',
+
+            'contact_email.required' => 'Email kontak wajib diisi.',
+            'contact_email.email' => 'Format email kontak tidak valid.',
+            'contact_email.unique' => 'Email kontak sudah digunakan.',
+
+            'name.required' => 'Nama wajib diisi.',
+            'name.string' => 'Nama harus berupa teks.',
+            'name.max' => 'Nama maksimal 255 karakter.',
+
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email sudah digunakan.',
+            'email.unique_email' => 'Email sudah digunakan oleh pengguna lain.', // Jika Anda memiliki aturan kustom `UniqueEmail`
+
+            'password.required' => 'Kata sandi wajib diisi.',
+            'password.string' => 'Kata sandi harus berupa teks.',
+            'password.min' => 'Kata sandi harus memiliki minimal 8 karakter.',
+            'password.confirmed' => 'Kata sandi konfirmasi tidak cocok.',
         ]);
 
         // Jika validasi gagal, kembali dengan error
@@ -125,6 +162,40 @@ class RegisteredUserController extends Controller
             'address' => 'required|string|max:500',
             'g-recaptcha-response' => 'recaptcha',
             recaptchaFieldName() => recaptchaRuleName(),
+        ], [
+            'name.required' => 'Nama wajib diisi.',
+            'name.string' => 'Nama harus berupa teks.',
+            'name.max' => 'Nama maksimal 255 karakter.',
+
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email sudah digunakan.',
+            'email.unique_email' => 'Email sudah digunakan oleh pengguna lain.', // Jika Anda memiliki aturan kustom `UniqueEmail`
+
+            'photo.required' => 'Foto wajib diisi.',
+            'photo.image' => 'File yang diunggah harus berupa gambar.',
+            'photo.mimes' => 'Foto harus berupa file dengan ekstensi jpeg, png, atau jpg.',
+            'photo.max' => 'Foto maksimal 2 MB.',
+
+            'cv.required' => 'CV wajib diisi.',
+            'cv.image' => 'File yang diunggah harus berupa gambar.',
+            'cv.mimes' => 'CV harus berupa file dengan ekstensi jpeg, png, atau jpg.',
+            'cv.max' => 'CV maksimal 2 MB.',
+
+            'phone.required' => 'Nomor telepon wajib diisi.',
+            'phone.string' => 'Nomor telepon harus berupa teks.',
+            'phone.max' => 'Nomor telepon maksimal 15 karakter.',
+
+            'gender.required' => 'Jenis kelamin wajib diisi.',
+            'gender.string' => 'Jenis kelamin harus berupa teks.',
+            'gender.in' => 'Jenis kelamin harus berupa "male" atau "female".',
+
+            'address.required' => 'Alamat wajib diisi.',
+            'address.string' => 'Alamat harus berupa teks.',
+            'address.max' => 'Alamat maksimal 500 karakter.',
+
+            'g-recaptcha-response.recaptcha' => 'Tolong verifikasi bahwa Anda bukan robot.', // Pastikan aturan recaptcha diatur dengan benar
+            recaptchaFieldName() . '.' . recaptchaRuleName() => 'Tolong verifikasi captcha Anda.', // Pastikan Anda menyesuaikan nama field dan aturan
         ]);
 
         if ($validator->fails()) {
@@ -205,6 +276,16 @@ class RegisteredUserController extends Controller
             'email' => 'required|email|exists:employee_details,email',
             'password' => 'required|min:8|confirmed',
             'password_confirmation' => 'required',
+        ], [
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.exists' => 'Email tidak ditemukan dalam data pegawai.',
+
+            'password.required' => 'Kata sandi wajib diisi.',
+            'password.min' => 'Kata sandi harus memiliki minimal 8 karakter.',
+            'password.confirmed' => 'Konfirmasi kata sandi tidak cocok.',
+
+            'password_confirmation.required' => 'Konfirmasi kata sandi wajib diisi.',
         ]);
 
         $applicant = EmployeeDetail::where('email', $request->email)
@@ -260,6 +341,31 @@ class RegisteredUserController extends Controller
             'gender' => 'required|string|in:male,female',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
+        ], [
+            'name.required' => 'Nama wajib diisi.',
+            'name.string' => 'Nama harus berupa teks.',
+            'name.max' => 'Nama maksimal 255 karakter.',
+
+            'phone.required' => 'Nomor telepon wajib diisi.',
+            'phone.string' => 'Nomor telepon harus berupa teks.',
+            'phone.max' => 'Nomor telepon maksimal 20 karakter.',
+
+            'photo.required' => 'Foto wajib diunggah.',
+            'photo.mimes' => 'Foto harus berupa file dengan ekstensi png, jpg, atau jpeg.',
+            'photo.max' => 'Foto maksimal 3 MB.',
+
+            'gender.required' => 'Jenis kelamin wajib diisi.',
+            'gender.string' => 'Jenis kelamin harus berupa teks.',
+            'gender.in' => 'Jenis kelamin harus berupa "male" atau "female".',
+
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email sudah digunakan.',
+
+            'password.required' => 'Kata sandi wajib diisi.',
+            'password.string' => 'Kata sandi harus berupa teks.',
+            'password.min' => 'Kata sandi harus memiliki minimal 8 karakter.',
+            'password.confirmed' => 'Konfirmasi kata sandi tidak cocok.',
         ]);
 
         // Jika validasi gagal, kembali dengan error

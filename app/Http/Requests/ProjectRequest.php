@@ -26,22 +26,25 @@ class ProjectRequest extends FormRequest
             'description' => 'max:250',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'price' => 'required',
+            'price' => 'required|not_regex:/-/',
+            'department_id' => 'nullable'
         ];
     }
 
     public function messages(): array
     {
         return [
-            'name.required' => 'Nama proyek harus diisi',
-            'name.max' => 'Nama proyek tidak boleh lebih dari 250 karakter',
+            'name.required' => 'Nama proyek harus diisi.',
+            'price.required' => 'Harga harus diisi.',
+            'price.not_regex' => 'Harga tidak boleh negatif.',
+            'name.max' => 'Nama proyek tidak boleh lebih dari 250 karakter.',
             // 'description.required' => 'Deskripsi harus diisi',
-            'description.max' => 'Deskripsi tidak boleh lebih dari 250 karakter',
-            'start_date.required' => 'Tanggal mulai harus diisi',
-            'start_date.date' => 'Tanggal mulai harus berupa tanggal yang valid',
-            'end_date.required' => 'Tanggal selesai harus diisi',
-            'end_date.date' => 'Tanggal selesai harus berupa tanggal yang valid',
-            'end_date.after_or_equal' => 'Tanggal selesai harus sama atau setelah tanggal mulai',
+            'description.max' => 'Deskripsi tidak boleh lebih dari 250 karakter.',
+            'start_date.required' => 'Tanggal mulai harus diisi.',
+            'start_date.date' => 'Tanggal mulai harus berupa tanggal yang valid.',
+            'end_date.required' => 'Tanggal selesai harus diisi.',
+            'end_date.date' => 'Tanggal selesai harus berupa tanggal yang valid.',
+            'end_date.after_or_equal' => 'Tanggal selesai harus sama atau setelah tanggal mulai.',
         ];
     }
 }

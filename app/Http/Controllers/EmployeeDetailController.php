@@ -147,25 +147,19 @@ class EmployeeDetailController extends Controller
         return response()->json(['salary' => null], 404);
     }
 
-    public function edit(EmployeeDetail $employee)
-    {
-        $companyId = Auth::user()->company_id;
-
-        // Ambil data departemen berdasarkan company_id
-        $departments = Department::where('company_id', $companyId)->get();
-
-        // Ambil data posisi berdasarkan company_id (misalnya jika Position model memiliki company_id)
-        $positions = Position::where('company_id', $companyId)->get();
-
-        return view('employee.partial.edit-modal', compact('employee', 'departments', 'positions'));
-    }
-
-
     public function update(Request $request, EmployeeDetail $employee)
     {
         $validatedData = $request->validate([
             'department_id' => 'required|exists:departments,id',
             'position_id' => 'required|exists:positions,id',
+            'salary' => 'required|not_regex:/-/'
+        ], [
+            'department_id.required' => 'Departemen harus diisi.',
+            'department_id.exists' => 'Departemen yang dipilih tidak valid.',
+            'position_id.required' => 'Posisi harus diisi.',
+            'position_id.exists' => 'Posisi yang dipilih tidak valid.',
+            'salary.required' => 'Gaji harus diisi.',
+            'salary.not_regex' => 'Gaji tidak boleh negatif.'
         ]);
 
         $employee->update($validatedData);

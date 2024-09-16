@@ -99,7 +99,7 @@ class SalaryController extends Controller
                 'type' => 'expense',
                 'amount' => $totalAmount,
                 'description' => 'Gaji untuk karyawan ' . $salary->employee_detail->name,
-                'transaction_date' => $validatedData['transaction_date'],
+                'transaction_date' => $request->transaction_date ?? date('Y-m-d'),
                 'company_id' => Auth::user()->company_id,
                 'salary_id' => $salary->id
             ]);

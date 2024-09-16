@@ -27,4 +27,19 @@ class UserRequest extends FormRequest
             'salary' => 'required|numeric|min:0'
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'department_id.required' => 'Departemen wajib diisi.',
+            'department_id.exists' => 'Departemen yang dipilih tidak ditemukan.',
+
+            'position_id.required' => 'Posisi wajib diisi.',
+            'position_id.exists' => 'Posisi yang dipilih tidak ditemukan.',
+
+            'salary.required' => 'Gaji wajib diisi.',
+            'salary.numeric' => 'Gaji harus berupa angka.',
+            'salary.min' => 'Gaji tidak boleh kurang dari 0.',
+        ];
+    }
 }

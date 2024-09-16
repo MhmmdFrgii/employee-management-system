@@ -51,14 +51,12 @@ class UserController extends Controller
         $validatedData = $request->validated();
 
         // Update departemen, posisi, dan set status menjadi 'approved'
-        $employee = $applicant->update([
+        $applicant->update([
             'department_id' => $validatedData['department_id'],
             'position_id' => $validatedData['position_id'],
             'status' => 'approved',
             'salary' => $validatedData['salary']
         ]);
-
-        $applicant->user->assignRole('employee');
 
         // Buat variabel isInvited berdasarkan sumber
         $isInvited = $applicant->source === 'invited';
@@ -82,11 +80,11 @@ class UserController extends Controller
                 $isInvited // Kirim variabel ini ke email
             ));
         } catch (\Exception $e) {
-            return redirect()->route('candidates.index')->with('error', 'User approved but failed to send email.');
+            return redirect()->route('candidates.index')->with('error', 'Kandidat disetujui tetapi gagal mengirim email.');
         }
 
         // Redirect ke index dengan pesan sukses
-        return redirect()->route('candidates.index')->with('success', 'User Applicant approved.');
+        return redirect()->route('candidates.index')->with('success', 'Kandidat disetujui.');
     }
 
     public function reject(EmployeeDetail $applicant)
@@ -102,11 +100,11 @@ class UserController extends Controller
                 $applicant->company->name
             ));
         } catch (\Exception $e) {
-            return redirect()->route('candidates.index')->with('error', 'User rejected but failed to send email.');
+            return redirect()->route('candidates.index')->with('error', 'Kandidat ditolak tetapi gagal mengirim email.');
         }
 
         // Redirect ke index dengan pesan sukses
-        return redirect()->route('candidates.index')->with('success', 'User Applicant rejected.');
+        return redirect()->route('candidates.index')->with('success', 'Kandidat ditolak.');
     }
 
     /**
@@ -122,10 +120,10 @@ class UserController extends Controller
             $applicant->update(['status' => 'rejected']);
 
             // Redirect ke index dengan pesan sukses
-            return redirect()->route('candidates.index')->with('success', 'Applicant rejected successfully.');
+            return redirect()->route('candidates.index')->with('success', 'Kandidat ditolak berhasil.');
         } catch (\Exception $e) {
             // Jika ada kesalahan, redirect ke index dengan pesan error
-            return redirect()->route('candidates.index')->with('error', 'Failed to reject applicant.');
+            return redirect()->route('candidates.index')->with('error', 'Gagal menolak kandidat.');
         }
     }
 }

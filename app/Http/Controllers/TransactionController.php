@@ -59,9 +59,11 @@ class TransactionController extends Controller
         $request->validate([
             'salary_id' => 'nullable|exists:salaries,id',
             'type' => 'required|in:income,expense',
-            'amount' => 'required|numeric|min:0',
+            'amount' => 'required|numeric|not_regex:/-/',
             'description' => 'nullable|string',
-            'transaction_date' => 'required|date',
+        ], [
+            'amount.required' => 'Jumlah wajib diisi.',
+            'amount.not_regex' => 'Jumlah tidak boleh negatif.',
         ]);
 
         Transaction::create([
@@ -70,10 +72,10 @@ class TransactionController extends Controller
             'type' => $request->type,
             'amount' => $request->amount,
             'description' => $request->description,
-            'transaction_date' => $request->transaction_date,
+            'transaction_date' => $request->transaction_date ?? date('Y-m-d'),
         ]);
 
-        return redirect()->route('transactions.index')->with('success', 'Transaction added successfully');
+        return redirect()->route('transactions.index')->with('success', 'Berhasil menambahkan transaksi.');
     }
 
     public function export(Request $request)

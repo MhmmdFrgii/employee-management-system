@@ -19,7 +19,7 @@ class KanbanTaskController extends Controller
         $task->status = $request->status;
         $task->save();
 
-        return response()->json(['success' => 'Task status updated successfully.']);
+        return response()->json(['success' => 'Status tugas berhasil diperbarui.']);
     }
 
     public function updateOrder(Request $request)
@@ -44,7 +44,8 @@ class KanbanTaskController extends Controller
     public function store(KanbanTaskRequest $request)
     {
         KanbanTask::create($request->validated());
-        return redirect()->route('kanban-boards.index', ['id' => $request->kanban_boards_id])->with('success', 'Kanban Tasks berhasil disimpan.');
+        return redirect()->route('kanban-boards.index', ['id' => $request->kanban_boards_id])
+            ->with('success', 'Tugas Kanban berhasil disimpan.');
     }
 
     public function update(KanbanTaskRequest $request, KanbanTask $kanban_task)
@@ -96,7 +97,7 @@ class KanbanTaskController extends Controller
             DB::commit();
 
             return redirect()->route('kanban-boards.index', ['id' => $kanban_task->kanban_boards_id])
-                ->with('success', 'Kanban Tasks berhasil diupdate');
+                ->with('success', 'Tugas Kanban berhasil diperbarui.');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -119,6 +120,6 @@ class KanbanTaskController extends Controller
         $task = KanbanTask::findOrFail($id);
         $task->delete();
 
-        return redirect()->back()->with('success', 'Task berhasil dihapus.');
+        return redirect()->back()->with('success', 'Tugas berhasil dihapus.');
     }
 }

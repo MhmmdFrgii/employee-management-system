@@ -30,8 +30,16 @@ class CompanyController extends Controller
     public function updateOfficeHour(Request $request)
     {
         $request->validate([
-            'checkin_start' => 'required',
-            'checkin_end' => 'required',
+            'checkin_start' => 'required|date_format:H:i|before:checkin_end',
+            'checkin_end' => 'required|date_format:H:i|after:checkin_start',
+        ], [
+            'checkin_start.required' => 'Waktu check-in awal harus diisi.',
+            'checkin_start.date_format' => 'Format waktu check-in awal harus dalam format jam:menit (HH:mm).',
+            'checkin_start.before' => 'Waktu check-in awal harus sebelum waktu check-in akhir.',
+
+            'checkin_end.required' => 'Waktu check-in akhir harus diisi.',
+            'checkin_end.date_format' => 'Format waktu check-in akhir harus dalam format jam:menit (HH:mm).',
+            'checkin_end.after' => 'Waktu check-in akhir harus setelah waktu check-in awal.',
         ]);
 
         $company = Auth::user()->company;

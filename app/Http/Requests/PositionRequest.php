@@ -28,7 +28,7 @@ class PositionRequest extends FormRequest
                 'max:255',
                 Rule::unique('positions', 'name')->ignore($this->route('position')),
             ],
-            'description' => 'required|max:500'
+            'description' => 'nullable|string'
         ];
     }
 
@@ -38,9 +38,9 @@ class PositionRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Nama Position harus diisi.',
-            'name.unique' => 'Nama Position sudah ada.',
-            'name.max' => 'Nama Position tidak boleh lebih dari 255 karakter.',
+            'name.required' => 'Nama jabatan harus diisi.',
+            'name.unique' => 'Nama jabatan sudah ada.',
+            'name.max' => 'Nama jabatan tidak boleh lebih dari 255 karakter.',
             'description.required' => 'Deskripsi harus diisi.',
             'description.max' => 'Deskripsi tidak boleh lebih dari 500 karakter.',
         ];

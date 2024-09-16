@@ -24,7 +24,7 @@ class DepartmentRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', Rule::unique('departments', 'name')->ignore($this->department)],
-            'description' => 'required'
+            'description' => 'nullable|string'
         ];
     }
 
@@ -34,7 +34,6 @@ class DepartmentRequest extends FormRequest
         return [
             'name.required' => 'Nama departemen harus diisi.',
             'name.unique' => 'Nama departemen sudah ada.',
-            'description.required' => 'Deskripsi harus diisi'
         ];
     }
 }
