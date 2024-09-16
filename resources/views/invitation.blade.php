@@ -38,7 +38,7 @@
 
                     <!-- Tombol Kembali -->
                     <div class="mt-4">
-                        <a href="javascript:history.back()" class="btn btn-danger btn-block">Kembali</a>
+                        <a href="/" class="btn btn-danger btn-block">Kembali</a>
                     </div>
                 </div>
             </div>

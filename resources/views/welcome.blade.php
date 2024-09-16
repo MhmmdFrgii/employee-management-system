@@ -92,10 +92,10 @@
                                     placeholder="Masukkan Kode Undangan atau Rekrut">
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
-                            @error('code')
-                                <div class="text-danger mt-1">{{ $message }}</div>
-                            @enderror
                         </div>
+                        @error('code')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-12 col-md-5 col-lg-6">
                         <!-- Welcome Thumb -->

@@ -26,7 +26,7 @@
 
 </head>
 
-<body style="background-color: #edf3fc">
+<body>
     <!--====== Scroll To Top Area Start ======-->
     <div id="scrollUp" title="Scroll To Top">
         <i class="fas fa-arrow-up"></i>
