@@ -36,7 +36,7 @@
                                     </div>
 
                                     <div class="mb-4">
-                                        <label for="password" class="form-label">Password</label>
+                                    <label for="password" class="form-label">Kata Sandi</label>
                                         <input type="password" class="form-control @error('password') is-invalid @enderror"
                                             name="password" id="password">
 
@@ -51,11 +51,11 @@
                                             <input class="form-check-input primary" type="checkbox" value=""
                                                 id="flexCheckChecked" name="remember" checked>
                                             <label class="form-check-label text-dark" for="flexCheckChecked">
-                                                Remeber this Device
+                                                Ingat Perangkat Ini
                                             </label>
                                         </div>
-                                        <a class="text-primary fw-medium" href="{{ route('password.request') }}">Forgot
-                                            Password ?</a>
+                                        <a class="text-primary fw-medium" href="{{ route('password.request') }}">Lupa
+                                            Kata Sandi ?</a>
                                     </div>
                                     <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Masuk</button>
                                     <div class="d-flex align-items-center justify-content-center">
