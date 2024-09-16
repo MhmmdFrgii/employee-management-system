@@ -17,7 +17,7 @@
 
                     <!-- Title Input -->
                     <div class="mb-3">
-                        <label for="title" class="form-label">Title</label>
+                        <label for="title" class="form-label">Judul</label>
                         <input type="text" name="title" class="form-control @error('title') is-invalid @enderror"
                             id="title" value="{{ $task->title ?? old('title') }}">
                         @error('title')
@@ -27,7 +27,7 @@
 
                     <!-- Description Input -->
                     <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
+                        <label for="description" class="form-label">Deskripsi</label>
                         <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description">{{ $task->description ?? old('description') }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -36,7 +36,7 @@
 
                     <!-- Date Input -->
                     <div class="mb-3">
-                        <label for="date" class="form-label">Date</label>
+                        <label for="date" class="form-label">Tanggal</label>
                         <input type="date" name="date" class="form-control @error('date') is-invalid @enderror"
                             id="date" value="{{ $task->date ?? old('date') }}">
                         @error('date')
@@ -46,12 +46,22 @@
 
                     <!-- Color Select -->
                     <div class="mb-3">
-                        <label for="color" class="form-label">Color</label>
+                        <label for="color" class="form-label">Warna</label>
                         <select name="color" class="form-select @error('color') is-invalid @enderror" id="color">
-                            @foreach (['primary', 'secondary', 'success', 'danger', 'warning', 'info'] as $colorOption)
+                            @php
+                                $colorOptions = [
+                                    'primary' => 'Biru',
+                                    'secondary' => 'Cyan',
+                                    'success' => 'Hijau',
+                                    'danger' => 'Merah',
+                                    'warning' => 'Kuning',
+                                    'info' => 'Biru Muda',
+                                ];
+                            @endphp
+                            @foreach ($colorOptions as $colorOption => $colorName)
                                 <option value="{{ $colorOption }}"
                                     {{ (isset($task) && $task->color === $colorOption) || old('color') == $colorOption ? 'selected' : '' }}>
-                                    {{ ucfirst($colorOption) }}
+                                    {{ $colorName }}
                                 </option>
                             @endforeach
                         </select>
@@ -62,10 +72,10 @@
 
                     <!-- User Select -->
                     <div class="mb-3">
-                        <label for="employee_id" class="form-label">Assign to User</label>
+                        <label for="employee_id" class="form-label">Tugaskan kepada Pengguna</label>
                         <select class="form-select @error('employee_id') is-invalid @enderror" id="employee_id"
                             name="employee_id">
-                            <option value="" selected>Select a user</option>
+                            <option value="" selected>Pilih pengguna</option>
                             @foreach ($users as $user)
                                 <option value="{{ $user->id }}"
                                     {{ (isset($task) && $task->employee_id == $user->id) || old('employee_id') == $user->id ? 'selected' : '' }}>
@@ -80,8 +90,9 @@
 
                     <input type="hidden" name="status" value="{{ $status }}">
 
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary">{{ $buttonText }}</button>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">{{ $buttonText }}</button>
+                    </div>
                 </form>
             </div>
         </div>

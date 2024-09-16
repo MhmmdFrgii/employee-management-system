@@ -40,8 +40,8 @@ class KanbanTaskRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => 'Title harus diisi!',
-            'title.string'  => 'Title tidak valid!',
+            'title.required' => 'Judul harus diisi!',
+            'title.string'  => 'Judul tidak valid!',
             'title.max' => 'Maximal 50 karakter.',
             'description.max' => 'Maximal 255 karakter.',
             'status.required' => 'Status tidak boleh kosong.',

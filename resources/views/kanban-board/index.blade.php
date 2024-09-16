@@ -1,7 +1,6 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 
     <div class="container py-2">
@@ -37,10 +36,10 @@
                                     ])
                                     @include('kanban-board.partial.edit-task-modal', [
                                         'modalId' => 'editTaskModal' . $task->id,
-                                        'title' => 'Edit Task',
+                                        'title' => 'Edit Tugas',
                                         'actionUrl' => route('kanban-tasks.update', $task->id),
                                         'method' => 'patch',
-                                        'buttonText' => 'Update Task',
+                                        'buttonText' => 'Edit',
                                         'task' => $task,
                                     ])
                                 @empty
@@ -68,10 +67,10 @@
     @foreach (['todo' => 'To Do', 'progress' => 'In Progress', 'done' => 'Done'] as $status => $statusTitle)
         @include('kanban-board.partial.task-modal', [
             'modalId' => 'createTaskModal' . ucfirst($status) . ($kanbanboard->id ?? ''),
-            'title' => 'Create New Task',
+            'title' => 'Buat tugas baru',
             'actionUrl' => route('kanban-tasks.store'),
             'method' => 'post',
-            'buttonText' => 'Create',
+            'buttonText' => 'Tambah',
             'status' => $status,
             'task' => new \App\Models\KanbanTask(),
         ])
@@ -92,28 +91,23 @@
             </div>
         @endif
 
-        <div class="comments-section mt-4">
-            <h5 class="mb-3">Komentar</h5>
-            @foreach ($comments as $comment)
-                <div class="comment-box mb-2 p-2 rounded-1 border border-light shadow-sm">
-                    <div class="comment-content ms-2">
-                        <div class="mb-2 d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0 text-primary">{{ $comment->user->name }}</h5>
-                            <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+        @if (!empty($comments) && $comments->count())
+            <div class="comments-section mt-4">
+                <h5 class="mb-3">Komentar</h5>
+                @foreach ($comments as $comment)
+                    <div class="comment-box mb-2 p-2 rounded-1 border border-light shadow-sm">
+                        <div class="comment-content ms-2">
+                            <div class="mb-2 d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0 text-primary">{{ $comment->user->name }}</h5>
+                                <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+                            </div>
+                            <p class="mb-1">{{ $comment->comment }}</p>
                         </div>
-                        <p class="mb-1">{{ $comment->comment }}</p>
                     </div>
-                </div>
-            @endforeach
-        </div>
-
+                @endforeach
+            </div>
+        @endif
     </div>
-
-
-
-
-
-
 @endsection
 {{--
 <script>

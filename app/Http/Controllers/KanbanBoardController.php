@@ -34,8 +34,9 @@ class KanbanBoardController extends Controller
         $done = KanbanTask::where('kanban_boards_id', $kanbanboardID)
             ->where('status', 'done')
             ->get();
-        $users = EmployeeDetail::whereHas('projects')
-            ->get();
+        $users = EmployeeDetail::whereHas('kanban_tasks', function ($query) use ($kanbanboardID) {
+            $query->where('kanban_boards_id', $kanbanboardID);
+        })->get();
 
         $kanbanboard = KanbanBoard::where('id', $kanbanboardID)->first();
 

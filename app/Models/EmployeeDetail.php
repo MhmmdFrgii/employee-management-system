@@ -60,4 +60,9 @@ class EmployeeDetail extends Model
     {
         return $this->belongsToMany(Project::class, 'project_assignments', 'employee_id', 'project_id');
     }
+
+    public function kanban_tasks()
+    {
+        return $this->hasMany(KanbanTask::class, 'employee_id');
+    }
 }
