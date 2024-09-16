@@ -53,8 +53,11 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $department->name }}</td>
-                                    <td>{{ Str::limit($department->description, 35) }}</td>
+                                    <td>{{ Str::limit($department->description, 50) ?? '-' }}</td>
                                     <td class="text-center">
+                                        <button class="btn btn-info btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#detaildepartmentsModal{{ $department->id }}"
+                                            type="button">Detail</button>
                                         <button data-bs-target="#editModal{{ $department->id }}" data-bs-toggle="modal"
                                             class="btn btn-warning btn-sm">Edit</button>
                                         <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
@@ -64,6 +67,7 @@
                                 </tr>
                                 @include('department.partial.edit-modal')
                                 @include('department.partial.delete-modal')
+                                @include('department.partial.detail-modal')
                             @empty
                                 <tr>
                                     <td colspan="4" class="text-center">
