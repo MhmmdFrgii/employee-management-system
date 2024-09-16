@@ -14,7 +14,9 @@ class LandingPageController extends Controller
     {
         $company = Company::count();
         $departments = Department::count();
+        $employees = EmployeeDetail::count();
         $projects = Project::where('status', 'completed')->count();
-        return view('welcome', compact('company', 'departments', 'projects'));
+        $activeProjects = Project::where('status', 'active')->count();
+        return view('welcome', compact('company', 'departments', 'projects', 'employees', 'activeProjects'));
     }
 }
