@@ -35,9 +35,6 @@
                             <li class="nav-item">
                                 <a class="nav-link scroll" href="#workflow">Alur Kerja</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/invitation">Kode Undangan</a>
-                            </li>
 
                             @auth
 
@@ -93,11 +90,11 @@
                                 @csrf
                                 <input type="text" name="code" class="form-control me-2 mr-3"
                                     placeholder="Masukkan Kode Undangan atau Rekrut">
-                                @error('code')
-                                    <div class="text-danger mt-1">{{ $message }}</div>
-                                @enderror
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
+                            @error('code')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                     <div class="col-12 col-md-5 col-lg-6">
