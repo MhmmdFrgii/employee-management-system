@@ -86,7 +86,7 @@ class AttendanceController extends Controller
         if ($now->lessThanOrEqualTo($checkin_end)) {
             $status = 'present';
         } else {
-            $status = 'late';  
+            $status = 'late';
         }
 
         // Buat entri absensi baru
@@ -108,12 +108,24 @@ class AttendanceController extends Controller
 
         $selectedDate = $request->has('date') ? Carbon::parse($request->date) : Carbon::today();
 
+        $searchQuery = $request->input('search');
+
+
         $employees = EmployeeDetail::where('company_id', $user->company_id)
+            ->when($searchQuery, function ($query) use ($searchQuery) {
+
+                $query->where('name', 'like', '%' . $searchQuery . '%')
+                      ->orWhereHas('department', function ($q) use ($searchQuery) {
+                          $q->where('name', 'like', '%' . $searchQuery . '%');
+                      });
+            })
             ->with(['attendances' => function ($query) use ($selectedDate) {
+
                 $query->whereDate('date', $selectedDate);
             }])
             ->get();
 
+        // Filter status
         $statusFilters = $request->status ?? [];
 
         if (in_array('alpha', $statusFilters)) {
@@ -141,7 +153,7 @@ class AttendanceController extends Controller
             });
         }
 
-        return view('attendance.index', compact('employees', 'selectedDate'));
+        return view('attendance.index', compact('employees', 'selectedDate', 'searchQuery'));
     }
 
     public function export(Request $request)
