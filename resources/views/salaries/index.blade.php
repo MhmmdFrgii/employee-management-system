@@ -102,7 +102,7 @@
                                     <td>Rp {{ number_format($salary->extra, 2, ',', '.') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($salary->transactions->transaction_date)->format('d M Y') }}
                                     </td>
-                                    <td>{{ $salary->description ?? 'N/A' }}</td>
+                                    <td>{{ $salary->description ?? '-' }}</td>
                                     <td>Rp {{ number_format($salary->total_amount, 2, ',', '.') }}</td>
                                     <td class="text-center">
                                         <button data-bs-target="#editSalariesModal{{ $salary->id }}"
