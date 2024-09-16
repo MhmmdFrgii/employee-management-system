@@ -86,7 +86,7 @@
                                         ];
                                     @endphp
                                     <td>{{ $types[$data->type] }}</td>
-                                    <td>{{ $data->description ?? 'N/A' }}</td>
+                                    <td>{{ $data->description ?? '-' }}</td>
                                     <td>{{ \Carbon\Carbon::parse($data->transaction_date)->format('d M Y') }}</td>
                                 </tr>
                             @empty
@@ -97,7 +97,7 @@
                                                 class="img-fluid" style="width: clamp(150px, 50vw, 300px);">
                                             <p class="mt-3">Tidak ada data tersedia</p>
                                         </div>
-                                    </td>   
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -127,30 +127,42 @@
                         <!-- Type (Income or Expense) -->
                         <div class="mb-3">
                             <label for="type" class="form-label">Jenis Transaksi</label>
-                            <select class="form-select" id="type" name="type" required>
-                                <option value="income">Pemasukan</option>
-                                <option value="expense">Pengeluaran</option>
+                            <select class="form-select @error('type') is-invalid @enderror" id="type" name="type"
+                                required>
+                                <option value="income" {{ old('type') === 'income' ? 'selected' : '' }}>Pemasukan</option>
+                                <option value="expense" {{ old('type') === 'expense' ? 'selected' : '' }}>Pengeluaran
+                                </option>
                             </select>
+                            @error('type')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Amount -->
                         <div class="mb-3">
                             <label for="amount" class="form-label">Jumlah</label>
-                            <input type="number" step="0.01" class="form-control" id="amount" name="amount"
-                                placeholder="Jumlah Transaksi" required>
+                            <input type="number" step="0.01" class="form-control @error('amount') is-invalid @enderror"
+                                id="amount" name="amount" placeholder="Jumlah Transaksi" value="{{ old('amount') }}">
+                            @error('amount')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Description (Optional) -->
                         <div class="mb-3">
                             <label for="description" class="form-label">Deskripsi (opsional)</label>
-                            <textarea class="form-control" id="description" name="description" rows="3" placeholder="Deskripsi"></textarea>
+                            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
+                                rows="3" placeholder="Deskripsi">{{ old('description') }}</textarea>
+                            @error('description')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Transaction Date -->
                         <div class="mb-3">
                             <label for="transaction_date" class="form-label">Tanggal Transaksi</label>
-                            <input type="date" class="form-control" id="transaction_date" name="transaction_date"
-                                required>
+                            <input type="date" class="form-control @error('transaction_date') is-invalid @enderror"
+                                id="transaction_date" name="transaction_date" value="{{ old('transaction_date') }}">
                         </div>
 
                         <div class="modal-footer">
