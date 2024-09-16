@@ -85,8 +85,7 @@
                     @csrf
                     <input type="hidden" name="project_id" value="{{ $kanbanboard->id }}">
                     <div class="mb-3">
-                        <textarea class="form-control" placeholder="Tulis komentar anda..." id="comment" name="comment" rows="3"
-                            required></textarea>
+                        <textarea class="form-control" placeholder="Tulis komentar anda..." id="comment" name="comment" rows="3"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary btn-sm">Kirim Komentar</button>
                 </form>

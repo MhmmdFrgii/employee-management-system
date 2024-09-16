@@ -24,8 +24,8 @@ class SalaryRequest extends FormRequest
         return [
             'company_id' => 'required|exists:companies,id',
             'employee_id' => 'required',
-            'amount' => 'required|numeric|min:0',
-            'extra' => 'nullable',
+            'amount' => 'required|numeric|min:0|not_regex:/-/',
+            'extra' => 'nullable|not_regex:/-/',
         ];
     }
 
@@ -35,6 +35,8 @@ class SalaryRequest extends FormRequest
             'employee_id.required' => 'Karyawan harus diisi.',
             'amount.required' => 'Gaji harus diisi.',
             'type' => 'Jenis transaksi harus di isi',
+            'amount.not_regex' => 'Jumlah tidak boleh negatif',
+            'extra.not_regex' => 'Bonus tidak boleh negatif',
         ];
     }
 }
