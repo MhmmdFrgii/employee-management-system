@@ -33,8 +33,12 @@
                                             {{ $loop->iteration + ($positions->currentPage() - 1) * $positions->perPage() }}
                                         </td>
                                         <td class="col-lg-2">{{ $data->name }}</td>
-                                        <td class="col-lg-3">{{ $data->description }}</td>
+                                        <td class="col-lg-3">{{ Str::limit($data->description, 50) ?? '-' }}</td>
                                         <td class="col-lg-1 text-center">
+                                            <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#detailpositionsModal{{ $data->id }}">
+                                                Detail
+                                            </button>
                                             <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#editpositionsModal{{ $data->id }}">
                                                 Edit
@@ -45,6 +49,7 @@
                                             </button>
                                         </td>
                                     </tr>
+                                    @include('positions.partial.detail-modal')
                                     @include('positions.partial.edit-modal')
                                     @include('positions.partial.delete-modal')
                                 @empty
