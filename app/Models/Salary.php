@@ -11,7 +11,7 @@ class Salary extends Model
     use HasFactory;
     protected $table = 'salaries';
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function company()
     {
