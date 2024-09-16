@@ -1,7 +1,7 @@
 <!-- Modal Edit -->
 <div class="modal fade" id="editModal{{ $project->id }}" tabindex="-1" aria-labelledby="editModalLabel{{ $project->id }}"
     aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel{{ $project->id }}">Ubah Proyek</h5>
@@ -16,9 +16,7 @@
                         <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
                             id="name" value="{{ old('name', $project->name) }}">
                         @error('name')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
@@ -26,78 +24,80 @@
                         <input type="number" name="price" class="form-control @error('price') is-invalid @enderror"
                             id="price" value="{{ old('price', number_format($project->price, 0, '.', '')) }}">
                         @error('price')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Deskripsi</label>
-                        <input type="text" name="description"
-                            class="form-control @error('description') is-invalid @enderror" id="description"
-                            value="{{ old('description', $project->description) }}">
+                        <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description"
+                            rows="4">{{ old('description', $project->description) }}</textarea>
                         @error('description')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="start_date" class="form-label">Tanggal Mulai</label>
-                        <input type="date" name="start_date"
-                            class="form-control @error('start_date') is-invalid @enderror" id="start_date"
-                            value="{{ old('start_date', $project->start_date) }}">
-                        @error('start_date')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="end_date" class="form-label">Tanggal Selesai</label>
-                        <input type="date" name="end_date"
-                            class="form-control @error('end_date') is-invalid @enderror" id="end_date"
-                            value="{{ old('end_date', $project->end_date) }}">
-                        @error('end_date')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="department" class="form-label">Departemen</label>
-                        <select name="department_id" id="edit-department-{{ $project->id }}"
-                            class="form-control @error('department_id') is-invalid @enderror">
-                            <option value="">Pilih Departemen</option>
-                            @foreach ($departments as $department)
-                                <option value="{{ $department->id }}">{{ $department->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('department_id')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="employee_id" class="form-label">Karyawan</label>
-                        <select
-                            class="js-example-basic-multiple form-control w-100 @error('employee_id') is-invalid @enderror"
-                            name="employee_id[]" id="edit-employee-{{ $project->id }}" multiple="multiple">
-                            @foreach ($employees as $employee)
-                                <option value="{{ $employee->id }}" @if (in_array($employee->id, old('employee_id', $project->employee_details->pluck('id')->toArray()))) selected @endif>
-                                    {{ $employee->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('employee_id')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="start_date" class="form-label">Tanggal Mulai</label>
+                                <input type="date" name="start_date"
+                                    class="form-control @error('start_date') is-invalid @enderror" id="start_date"
+                                    value="{{ old('start_date', $project->start_date) }}">
+                                @error('start_date')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="end_date" class="form-label">Tanggal Selesai</label>
+                                <input type="date" name="end_date"
+                                    class="form-control @error('end_date') is-invalid @enderror" id="end_date"
+                                    value="{{ old('end_date', $project->end_date) }}">
+                                @error('end_date')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="department_id" class="form-label">Departemen</label>
+                                <select name="department_id" id="edit-department-{{ $project->id }}"
+                                    class="form-control @error('department_id') is-invalid @enderror">
+                                    <option value="">Pilih Departemen</option>
+                                    @foreach ($departments as $department)
+                                        <option value="{{ $department->id }}"
+                                            {{ old('department_id', $project->department_id) == $department->id ? 'selected' : '' }}>
+                                            {{ $department->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('department_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="employee_id" class="form-label">Karyawan</label>
+                                <select name="employee_id[]" id="edit-employee-{{ $project->id }}"
+                                    class="form-control js-example-basic-multiple" multiple="multiple">
+                                </select>
+                                @error('employee_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
                 </form>
             </div>
         </div>

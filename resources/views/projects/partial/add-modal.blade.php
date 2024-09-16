@@ -1,7 +1,7 @@
 <!-- Modal Create -->
 <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true"
     data-bs-backdrop="static">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createModalLabel">Buat Proyek</h5>
@@ -10,48 +10,87 @@
             <div class="modal-body">
                 <form action="{{ route('projects.store') }}" method="POST">
                     @csrf
+
                     <div class="mb-3">
                         <label for="name" class="form-label">Nama Proyek</label>
                         <input type="text" name="name" class="form-control" id="name"
                             value="{{ old('name') }}">
+                        @error('name')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="price" class="form-label">Harga</label>
                         <input type="number" name="price" class="form-control" id="price"
                             value="{{ old('price') }}">
+                        @error('price')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="description" class="form-label">Deskripsi</label>
-                        <input type="text" name="description" class="form-control" id="description"
-                            value="{{ old('description') }}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="start_date" class="form-label">Tanggal Mulai</label>
-                        <input type="date" name="start_date" class="form-control" id="start_date"
-                            value="{{ old('start_date') }}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="end_date" class="form-label">Tanggal Selesai</label>
-                        <input type="date" name="end_date" class="form-control" id="end_date"
-                            value="{{ old('end_date') }}">
+                        <textarea name="description" class="form-control" id="description" rows="4">{{ old('description') }}</textarea>
+                        @error('description')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
-                    <div class="mb-3">
-                        <label for="department_id" class="form-label">Departemen</label>
-                        <select name="department_id" id="department_id" class="form-control">
-                            <option value="">Pilih Departemen</option>
-                            @foreach ($departments as $department)
-                                <option value="{{ $department->id }}"  {{ old('department_id') == $department->id ? 'selected' : '' }}>{{ $department->name }}</option>
-                            @endforeach
-                        </select>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="start_date" class="form-label">Tanggal Mulai</label>
+                                <input type="date" name="start_date" class="form-control" id="start_date"
+                                    value="{{ old('start_date') }}">
+                                @error('start_date')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="end_date" class="form-label">Tanggal Selesai</label>
+                                <input type="date" name="end_date" class="form-control" id="end_date"
+                                    value="{{ old('end_date') }}">
+                                @error('end_date')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="employee_id" class="form-label">Karyawan</label>
-                        <select name="employee_id[]" id="employee_id" class="form-control js-example-basic-multiple" multiple="multiple">
-                        </select>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="department_id" class="form-label">Departemen</label>
+                                <select name="department_id" id="department_id" class="form-control">
+                                    <option value="">Pilih Departemen</option>
+                                    @foreach ($departments as $department)
+                                        <option value="{{ $department->id }}"
+                                            {{ old('department_id') == $department->id ? 'selected' : '' }}>
+                                            {{ $department->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('department_id')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="employee_id" class="form-label">Karyawan</label>
+                                <select name="employee_id[]" id="employee_id"
+                                    class="form-control js-example-basic-multiple" multiple="multiple">
+                                </select>
+                                @error('employee_id')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
-                    
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary">Simpan</button>
@@ -64,18 +103,19 @@
 
 <style>
     /* Gaya Select2 untuk tampilan yang lebih baik */
-.select2-container--default .select2-selection--multiple {
-    background-color: #fff !important;
-    border: 1px solid #ccc !important;
-}
+    .select2-container--default .select2-selection--multiple {
+        background-color: #fff !important;
+        border: 1px solid #ccc !important;
+    }
 
-.select2-container--default .select2-results__option--highlighted[aria-selected] {
-    background-color: #bcb9b9 !important;
-}
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background-color: #bcb9b9 !important;
+    }
 
-.select2-container--default .select2-dropdown {
-    z-index: 9999; /* Pastikan dropdown muncul di atas elemen lain */
-}
+    .select2-container--default .select2-dropdown {
+        z-index: 9999;
+        /* Pastikan dropdown muncul di atas elemen lain */
+    }
 </style>
 
 <script>
@@ -118,7 +158,8 @@
                 success: function(data) {
                     var options = '<option></option>'; // Placeholder untuk Select2
                     $.each(data, function(key, value) {
-                        options += '<option value="' + value.id + '">' + value.name + '</option>';
+                        options += '<option value="' + value.id + '">' + value.name +
+                            '</option>';
                     });
                     employeeSelect.html(options);
 
