@@ -6,7 +6,7 @@
             series: @json($department_data),
             labels: @json($departments),
             chart: {
-                type: 'pie',
+                type: 'donut',
                 height: 350
             },
             legend: {
@@ -16,7 +16,7 @@
                 enabled: true,
                 formatter: function(val, opts) {
                     // Display the number of people from the series data
-                    return opts.w.config.series[opts.seriesIndex] + " orang";
+                        // return opts.w.config.series[opts.seriesIndex] + " orang";
                 }
             },
             tooltip: {

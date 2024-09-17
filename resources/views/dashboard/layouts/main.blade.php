@@ -291,6 +291,7 @@
     <!--  Import Js Files -->
 
     <script src="{{ asset('dist/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+
     <script src="{{ asset('dist/js/datatable/datatable-basic.init.js') }}"></script>
     <script src="{{ asset('dist/libs/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('dist/libs/simplebar/dist/simplebar.min.js') }}"></script>
@@ -309,13 +310,7 @@
     <script src="{{ asset('dist/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
     <script src="{{ asset('dist/js/dashboard.js') }}"></script>
 
-    <script src="{{ asset('assets/landing-page/js/jquery/jquery.min.js') }}"></script>
 
-     <!-- Plugins js -->
-     <script src="{{ asset('assets/landing-page/js/plugins/plugins.min.js') }}"></script>
-
-     <!-- Active js -->
-     <script src="{{ asset('assets/landing-page/js/active.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
