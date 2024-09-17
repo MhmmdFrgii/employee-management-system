@@ -7,6 +7,7 @@ use App\Models\Department;
 use App\Models\EmployeeDetail;
 use App\Models\Position;
 use App\Models\Project;
+use App\Models\ProjectAssignment;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -149,6 +150,9 @@ class EmployeeDetailController extends Controller
 
     public function update(Request $request, EmployeeDetail $employee)
     {
+
+        $oldDepartment = $employee->department_id;
+
         $validatedData = $request->validate([
             'department_id' => 'required|exists:departments,id',
             'position_id' => 'required|exists:positions,id',
@@ -161,6 +165,21 @@ class EmployeeDetailController extends Controller
             'salary.required' => 'Gaji harus diisi.',
             'salary.not_regex' => 'Gaji tidak boleh negatif.'
         ]);
+
+
+        if ($oldDepartment != $validatedData['department_id']) {
+
+            $employe_id = $employee->id;
+
+            $projects = Project::where('status', 'active')->whereHas('employee_details', function ($query) use ($employe_id) {
+                $query->where('employee_id', $employe_id);
+            })->get();
+
+            foreach ($projects as $project) {
+                $project->employee_details()->detach($employe_id);
+            }
+        }
+
 
         $employee->update($validatedData);
 
