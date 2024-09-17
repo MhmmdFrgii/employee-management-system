@@ -19,6 +19,7 @@ class SalaryController extends Controller
         // Query dasar untuk Salary dengan relasi employee_detail
         $query = Salary::with('employee_detail')
             ->join('transactions', 'salaries.id', '=', 'transactions.salary_id')
+            ->join('employee_details', 'salaries.employee_id', '=', 'employee_details.id')
             ->where('salaries.company_id', Auth::user()->company_id);
 
         // Pencarian berdasarkan karyawan atau jumlah gaji
@@ -26,10 +27,10 @@ class SalaryController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->whereHas('employee_detail', function ($q) use ($search) {
-                    $q->where('name', 'like', '%' . $search . '%');
+                    $q->where('employee_details.name', 'like', '%' . $search . '%');
                 })
-                    ->orWhere('salaries.amount', 'like', '%' . $search . '%')
-                    ->orWhere('transactions.amount', 'like', '%' . $search . '%')
+                    ->orWhere('salaries.amount', 'like', '%' . $search . '%') // Kolom amount dari salaries
+                    ->orWhere('transactions.amount', 'like', '%' . $search . '%') // Kolom amount dari transactions
                     ->orWhereDate('transactions.transaction_date', $search);
             });
         }
@@ -41,9 +42,19 @@ class SalaryController extends Controller
         }
 
         // Sorting
-        $sortBy = $request->get('sortBy', 'salaries.created_at'); // Pastikan tabel yang tepat
+        $sortBy = $request->get('sortBy', 'salaries.created_at'); // Default sorting
         $sortDirection = $request->get('sortDirection', 'asc');
-        $query->orderBy($sortBy, $sortDirection);
+
+        // Jika sorting berdasarkan 'amount', tentukan tabel yang tepat
+        if ($sortBy == 'amount') {
+            $query->orderBy('salaries.amount', $sortDirection); // Sorting by salaries.amount
+        } else if ($sortBy == 'employee') {
+            $query->orderBy('employee_details.name', $sortDirection); // Sorting by employee name
+        } else if ($sortBy == 'payment_date') {
+            $query->orderBy('transactions.transaction_date', $sortDirection); // Sorting by transaction date
+        } else {
+            $query->orderBy($sortBy, $sortDirection);
+        }
 
         // Ambil data employee dari company tertentu
         $employees = EmployeeDetail::where('company_id', Auth::user()->company->id)->get();
