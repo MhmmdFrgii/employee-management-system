@@ -24,23 +24,31 @@ class KanbanBoardController extends Controller
         // Ambil semua komentar yang terkait dengan KanbanBoard tertentu
         $comments = Comment::where('project_id', $kanbanboardID)->latest()->get();
 
-        $kanbanboards = KanbanBoard::all();
-        $todo = KanbanTask::where('kanban_boards_id', $kanbanboardID)
-            ->where('status', 'todo')
-            ->get();
-        $progress = KanbanTask::where('kanban_boards_id', $kanbanboardID)
-            ->where('status', 'progress')
-            ->get();
-        $done = KanbanTask::where('kanban_boards_id', $kanbanboardID)
-            ->where('status', 'done')
-            ->get();
-        $users = EmployeeDetail::whereHas('kanban_tasks', function ($query) use ($kanbanboardID) {
-            $query->where('kanban_boards_id', $kanbanboardID);
-        })->get();
+        // Ambil KanbanBoard yang terkait
+        $kanbanboard = KanbanBoard::find($kanbanboardID);
 
-        $kanbanboard = KanbanBoard::where('id', $kanbanboardID)->first();
+        // Pastikan project_id berasal dari KanbanBoard
+        $projectID = $kanbanboard ? $kanbanboard->project_id : null;
 
-        return view('kanban-board.index', compact('kanbanboards', 'kanbanboard', 'todo', 'progress', 'done', 'users', 'comments'));
+        if ($projectID) {
+            // Ambil tasks yang terkait dengan kanbanboard
+            $todo = KanbanTask::where('kanban_boards_id', $kanbanboardID)
+                ->where('status', 'todo')
+                ->get();
+            $progress = KanbanTask::where('kanban_boards_id', $kanbanboardID)
+                ->where('status', 'progress')
+                ->get();
+            $done = KanbanTask::where('kanban_boards_id', $kanbanboardID)
+                ->where('status', 'done')
+                ->get();
+
+            // Ambil employee details yang diassign ke proyek tersebut
+            $users = EmployeeDetail::whereHas('projects', function ($query) use ($projectID) {
+                $query->where('project_id', $projectID);
+            })->get();
+        }
+
+        return view('kanban-board.index', compact('kanbanboard', 'todo', 'progress', 'done', 'users', 'comments'));
     }
 
 

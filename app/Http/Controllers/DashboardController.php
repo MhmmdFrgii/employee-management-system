@@ -22,6 +22,7 @@ class DashboardController extends Controller
         $monthlyData = $this->getMonthlyData();
         $company_id = Auth::user()->company->id;
 
+        // Hitung data yang ada seperti semula
         $employee_count = EmployeeDetail::where('company_id', $company_id)
             ->where('status', 'approved')
             ->whereHas('user')
@@ -40,10 +41,11 @@ class DashboardController extends Controller
         $now = Carbon::now();
         $projectsWithNearestDeadlines = Project::where('end_date', '>=', $now)
             ->where('company_id', $company_id)
-            ->where('status', '!=', 'completed') // Exclude completed projects
+            ->where('status', '!=', 'completed')
             ->orderBy('end_date', 'asc')
             ->get();
 
+        // Logika untuk pendapatan dan pengeluaran bulanan
         $months = [];
         $activeCounts = [];
         $earningCounts = [];
@@ -74,23 +76,21 @@ class DashboardController extends Controller
             ];
         }
 
-        $monthtransa = []; // Inisialisasi array kosong untuk menampung bulan
+        // Transaksi pendapatan dan pengeluaran
+        $monthtransa = [];
         $incomes = [];
         $expenses = [];
 
-        // Loop untuk 6 bulan terakhir
         for ($i = 5; $i >= 0; $i--) {
-            $monthData = Carbon::now()->subMonths($i); // Mendapatkan data bulan yang diinginkan
-            $monthtransa[] = $monthData->format('F'); // Format nama bulan dan tambahkan ke array
+            $monthData = Carbon::now()->subMonths($i);
+            $monthtransa[] = $monthData->format('F');
 
-            // Ambil total income (pendapatan) bulan ini
             $monthlyIncomes = Transaction::where('company_id', $company_id)
                 ->where('type', 'income')
                 ->whereYear('created_at', $monthData->year)
                 ->whereMonth('created_at', $monthData->month)
                 ->sum('amount');
 
-            // Ambil total expenses (pengeluaran) bulan ini
             $monthlyExpenses = Transaction::where('company_id', $company_id)
                 ->where('type', 'expense')
                 ->whereYear('created_at', $monthData->year)
@@ -101,7 +101,6 @@ class DashboardController extends Controller
             $expenses[] = $monthlyExpenses;
         }
 
-        // Jumlah total earnings dan expenses bulan ini
         $totalIncomes = array_sum($incomes);
         $totalExpenses = array_sum($expenses);
 
@@ -111,7 +110,7 @@ class DashboardController extends Controller
             ->pluck('employee_details_count')
             ->toArray();
 
-        // Ambil data proyek selesai berdasarkan departemen
+        // Panggil data proyek yang selesai dari tabel department
         $completedProjectsData = $this->getCompletedProjectsByDepartment($company_id);
 
         return view('dashboard.index', [
@@ -120,10 +119,10 @@ class DashboardController extends Controller
             'project_done' => $project_done,
             'department_count' => $department_count,
             'applicant_count' => $applicant_count,
-            'months' => $months, // Data bulan untuk proyek
-            'monthtransa' => $monthtransa, // Data bulan untuk transaksi
-            'incomes' => $incomes, // Pendapatan per bulan
-            'expenses' => $expenses, // Pengeluaran per bulan
+            'months' => $months,
+            'monthtransa' => $monthtransa,
+            'incomes' => $incomes,
+            'expenses' => $expenses,
             'totalIncomes' => $totalIncomes,
             'totalExpenses' => $totalExpenses,
             'performance' => $performance,
@@ -133,9 +132,38 @@ class DashboardController extends Controller
             'projectsWithNearestDeadlines' => $projectsWithNearestDeadlines,
             'newNotificationCount' => $newNotificationCount,
             'monthlyData' => $monthlyData,
-            'completedProjects' => $completedProjectsData['completedProjects'],
+            'completedProjects' => $completedProjectsData['completedProjects'], // Data dari kolom project_complete
             'departmentNames' => $completedProjectsData['departmentNames'],
         ]);
+    }
+
+    protected function getCompletedProjectsByDepartment($company_id)
+    {
+        $departments = Department::where('company_id', $company_id)->get();
+
+        $completedProjects = [];
+        $departmentNames = [];
+
+        foreach ($departments as $department) {
+            $departmentNames[] = $department->name;
+
+            // Buat array proyek selesai berdasarkan bulan
+            $monthlyCompletedProjects = [];
+            for ($i = 5; $i >= 0; $i--) {
+                $month = Carbon::now()->subMonths($i);
+                $monthlyCompletedProjects[$month->format('F')] = Project::where('department_id', $department->id)
+                    ->where('status', 'completed')
+                    ->whereYear('end_date', $month->year)
+                    ->whereMonth('end_date', $month->month)
+                    ->count();
+            }
+            $completedProjects[$department->name] = $monthlyCompletedProjects;
+        }
+
+        return [
+            'completedProjects' => $completedProjects, // Data proyek selesai per departemen per bulan
+            'departmentNames' => $departmentNames,
+        ];
     }
 
     private function getMonthlyData()
@@ -238,41 +266,5 @@ class DashboardController extends Controller
         return Notification::where('user_id', $userId)
             ->where('is_read', false)
             ->count();
-    }
-
-    // Fungsi baru: menghitung proyek selesai berdasarkan departemen
-    public function getCompletedProjectsByDepartment($company_id)
-    {
-        $departments = Department::where('company_id', $company_id)->get();
-        $completedProjects = [];
-        $departmentNames = [];
-        $months = [];
-
-        $now = Carbon::now();
-        for ($i = 5; $i >= 0; $i--) {
-            $month = Carbon::now()->subMonths($i);
-            $months[] = $month->format('F');
-
-            foreach ($departments as $department) {
-                $completedCount = Project::where('company_id', $company_id)
-                    ->where('status', 'completed')
-                    ->whereHas('employee_details', function ($query) use ($department) {
-                        $query->where('department_id', $department->id);
-                    })
-                    ->whereYear('start_date', $month->year)
-                    ->whereMonth('start_date', $month->month)
-                    ->count();
-
-                $completedProjects[$department->name][$month->format('F')] = $completedCount;
-            }
-        }
-
-        $departmentNames = $departments->pluck('name')->toArray();
-
-        return [
-            'completedProjects' => $completedProjects,
-            'departmentNames' => $departmentNames,
-            'months' => $months
-        ];
     }
 }
