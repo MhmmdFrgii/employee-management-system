@@ -90,7 +90,7 @@
                                 @csrf
                                 <input type="text" name="code" class="form-control me-2 mr-3"
                                     placeholder="Masukkan Kode Undangan atau Rekrut">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-success">Submit</button>
                             </form>
                         </div>
                         @error('code')
