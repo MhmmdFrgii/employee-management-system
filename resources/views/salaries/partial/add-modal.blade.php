@@ -29,7 +29,7 @@
                      </div>
                      <div class="mb-3">
                          <label for="create_amount" class="form-label">Gaji</label>
-                         <input type="text" class="form-control" id="create_amount" name="amount" readonly>
+                         <input type="text" class="form-control" id="create_amount" name="amount" readonly value="{{ old('amount') }}">
                      </div>
                      <div class="mb-3">
                          <label for="create_extra" class="form-label">Bonus Gaji</label>

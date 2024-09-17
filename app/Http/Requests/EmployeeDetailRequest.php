@@ -36,4 +36,38 @@ class EmployeeDetailRequest extends FormRequest
             'hire_date' => ['required', 'date'],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'user_id.required' => 'ID pengguna wajib diisi.',
+            'user_id.exists' => 'ID pengguna tidak valid.',
+            'department_id.required' => 'Departemen wajib diisi.',
+            'department_id.exists' => 'Departemen tidak valid.',
+            'position_id.required' => 'Posisi wajib diisi.',
+            'position_id.exists' => 'Posisi tidak valid.',
+            'nik.required' => 'NIK wajib diisi.',
+            'nik.string' => 'NIK harus berupa teks.',
+            'nik.min_digits' => 'NIK harus terdiri dari 16 digit.',
+            'nik.max_digits' => 'NIK harus terdiri dari 16 digit.',
+            'nik.unique' => 'NIK sudah terdaftar.',
+            'fullname.required' => 'Nama lengkap wajib diisi.',
+            'fullname.string' => 'Nama lengkap harus berupa teks.',
+            'photo.required' => 'Foto wajib diunggah.',
+            'photo.mimes' => 'Foto harus berformat PNG atau JPG.',
+            'photo.max' => 'Ukuran foto maksimal 2MB.',
+            'cv.required' => 'CV wajib diunggah.',
+            'cv.mimes' => 'CV harus berformat PNG atau JPG.',
+            'cv.max' => 'Ukuran CV maksimal 2MB.',
+            'phone.required' => 'Nomor telepon wajib diisi.',
+            'phone.numeric' => 'Nomor telepon harus berupa angka.',
+            'phone.unique' => 'Nomor telepon sudah terdaftar.',
+            'gender.required' => 'Jenis kelamin wajib diisi.',
+            'gender.string' => 'Jenis kelamin harus berupa teks.',
+            'address.required' => 'Alamat wajib diisi.',
+            'address.string' => 'Alamat harus berupa teks.',
+            'hire_date.required' => 'Tanggal diterima kerja wajib diisi.',
+            'hire_date.date' => 'Tanggal diterima kerja harus berupa tanggal yang valid.',
+        ];
+    }
 }
