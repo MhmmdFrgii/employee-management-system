@@ -23,7 +23,7 @@ class Salary extends Model
         return $this->belongsTo(EmployeeDetail::class, 'employee_id');
     }
 
-    public function transactions()
+    public function transaction()
     {
         return $this->hasOne(Transaction::class);
     }
