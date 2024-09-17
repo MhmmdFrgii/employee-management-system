@@ -56,7 +56,7 @@
                                     <label for="position_id" class="form-label">Gaji Pokok</label>
                                     <input type="number" class="form-control @error('salary') is-invalid @enderror"
                                         name="salary" placeholder="Gaji Pokok"
-                                        value="{{ old('salary', $employee->salary) }}" />
+                                        value="{{ old('salary', number_format($employee->salary, null, '', '')) }}" />
                                     @error('salary')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
