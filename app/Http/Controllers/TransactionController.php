@@ -33,7 +33,6 @@ class TransactionController extends Controller
         // Filter berdasarkan status
         if ($request->has('status')) {
             $statuses = $request->input('status');
-            // Memastikan filter yang diterima sesuai dengan tipe transaksi
             $query->whereIn('type', $statuses);
         }
 
@@ -46,13 +45,20 @@ class TransactionController extends Controller
         // Sorting
         $sortBy = $request->get('sortBy', 'transaction_date');
         $sortDirection = $request->get('sortDirection', 'asc');
-        $query->orderBy($sortBy, $sortDirection);
+
+        // Jika sortBy 'total_amount', ganti dengan kolom yang valid seperti 'amount'
+        if ($sortBy == 'total_amount') {
+            $query->orderBy('amount', $sortDirection);
+        } else {
+            $query->orderBy($sortBy, $sortDirection);
+        }
 
         // Mendapatkan data dengan paginasi
         $finance = $query->paginate(10);
 
         return view('finance.index', compact('finance', 'sortBy', 'sortDirection'));
     }
+
 
     public function store(Request $request)
     {
