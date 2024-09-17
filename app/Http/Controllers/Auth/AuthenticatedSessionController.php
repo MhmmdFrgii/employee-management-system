@@ -36,8 +36,8 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('employee.dashboard');
         }
 
-
-        return redirect()->intended(route('landing-page', absolute: false));
+        Auth::logout();
+        return redirect()->route('confirmation')->withErrors(['error' => 'Anda tidak memiliki akses untuk login.']);
     }
 
     /**

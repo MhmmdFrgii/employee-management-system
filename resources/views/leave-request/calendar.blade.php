@@ -12,6 +12,34 @@
     </div>
 @endsection
 
+@push('style')
+    <style>
+        .fc-event {
+            border-radius: 10px !important;
+            font-size: 14px;
+            padding: 5px;
+        }
+
+        .fc-event .fc-event-title {
+            color: #fff !important;
+        }
+
+        .fc-daygrid-event {
+            font-size: 0.9em;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .fc-event:hover {
+            background-color: #007bff !important;
+            border-color: #007bff !important;
+        }
+
+        .fc-toolbar-title {
+            font-size: 24px;
+        }
+    </style>
+@endpush
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -51,31 +79,3 @@
     </script>
 @endpush
 
-@push('style')
-    <style>
-        .fc-event {
-            border-radius: 10px !important;
-            font-size: 14px;
-            padding: 5px;
-        }
-
-        .fc-event .fc-event-title {
-            color: #fff !important;
-        }
-
-        .fc-daygrid-event {
-            font-size: 0.9em;
-            background-color: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .fc-event:hover {
-            background-color: #007bff !important;
-            border-color: #007bff !important;
-        }
-
-        .fc-toolbar-title {
-            font-size: 24px;
-        }
-    </style>
-@endpush
