@@ -62,7 +62,7 @@
                     <h5>Absen</h5>
                 </div>
                 <div class="card-body">
-                    <div id="chart"></div>
+                    <div id="attendanceChart"></div>
                 </div>
             </div>
         </div>
@@ -135,8 +135,8 @@
                 }]
             };
 
-            var chart = new ApexCharts(document.querySelector("#chart"), options);
-            chart.render();
+            var attendanceChart = new ApexCharts(document.querySelector("#attendanceChart"), options);
+            attendanceChart.render();
         </script>
     @else
         <p>Data tidak ditemukan.</p>
