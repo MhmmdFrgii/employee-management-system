@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained('companies', 'id')->onDelete('cascade');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->integer('project_complete');
+            $table->integer('project_complete')->default(0);
             $table->timestamps();
         });
     }

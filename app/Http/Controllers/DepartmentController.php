@@ -15,32 +15,32 @@ class DepartmentController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-{
-    // Ambil company_id dari user yang sedang login
-    $companyId = Auth::user()->company_id;
+    {
+        // Ambil company_id dari user yang sedang login
+        $companyId = Auth::user()->company_id;
 
-    $query = Department::query();
+        $query = Department::query();
 
-    // Filter berdasarkan company_id
-    $query->where('company_id', $companyId);
+        // Filter berdasarkan company_id
+        $query->where('company_id', $companyId);
 
-    // Pencarian
-    $search = $request->input('search');
-    if ($search) {
-        $query->where('name', 'like', '%' . $search . '%'); // Menggunakan scope search dari model
+        // Pencarian
+        $search = $request->input('search');
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%'); // Menggunakan scope search dari model
+        }
+
+        // Sorting
+        $sortBy = $request->get('sortBy', 'created_at'); // Kolom default yang valid
+        $sortDirection = $request->get('sortDirection', 'asc'); // Arah default
+        $query->orderBy($sortBy, $sortDirection);
+
+        // Ambil data yang telah disortir dan difilter
+        $departments = $query->paginate(5);
+        $departments->appends($request->all());
+
+        return view('department.index', compact('departments'));
     }
-
-    // Sorting
-    $sortBy = $request->get('sortBy', 'created_at'); // Kolom default yang valid
-    $sortDirection = $request->get('sortDirection', 'asc'); // Arah default
-    $query->orderBy($sortBy, $sortDirection);
-
-    // Ambil data yang telah disortir dan difilter
-    $departments = $query->paginate(5);
-    $departments->appends($request->all());
-
-    return view('department.index', compact('departments'));
-}
 
 
     /**
