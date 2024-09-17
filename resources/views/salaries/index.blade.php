@@ -144,6 +144,11 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        function formatNumber(number) {
+            return Math.floor(number).toString();
+        }
+
+
         document.getElementById('create_employee_id').addEventListener('change', function() {
             const employeeId = this.value;
 
@@ -158,7 +163,9 @@
                     .then(data => {
                         console.log('Received data:', data);
                         if (data.salary !== undefined) {
-                            document.getElementById('create_amount').value = data.salary;
+                            const formattedSalary = formatNumber(data.salary);
+
+                            document.getElementById('create_amount').value = formattedSalary;
                         } else {
                             console.log('Salary data is undefined');
                             document.getElementById('create_amount').value = '';

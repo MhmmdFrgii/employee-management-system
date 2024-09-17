@@ -255,7 +255,7 @@
                                                             alt="" width="24" height="24">
                                                     </span>
                                                     <div class="w-75 d-inline-block v-middle ps-3">
-                                                        <h6 class="mb-1 bg-hover-primary fw-semibold"> Profil Saya
+                                                        <h6 class="mb-1 bg-hover-primary fw-semibold"> Profil
                                                         </h6>
                                                         <span class="d-block text-dark">Pengaturan Akun</span>
                                                     </div>
