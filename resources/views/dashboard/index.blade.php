@@ -2,60 +2,6 @@
 
 @section('content')
     <div class="row gx-3">
-        {{-- <div class="col-md-6 col-lg-3 col-6">
-            <div class="card text-white bg-primary rounded">
-                <div class="card-body p-4">
-                    <span>
-                        <i class="ti ti-layout-grid fs-8"></i>
-                    </span>
-                    <h3 class="card-title mt-3 mb-0 text-white">{{ $project_count }}</h3>
-                    <p class="card-text text-white-50 fs-3 fw-normal">
-                        Total Proyek
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-lg-3 col-6">
-            <div class="card text-white bg-secondary rounded">
-                <div class="card-body p-4">
-                    <span>
-                        <i class="ti ti-users fs-8"></i>
-                    </span>
-                    <h3 class="card-title mt-3 mb-0 text-white">{{ $employee_count }}</h3>
-                    <p class="card-text text-white-50 fs-3 fw-normal">
-                        Total Karyawan
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-lg-3 col-6">
-            <div class="card text-white bg-warning rounded">
-                <div class="card-body p-4">
-                    <span>
-                        <i class="ti ti-category-2 fs-8"></i>
-                    </span>
-                    <h3 class="card-title mt-3 mb-0 text-white">{{ $department_count }}</h3>
-                    <p class="card-text text-white-50 fs-3 fw-normal">
-                        Total Departemen
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-lg-3 col-6">
-            <div class="card text-white bg-danger rounded">
-                <div class="card-body p-4">
-                    <span>
-                        <i class="ti ti-user-cog fs-8"></i>
-                    </span>
-                    <h3 class="card-title mt-3 mb-0 text-white">{{ $applicant_count }}</h3>
-                    <p class="card-text text-white-50 fs-3 fw-normal">
-                        Menunggu Konfirmasi
-                    </p>
-                </div>
-            </div>
-        </div> --}}
-
-
         <div class="col-lg-3 col-md-6">
             <div class="card border-start border-primary">
                 <div class="card-body">
@@ -64,7 +10,7 @@
                             <span class="text-primary display-6"><i class="ti ti-briefcase"></i></span>
                         </div>
                         <div class="ms-auto">
-                            <h2 class="fs-7">{{ $project_count }}</h2>
+                            <h2 class="fs-7 counter">{{ $project_count }}</h2>
                             <h6 class="fw-medium text-primary mb-0">Total Proyek</h6>
                         </div>
                     </div>
@@ -79,7 +25,7 @@
                             <span class="text-danger display-6"><i class="ti ti-user"></i></span>
                         </div>
                         <div class="ms-auto">
-                            <h2 class="fs-7">{{ $employee_count }}</h2>
+                            <h2 class="fs-7 counter">{{ $employee_count }}</h2>
                             <h6 class="fw-medium text-danger mb-0">Total Karyawan</h6>
                         </div>
                     </div>
@@ -94,7 +40,7 @@
                             <span class="text-info display-6"><i class="ti ti-category"></i></span>
                         </div>
                         <div class="ms-auto">
-                            <h2 class="fs-7">{{ $department_count }}</h2>
+                            <h2 class="fs-7 counter">{{ $department_count }}</h2>
                             <h6 class="fw-medium text-info mb-0">Total Departemen</h6>
                         </div>
                     </div>
@@ -109,7 +55,7 @@
                             <span class="text-warning display-6"><i class="ti ti-user-cog"></i></span>
                         </div>
                         <div class="ms-auto">
-                            <h2 class="fs-7">{{ $applicant_count }}</h2>
+                            <h2 class="fs-7 counter">{{ $applicant_count }}</h2>
                             <h6 class="fw-medium text-warning mb-0">Menunggu Konfirmasi</h6>
                         </div>
                     </div>
@@ -195,4 +141,5 @@
                 /* Spacing between cards */
             }
         </style>
+
     @endsection

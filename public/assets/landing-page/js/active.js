@@ -41,7 +41,7 @@
     });
 
     function checkWidth(init) {
-        // If browser resized, check width again 
+        // If browser resized, check width again
         if ($(window).width() <= 991) {
             $('.dropdown-submenu a').on("click", function (e) {
                 $(this).next('ul').toggle();
@@ -130,8 +130,8 @@
 
     // :: 9.0 COUNTERUP ACTIVE CODE
     $('.counter').counterUp({
-        delay: 10,
-        time: 1000
+        delay: 8,
+        time: 600
     });
 
     // :: 10.0 FANCYBOX VIDEO POPUP ACTIVE CODE
