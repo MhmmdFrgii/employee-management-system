@@ -3,11 +3,11 @@
         window.onload = function() {
             var transactionChart = {
                 series: [{
-                        name: "Eanings this month",
+                        name: "Pendapatan bulan ini",
                         data: @json($incomes),
                     },
                     {
-                        name: "Expense this month",
+                        name: "Pengeluaran bulan ini",
                         data: @json($expenses),
                     },
                 ],
@@ -17,11 +17,11 @@
                     },
                     type: "bar",
                     fontFamily: "Plus Jakarta Sans', sans-serif",
-                    foreColor: "#adb0bb",
+                    foreColor: "#000000",
                     height: 320,
                     stacked: true,
                 },
-                colors: ["var(--bs-primary)", "var(--bs-secondary)"],
+                colors: ["var(--bs-primary)"],
                 plotOptions: {
                     bar: {
                         horizontal: false,
