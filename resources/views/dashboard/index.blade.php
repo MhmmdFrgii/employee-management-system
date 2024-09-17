@@ -1,62 +1,8 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
-    <div class="row">
-        <div class="col d-flex align-items-stretch">
-            <div class="card w-100 bg-light-info overflow-hidden shadow-none">
-                <div class="card-body position-relative">
-                    <div class="row">
-                        <div class="col-sm-7">
-                            <div class="d-flex align-items-center mb-7">
-                                <div class="rounded-circle overflow-hidden me-6">
-                                    <img src="
-                                    @if (Auth::user()->hasRole('manager')) {{ asset('dist/images/profile/user-4.jpg') }}
-                                    @else
-                                        {{ asset('assets/images/no-profile.jpeg') }} @endif
-                                    "
-                                        alt="" width="40" height="40">
-                                </div>
-                                <div>
-                                    <h5 class="fw-semibold mb-0 xfs-5">Selamat datang kembali {{ auth()->user()->name }}
-                                    </h5>
-                                    @if (Auth::user()->hasRole('manager') && Auth::user()->company)
-                                        <p class="mb-0 text-dark">Perusahaan: {{ Auth::user()->company->name }}</p>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <div class="border-end pe-4 border-muted border-opacity-10">
-                                    <h3 class="mb-1 fw-semibold fs-8 d-flex align-content-center">{{ $project_done }}<i
-                                            class="{{ $project_done
-                                                ? 'ti ti-arrow-up-right fs-5 lh-base text-success'
-                                                : 'ti ti-arrow-down-right fs-5 lh-base text-danger' }}"></i>
-                                    </h3>
-                                    <p class="mb-0 text-dark">Project Selesai</p>
-                                </div>
-                                <div class="ps-4">
-                                    <h3 class="mb-1 fw-semibold fs-8 d-flex align-content-center">{{ $performance }}%<i
-                                            class="{{ $performance
-                                                ? 'ti ti-arrow-up-right fs-5 lh-base text-success'
-                                                : 'ti ti-arrow-down-right fs-5 lh-base text-danger' }}"></i>
-                                    </h3>
-                                    <p class="mb-0 text-dark">Kinerja Keseluruhan</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-5">
-                            <div class="welcome-bg-img mb-n7 text-end">
-                                <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/backgrounds/welcome-bg.svg"
-                                    alt="" class="img-fluid">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
     <div class="row gx-3">
-        <div class="col-md-6 col-lg-3 col-6">
+        {{-- <div class="col-md-6 col-lg-3 col-6">
             <div class="card text-white bg-primary rounded">
                 <div class="card-body p-4">
                     <span>
@@ -105,6 +51,68 @@
                     <p class="card-text text-white-50 fs-3 fw-normal">
                         Menunggu Konfirmasi
                     </p>
+                </div>
+            </div>
+        </div> --}}
+
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card border-start border-primary">
+                <div class="card-body">
+                    <div class="d-flex no-block align-items-center">
+                        <div>
+                            <span class="text-primary display-6"><i class="ti ti-briefcase"></i></span>
+                        </div>
+                        <div class="ms-auto">
+                            <h2 class="fs-7">{{ $project_count }}</h2>
+                            <h6 class="fw-medium text-primary mb-0">Total Proyek</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card border-start border-danger">
+                <div class="card-body">
+                    <div class="d-flex no-block align-items-center">
+                        <div>
+                            <span class="text-danger display-6"><i class="ti ti-user"></i></span>
+                        </div>
+                        <div class="ms-auto">
+                            <h2 class="fs-7">{{ $employee_count }}</h2>
+                            <h6 class="fw-medium text-danger mb-0">Total Karyawan</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card border-start border-info">
+                <div class="card-body">
+                    <div class="d-flex no-block align-items-center">
+                        <div>
+                            <span class="text-info display-6"><i class="ti ti-category"></i></span>
+                        </div>
+                        <div class="ms-auto">
+                            <h2 class="fs-7">{{ $department_count }}</h2>
+                            <h6 class="fw-medium text-info mb-0">Total Departemen</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card border-start border-warning">
+                <div class="card-body">
+                    <div class="d-flex no-block align-items-center">
+                        <div>
+                            <span class="text-warning display-6"><i class="ti ti-user-cog"></i></span>
+                        </div>
+                        <div class="ms-auto">
+                            <h2 class="fs-7">{{ $applicant_count }}</h2>
+                            <h6 class="fw-medium text-warning mb-0">Menunggu Konfirmasi</h6>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
