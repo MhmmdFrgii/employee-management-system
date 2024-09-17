@@ -309,6 +309,14 @@
     <script src="{{ asset('dist/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
     <script src="{{ asset('dist/js/dashboard.js') }}"></script>
 
+    <script src="{{ asset('assets/landing-page/js/jquery/jquery.min.js') }}"></script>
+
+     <!-- Plugins js -->
+     <script src="{{ asset('assets/landing-page/js/plugins/plugins.min.js') }}"></script>
+
+     <!-- Active js -->
+     <script src="{{ asset('assets/landing-page/js/active.js') }}"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         @if (session('success'))
