@@ -124,6 +124,9 @@ class LeaveRequestController extends Controller
             $leaveRequestPhoto = $request->file('photo')->store('leave-request', 'public');
 
             $validatedData['photo'] = $leaveRequestPhoto;
+            $validatedData['company_id'] = $company_id;
+            $validatedData['employee_id'] = Auth::user()->employee_detail->id;
+
             LeaveRequest::create($validatedData);
 
             // Commit transaksi sebelum return
@@ -132,6 +135,7 @@ class LeaveRequestController extends Controller
             return redirect()->route('attendance.user')->with('success', 'Berhasil mengajukan izin.');
         } catch (\Throwable $e) {
             DB::rollBack();
+            dd($e);
             if (isset($leaveRequestPhoto)) {
                 Storage::disk('public')->delete($leaveRequestPhoto);
             }
