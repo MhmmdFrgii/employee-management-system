@@ -61,6 +61,12 @@
                                     <p id="modal-hire-date" class="fw-semibold">
                                         {{ $employee->hire_date }}</p>
                                 </div>
+                                <div class="col-md-6">
+                                    <h6 class="text-muted">Gaji Pokok:</h6>
+                                    <p id="modal-gender" class="fw-semibold">
+                                        Rp . <span class="text-success">{{ number_format($employee->salary, 2, ',', '.') }}</span>
+                                    </p>
+                                    </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-6">
