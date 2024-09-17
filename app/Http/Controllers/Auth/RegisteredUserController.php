@@ -226,9 +226,9 @@ class RegisteredUserController extends Controller
             Notification::create([
                 'user_id' => $manager->id,
                 'title' => 'Pelamar baru telah bergabung',
-                'message' => 'Seorang pelamar baru telah mendaftar. Silakan tinjau lamaran mereka di portal rekrutmen.',
+                'message' => 'Seorang pelamar baru telah mendaftar. Silakan tinjau lamaran mereka di portal kandidat.',
                 'type' => 'info',
-                'url' => 'applicants.index'
+                'url' => 'candidates.index'
             ]);
 
             DB::commit();
@@ -400,6 +400,18 @@ class RegisteredUserController extends Controller
                 'address' => $request->address,
                 'company_id' => $company->id,
                 'source' => 'invited'
+            ]);
+
+            $manager = User::where('company_id', $company->id)
+                ->role('manager')
+                ->first();
+
+            Notification::create([
+                'user_id' => $manager->id,
+                'title' => 'Ter-undang baru telah bergabung',
+                'message' => 'Seorang telah mendaftar dari undangan. Silakan tinjau lamaran mereka di portal kandidat.',
+                'type' => 'info',
+                'url' => 'candidates.index'
             ]);
 
             DB::commit();

@@ -30,6 +30,9 @@ class KanbanController extends Controller
         // Ambil semua komentar yang terkait dengan KanbanBoard tertentu
         $comments = Comment::where('project_id', $kanbanboardID)->latest()->get();
 
+        $kanbanboard = KanbanBoard::find($kanbanboardID);
+        $projectID = $kanbanboard ? $kanbanboard->project_id : null;
+
         $todo = KanbanTask::where('kanban_boards_id', $kanbanboardID)
             ->where('status', 'todo')
             ->get();
@@ -39,6 +42,10 @@ class KanbanController extends Controller
         $done = KanbanTask::where('kanban_boards_id', $kanbanboardID)
             ->where('status', 'done')
             ->get();
+
+        $users = EmployeeDetail::whereHas('projects', function ($query) use ($projectID) {
+            $query->where('project_id', $projectID);
+        })->get();
 
         $formattedKanban = [
             'todo' => $todo->map(function ($task) {
@@ -75,6 +82,12 @@ class KanbanController extends Controller
                 return [
                     'comment' => $comment->comment,
                     'comment_time' => $comment->created_at,
+                ];
+            }),
+            'user' => $users->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
                 ];
             }),
         ];
