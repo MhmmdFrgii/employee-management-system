@@ -16,6 +16,7 @@ class SalaryController extends Controller
 {
     public function index(Request $request)
     {
+        // Query dasar untuk Salary dengan relasi employee_detail
         $query = Salary::with('employee_detail')
             ->join('transactions', 'salaries.id', '=', 'transactions.salary_id')
             ->where('salaries.company_id', Auth::user()->company_id);
@@ -29,7 +30,7 @@ class SalaryController extends Controller
                 })
                     ->orWhere('salaries.amount', 'like', '%' . $search . '%')
                     ->orWhere('transactions.amount', 'like', '%' . $search . '%')
-                    ->orWhereDate('transactions.transaction_date', 'like', '%' . $search . '%');
+                    ->orWhereDate('transactions.transaction_date', $search);
             });
         }
 
@@ -40,7 +41,7 @@ class SalaryController extends Controller
         }
 
         // Sorting
-        $sortBy = $request->get('sortBy', 'created_at'); // Gunakan created_at untuk urutan waktu
+        $sortBy = $request->get('sortBy', 'salaries.created_at'); // Pastikan tabel yang tepat
         $sortDirection = $request->get('sortDirection', 'asc');
         $query->orderBy($sortBy, $sortDirection);
 
@@ -49,13 +50,10 @@ class SalaryController extends Controller
 
         // Pagination
         $salaries = $query->paginate(10);
-
         $salaries->appends($request->all());
 
         // Mengambil data untuk chart (jika ada)
         $monthlyData = $this->getMonthlyData();
-
-
 
         return view('salaries.index', compact('salaries', 'employees', 'sortBy', 'sortDirection', 'search', 'monthlyData'));
     }

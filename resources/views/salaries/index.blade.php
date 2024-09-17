@@ -100,7 +100,8 @@
                                     <td>{{ $salary->employee_detail->name ?? 'N/A' }}</td>
                                     <td>Rp {{ number_format($salary->amount, 2, ',', '.') }}</td>
                                     <td>Rp {{ number_format($salary->extra, 2, ',', '.') }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($salary->transactions->transaction_date)->format('d M Y') }}
+
+                                    <td>{{ \Carbon\Carbon::parse($salary->transaction_date)->format('d M Y') }}
                                     </td>
                                     <td>{{ $salary->description ?? '-' }}</td>
                                     <td>Rp {{ number_format($salary->total_amount, 2, ',', '.') }}</td>
