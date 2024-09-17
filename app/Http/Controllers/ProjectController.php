@@ -45,6 +45,8 @@ class ProjectController extends Controller
                 'company_id' => Auth::user()->company_id
             ]);
 
+            $project->department->increment('project_complete');
+
             DB::commit();
 
             return redirect()->route('projects.index')->with('success', 'Proyek telah berhasil diselesaikan.');
@@ -237,7 +239,11 @@ class ProjectController extends Controller
             // Update proyek termasuk department_id
             $project->update([
                 'name' => $request->name,
-                'department_id' => $request->department_id // Pastikan department_id juga diperbarui
+                'department_id' => $request->department_id,
+                'price' => $request->price,
+                'description' => $request->description ?? old('description'),
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date
             ]);
 
             // Sinkronisasi karyawan

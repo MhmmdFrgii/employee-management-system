@@ -23,7 +23,7 @@ class ProjectRequest extends FormRequest
     {
         return [
             'name' => 'required|max:250',
-            'description' => 'max:250',
+            'description' => 'nullable',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'price' => 'required|not_regex:/-/',
