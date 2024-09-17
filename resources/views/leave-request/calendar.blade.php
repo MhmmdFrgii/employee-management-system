@@ -35,12 +35,13 @@
                     {
                         title: '{{ $leave_data->type === 'izin' ? 'Cuti Tahunan' : 'Cuti Sakit' }} - {{ $leave_data->employee_detail->name ?? 'Tanpa Nama' }}',
                         start: '{{ $leave_data->start_date }}', // Properti start_date dari objek
-                        end: '{{ $leave_data->end_date }}', // Properti end_date dari objek
+                        end: '{{ \Carbon\Carbon::parse($leave_data->end_date)->addDay()->format('Y-m-d') }}', // Tambahkan 1 hari ke end_date
                         backgroundColor: '{{ $leave_data->type === 'izin' ? '#28a745' : '#dc3545' }}', // Hijau untuk izin, merah untuk sakit
                     },
                 @empty
                     // Jika tidak ada data, kalender tetap kosong
                 @endforelse
+
             ],
             buttonText: {
                 today: 'Hari Ini',
