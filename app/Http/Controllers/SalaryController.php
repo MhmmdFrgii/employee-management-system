@@ -16,26 +16,28 @@ class SalaryController extends Controller
 {
     public function index(Request $request)
     {
-        // Ambil query Salary dengan relasi employee_detail
-        $query = Salary::with('employee_detail')->where('company_id', Auth::user()->company_id);
+        $query = Salary::with('employee_detail')
+            ->join('transactions', 'salaries.id', '=', 'transactions.salary_id')
+            ->where('salaries.company_id', Auth::user()->company_id);
 
         // Pencarian berdasarkan karyawan atau jumlah gaji
         $search = $request->input('search');
         if ($search) {
-            $query->whereHas('employee_detail', function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%');
-            })
-                ->orWhere('amount', 'like', '%' . $search . '%')
-                ->orWhere('total_amount', 'like', '%' . $search . '%')
-                ->orWhereDate('created_at', 'like', '%' . $search . '%');
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('employee_detail', function ($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%');
+                })
+                    ->orWhere('salaries.amount', 'like', '%' . $search . '%')
+                    ->orWhere('transactions.amount', 'like', '%' . $search . '%')
+                    ->orWhereDate('transactions.transaction_date', 'like', '%' . $search . '%');
+            });
         }
 
-        // Filter berdasarkan tanggal
+        // Filter berdasarkan tanggal transaksi
         $date = $request->input('date');
         if ($date) {
-            $query->whereDate('transaction_date', $date);
+            $query->whereDate('transactions.transaction_date', $date);
         }
-
 
         // Sorting
         $sortBy = $request->get('sortBy', 'created_at'); // Gunakan created_at untuk urutan waktu
