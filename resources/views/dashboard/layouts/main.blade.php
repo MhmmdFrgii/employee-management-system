@@ -58,7 +58,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-    </style>
+    @stack('style')
 </head>
 
 <body>
@@ -309,8 +309,10 @@
     <script src="{{ asset('dist/libs/owl.carousel/dist/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('dist/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
     <script src="{{ asset('dist/js/dashboard.js') }}"></script>
+    <script src="{{ asset('dist/libs/fullcalendar/index.global.min.js') }}"></script>
+    <script src="{{ asset('dist/js/apps/calendar-init.js') }}"></script>
 
-
+    @stack('scripts')
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>

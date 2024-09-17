@@ -112,6 +112,7 @@ class AttendanceController extends Controller
 
 
         $employees = EmployeeDetail::where('company_id', $user->company_id)
+            ->where('status', 'approved')
             ->when($searchQuery, function ($query) use ($searchQuery) {
 
                 $query->where('name', 'like', '%' . $searchQuery . '%')
@@ -130,6 +131,7 @@ class AttendanceController extends Controller
 
         if (in_array('alpha', $statusFilters)) {
             $employeesAlpha = EmployeeDetail::where('company_id', $user->company_id)
+                ->where('status', 'approved')
                 ->whereDoesntHave('attendances', function ($query) use ($selectedDate) {
                     $query->whereDate('date', $selectedDate);
                 })

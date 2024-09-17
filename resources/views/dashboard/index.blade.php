@@ -11,7 +11,7 @@
                         </div>
                         <div class="ms-auto">
                             <h2 class="fs-7 counter">{{ $project_count }}</h2>
-                            <h6 class="fw-medium text-primary mb-0">Total Proyek</h6>
+                            <h6 class="fw-medium text-primary mb-0 text-center">Total Proyek</h6>
                         </div>
                     </div>
                 </div>
@@ -146,4 +146,5 @@
         <script src="{{ asset('assets/landing-page/js/plugins/plugins.min.js') }}"></script>
 
         <script src="{{ asset('assets/landing-page/js/active.js') }}"></script>
+
     @endsection

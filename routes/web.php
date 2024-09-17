@@ -24,9 +24,12 @@ use App\Http\Controllers\TransactionController;
 Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');
 
 
-Route::get('confirmation', function () {
-    return view('confirmation');
-})->name('confirmation');
+Route::middleware('guest')->group(function () {
+    Route::get('confirmation', function () {
+        return view('confirmation');
+    })->name('confirmation');
+
+});
 
 Route::get('/invitation', function () {
     return view('invitation');
