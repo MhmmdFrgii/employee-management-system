@@ -20,6 +20,7 @@ class DepartmentSeeder extends Seeder
                 'description' => 'Handles employee relations and company policies.',
                 'created_at' => now(),
                 'updated_at' => now(),
+                'project_complete' => '0'
             ],
             [
                 'company_id' => 1,
@@ -27,6 +28,7 @@ class DepartmentSeeder extends Seeder
                 'description' => 'Develops and maintains products and systems.',
                 'created_at' => now(),
                 'updated_at' => now(),
+                'project_complete' => '0'
             ],
             [
                 'company_id' => 2,
@@ -34,6 +36,7 @@ class DepartmentSeeder extends Seeder
                 'description' => 'Develops and maintains products and systems.',
                 'created_at' => now(),
                 'updated_at' => now(),
+                'project_complete' => '0'
             ],
             [
                 'company_id' => 2,
@@ -41,6 +44,7 @@ class DepartmentSeeder extends Seeder
                 'description' => 'Develops and maintains products and systems.',
                 'created_at' => now(),
                 'updated_at' => now(),
+                'project_complete' => '0'
             ],
         ]);
     }
