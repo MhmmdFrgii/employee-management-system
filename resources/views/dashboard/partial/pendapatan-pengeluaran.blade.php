@@ -21,7 +21,7 @@
                     height: 320,
                     stacked: true,
                 },
-                colors: ["var(--bs-primary)"],
+                colors: ["var(--bs-primary)", "var(--bs-secondary)"],
                 plotOptions: {
                     bar: {
                         horizontal: false,
