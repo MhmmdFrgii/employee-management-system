@@ -142,4 +142,8 @@
             }
         </style>
 
+        <script src="{{ asset('assets/landing-page/js/jquery/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/landing-page/js/plugins/plugins.min.js') }}"></script>
+
+        <script src="{{ asset('assets/landing-page/js/active.js') }}"></script>
     @endsection
