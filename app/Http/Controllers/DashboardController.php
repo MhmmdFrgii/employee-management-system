@@ -95,7 +95,7 @@ class DashboardController extends Controller
                 ->where('type', 'expense')
                 ->whereYear('created_at', $monthData->year)
                 ->whereMonth('created_at', $monthData->month)
-                ->sum('amount') * -1;
+                ->sum('amount');
 
             $incomes[] = $monthlyIncomes;
             $expenses[] = $monthlyExpenses;
