@@ -156,7 +156,7 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', 'unique:users,email', new UniqueEmail],
             'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'cv' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'cv' => 'required|mimes:pdf|max:2048',
             'phone' => 'required|string|max:15',
             'gender' => 'required|string|in:male,female',
             'address' => 'required|string|max:500',
@@ -178,9 +178,8 @@ class RegisteredUserController extends Controller
             'photo.max' => 'Foto maksimal 2 MB.',
 
             'cv.required' => 'CV wajib diisi.',
-            'cv.image' => 'File yang diunggah harus berupa gambar.',
-            'cv.mimes' => 'CV harus berupa file dengan ekstensi jpeg, png, atau jpg.',
-            'cv.max' => 'CV maksimal 2 MB.',
+            'cv.mimes' => 'CV harus berupa file dengan ekstensi pdf.',
+            'cv' => 'required|mimes:pdf|max:2048',
 
             'phone.required' => 'Nomor telepon wajib diisi.',
             'phone.string' => 'Nomor telepon harus berupa teks.',

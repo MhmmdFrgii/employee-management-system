@@ -63,7 +63,8 @@
                                                         <input type="file"
                                                             class="form-control @error('photo') is-invalid @enderror"
                                                             id="photo" name="photo" placeholder="Nomor Telepon"
-                                                            value="{{ old('photo') }}" min="0" />
+                                                            value="{{ old('photo') }}" min="0"
+                                                            accept=".jpg, .jpeg, .png" />
 
                                                         <p class="text-danger">*Foto Harus Berformat .jpg, .jpeg, atau .png
                                                         </p>
@@ -78,9 +79,9 @@
                                                         <input type="file"
                                                             class="form-control @error('cv') is-invalid @enderror"
                                                             id="cv" name="cv" placeholder="Nomor Telepon"
-                                                            value="{{ old('cv') }}" min="0" />
+                                                            value="{{ old('cv') }}" min="0" accept=".pdf" />
 
-                                                        <p class="text-danger">*CV Harus Berformat .jpg, .jpeg, atau .png
+                                                        <p class="text-danger">*CV Harus Berformat .pdf
                                                         </p>
                                                         @error('cv')
                                                             <div class="text-danger">{{ $message }}</div>
