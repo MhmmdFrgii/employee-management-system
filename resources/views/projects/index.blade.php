@@ -36,12 +36,10 @@
                                 <p class="card-text">
                                 <div class="d-flex flex-wrap gap-1">
                                     <strong>Departemen:</strong>
-                                    @if ($project->employee_details->isNotEmpty())
-                                        @foreach ($project->employee_details->unique('department_id') as $employee_detail)
-                                            <span class="badge bg-primary me-1">
-                                                {{ $employee_detail->department->name ?? 'Tidak Diketahui' }}
-                                            </span>
-                                        @endforeach
+                                    @if (isset($project->department->name))
+                                        <span class="badge bg-primary me-1">
+                                            {{ $project->department->name }}
+                                        </span>
                                     @else
                                         <span>-</span>
                                     @endif

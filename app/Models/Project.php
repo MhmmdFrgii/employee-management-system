@@ -38,7 +38,6 @@ class Project extends Model
         return $this->belongsToMany(EmployeeDetail::class, 'project_assignments', 'project_id', 'employee_id');
     }
 
-    //
 
     public function kanban_board()
     {
