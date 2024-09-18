@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('employee_id')->constrained('employee_details')->onDelete('cascade');
             $table->date('date');
             $table->enum('status', ['present', 'absent', 'late', 'alpha'])->default('present');
+            $table->time('checkout_time')->nullable();
             $table->timestamps();
         });
     }

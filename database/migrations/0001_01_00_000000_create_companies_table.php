@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('longitude')->nullable();
             $table->time('checkin_start')->nullable();
             $table->time('checkin_end')->nullable();
+            $table->integer('checkin_tolerance')->default(0);
+            $table->time('checkout_start')->nullable();
+            $table->time('checkout_end')->nullable();
             $table->string('company_code')->unique()->nullable();
             $table->string('company_invite')->unique()->nullable();
             $table->timestamps();

@@ -67,37 +67,69 @@ class AttendanceController extends Controller
         $today = Carbon::today()->format('Y-m-d');
         $now = Carbon::now();
 
+        // Jam absensi check-in dan check-out
         $checkin_start = Carbon::parse($company->checkin_start);
         $checkin_end = Carbon::parse($company->checkin_end);
+        $checkout_start = Carbon::parse($company->checkout_start);
+        $checkout_end = Carbon::parse($company->checkout_end);
 
+        // Toleransi check-in (checkout_tolerance dihilangkan)
+        $checkin_tolerance = $company->checkin_tolerance;
+
+        // Cek apakah ada absensi hari ini
         $today_attendance = Attendance::where('employee_id', $employee)
             ->where('date', $today)
-            ->exists();
+            ->first();
 
-        if ($today_attendance) {
-            return redirect()->route($request->route)->with('info', 'Kamu sudah absen hari ini!');
+        // Logika Check-in
+        if (!$today_attendance) {
+            // Tentukan batas toleransi check-in
+            $checkin_start_with_tolerance = $checkin_start->copy()->subMinutes($checkin_tolerance);
+
+            if ($now->lessThan($checkin_start_with_tolerance)) {
+                return redirect()->route($request->route)->with('danger', 'Belum bisa absen, waktu absen belum dimulai!');
+            }
+
+            if ($now->lessThanOrEqualTo($checkin_end)) {
+                $status = 'present';
+            } elseif ($now->greaterThan($checkin_end->copy()->addMinutes($checkin_tolerance))) {
+                $status = 'alpha';
+            } else {
+                $status = 'late';
+            }
+
+            // Buat entri absensi baru
+            Attendance::create([
+                'employee_id' => $employee,
+                'date' => $today,
+                'status' => $status,
+                'checkin_time' => $now->format('H:i:s'),
+            ]);
+
+            return redirect()->route($request->route)->with('success', 'Berhasil check-in!');
         }
 
-        if ($now->lessThan($checkin_start)) {
-            return redirect()->route($request->route)->with('danger', 'Belum bisa absen, waktu absen belum dimulai!');
+        // Logika Check-out
+        if ($today_attendance && !$today_attendance->checkout_time) {
+            if ($now->lessThan($checkout_start)) {
+                return redirect()->route($request->route)->with('danger', 'Belum bisa checkout, waktu checkout belum dimulai!');
+            }
+
+            if ($now->greaterThan($checkout_end)) {
+                return redirect()->route($request->route)->with('danger', 'Waktu checkout sudah berakhir!');
+            }
+
+            // Update waktu checkout
+            $today_attendance->update([
+                'checkout_time' => $now->format('H:i:s'),
+            ]);
+
+            return redirect()->route($request->route)->with('success', 'Berhasil checkout!');
         }
 
-
-        if ($now->lessThanOrEqualTo($checkin_end)) {
-            $status = 'present';
-        } else {
-            $status = 'late';
-        }
-
-        // Buat entri absensi baru
-        Attendance::create([
-            'employee_id' => $employee,
-            'date' => $today,
-            'status' => $status,
-        ]);
-
-        return redirect()->route($request->route)->with('success', 'Berhasil absen!');
+        return redirect()->route($request->route)->with('info', 'Kamu sudah check-in dan check-out hari ini!');
     }
+
 
     /**
      * Display a listing of the resource.
@@ -116,9 +148,9 @@ class AttendanceController extends Controller
             ->when($searchQuery, function ($query) use ($searchQuery) {
 
                 $query->where('name', 'like', '%' . $searchQuery . '%')
-                      ->orWhereHas('department', function ($q) use ($searchQuery) {
-                          $q->where('name', 'like', '%' . $searchQuery . '%');
-                      });
+                    ->orWhereHas('department', function ($q) use ($searchQuery) {
+                        $q->where('name', 'like', '%' . $searchQuery . '%');
+                    });
             })
             ->with(['attendances' => function ($query) use ($selectedDate) {
 

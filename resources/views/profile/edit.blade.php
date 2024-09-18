@@ -141,7 +141,8 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Atur Lokasi Perusahaan Anda!</h5>
-                                    <form action="{{ route('company.location.update', ['route' => 'profile.edit']) }}" method="post">
+                                    <form action="{{ route('company.location.update', ['route' => 'profile.edit']) }}"
+                                        method="post">
                                         @csrf
                                         @method('patch')
                                         <div class="mb-3">
@@ -176,21 +177,43 @@
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
-
-                                    <h5 class="card-title">Atur Jam Masuk Kantor</h5>
+                                    <h5 class="card-title">Atur Jam Kantor</h5>
                                 </div>
                                 <div class="card-body">
                                     <form action="{{ route('update.officeHour') }}" method="POST">
                                         @csrf
                                         @method('patch')
-                                        <label for="exampleInputtime" class="form-label">Masuk :</label>
+                                        <!-- Jam Masuk -->
+                                        <label for="checkin_start" class="form-label">Jam Masuk:</label>
                                         <div class="d-flex">
-                                            <input type="time" class="form-control" id="exampleInputtime"
-                                                name="checkin_start" value="{{ $user->company->checkin_start }}">
+                                            <input type="time" class="form-control" id="checkin_start"
+                                                name="checkin_start"
+                                                value="{{ \Carbon\Carbon::parse($user->company->checkin_start)->format('H:i') }}">
                                             <h2 class="ms-2">-</h2>
-                                            <input type="time" class="form-control ms-2" id="exampleInputtime"
-                                                name="checkin_end" value="{{ $user->company->checkin_end }}">
+                                            <input type="time" class="form-control ms-2" id="checkin_end"
+                                                name="checkin_end"
+                                                value="{{ \Carbon\Carbon::parse($user->company->checkin_end)->format('H:i') }}">
                                         </div>
+
+                                        <!-- Menit Toleransi Masuk -->
+                                        <label for="checkin_tolerance" class="form-label mt-3">Menit Toleransi
+                                            Masuk:</label>
+                                        <input type="number" class="form-control" id="checkin_tolerance"
+                                            name="checkin_tolerance" value="{{ $user->company->checkin_tolerance }}"
+                                            min="0">
+
+                                        <!-- Jam Keluar -->
+                                        <label for="checkout_start" class="form-label mt-3">Jam Keluar:</label>
+                                        <div class="d-flex">
+                                            <input type="time" class="form-control" id="checkout_start"
+                                                name="checkout_start"
+                                                value="{{ \Carbon\Carbon::parse($user->company->checkout_start)->format('H:i') }}">
+                                            <h2 class="ms-2">-</h2>
+                                            <input type="time" class="form-control ms-2" id="checkout_end"
+                                                name="checkout_end"
+                                                value="{{ \Carbon\Carbon::parse($user->company->checkout_end)->format('H:i') }}">
+                                        </div>
+
                                         <div class="mt-4">
                                             <button type="submit" class="btn btn-primary">Simpan Pengaturan</button>
                                         </div>
@@ -201,7 +224,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 

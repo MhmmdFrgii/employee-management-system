@@ -10,17 +10,7 @@ class Company extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'address',
-        'contact_email',
-        'company_code',
-        'company_invite',
-        'latitude',
-        'longitude',
-        'checkin_start',
-        'checkin_end'
-    ];
+    protected $guarded = ['id'];
 
     public function users(): mixed
     {
