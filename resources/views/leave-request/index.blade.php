@@ -1,16 +1,16 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
-<div class="card px-3 pb-4 mb-1 pt-1 rounded-sm">
-    <div class="row g-2 mt-3">
-        <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="row g-2">
-                <h3 class="mx-1">Permintaan Cuti</h3>
+    <div class="card px-3 pb-4 mb-1 pt-1 rounded-sm">
+        <div class="row g-2 mt-3">
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="row g-2">
+                    <h3 class="mx-1">Permintaan Cuti</h3>
+                </div>
             </div>
+            @include('leave-request.partial.filter')
         </div>
-        @include('leave-request.partial.filter')
     </div>
-</div>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="container py-2">
@@ -161,8 +161,8 @@
                                                             <h5 class="modal-title"
                                                                 id="approveModalLabel{{ $data->id }}">Approve
                                                                 Permintaan Cuti</h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <p>Apakah Anda yakin ingin menyetujui permintaan cuti ini?</p>
@@ -171,8 +171,7 @@
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
                                                                 data-bs-dismiss="modal">Batal</button>
-                                                            <button type="submit"
-                                                                class="btn btn-primary">Setujui</button>
+                                                            <button type="submit" class="btn btn-primary">Setujui</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -193,8 +192,8 @@
                                                             <h5 class="modal-title"
                                                                 id="rejectModalLabel{{ $data->id }}">Tolak
                                                                 Permintaan Cuti</h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <p>Apakah Anda yakin ingin menolak permintaan cuti ini?</p>
@@ -218,8 +217,7 @@
                                     data-bs-backdrop="static">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                            <form action="{{ route('leave-requests.update', $data->id) }}"
-                                                method="POST">
+                                            <form action="{{ route('leave-requests.update', $data->id) }}" method="POST">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="modal-header">
@@ -370,13 +368,14 @@
                                                                 {{ $data->end_date }}</p>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4">
+                                                    <div class="row">
                                                         <h6 class="text-muted">Bukti: </h6>
-                                                        <img id="modal-photo"
-                                                            src="{{ asset('storage/' . $data->photo) }}"
-                                                            class="img-fluid mb-3" alt="Employee photo"
-                                                            onerror="this.src='{{ asset('assets/images/no-data.png') }}';"
-                                                            width="200" height="200">
+                                                        <a href="{{ asset('storage/' . $data->photo) }}" target="_blank">
+                                                            <img id="modal-photo"
+                                                                src="{{ asset('storage/' . $data->photo) }}"
+                                                                class="img-fluid mb-3 w-100" alt="Employee photo"
+                                                                onerror="this.src='{{ asset('assets/images/no-data.png') }}';">
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
