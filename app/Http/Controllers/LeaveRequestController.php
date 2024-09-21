@@ -92,10 +92,10 @@ class LeaveRequestController extends Controller
                 $title = 'Pengajuan Izin Karyawan';
                 $message = 'Seorang karyawan telah mengajukan izin. Silakan tinjau dan proses pengajuan izin tersebut di halaman permintaan cuti.';
                 $url = route('leave-requests.index'); // URL menuju halaman permintaan cuti
-                $type = 'info'; // Jenis notifikasi
+                $type = 'warning'; // Jenis notifikasi
 
                 // Kirim notifikasi menggunakan GeneralNotification
-                $manager->notify(new DepositSuccessful($title, $message, $url, $type));
+                $manager->notify(new DepositSuccessful($title, $message, $type, $url));
             }
 
             // Ambil data dari request
@@ -179,7 +179,7 @@ class LeaveRequestController extends Controller
                 'Pengajuan Izin Diterima',
                 'Pengajuan izin Anda telah diterima.',
                 'success',
-                '#' // Tambahkan URL yang sesuai jika ada
+                route('attendance.user') // Tambahkan URL yang sesuai jika ada
             ));
 
             // Temukan permintaan cuti berdasarkan ID
@@ -242,7 +242,7 @@ class LeaveRequestController extends Controller
             $employee->user->notify(new DepositSuccessful(
                 'Pengajuan Izin Ditolak',
                 'Permintaan izin Anda telah ditolak.',
-                'warning',
+                'danger',
                 '#'
             ));
 

@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Throwable;
 
 class RegisteredUserController extends Controller
 {
@@ -222,18 +223,19 @@ class RegisteredUserController extends Controller
                 ->role('manager')
                 ->first();
 
-                if ($manager) {
-                    $manager->notify(new DepositSuccessful(
-                        'Pelamar baru telah bergabung',
-                        'Seorang pelamar baru telah mendaftar. Silakan tinjau lamaran mereka di portal kandidat.',
-                        'info',
-                        'candidates.index'
-                    ));
+            if ($manager) {
+                $manager->notify(new DepositSuccessful(
+                    'Pelamar baru telah bergabung',
+                    'Seorang pelamar baru telah mendaftar. Silakan tinjau lamaran mereka di portal kandidat.',
+                    'info',
+                    route('candidates.index')
+                ));
 
 
-            DB::commit();
-            return redirect()->route('confirmation')->with('success', 'Berhasil Daftar, Menunggu Konfirmasi!');
-        } catch (\Throwable $e) {
+                DB::commit();
+                return redirect()->route('confirmation')->with('success', 'Berhasil Daftar, Menunggu Konfirmasi!');
+            }
+        } catch (Throwable $e) {
             DB::rollBack();
             if (isset($photoPath)) {
                 Storage::disk('public')->delete($photoPath);
@@ -308,8 +310,9 @@ class RegisteredUserController extends Controller
             $user->notify(new DepositSuccessful(
                 'Selamat Datang!',
                 'Akun Anda telah berhasil dibuat. Selamat bergabung dan selamat bekerja!',
-                'success'.
-                '#'
+                'success' .
+                    '#',
+                ''
             ));
 
             $applicant->update([
@@ -405,14 +408,14 @@ class RegisteredUserController extends Controller
                 ->role('manager')
                 ->first();
 
-                if ($manager) {
-                    $manager->notify(new DepositSuccessful(
-                        'Ter-undang baru telah bergabung',
-                        'Seorang telah mendaftar dari undangan. Silakan tinjau lamaran mereka di portal kandidat.',
-                        'info',
-                        'candidates.index'
-                    ));
-                }
+            if ($manager) {
+                $manager->notify(new DepositSuccessful(
+                    'Ter-undang baru telah bergabung',
+                    'Seorang telah mendaftar dari undangan. Silakan tinjau lamaran mereka di portal kandidat.',
+                    'info',
+                    route('candidates.index')
+                ));
+            }
 
             DB::commit();
             return redirect()->route('confirmation')->with('success', 'Berhasil Daftar, Menunggu Konfirmasi!');
