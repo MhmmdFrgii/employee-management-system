@@ -59,10 +59,6 @@ class User extends Authenticatable
         return $this->hasOne(EmployeeDetail::class);
     }
 
-    public function notifications(): mixed
-    {
-        return $this->hasMany(Notification::class);
-    }
     public function department()
     {
         return $this->belongsTo(Department::class);

@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use App\Models\Project;
 use App\Models\Attendance;
 use App\Models\Department;
-use App\Models\Notification;
+
 use Illuminate\Http\Request;
 use App\Models\EmployeeDetail;
 use App\Models\Salary;
@@ -18,7 +18,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $newNotificationCount = $this->getNewNotificationCount();
+        // $newNotificationCount = $this->getNewNotificationCount();
         $monthlyData = $this->getMonthlyData();
         $company_id = Auth::user()->company->id;
 
@@ -130,7 +130,7 @@ class DashboardController extends Controller
             'departments' => $departments,
             'department_data' => $department_data,
             'projectsWithNearestDeadlines' => $projectsWithNearestDeadlines,
-            'newNotificationCount' => $newNotificationCount,
+            // 'newNotificationCount' => $newNotificationCount,
             'monthlyData' => $monthlyData,
             'completedProjects' => $completedProjectsData['completedProjects'], // Data dari kolom project_complete
             'departmentNames' => $completedProjectsData['departmentNames'],
@@ -247,24 +247,24 @@ class DashboardController extends Controller
             $attendanceCounts[] = $attendanceData[$status] ?? 0;
         }
 
-        $newNotificationCount = Notification::where('user_id', Auth::user()->id)
-            ->where('is_read', false)
-            ->count();
+        // $newNotificationCount = Notification::where('user_id', Auth::user()->id)
+        //     ->where('is_read', false)
+        //     ->count();
 
         return view('dashboard.employee.index', [
             'months' => $months,
             'projectCounts' => $projectCounts,
             'statuses' => $statuses,
             'attendanceCounts' => $attendanceCounts,
-            'newNotificationCount' => $newNotificationCount,
+            // 'newNotificationCount' => $newNotificationCount,
         ]);
     }
 
-    public function getNewNotificationCount()
-    {
-        $userId = Auth::id();
-        return Notification::where('user_id', $userId)
-            ->where('is_read', false)
-            ->count();
-    }
+    // public function getNewNotificationCount()
+    // {
+    //     $userId = Auth::id();
+    //     return Notification::where('user_id', $userId)
+    //         ->where('is_read', false)
+    //         ->count();
+    // }
 }

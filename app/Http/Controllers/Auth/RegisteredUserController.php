@@ -7,8 +7,8 @@ use App\Models\Company;
 use App\Models\Department;
 use App\Models\EmployeeDetail;
 use App\Models\InvitationCode;
-use App\Models\Notification;
 use App\Models\User;
+use App\Notifications\DepositSuccessful;
 use App\Rules\UniqueEmail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -222,13 +222,14 @@ class RegisteredUserController extends Controller
                 ->role('manager')
                 ->first();
 
-            Notification::create([
-                'user_id' => $manager->id,
-                'title' => 'Pelamar baru telah bergabung',
-                'message' => 'Seorang pelamar baru telah mendaftar. Silakan tinjau lamaran mereka di portal kandidat.',
-                'type' => 'info',
-                'url' => 'candidates.index'
-            ]);
+                if ($manager) {
+                    $manager->notify(new DepositSuccessful(
+                        'Pelamar baru telah bergabung',
+                        'Seorang pelamar baru telah mendaftar. Silakan tinjau lamaran mereka di portal kandidat.',
+                        'info',
+                        'candidates.index'
+                    ));
+
 
             DB::commit();
             return redirect()->route('confirmation')->with('success', 'Berhasil Daftar, Menunggu Konfirmasi!');
@@ -304,13 +305,12 @@ class RegisteredUserController extends Controller
                 'password' => Hash::make($request->password),
             ])->assignRole('employee');
 
-            Notification::create([
-                'user_id' => $user->id,
-                'title' => 'Selamat Datang!',
-                'message' => 'Akun Anda telah berhasil dibuat. Selamat bergabung dan selamat bekerja!',
-                'type' => 'success',
-                'url' => ''
-            ]);
+            $user->notify(new DepositSuccessful(
+                'Selamat Datang!',
+                'Akun Anda telah berhasil dibuat. Selamat bergabung dan selamat bekerja!',
+                'success'.
+                '#'
+            ));
 
             $applicant->update([
                 'user_id' => $user->id,
@@ -405,13 +405,14 @@ class RegisteredUserController extends Controller
                 ->role('manager')
                 ->first();
 
-            Notification::create([
-                'user_id' => $manager->id,
-                'title' => 'Ter-undang baru telah bergabung',
-                'message' => 'Seorang telah mendaftar dari undangan. Silakan tinjau lamaran mereka di portal kandidat.',
-                'type' => 'info',
-                'url' => 'candidates.index'
-            ]);
+                if ($manager) {
+                    $manager->notify(new DepositSuccessful(
+                        'Ter-undang baru telah bergabung',
+                        'Seorang telah mendaftar dari undangan. Silakan tinjau lamaran mereka di portal kandidat.',
+                        'info',
+                        'candidates.index'
+                    ));
+                }
 
             DB::commit();
             return redirect()->route('confirmation')->with('success', 'Berhasil Daftar, Menunggu Konfirmasi!');

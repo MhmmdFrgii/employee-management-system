@@ -10,9 +10,9 @@ use Illuminate\Http\Request;
 use App\Models\EmployeeDetail;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ProjectRequest;
-use App\Models\Notification;
 use App\Models\ProjectAssignment;
 use App\Models\Transaction;
+use App\Notifications\DepositSuccessful;
 use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller
@@ -133,12 +133,13 @@ class ProjectController extends Controller
             if ($request->employee_id) {
                 foreach ($request->employee_id as $employeeId) {
                     $employee = EmployeeDetail::find($employeeId);
-                    Notification::create([
-                        'user_id' => $employee->user->id,
-                        'title' => 'Anda Ditugaskan ke Proyek Baru',
-                        'message' => 'Anda telah ditugaskan ke proyek: ' . $project->name . '. Silakan tinjau detailnya.',
-                        'type' => 'info'
-                    ]);
+
+                    $employee->user->notify(new DepositSuccessful(
+                        'Anda Ditugaskan ke Proyek Baru',
+                        'Anda telah ditugaskan ke proyek: ' . $project->name . '. Silakan tinjau detailnya.',
+                        'info',
+                        '#'
+                    ));
                 }
             }
 
@@ -261,22 +262,24 @@ class ProjectController extends Controller
 
             foreach ($removedEmployeeIds as $employeeId) {
                 $employee = EmployeeDetail::find($employeeId);
-                Notification::create([
-                    'user_id' => $employee->user->id,
-                    'title' => 'Dihapus dari Proyek',
-                    'message' => 'Anda dihapus dari proyek: ' . $project->name,
-                    'type' => 'info'
-                ]);
+
+                $employee->user->notify(new DepositSuccessful(
+                    'Dihapus dari Proyek',
+                    'Anda dihapus dari proyek: ' . $project->name,
+                    'warning',
+                    '#'
+                ));
             }
 
             foreach ($addedEmployeeIds as $employeeId) {
                 $employee = EmployeeDetail::find($employeeId);
-                Notification::create([
-                    'user_id' => $employee->user->id,
-                    'title' => 'Ditugaskan ke Proyek Baru',
-                    'message' => 'Anda ditugaskan ke proyek: ' . $project->name,
-                    'type' => 'info'
-                ]);
+
+                $employee->user->notify(new DepositSuccessful(
+                    'Ditugaskan ke Proyek Baru',
+                    'Anda ditugaskan ke proyek: ' . $project->name,
+                    'info',
+                    '#'
+                ));
             }
 
             DB::commit();

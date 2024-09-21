@@ -28,7 +28,6 @@ Route::middleware('guest')->group(function () {
     Route::get('confirmation', function () {
         return view('confirmation');
     })->name('confirmation');
-
 });
 
 Route::get('/invitation', function () {
@@ -115,7 +114,9 @@ Route::middleware('auth')->group(function () {
         });
     });
 
+    Route::patch('notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
     Route::resource('notifications', NotificationController::class);
+
     Route::resource('leave-requests', LeaveRequestController::class);
     Route::resource('kanban-boards', KanbanBoardController::class);
     Route::resource('kanban-tasks', KanbanTaskController::class);

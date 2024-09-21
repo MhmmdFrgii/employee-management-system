@@ -123,58 +123,86 @@
                                 <i class="ti ti-align-justified fs-7"></i>
                             </a>
                             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-center">
+                                {{-- Menampilkan notifikasi pada dashboard --}}
                                 @php
-                                    $notifications = auth()
-                                        ->user()
-                                        ->notifications()
-                                        ->where('is_read', false)
-                                        ->latest()
-                                        ->take(5)
-                                        ->get();
+                                    $notifications = auth()->user()->unreadNotifications()->take(10)->get(); // Maksimal 10 notifikasi belum dibaca
+                                    $unreadCount = $notifications->count(); // Hitung notifikasi belum dibaca
                                 @endphp
+
+
                                 <li class="nav-item dropdown">
                                     <a class="nav-link nav-icon-hover position-relative" href="#"
                                         id="notificationDropdown" role="button" data-bs-toggle="dropdown"
                                         aria-expanded="false">
                                         <i class="ti ti-bell-ringing"></i>
-                                        @if (!$notifications->isEmpty())
+                                        @if ($unreadCount > 0)
                                             <span class="badge bg-danger position-absolute fs-1 rounded-circle"
-                                                style="top: 15px; right: 10px; transform: translate(50%, -50%);">{{ $notifications->count() }}</span>
+                                                style="top: 15px; right: 10px; transform: translate(50%, -50%);">
+                                                {{ $unreadCount }}
+                                            </span>
                                         @endif
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end p-0 shadow-lg"
                                         aria-labelledby="notificationDropdown" style="width: 300px;">
-                                        <li class="dropdown-header bg-light fw-bold p-3">Notifications</li>
+                                        <li
+                                            class="dropdown-header bg-light fw-bold p-3 d-flex justify-content-between align-items-center">
+                                            <span>Notifications</span>
+
+                                            {{-- Tombol "View All" --}}
+                                            <a href="{{ route('notifications.index') }}"
+                                                class="btn btn-link text-decoration-none">
+                                                View All
+                                            </a>
+                                        </li>
+
                                         @if ($notifications->isEmpty())
                                             <li class="dropdown-item text-center py-3">No new notifications</li>
                                         @else
                                             @foreach ($notifications as $notification)
                                                 <li class="dropdown-item border-bottom">
-                                                    <a href="{{ $notification->url ?? '#' }}"
+                                                    <a href="{{ $notification->data['url'] ?? '#' }}"
                                                         class="d-flex align-items-start text-decoration-none">
                                                         <div class="flex-grow-1">
                                                             <h6 class="mb-1 text-truncate"
                                                                 style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                                                {{ $notification->title }}
+                                                                {{ $notification->data['title'] ?? 'Untitled' }}
                                                             </h6>
                                                             <p class="mb-0 text-muted small"
                                                                 style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                                                {{ $notification->message }}
+                                                                {{ $notification->data['message'] ?? 'No message available' }}
                                                             </p>
                                                         </div>
                                                         <small class="text-muted ms-3"
-                                                            style="max-width: 80px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $notification->created_at->diffForHumans() }}</small>
+                                                            style="max-width: 80px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                            {{ $notification->created_at->diffForHumans() }}
+                                                        </small>
                                                     </a>
                                                 </li>
                                             @endforeach
                                         @endif
-                                        <li>
-                                            <hr class="dropdown-divider my-0">
-                                        </li>
-                                        <li><a class="dropdown-item text-center py-3"
-                                                href="{{ route('notifications.index') }}">View all</a></li>
+
+                                        <li class="dropdown-divider my-0"></li>
+
+                                        {{-- Tombol "Tandai Semua Sebagai Dibaca" --}}
+                                        @if ($unreadCount > 0)
+                                            <li class="text-center py-3">
+                                                <form action="{{ route('notifications.readAll') }}" method="POST">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit"
+                                                        class="btn btn-link text-decoration-none text-primary">
+                                                        Tandai Telah Dibaca
+                                                        {{-- <span class="badge bg-danger">{{ $unreadCount }}</span> --}}
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        @endif
                                     </ul>
                                 </li>
+
+
+
+
                                 <li class="nav-item dropdown">
                                     <a class="nav-link pe-0" href="javascript:void(0)" id="drop1"
                                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -248,7 +276,8 @@
                                                 </div>
                                             </div>
                                             <div class="message-body">
-                                                <a href="/manager/profile" class="py-8 px-7 mt-8 d-flex align-items-center">
+                                                <a href="/manager/profile"
+                                                    class="py-8 px-7 mt-8 d-flex align-items-center">
                                                     <span
                                                         class="d-flex align-items-center justify-content-center bg-light rounded-1 p-6">
                                                         <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/icon-account.svg"

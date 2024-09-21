@@ -10,6 +10,7 @@ use App\Models\LeaveRequest;
 use App\Models\Notification;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Notifications\DepositSuccessful;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -86,13 +87,16 @@ class LeaveRequestController extends Controller
                 ->role('manager')
                 ->first();
 
-            Notification::create([
-                'user_id' => $manager->id,
-                'title' => 'Pengajuan Izin Karyawan',
-                'message' => 'Seorang karyawan telah mengajukan izin. Silakan tinjau dan proses pengajuan izin tersebut di halaman permintaan cuti.',
-                'type' => 'info',
-                'url' => 'leave-requests.index'
-            ]);
+            if ($manager) {
+                // Buat pesan notifikasi
+                $title = 'Pengajuan Izin Karyawan';
+                $message = 'Seorang karyawan telah mengajukan izin. Silakan tinjau dan proses pengajuan izin tersebut di halaman permintaan cuti.';
+                $url = route('leave-requests.index'); // URL menuju halaman permintaan cuti
+                $type = 'info'; // Jenis notifikasi
+
+                // Kirim notifikasi menggunakan GeneralNotification
+                $manager->notify(new DepositSuccessful($title, $message, $url, $type));
+            }
 
             // Ambil data dari request
             $employeeId = $request->input('employee_id');
@@ -171,13 +175,12 @@ class LeaveRequestController extends Controller
         try {
             $employee = EmployeeDetail::where('id', $id->employee_id)->first();
 
-            Notification::create([
-                'user_id' => $employee->user->id,
-                'title' => 'Pengajuan Izin Diterima',
-                'message' => 'Pengajuan izin Anda telah diterima.',
-                'type' => 'success',
-                'url' => '#', // Tambahkan URL yang sesuai jika ada
-            ]);
+            $employee->user->notify(new DepositSuccessful(
+                'Pengajuan Izin Diterima',
+                'Pengajuan izin Anda telah diterima.',
+                'success',
+                '#' // Tambahkan URL yang sesuai jika ada
+            ));
 
             // Temukan permintaan cuti berdasarkan ID
             $leaveRequest = $id;
@@ -236,13 +239,14 @@ class LeaveRequestController extends Controller
             $leaveRequest->status = 'rejected';
             $leaveRequest->save();
 
-            Notification::create([
-                'user_id' => $employee->user->id,
-                'title' => 'Pengajuan Izin Ditolak',
-                'message' => 'Permintaan izin Anda telah ditolak.',
-                'type' => 'warning',
-                'url' => ''
-            ]);
+            $employee->user->notify(new DepositSuccessful(
+                'Pengajuan Izin Ditolak',
+                'Permintaan izin Anda telah ditolak.',
+                'warning',
+                '#'
+            ));
+
+
 
             DB::commit();
 
