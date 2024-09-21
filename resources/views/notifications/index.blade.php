@@ -9,16 +9,26 @@
                 <div class="list-group">
                     @forelse ($notifications as $notification)
                         @php
-                            $borderColor = match ($notification->data['type']) {
-                                'info' => 'primary',
-                                'warning' => 'warning',
-                                'success' => 'success',
-                                'error' => 'danger', // Menggunakan 'error' untuk tipe 'warning'
-                                default => 'secondary', // Untuk tipe yang tidak terdefinisi
-                            };
+                            // Tentukan border color berdasarkan type notifikasi
+                            switch ($notification->data['type']) {
+                                case 'info':
+                                    $borderColor = 'primary';
+                                    break;
+                                case 'success':
+                                    $borderColor = 'success';
+                                    break;
+                                case 'warning':
+                                    $borderColor = 'warning';
+                                    break;
+                                case 'danger':
+                                    $borderColor = 'danger';
+                                    break;
+                                default:
+                                    $borderColor = 'secondary'; // default jika tipe tidak terdefinisi
+                            }
                         @endphp
-                        <div
-                            class="list-group-item list-group-item-action d-flex flex-column align-items-start mb-3 border border-{{ $borderColor }}">
+                        <div class="list-group-item list-group-item-action d-flex flex-column align-items-start mb-3 border border-{{ $borderColor }}"
+                            onclick="window.location.href='{{ $notification->data['url'] }}'">
                             <div class="w-100 d-flex justify-content-between align-items-center">
                                 <div>
                                     <h5 class="mb-1" style="font-size: 14px;">{{ $notification->data['title'] }}</h5>
