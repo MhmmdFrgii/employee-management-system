@@ -8,6 +8,7 @@ use App\Models\EmployeeDetail;
 use App\Models\LeaveRequest;
 use App\Models\Notification;
 use App\Models\User;
+use App\Notifications\DepositSuccessful;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -44,13 +45,15 @@ class LeaveRequestController extends Controller
                 ->firstOrFail();
 
             // Kirim notifikasi ke manajer
-            Notification::create([
-                'user_id' => $manager->id,
-                'title' => 'Pengajuan Izin Karyawan',
-                'message' => 'Seorang karyawan telah mengajukan izin. Silakan tinjau dan proses pengajuan izin tersebut di halaman permintaan cuti.',
-                'type' => 'info',
-                'url' => 'leave-requests.index'
-            ]);
+            if ($manager) {
+                $title = 'Pengajuan Izin Karyawan';
+                $message = 'Seorang karyawan telah mengajukan izin. Silakan tinjau dan proses pengajuan izin tersebut di halaman permintaan cuti.';
+                $url = route('leave-requests.index'); // URL menuju halaman permintaan cuti
+                $type = 'warning'; // Jenis notifikasi
+
+                // Kirim notifikasi menggunakan GeneralNotification
+                $manager->notify(new DepositSuccessful($title, $message, $type, $url));
+            }
 
             // Ambil data dari request
             $startDate = $request->input('start_date');
