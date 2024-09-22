@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id')->constrained('companies', 'id')->onDelete('cascade');
-            $table->foreignId('department_id')->nullable()->constrained('departments', 'id')->onDelete('cascade');
+            $table->foreignId('department_id')->nullable()->constrained('departments', 'id');
             $table->string('name');
             $table->decimal('price', 15, 2);
             $table->string('description')->nullable();

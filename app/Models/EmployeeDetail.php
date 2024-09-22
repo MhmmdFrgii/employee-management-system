@@ -41,7 +41,7 @@ class EmployeeDetail extends Model
     }
     function department()
     {
-        return $this->belongsTo(Department::class);
+        return $this->belongsTo(Department::class)->withTrashed();
     }
     function position()
     {

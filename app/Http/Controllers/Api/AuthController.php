@@ -18,7 +18,7 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
 
-        if ($validator->fails()) return response()->json(['message' => 'Invalid fields', 'errors' => $validator->errors()], 422);
+        if ($validator->fails()) return response()->json(['message' => 'Invalid fields', 'errors' => $validator->errors()], 422); 
 
         if (!Auth::attempt($validator->validate())) {
             return response()->json([

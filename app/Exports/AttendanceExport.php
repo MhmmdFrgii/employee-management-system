@@ -55,14 +55,11 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
                     if ($employeeAttendances->where('date', $formattedDate)->isNotEmpty()) {
                         $attendance = $employeeAttendances->where('date', $formattedDate)->first();
                         $status = $this->mapStatus($attendance->status);
-                        $time = $attendance->created_at->format('H:i');
                     } else {
                         $status = 'Alpha'; // Jika tidak ada data absensi
-                        $time = '';
                     }
 
                     $row[] = $status;
-                    $row[] = $time;
                 }
             }
 
@@ -76,32 +73,100 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
     {
         $daysInMonth = Carbon::create($this->year, $this->month, 1)->daysInMonth;
 
-        // Baris pertama untuk tanggal
+        // Baris pertama untuk tanggal (hanya menampilkan tanggal saja)
         $heading1 = ['Nama'];
         for ($date = 1; $date <= $daysInMonth; $date++) {
             $currentDate = Carbon::create($this->year, $this->month, $date);
             if (!$currentDate->isWeekend()) {
-                $heading1[] = $currentDate->format('d/m/Y');
-                $heading1[] = ''; // Kolom kosong untuk "Masuk"
+                $heading1[] = $currentDate->format('d'); // Menampilkan hanya tanggal
             }
         }
 
-        // Baris kedua untuk sub-header 'Detail' dan 'Masuk'
-        $heading2 = [''];
-        for ($date = 1; $date <= $daysInMonth; $date++) {
-            $currentDate = Carbon::create($this->year, $this->month, $date);
-            if (!$currentDate->isWeekend()) {
-                $heading2[] = 'Detail';
-                $heading2[] = 'Masuk';
-            }
-        }
-
-        return [$heading1, $heading2];
+        return [$heading1];
     }
 
     public function map($row): array
     {
         return $row; // Mengembalikan data apa adanya karena sudah disusun di `collection()`
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        $highestColumn = $sheet->getHighestColumn();
+
+        // Menerapkan style untuk header
+        $sheet->getStyle('A1:' . $highestColumn . '1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'size' => 13, // Menjadikan heading lebih besar
+                'color' => ['argb' => 'FF1E90FF'], // Teks berwarna biru
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+            'borders' => [
+                'bottom' => [
+                    'borderStyle' => Border::BORDER_THICK, // Border bawah tebal
+                    'color' => ['argb' => 'FF1E90FF'], // Border berwarna biru
+                ],
+            ],
+        ]);
+
+        // Auto-fit untuk semua kolom
+        foreach (range('A', $highestColumn) as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        // Menerapkan warna pastel berdasarkan status
+        $highestRow = $sheet->getHighestRow();
+        for ($row = 2; $row <= $highestRow; $row++) {
+            for ($col = 'B'; $col !== $highestColumn; $col++) {
+                $status = $sheet->getCell($col . $row)->getValue();
+                $styleArray = $this->getStatusStyle($status);
+
+                if ($styleArray !== null) {
+                    $sheet->getStyle($col . $row)->applyFromArray($styleArray);
+                }
+            }
+        }
+    }
+
+    private function getStatusStyle($status)
+    {
+        switch ($status) {
+            case 'Masuk':
+                return $this->getPastelStyle('FF98FB98'); // Pastel Green
+            case 'Izin':
+                return $this->getPastelStyle('FFADD8E6'); // Light Blue
+            case 'Alpha':
+                return $this->getPastelStyle('FFFFB6C1'); // Light Pink
+            case 'Telat':
+                return $this->getPastelStyle('FFFFE4B5'); // Moccasin
+            default:
+                return null;
+        }
+    }
+
+    private function getPastelStyle($hexColor)
+    {
+        return [
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'argb' => $hexColor,
+                ],
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'], // Border hitam
+                ],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ],
+        ];
     }
 
     private function mapStatus($status)
@@ -117,116 +182,4 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
                 return 'Alpha';
         }
     }
-
-    public function styles(Worksheet $sheet)
-{
-    // Mendapatkan batas kolom tertinggi dan baris tertinggi
-    $highestRow = $sheet->getHighestRow();
-    $highestColumn = $sheet->getHighestColumn();
-
-    // Gabungkan cell pada header pertama (tanggal)
-    for ($col = 'B'; $col <= $highestColumn; $col++) {
-        if (($col - 1) % 2 == 0) {
-            $startCol = $col;
-            $endCol = ++$col;
-            $sheet->mergeCells("{$startCol}1:{$endCol}1"); // Menggabungkan dua kolom untuk setiap tanggal
-        }
-    }
-
-    // Style untuk header (Name dan Tanggal)
-    $sheet->getStyle('A1:' . $highestColumn . '2')->applyFromArray([
-        'font' => [
-            'bold' => true,
-            'size' => 12
-        ],
-        'alignment' => [
-            'horizontal' => Alignment::HORIZONTAL_CENTER,
-            'vertical' => Alignment::VERTICAL_CENTER,
-        ],
-        'borders' => [
-            'allBorders' => [
-                'borderStyle' => Border::BORDER_THIN,
-            ],
-        ],
-        'fill' => [
-            'fillType' => Fill::FILL_SOLID,
-            'startColor' => [
-                'argb' => 'FFCCCCCC' // Warna abu-abu untuk header
-            ]
-        ]
-    ]);
-
-    // Format khusus untuk memisahkan setiap tanggal dengan border tebal
-    for ($col = 'B'; $col <= $highestColumn; $col++) {
-        if (($col - 1) % 2 == 0) {
-            $startCol = $col;
-            $endCol = ++$col;
-
-            // Border kanan tebal untuk setiap tanggal
-            $sheet->getStyle("{$endCol}1:{$endCol}{$highestRow}")->getBorders()->getRight()->setBorderStyle(Border::BORDER_MEDIUM);
-
-            // Border bawah tebal untuk baris header tanggal
-            $sheet->getStyle("B1:{$highestColumn}2")->getBorders()->getBottom()->setBorderStyle(Border::BORDER_MEDIUM);
-        }
-    }
-
-    // Format borders untuk seluruh tabel
-    $sheet->getStyle("A1:{$highestColumn}{$highestRow}")->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-
-    // Mengubah warna berdasarkan status kehadiran
-    for ($row = 3; $row <= $highestRow; $row++) { // Mulai dari baris 3 karena 1 dan 2 adalah header
-        for ($col = 'B'; $col <= $highestColumn; $col++) {
-            $statusCell = $col . $row; // Mengambil nilai dari cell
-            $statusValue = $sheet->getCell($statusCell)->getValue();
-
-            // Sesuaikan warna berdasarkan nilai status
-            switch (strtolower($statusValue)) {
-                case 'masuk':
-                    $sheet->getStyle($statusCell)->applyFromArray([
-                        'fill' => [
-                            'fillType' => Fill::FILL_SOLID,
-                            'startColor' => [
-                                'argb' => 'FF99FF99' // Warna hijau untuk 'Masuk'
-                            ]
-                        ]
-                    ]);
-                    break;
-                case 'telat':
-                    $sheet->getStyle($statusCell)->applyFromArray([
-                        'fill' => [
-                            'fillType' => Fill::FILL_SOLID,
-                            'startColor' => [
-                                'argb' => 'FFFFCC00' // Warna kuning untuk 'Telat'
-                            ]
-                        ]
-                    ]);
-                    break;
-                case 'izin':
-                    $sheet->getStyle($statusCell)->applyFromArray([
-                        'fill' => [
-                            'fillType' => Fill::FILL_SOLID,
-                            'startColor' => [
-                                'argb' => 'FF00CCFF' // Warna biru untuk 'Izin'
-                            ]
-                        ]
-                    ]);
-                    break;
-                case 'alpha':
-                    $sheet->getStyle($statusCell)->applyFromArray([
-                        'fill' => [
-                            'fillType' => Fill::FILL_SOLID,
-                            'startColor' => [
-                                'argb' => 'FFFF9999' // Warna merah muda untuk 'Alpha'
-                            ]
-                        ]
-                    ]);
-                    break;
-                default:
-                    // Jika nilai status tidak cocok dengan kategori di atas, biarkan warna default
-                    break;
-            }
-        }
-    }
-}
-
 }

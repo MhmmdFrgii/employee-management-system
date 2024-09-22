@@ -18,7 +18,7 @@ class AttendanceController extends Controller
         $today = Carbon::today()->format('Y-m-d');
         $now = Carbon::now();
 
-        // Mengambil waktu check-in yang diatur oleh perusahaan
+    // Mengambil waktu check-in yang diatur oleh perusahaan 
         $checkin_start = Carbon::parse($company->checkin_start);
         $checkin_end = Carbon::parse($company->checkin_end);
 

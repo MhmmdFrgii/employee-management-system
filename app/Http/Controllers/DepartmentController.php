@@ -75,11 +75,9 @@ class DepartmentController extends Controller
             $department->delete();
             return redirect()->route('departments.index')->with('success', 'Hapus Department Success!');
         } catch (QueryException $e) {
-            // Cek jika kesalahan disebabkan oleh foreign key constraint
-            if ($e->getCode() === '23000') { // 23000 adalah kode untuk pelanggaran constraint
+            if ($e->getCode() === '23000') { 
                 return redirect()->route('departments.index')->with('danger', 'Tidak dapat menghapus department karena terkait dengan data lain.');
             }
-
             return redirect()->route('departments.index')->with('danger', 'Terjadi kesalahan saat menghapus department.');
         } catch (Exception $e) {
             return redirect()->route('departments.index')->with('danger', 'Terjadi kesalahan tak terduga.');
