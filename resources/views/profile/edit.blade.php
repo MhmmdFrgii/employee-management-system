@@ -187,12 +187,10 @@
                                         <label for="checkin_start" class="form-label">Jam Masuk:</label>
                                         <div class="d-flex">
                                             <input type="time" class="form-control" id="checkin_start"
-                                                name="checkin_start"
-                                                value="{{ \Carbon\Carbon::parse($user->company->checkin_start)->format('H:i') }}">
+                                                name="checkin_start" value="{{ $user->company->checkin_start }}">
                                             <h2 class="ms-2">-</h2>
                                             <input type="time" class="form-control ms-2" id="checkin_end"
-                                                name="checkin_end"
-                                                value="{{ \Carbon\Carbon::parse($user->company->checkin_end)->format('H:i') }}">
+                                                name="checkin_end" value="{{ $user->company->checkin_end }}">
                                         </div>
 
                                         <!-- Menit Toleransi Masuk -->
@@ -206,12 +204,10 @@
                                         <label for="checkout_start" class="form-label mt-3">Jam Keluar:</label>
                                         <div class="d-flex">
                                             <input type="time" class="form-control" id="checkout_start"
-                                                name="checkout_start"
-                                                value="{{ \Carbon\Carbon::parse($user->company->checkout_start)->format('H:i') }}">
+                                                name="checkout_start" value="{{ $user->company->checkout_start }}">
                                             <h2 class="ms-2">-</h2>
                                             <input type="time" class="form-control ms-2" id="checkout_end"
-                                                name="checkout_end"
-                                                value="{{ \Carbon\Carbon::parse($user->company->checkout_end)->format('H:i') }}">
+                                                name="checkout_end" value="{{ $user->company->checkout_end }}">
                                         </div>
 
                                         <div class="mt-4">

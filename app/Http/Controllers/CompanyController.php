@@ -31,11 +31,10 @@ class CompanyController extends Controller
     public function updateOfficeHour(Request $request)
     {
         $request->validate([
-            'checkin_start' => 'required|date_format:H:i|before:checkin_end',
-            'checkin_end' => 'required|date_format:H:i|after:checkin_start',
+            'checkin_start' => 'required|before:checkin_end',
+            'checkin_end' => 'required|after:checkin_start',
             'checkout_start' => [
                 'required',
-                'date_format:H:i',
                 function ($attribute, $value, $fail) use ($request) {
                     if (Carbon::parse($value)->lt(Carbon::parse($request->checkin_end))) {
                         $fail('Waktu check-out awal harus setelah waktu check-in akhir.');
@@ -44,7 +43,6 @@ class CompanyController extends Controller
             ],
             'checkout_end' => [
                 'required',
-                'date_format:H:i',
                 function ($attribute, $value, $fail) use ($request) {
                     if (Carbon::parse($value)->lt(Carbon::parse($request->checkout_start))) {
                         $fail('Waktu check-out akhir harus setelah waktu check-out awal.');
