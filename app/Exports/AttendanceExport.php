@@ -42,8 +42,13 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
         $data = [];
 
         // Menyusun data berdasarkan karyawan dan tanggal
+        $no = 1;
         foreach ($employees as $employee) {
-            $row = [$employee->name]; // Baris pertama dimulai dengan nama karyawan
+            $row = [
+                $no++, // Tambahkan nomor urut
+                strtoupper($employee->name), // Ubah nama karyawan menjadi huruf kapital
+                strtoupper($employee->department->name ?? '-') // Nama departemen
+            ];
 
             for ($date = 1; $date <= Carbon::create($this->year, $this->month, 1)->daysInMonth; $date++) {
                 $currentDate = Carbon::create($this->year, $this->month, $date);
@@ -74,7 +79,7 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
         $daysInMonth = Carbon::create($this->year, $this->month, 1)->daysInMonth;
 
         // Baris pertama untuk tanggal (hanya menampilkan tanggal saja)
-        $heading1 = ['Nama'];
+        $heading1 = ['No.', 'Karyawan', 'Departemen'];
         for ($date = 1; $date <= $daysInMonth; $date++) {
             $currentDate = Carbon::create($this->year, $this->month, $date);
             if (!$currentDate->isWeekend()) {
@@ -93,12 +98,13 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
     public function styles(Worksheet $sheet)
     {
         $highestColumn = $sheet->getHighestColumn();
+        $highestRow = $sheet->getHighestRow();
 
         // Menerapkan style untuk header
         $sheet->getStyle('A1:' . $highestColumn . '1')->applyFromArray([
             'font' => [
                 'bold' => true,
-                'size' => 13, // Menjadikan heading lebih besar
+                'size' => 12, // Menjadikan heading lebih besar
                 'color' => ['argb' => 'FF1E90FF'], // Teks berwarna biru
             ],
             'alignment' => [
@@ -117,10 +123,9 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 
-        // Menerapkan warna pastel berdasarkan status
-        $highestRow = $sheet->getHighestRow();
+        // Menerapkan warna pastel berdasarkan status dan memastikan style diterapkan untuk semua tanggal
         for ($row = 2; $row <= $highestRow; $row++) {
-            for ($col = 'B'; $col !== $highestColumn; $col++) {
+            for ($col = 'B'; $col <= $highestColumn; $col++) {
                 $status = $sheet->getCell($col . $row)->getValue();
                 $styleArray = $this->getStatusStyle($status);
 
@@ -135,13 +140,13 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
     {
         switch ($status) {
             case 'Masuk':
-                return $this->getPastelStyle('FF98FB98'); // Pastel Green
+                return $this->getPastelStyle('d2f0e3'); // Pastel Green
             case 'Izin':
-                return $this->getPastelStyle('FFADD8E6'); // Light Blue
+                return $this->getPastelStyle('fcedd4'); // Light Blue
             case 'Alpha':
-                return $this->getPastelStyle('FFFFB6C1'); // Light Pink
+                return $this->getPastelStyle('fedbda'); // Light Pink
             case 'Telat':
-                return $this->getPastelStyle('FFFFE4B5'); // Moccasin
+                return $this->getPastelStyle('fedbda'); // Light Yellow
             default:
                 return null;
         }
@@ -155,6 +160,9 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
                 'startColor' => [
                     'argb' => $hexColor,
                 ],
+            ],
+            'font' => [
+                'color' => ['argb' => 'FF000000'], // Teks berwarna hitam
             ],
             'borders' => [
                 'allBorders' => [
