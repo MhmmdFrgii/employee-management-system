@@ -60,6 +60,7 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
                     if ($employeeAttendances->where('date', $formattedDate)->isNotEmpty()) {
                         $attendance = $employeeAttendances->where('date', $formattedDate)->first();
                         $status = $this->mapStatus($attendance->status);
+                        // dd($attendance);
                     } else {
                         $status = 'Alpha'; // Jika tidak ada data absensi
                     }
@@ -183,7 +184,7 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
             case 'present':
                 return 'Masuk';
             case 'late':
-                return 'Telat';
+                return 'Masuk';
             case 'absent':
                 return 'Izin';
             default:
