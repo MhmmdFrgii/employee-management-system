@@ -40,6 +40,7 @@
                                 </th>
                                 <th scope="col" class="text-center">Keterangan</th>
                                 <th scope="col" class="text-center">Masuk</th>
+                                <th scope="col" class="text-center">Pulang</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -77,6 +78,12 @@
                                                     Tidak Ada Waktu
                                                 </span>
                                             @endif
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-success-subtle text-success py-2 px-3">
+                                                {{ \Carbon\Carbon::parse($attendance->checkout_time)->format('H:i') }}
+
+                                            </span>
                                         </td>
                                     @else
                                         <td class="text-center">
