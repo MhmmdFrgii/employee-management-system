@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,7 @@ class AttendanceController extends Controller
         $today = Carbon::today()->format('Y-m-d');
         $now = Carbon::now();
 
-    // Mengambil waktu check-in yang diatur oleh perusahaan 
+        // Mengambil waktu check-in yang diatur oleh perusahaan
         $checkin_start = Carbon::parse($company->checkin_start);
         $checkin_end = Carbon::parse($company->checkin_end);
 
@@ -127,5 +128,18 @@ class AttendanceController extends Controller
                 }),
             ],
         ], 200);
+    }
+
+    public function companyLocation()
+    {
+        $company = Auth::user()->company;
+
+        return response()->json([
+            'success' => 'true',
+            'location' => [
+                'latitude' => $company->latitude,
+                'longitude' => $company->longitude
+            ],
+        ]);
     }
 }

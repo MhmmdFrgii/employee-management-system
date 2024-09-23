@@ -30,7 +30,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/kanban-task/{id}', [KanbanController::class, 'destroyTask']);
 
         route::get('user-attendance', [AttendanceController::class, 'userIndex']);
+        route::get('company-location', [AttendanceController::class, 'companyLocation']);
         route::post('user-attendance', [AttendanceController::class, 'userAttendance']);
+
 
         route::get('leave-request', [LeaveRequestController::class, 'index']);
         route::post('leave-request', [LeaveRequestController::class, 'store']);
