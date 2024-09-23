@@ -16,10 +16,8 @@ class SalaryController extends Controller
 {
     public function index(Request $request)
     {
-        // Query dasar untuk Salary dengan relasi employee_detail
-        $query = Salary::with('employee_detail')
-            ->join('transactions', 'salaries.id', '=', 'transactions.salary_id')
-            ->join('employee_details', 'salaries.employee_id', '=', 'employee_details.id')
+        // Query dasar untuk Salary dengan relasi employee_detail dan transactions
+        $query = Salary::with(['employee_detail', 'transaction']) // Eager load employee_detail dan transaction
             ->where('salaries.company_id', Auth::user()->company_id);
 
         // Pencarian berdasarkan karyawan atau jumlah gaji
@@ -30,34 +28,40 @@ class SalaryController extends Controller
                     $q->where('employee_details.name', 'like', '%' . $search . '%');
                 })
                     ->orWhere('salaries.amount', 'like', '%' . $search . '%') // Kolom amount dari salaries
-                    ->orWhere('transactions.amount', 'like', '%' . $search . '%') // Kolom amount dari transactions
-                    ->orWhereDate('transactions.transaction_date', $search);
+                    ->orWhereHas('transaction', function ($q) use ($search) {
+                        $q->where('transactions.amount', 'like', '%' . $search . '%') // Kolom amount dari transactions
+                            ->orWhereDate('transactions.transaction_date', $search); // Filter by date in transaction
+                    });
             });
         }
 
         // Filter berdasarkan tanggal transaksi
         $date = $request->input('date');
         if ($date) {
-            $query->whereDate('transactions.transaction_date', $date);
+            $query->whereHas('transaction', function ($q) use ($date) {
+                $q->whereDate('transactions.transaction_date', $date);
+            });
         }
 
         // Sorting
-        $sortBy = $request->get('sortBy', 'salaries.created_at'); // Default sorting
+        $sortBy = $request->get('sortBy', 'salaries.created_at'); // Default sorting by created_at
         $sortDirection = $request->get('sortDirection', 'asc');
 
         // Jika sorting berdasarkan 'amount', tentukan tabel yang tepat
         if ($sortBy == 'amount') {
             $query->orderBy('salaries.amount', $sortDirection); // Sorting by salaries.amount
         } else if ($sortBy == 'employee') {
-            $query->orderBy('employee_details.name', $sortDirection); // Sorting by employee name
+            $query->orderBy(EmployeeDetail::select('name')
+                ->whereColumn('employee_details.id', 'salaries.employee_id'), $sortDirection); // Sorting by employee name
         } else if ($sortBy == 'payment_date') {
-            $query->orderBy('transactions.transaction_date', $sortDirection); // Sorting by transaction date
+            $query->orderBy(Transaction::select('transaction_date')
+                ->whereColumn('transactions.salary_id', 'salaries.id'), $sortDirection); // Sorting by transaction date
         } else {
             $query->orderBy($sortBy, $sortDirection);
         }
 
         // Ambil data employee dari company tertentu
-        $employees = EmployeeDetail::where('company_id', Auth::user()->company->id)->get();
+        $employees = EmployeeDetail::where('company_id', Auth::user()->company_id)->get();
 
         // Pagination
         $salaries = $query->paginate(10);
@@ -68,6 +72,7 @@ class SalaryController extends Controller
 
         return view('salaries.index', compact('salaries', 'employees', 'sortBy', 'sortDirection', 'search', 'monthlyData'));
     }
+
 
     // Method untuk chart data
     protected function getMonthlyData()
@@ -158,13 +163,24 @@ class SalaryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Salary $salary)
     {
-        $salary = Salary::findOrFail($id);
-        $salary->delete();
+        DB::beginTransaction();
+        try {
 
-        return redirect()->route('salaries.index')->with('success', 'Gaji berhasil dihapus');
+            // Hapus salary
+            $salary->delete();
+
+            DB::commit();
+            return redirect()->route('salaries.index')->with('success', 'Gaji berhasil dihapus');
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollBack();
+            // Pesan error jika ada foreign key constraint yang mencegah penghapusan
+            return redirect()->route('salaries.index')->with('error', 'Tidak dapat menghapus gaji karena masih ada transaksi terkait.');
+        }
     }
+
+
 
     // private function getMonthlyData()
     // {

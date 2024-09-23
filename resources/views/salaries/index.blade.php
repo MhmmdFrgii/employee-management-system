@@ -74,19 +74,7 @@
                                     </a>
                                 </th>
 
-                                <th>
-                                    <a
-                                        href="{{ route('salaries.index', array_merge(request()->query(), ['sortBy' => 'description', 'sortDirection' => request('sortDirection') === 'asc' ? 'desc' : 'asc'])) }}">
-                                        Deskripsi
-                                        @if (request('sortBy') === 'description')
-                                            @if (request('sortDirection') === 'asc')
-                                                &#9650;
-                                            @else
-                                                &#9660;
-                                            @endif
-                                        @endif
-                                    </a>
-                                </th>
+
                                 <th>Total Gaji</th>
 
 
@@ -100,10 +88,8 @@
                                     <td>{{ $salary->employee_detail->name ?? 'N/A' }}</td>
                                     <td>Rp {{ number_format($salary->amount, 2, ',', '.') }}</td>
                                     <td>Rp {{ number_format($salary->extra, 2, ',', '.') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($salary->transaction_date)->format('d M Y') }}</td>
 
-                                    <td>{{ \Carbon\Carbon::parse($salary->transaction_date)->format('d M Y') }}
-                                    </td>
-                                    <td>{{ $salary->description ?? '-' }}</td>
                                     <td>Rp {{ number_format($salary->total_amount, 2, ',', '.') }}</td>
                                     <td class="text-center">
                                         <button data-bs-target="#editSalariesModal{{ $salary->id }}"
@@ -111,12 +97,23 @@
                                         <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#deleteSalariesModal{{ $salary->id }}"
                                             type="button">Hapus</button>
+
+                                        <!-- Form hapus -->
+                                        <form action="{{ route('salaries.destroy', $salary->id) }}" method="POST"
+                                            style="display: none;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" id="delete-button-{{ $salary->id }}"
+                                                class="btn btn-sm btn-danger" style="display: none;">
+                                                <i class="ti ti-trash"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
 
                                 {{-- content modal  --}}
                                 @include('salaries.partial.edit-modal')
-                                @include('salaries.partial.delete-modal')
+                                @include('salaries.partial.delete-modal', ['salary' => $salary])
                                 {{-- end content modal --}}
 
                             @empty
@@ -129,6 +126,7 @@
                                 </tr>
                             @endforelse
                         </tbody>
+
                     </table>
                 </div>
 

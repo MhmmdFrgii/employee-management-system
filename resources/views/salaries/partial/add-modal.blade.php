@@ -29,7 +29,8 @@
                      </div>
                      <div class="mb-3">
                          <label for="create_amount" class="form-label">Gaji</label>
-                         <input type="text" class="form-control" id="create_amount" name="amount" readonly value="{{ old('amount') }}">
+                         <input type="text" class="form-control" id="create_amount" name="amount" readonly
+                             value="{{ old('amount') }}">
                      </div>
                      <div class="mb-3">
                          <label for="create_extra" class="form-label">Bonus Gaji</label>
@@ -51,15 +52,7 @@
                              <div class="invalid-feedback">{{ $message }}</div>
                          @enderror
                      </div>
-                     <div class="mb-3">
-                         <label for="create_description" class="form-label">Deskripsi</label>
-                         <input type="text" name="description" id="create_description"
-                             class="form-control @error('description') is-invalid @enderror"
-                             value="{{ old('description') }}">
-                         @error('description')
-                             <div class="invalid-feedback">{{ $message }}</div>
-                         @enderror
-                     </div>
+
                      <div class="mb-3">
                          <label for="create_transaction_date" class="form-label">Tanggal Transaksi</label>
                          <input type="date" name="transaction_date" id="create_transaction_date"
