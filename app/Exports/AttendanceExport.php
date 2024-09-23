@@ -6,10 +6,12 @@ use App\Models\Attendance;
 use App\Models\EmployeeDetail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Border;
@@ -29,20 +31,15 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
     public function collection()
     {
         $user = Auth::user();
-
-        // Ambil karyawan berdasarkan perusahaan user
         $employees = EmployeeDetail::where('company_id', $user->company_id)->get();
-
-        // Ambil absensi untuk bulan dan tahun yang dipilih
         $attendances = Attendance::whereYear('date', $this->year)
             ->whereMonth('date', $this->month)
             ->get()
             ->groupBy('employee_id');
 
         $data = [];
-
-        // Menyusun data berdasarkan karyawan dan tanggal
         $no = 1;
+
         foreach ($employees as $employee) {
             $row = [
                 $no++, // Tambahkan nomor urut
@@ -54,18 +51,16 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
                 $currentDate = Carbon::create($this->year, $this->month, $date);
                 $formattedDate = $currentDate->format('Y-m-d');
 
-                if (!$currentDate->isWeekend()) {
-                    $employeeAttendances = $attendances->get($employee->id, collect());
+                $employeeAttendances = $attendances->get($employee->id, collect());
 
-                    if ($employeeAttendances->where('date', $formattedDate)->isNotEmpty()) {
-                        $attendance = $employeeAttendances->where('date', $formattedDate)->first();
-                        $status = $this->mapStatus($attendance->status);
-                    } else {
-                        $status = 'Alpha'; // Jika tidak ada data absensi
-                    }
-
-                    $row[] = $status;
+                if ($employeeAttendances->where('date', $formattedDate)->isNotEmpty()) {
+                    $attendance = $employeeAttendances->where('date', $formattedDate)->first();
+                    $status = $this->mapStatus($attendance->status);
+                } else {
+                    $status = 'Alpha'; // Jika tidak ada data absensi
                 }
+
+                $row[] = $status;
             }
 
             $data[] = $row;
@@ -82,9 +77,7 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
         $heading1 = ['No.', 'Karyawan', 'Departemen'];
         for ($date = 1; $date <= $daysInMonth; $date++) {
             $currentDate = Carbon::create($this->year, $this->month, $date);
-            if (!$currentDate->isWeekend()) {
-                $heading1[] = $currentDate->format('d'); // Menampilkan hanya tanggal
-            }
+            $heading1[] = $currentDate->format('d'); // Menampilkan hanya tanggal
         }
 
         return [$heading1];
@@ -97,10 +90,14 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
 
     public function styles(Worksheet $sheet)
     {
+        // Mendapatkan kolom dan baris tertinggi
         $highestColumn = $sheet->getHighestColumn();
         $highestRow = $sheet->getHighestRow();
 
-        // Menerapkan style untuk header
+        // Konversi kolom tertinggi dari string ke indeks numerik
+        $highestColumnIndex = Coordinate::columnIndexFromString($highestColumn);
+
+        // Menerapkan style untuk header (baris pertama)
         $sheet->getStyle('A1:' . $highestColumn . '1')->applyFromArray([
             'font' => [
                 'size' => 12, // Menjadikan heading lebih besar
@@ -117,22 +114,68 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
             ],
         ]);
 
-        // Auto-fit untuk semua kolom
-        foreach (range('A', $highestColumn) as $columnID) {
+        // Auto-fit untuk semua kolom dari 'A' hingga kolom tertinggi
+        for ($col = 1; $col <= $highestColumnIndex; $col++) {
+            $columnID = Coordinate::stringFromColumnIndex($col);
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 
-        // Menerapkan warna pastel berdasarkan status dan memastikan style diterapkan untuk semua tanggal
+        // Menerapkan warna pastel berdasarkan status pada setiap cell
         for ($row = 2; $row <= $highestRow; $row++) {
-            for ($col = 'B'; $col <= $highestColumn; $col++) {
-                $status = $sheet->getCell($col . $row)->getValue();
+            for ($col = 4; $col <= $highestColumnIndex; $col++) { // Kolom ke-4 ke atas adalah data absensi
+                // Mendapatkan nama kolom dari indeks
+                $colString = Coordinate::stringFromColumnIndex($col);
+
+                // Hitung tanggal berdasarkan kolom
+                $currentDate = Carbon::create($this->year, $this->month, $col - 3); // Kolom ke-4 adalah tanggal 1
+
+                // Cek apakah hari Sabtu atau Minggu
+                if ($currentDate->isWeekend()) {
+                    // Set teks "Libur" untuk akhir pekan
+                    $sheet->setCellValue($colString . $row, 'Libur');
+
+                    // Terapkan warna putih untuk akhir pekan
+                    $sheet->getStyle($colString . $row)->applyFromArray($this->getWeekendStyle());
+                    continue; // Lanjutkan ke cell berikutnya
+                }
+
+                // Mendapatkan nilai dari cell
+                $status = $sheet->getCell($colString . $row)->getValue();
+
+                // Mendapatkan style berdasarkan status
                 $styleArray = $this->getStatusStyle($status);
 
+                // Jika style ditemukan, terapkan style ke cell tersebut
                 if ($styleArray !== null) {
-                    $sheet->getStyle($col . $row)->applyFromArray($styleArray);
+                    $sheet->getStyle($colString . $row)->applyFromArray($styleArray);
                 }
             }
         }
+    }
+
+    private function getWeekendStyle()
+    {
+        return [
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'argb' => 'FFFFFFFF', // Warna putih untuk akhir pekan
+                ],
+            ],
+            'font' => [
+                'color' => ['argb' => 'FF000000'], // Teks berwarna hitam
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'], // Border hitam
+                ],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ],
+        ];
     }
 
     private function getStatusStyle($status)
@@ -182,7 +225,7 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
             case 'present':
                 return 'Masuk';
             case 'late':
-                return 'Telat';
+                return 'Masuk';
             case 'absent':
                 return 'Izin';
             default:
@@ -190,4 +233,3 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
         }
     }
 }
-

@@ -67,7 +67,8 @@
 
             <div
                 class="form-check form-switch gap-3 col-lg-3 col-md-6 col-12 d-flex justify-content-between align-items-center">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exportExcelModal">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#exportExcelModal">
                     Rekap Excel
                 </button>
             </div>
