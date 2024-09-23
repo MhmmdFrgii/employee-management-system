@@ -60,7 +60,6 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
                     if ($employeeAttendances->where('date', $formattedDate)->isNotEmpty()) {
                         $attendance = $employeeAttendances->where('date', $formattedDate)->first();
                         $status = $this->mapStatus($attendance->status);
-                        // dd($attendance);
                     } else {
                         $status = 'Alpha'; // Jika tidak ada data absensi
                     }
@@ -93,7 +92,7 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
 
     public function map($row): array
     {
-        return $row; // Mengembalikan data apa adanya karena sudah disusun di `collection()`
+        return $row; // Mengembalikan data apa adanya karena sudah disusun di collection()
     }
 
     public function styles(Worksheet $sheet)
@@ -104,7 +103,6 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
         // Menerapkan style untuk header
         $sheet->getStyle('A1:' . $highestColumn . '1')->applyFromArray([
             'font' => [
-                'bold' => true,
                 'size' => 12, // Menjadikan heading lebih besar
                 'color' => ['argb' => 'FF1E90FF'], // Teks berwarna biru
             ],
@@ -184,7 +182,7 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
             case 'present':
                 return 'Masuk';
             case 'late':
-                return 'Masuk';
+                return 'Telat';
             case 'absent':
                 return 'Izin';
             default:
@@ -192,3 +190,4 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
         }
     }
 }
+
