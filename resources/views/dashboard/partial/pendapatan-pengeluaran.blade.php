@@ -34,13 +34,18 @@
             },
             yaxis: {
                 title: {
-                    // text: 'Jumlah Proyek Selesai'
+                    text: 'Jumlah (Rp)'
+                },
+                labels: {
+                    formatter: function(val) {
+                        return 'Rp ' + val.toLocaleString('id-ID');
+                    }
                 }
             },
             tooltip: {
                 y: {
                     formatter: function(val) {
-                        return val + " proyek";
+                        return 'Rp ' + val.toLocaleString('id-ID');
                     }
                 }
             },
@@ -52,8 +57,7 @@
             }
         };
 
-        var transactionChart = new ApexCharts(document.querySelector("#transactionChart"),
-            transactionData);
+        var transactionChart = new ApexCharts(document.querySelector("#transactionChart"), transactionData);
         transactionChart.render();
     </script>
 @else
