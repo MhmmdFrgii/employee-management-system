@@ -19,7 +19,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th scope="col" style="width: 1rem">No.</th>
-                                <th scope="col"><a href="#" class="sort-link text-black" data-sort="employee_id"
+                                <th scope="col"><a href="#" class="sort-link text-black" data-sort="name"
                                         data-direction="{{ request('sortDirection') === 'asc' ? 'desc' : 'asc' }}">
                                         Karyawan
                                         @if (request('sortBy') === 'employee_id')
@@ -44,53 +44,53 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($employees as $employee)
+                            @forelse ($attendanceData as $data)
                                 <tr>
-                                    <td>{{ $loop->iteration }} .</td>
-                                    <td class="text-uppercase">{{ $employee->name }}</td>
-                                    <td class="text-uppercase">{{ $employee->department->name }}</td>
-                                    <td>{{ $selectedDate->format('Y-m-d') }}</td>
-                                    @php $attendance = $employee->attendances->first(); @endphp
+                                    <td>{{ $loop->iteration }}.</td>
+                                    <td class="text-uppercase">{{ $data['name'] }}</td>
+                                    <td class="text-uppercase">
+                                        @if (isset($data['department_name']))
+                                            {{ $data['department_name'] }}
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                    <td>{{ $data['date'] }}</td>
 
-                                    @if ($employee->attendances->isNotEmpty())
-                                        <td class="text-center">
-                                            @if ($attendance->status == 'present')
-                                                <span class="badge bg-success-subtle text-success py-2 px-3">masuk</span>
-                                            @elseif($attendance->status == 'late')
-                                                <span class="badge bg-danger-subtle text-danger py-2 px-3">telat</span>
-                                            @elseif($attendance->status == 'absent')
-                                                <span class="badge bg-warning-subtle text-warning py-2 px-3">izin</span>
-                                            @else
-                                                <span class="badge bg-warning-subtle text-warning py-2 px-3">alpha</span>
-                                            @endif
-                                        </td>
-                                        <td class="text-center">
-                                            @if ($attendance->status == 'present')
-                                                <span class="badge bg-success-subtle text-success py-2 px-3">
-                                                    {{ $attendance->created_at->format('H:i') }}
-                                                </span>
-                                            @elseif ($attendance->status == 'late')
-                                                <span class="badge bg-danger-subtle text-danger py-2 px-3">
-                                                    {{ $attendance->created_at->format('H:i') }}
-                                                </span>
-                                            @else
-                                                <span class="badge bg-secondary-subtle text-secondary py-2 px-3">
-                                                    Tidak Ada Waktu
-                                                </span>
-                                            @endif
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="badge bg-success-subtle text-success py-2 px-3">
-                                                {{ \Carbon\Carbon::parse($attendance->checkout_time)->format('H:i') }}
-
-                                            </span>
-                                        </td>
-                                    @else
-                                        <td class="text-center">
+                                    <td class="text-center">
+                                        @if ($data['attendance_status'] == 'present')
+                                            <span class="badge bg-success-subtle text-success py-2 px-3">masuk</span>
+                                        @elseif ($data['attendance_status'] == 'late')
+                                            <span class="badge bg-warning-subtle text-warning py-2 px-3">telat</span>
+                                        @elseif ($data['attendance_status'] == 'absent' || $data['attendance_status'] == 'izin')
+                                            <span class="badge bg-primary-subtle text-primary py-2 px-3">izin</span>
+                                        @else
                                             <span class="badge bg-danger-subtle text-danger py-2 px-3">alpha</span>
-                                        </td>
-                                        <td></td>
-                                    @endif
+                                        @endif
+                                    </td>
+
+                                    <td class="text-center">
+                                        @if (
+                                            $data['attendance_status'] === 'absent' ||
+                                                $data['attendance_status'] === 'izin' ||
+                                                $data['attendance_time'] === '-')
+                                            -
+                                        @else
+                                            <span class="badge bg-success-subtle text-success py-2 px-3">
+                                                {{ $data['attendance_time'] }}
+                                            </span>
+                                        @endif
+                                    </td>
+
+                                    <td class="text-center">
+                                        @if ($data['attendance_status'] === 'absent' || $data['attendance_status'] === 'izin' || $data['checkout_time'] === '-')
+                                            -
+                                        @else
+                                            <span class="badge bg-success-subtle text-success py-2 px-3">
+                                                {{ $data['checkout_time'] }}
+                                            </span>
+                                        @endif
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
