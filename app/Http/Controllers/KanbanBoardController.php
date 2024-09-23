@@ -24,6 +24,7 @@ class KanbanBoardController extends Controller
         $comments = Comment::where('project_id', $kanbanboardID)
             ->with(['replies.user']) // Eager loading relasi user di dalam replies
             ->whereNull('parent_id')
+            ->latest()
             ->get();
 
         $commentCount = Comment::count();

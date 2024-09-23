@@ -87,15 +87,15 @@
                 <textarea class="form-control mb-4" name="comment" rows="3"></textarea>
                 <button class="btn btn-primary" type="submit">Kirim Komentar</button>
             </form>
+
             <div class="d-flex align-items-center gap-3 mb-4 mt-7 pt-8">
                 <h4 class="mb-0 fw-semibold">Komentar</h4>
                 <span
                     class="badge bg-light-primary text-primary fs-4 fw-semibold px-6 py-8 rounded">{{ $commentCount }}</span>
             </div>
+
             <div class="position-relative">
-
                 @if (!empty($comments) && $comments->count())
-
                     @foreach ($comments as $comment)
                         <div class="p-4 rounded-2 bg-light mb-3">
                             <div class="d-flex align-items-center gap-3">
@@ -103,39 +103,60 @@
                                     class="rounded-circle" width="33" height="33">
                                 <h6 class="fw-semibold mb-0 fs-4">{{ $comment->user->name }}</h6>
                                 <span class="p-1 bg-light-dark rounded-circle d-inline-block"></span>
+                                <span>{{ $comment->created_at->diffForHumans() }}</span>
                             </div>
-                            <p class="my-3">
-                                {{ $comment->comment }}
-                            </p>
+                            <p class="my-3">{{ $comment->comment }}</p>
+
+                            <!-- Button for Reply -->
                             <div class="d-flex align-items-center gap-2">
-                                <a class="text-white d-flex align-items-center justify-content-center bg-secondary p-2 fs-4 rounded-circle"
-                                    href="">
-                                    <i class="ti ti-arrow-back-up"></i>
-                                </a>
+                                <button class="btn text-secondary"
+                                    onclick="showReplyForm({{ $comment->id }})">Balas</button>
                             </div>
+
+                            <!-- Reply Form (Hidden by Default) -->
+                            <div id="reply-form-{{ $comment->id }}" style="display: none; margin-left: 20px;">
+                                <form action="{{ route('comments.reply', $comment->id) }}" method="POST">
+                                    @csrf
+                                    <textarea class="form-control mb-2" name="comment" rows="2" placeholder="Tulis balasan..."></textarea>
+                                    <button class="btn btn-primary btn-sm" type="submit">Kirim Balasan</button>
+                                </form>
+                            </div>
+
+                            <!-- Display Replies -->
+                            @if ($comment->replies && $comment->replies->count() > 0)
+                                @foreach ($comment->replies as $reply)
+                                    <div class="p-4 rounded-2 bg-light mb-3 ms-7">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <img src="{{ asset('dist/images/profile/user-3.jpg') }}" alt=""
+                                                class="rounded-circle" width="40" height="40">
+                                            <h6 class="fw-semibold mb-0 fs-4">{{ $reply->user->name }}</h6>
+                                            <span class="p-1 bg-light-dark rounded-circle d-inline-block"></span>
+                                            <span>{{ $comment->created_at->diffForHumans() }}</span>
+                                        </div>
+                                        <p class="my-3">{{ $reply->comment }}</p>
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
                     @endforeach
-
-                    @if ($comment->replies && $comment->replies->count() > 0)
-                        @foreach ($comment->replies as $reply)
-                            <div class="p-4 rounded-2 bg-light mb-3 ms-7">
-                                <div class="d-flex align-items-center gap-3">
-                                    <img src="../../dist/images/profile/user-3.jpg" alt="" class="rounded-circle"
-                                        width="40" height="40">
-                                    <h6 class="fw-semibold mb-0 fs-4">{{ $reply->user->name }}</h6>
-                                    <span class="p-1 bg-light-dark rounded-circle d-inline-block"></span>
-                                </div>
-                                <p class="my-3">
-                                    {{ $reply->comment }}
-                                </p>
-                            </div>
-                        @endforeach
-                    @endif
                 @endif
             </div>
         </div>
     </div>
+
+
 @endsection
+<script>
+    function showReplyForm(commentId) {
+        // Toggle visibility of the reply form
+        var replyForm = document.getElementById('reply-form-' + commentId);
+        if (replyForm.style.display === "none") {
+            replyForm.style.display = "block";
+        } else {
+            replyForm.style.display = "none";
+        }
+    }
+</script>
 {{--
 <script>
     document.addEventListener('DOMContentLoaded', function() {
