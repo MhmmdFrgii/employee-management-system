@@ -45,21 +45,28 @@ class DashboardController extends Controller
             ->orderBy('end_date', 'asc')
             ->get();
 
+
         // Logika untuk pendapatan dan pengeluaran bulanan
         $months = [];
         $activeCounts = [];
         $earningCounts = [];
-        $currentMonth = Carbon::now()->month;
-        $currentYear = Carbon::now()->year;
 
-        for ($i = 5; $i >= 0; $i--) {
-            $month = Carbon::now()->subMonths($i);
-            $months[] = $month->format('F');
+        // Definisikan 6 bulan dari April sampai September
+        $monthStart = Carbon::createFromDate(Carbon::now()->year, 4, 1); // Mulai dari April
+
+        for ($i = 0; $i < 6; $i++) {
+            // Tambah bulan dari April sampai September secara akurat
+            $month = $monthStart->copy()->addMonths($i);
+            $months[] = $month->format('F'); // Format bulan dalam format text
+
+            // Hitung project yang completed di bulan tertentu
             $activeCounts[] = Project::where('status', 'completed')
                 ->where('company_id', $company_id)
                 ->whereYear('start_date', $month->year)
                 ->whereMonth('start_date', $month->month)
                 ->count();
+
+            // Hitung total earning berdasarkan 'price' dari project di bulan tertentu
             $earningCounts[] = Project::where('status', 'completed')
                 ->where('company_id', $company_id)
                 ->whereYear('start_date', $month->year)
@@ -70,9 +77,9 @@ class DashboardController extends Controller
         $project_data = [];
         for ($i = 0; $i < 6; $i++) {
             $project_data[] = [
-                $i + 1,
-                $activeCounts[$i],
-                $earningCounts[$i]
+                $i + 1,                   // Nomor bulan
+                $activeCounts[$i],         // Jumlah project yang selesai
+                $earningCounts[$i]         // Jumlah total pendapatan
             ];
         }
 
@@ -81,28 +88,35 @@ class DashboardController extends Controller
         $incomes = [];
         $expenses = [];
 
-        for ($i = 5; $i >= 0; $i--) {
-            $monthData = Carbon::now()->subMonths($i);
-            $monthtransa[] = $monthData->format('F');
+        // Ulangi proses untuk transaksi income dan expense di bulan April sampai September
+        for ($i = 0; $i < 6; $i++) {
+            $monthData = $monthStart->copy()->addMonths($i); // Pindah bulan secara akurat
+            $monthtransa[] = $monthData->format('F'); // Format nama bulan
 
+            // Hitung income bulanan
             $monthlyIncomes = Transaction::where('company_id', $company_id)
                 ->where('type', 'income')
-                ->whereYear('created_at', $monthData->year)
-                ->whereMonth('created_at', $monthData->month)
+                ->whereYear('transaction_date', $monthData->year)
+                ->whereMonth('transaction_date', $monthData->month)
                 ->sum('amount');
 
+            // Hitung expense bulanan
             $monthlyExpenses = Transaction::where('company_id', $company_id)
                 ->where('type', 'expense')
-                ->whereYear('created_at', $monthData->year)
-                ->whereMonth('created_at', $monthData->month)
+                ->whereYear('transaction_date', $monthData->year)
+                ->whereMonth('transaction_date', $monthData->month)
                 ->sum('amount');
 
-            $incomes[] = $monthlyIncomes;
-            $expenses[] = $monthlyExpenses;
+            $incomes[] = $monthlyIncomes; // Simpan income tiap bulan
+            $expenses[] = $monthlyExpenses; // Simpan expense tiap bulan
         }
 
-        $totalIncomes = array_sum($incomes);
-        $totalExpenses = array_sum($expenses);
+
+
+
+        $totalIncomes = array_sum($incomes); // Total semua income
+        $totalExpenses = array_sum($expenses); // Total semua expense
+
 
         $departments = Department::where('company_id', $company_id)->pluck('name')->toArray();
         $department_data = Department::where('company_id', $company_id)

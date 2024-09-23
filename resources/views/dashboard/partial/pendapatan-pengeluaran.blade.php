@@ -27,7 +27,7 @@
                 enabled: false
             },
             xaxis: {
-                categories: @json($monthtransa),
+                categories: @json($monthtransa), // Nama bulan yang benar
                 title: {
                     text: 'Bulan'
                 }
