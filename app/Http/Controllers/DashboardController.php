@@ -111,9 +111,6 @@ class DashboardController extends Controller
             $expenses[] = $monthlyExpenses; // Simpan expense tiap bulan
         }
 
-
-
-
         $totalIncomes = array_sum($incomes); // Total semua income
         $totalExpenses = array_sum($expenses); // Total semua expense
 
@@ -167,8 +164,8 @@ class DashboardController extends Controller
                 $month = Carbon::now()->subMonths($i);
                 $monthlyCompletedProjects[$month->format('F')] = Project::where('department_id', $department->id)
                     ->where('status', 'completed')
-                    ->whereYear('end_date', $month->year)
-                    ->whereMonth('end_date', $month->month)
+                    ->whereYear('start_date', $month->year)
+                    ->whereMonth('start_date', $month->month)
                     ->count();
             }
             $completedProjects[$department->name] = $monthlyCompletedProjects;
