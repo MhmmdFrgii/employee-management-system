@@ -41,7 +41,7 @@ class ProjectController extends Controller
                 'type' => 'income',
                 'amount' => $project->price,
                 'description' => $project->description,
-                'transaction_date' => date('Y-m-d'),
+                'transaction_date' =>  $project->start_date,
                 'company_id' => Auth::user()->company_id
             ]);
 
