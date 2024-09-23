@@ -11,6 +11,17 @@ class Comment extends Model
     protected $table = 'comments';
     protected $guarded = [];
 
+
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class, 'parent_id');
+    }
+
+    public function replies()
+    {
+        return $this->hasMany(Comment::class, 'parent_id')->whereNotNull('parent_id');
+    }
+
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id');

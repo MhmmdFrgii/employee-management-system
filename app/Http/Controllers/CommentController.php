@@ -9,28 +9,10 @@ use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class CommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $comment = Comment::all();
-        $project = Project::where('company_id', Auth::user()->company->id)->get();
-        $employees = EmployeeDetail::where('company_id', Auth::user()->company->id)->get();
-        $user = User::all();
-        return view('comment.index', compact('comment', 'employees', 'project', 'user'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -45,25 +27,24 @@ class CommentController extends Controller
             'project_id' => $request->project_id,
             'user_id' => $userId,
             'comment' => $request->comment,
+            'parent_id' => null
         ]);
         return redirect()->back()->with('success', 'Komentar berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Comment $comment)
+    public function reply(Comment $comment, Request $request)
     {
-        //
+
+        Comment::create([
+            'project_id' => $comment->project_id,
+            'user_id' => $comment->user_id,
+            'comment' => $request->comment,
+            'parent_id' => $comment->id
+        ]);
+
+        return back();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Comment $comment)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

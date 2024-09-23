@@ -63,7 +63,11 @@ Route::middleware('auth')->group(function () {
             Route::get('/getEmployeeSalary/{employeeId}', [SalaryController::class, 'getEmployeeSalary'])->name('salary.getEmployeeSalary');
 
             Route::resource('positions', PositionController::class);
-            Route::resource('comment', CommentController::class);
+
+            Route::post('comment', [CommentController::class, 'store'])->name('comment.store');
+            Route::post('comments/{comment}/reply', [CommentController::class, 'reply'])->name('comments.reply');
+            Route::put('comment/{comment}', [CommentController::class, 'update'])->name('comment.update');
+            Route::delete('comment/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
 
             // Route::resource('attendance', AttendanceController::class);
             Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');

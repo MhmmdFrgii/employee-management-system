@@ -21,8 +21,12 @@ class KanbanBoardController extends Controller
     {
         $kanbanboardID = $request->id ? $request->id : 1;
 
-        // Ambil semua komentar yang terkait dengan KanbanBoard tertentu
-        $comments = Comment::where('project_id', $kanbanboardID)->latest()->get();
+        $comments = Comment::where('project_id', $kanbanboardID)
+            ->with(['replies.user']) // Eager loading relasi user di dalam replies
+            ->whereNull('parent_id')
+            ->get();
+
+        $commentCount = Comment::count();
 
         // Ambil KanbanBoard yang terkait
         $kanbanboard = KanbanBoard::find($kanbanboardID);
@@ -48,7 +52,8 @@ class KanbanBoardController extends Controller
             })->get();
         }
 
-        return view('kanban-board.index', compact('kanbanboard', 'todo', 'progress', 'done', 'users', 'comments'));
+
+        return view('kanban-board.index', compact('kanbanboard', 'todo', 'progress', 'done', 'users', 'comments', 'commentCount'));
     }
 
 
@@ -69,7 +74,7 @@ class KanbanBoardController extends Controller
 
         $kanbanboardID = $request->id ?  $request->id : 1;
 
-        $kanbanboards = KanbanBoard::all(); // Perbaikan nama variabel 
+        $kanbanboards = KanbanBoard::all(); // Perbaikan nama variabel
         $todo = KanbanTask::where('kanban_boards_id', $kanbanboardID)
             ->where('status', 'todo')
             ->get();

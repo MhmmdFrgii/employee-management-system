@@ -76,37 +76,64 @@
         ])
     @endforeach
 
-    <div class="container mt-3">
-        <h5>Tambah Komentar</h5>
-        @if (Auth::user()->hasRole('manager'))
-            <div class="container mt-3">
-                <form action="{{ route('comment.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="project_id" value="{{ $kanbanboard->id }}">
-                    <div class="mb-3">
-                        <textarea class="form-control" placeholder="Tulis komentar anda..." id="comment" name="comment" rows="3"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-sm">Kirim Komentar</button>
-                </form>
-            </div>
-        @endif
 
-        @if (!empty($comments) && $comments->count())
-            <div class="comments-section mt-4">
-                <h5 class="mb-3">Komentar</h5>
-                @foreach ($comments as $comment)
-                    <div class="comment-box mb-2 p-2 rounded-1 border border-light shadow-sm">
-                        <div class="comment-content ms-2">
-                            <div class="mb-2 d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0 text-primary">{{ $comment->user->name }}</h5>
-                                <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
-                            </div>
-                            <p class="mb-1">{{ $comment->comment }}</p>
-                        </div>
-                    </div>
-                @endforeach
+
+    <div class="card">
+        <div class="card-body">
+            <h4 class="mb-4 fw-semibold">Tambah Komentar</h4>
+            <form action="{{ route('comment.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="project_id" value="{{ $kanbanboard->id }}">
+                <textarea class="form-control mb-4" name="comment" rows="3"></textarea>
+                <button class="btn btn-primary" type="submit">Kirim Komentar</button>
+            </form>
+            <div class="d-flex align-items-center gap-3 mb-4 mt-7 pt-8">
+                <h4 class="mb-0 fw-semibold">Komentar</h4>
+                <span
+                    class="badge bg-light-primary text-primary fs-4 fw-semibold px-6 py-8 rounded">{{ $commentCount }}</span>
             </div>
-        @endif
+            <div class="position-relative">
+
+                @if (!empty($comments) && $comments->count())
+
+                    @foreach ($comments as $comment)
+                        <div class="p-4 rounded-2 bg-light mb-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <img src="{{ asset('dist/images/profile/user-4.jpg') }}" alt=""
+                                    class="rounded-circle" width="33" height="33">
+                                <h6 class="fw-semibold mb-0 fs-4">{{ $comment->user->name }}</h6>
+                                <span class="p-1 bg-light-dark rounded-circle d-inline-block"></span>
+                            </div>
+                            <p class="my-3">
+                                {{ $comment->comment }}
+                            </p>
+                            <div class="d-flex align-items-center gap-2">
+                                <a class="text-white d-flex align-items-center justify-content-center bg-secondary p-2 fs-4 rounded-circle"
+                                    href="">
+                                    <i class="ti ti-arrow-back-up"></i>
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+
+                    @if ($comment->replies && $comment->replies->count() > 0)
+                        @foreach ($comment->replies as $reply)
+                            <div class="p-4 rounded-2 bg-light mb-3 ms-7">
+                                <div class="d-flex align-items-center gap-3">
+                                    <img src="../../dist/images/profile/user-3.jpg" alt="" class="rounded-circle"
+                                        width="40" height="40">
+                                    <h6 class="fw-semibold mb-0 fs-4">{{ $reply->user->name }}</h6>
+                                    <span class="p-1 bg-light-dark rounded-circle d-inline-block"></span>
+                                </div>
+                                <p class="my-3">
+                                    {{ $reply->comment }}
+                                </p>
+                            </div>
+                        @endforeach
+                    @endif
+                @endif
+            </div>
+        </div>
     </div>
 @endsection
 {{--
