@@ -44,7 +44,7 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item {{ Request::is('manager/projects*') ? 'selected' : '' }}">
+                <li class="sidebar-item {{ Request::is('manager/projects*') || request()->routeIs('kanban-boards.*') ? 'selected' : '' }}">
                     <a class="sidebar-link" href="{{ route('projects.index') }}" aria-expanded="false">
                         <span class="d-flex">
                             <i class="ti ti-clipboard-list"></i>
