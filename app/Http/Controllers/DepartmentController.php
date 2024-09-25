@@ -59,6 +59,11 @@ class DepartmentController extends Controller
         return redirect()->route('departments.index')->with('success', 'Departemen berhasil dibuat.');
     }
 
+    public function restore(Department $department)
+    {
+        
+    }
+
     /**
      * Update the specified resource in storage.
      */
