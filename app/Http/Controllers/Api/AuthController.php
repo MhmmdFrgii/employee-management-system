@@ -18,13 +18,28 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
 
-        if ($validator->fails()) return response()->json(['message' => 'Invalid fields', 'errors' => $validator->errors()], 422); 
+        if ($validator->fails()) return response()->json(['message' => 'Invalid fields', 'errors' => $validator->errors()], 422);
 
         if (!Auth::attempt($validator->validate())) {
             return response()->json([
                 'message' => 'Email or Password Incorect.'
             ], 401);
         }
+
+        $user = Auth::user();
+
+        if ($user->hasRole('manager')) {
+            return response()->json([
+                'message' => 'Tidak bisa login.'
+            ], 403);
+        }
+
+        if (!$user->hasRole('employee')) {
+            return response()->json([
+                'message' => 'Tidak bisa login.'
+            ], 403);
+        }
+
 
         $token = Auth::user()->createToken('access_token')->plainTextToken;
 

@@ -56,6 +56,11 @@ class DepartmentController extends Controller
         return redirect()->route('departments.index')->with('success', 'Departemen berhasil dibuat.');
     }
 
+    public function restore(Department $department)
+    {
+        
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -75,7 +80,7 @@ class DepartmentController extends Controller
             $department->delete();
             return redirect()->route('departments.index')->with('success', 'Hapus Department Success!');
         } catch (QueryException $e) {
-            if ($e->getCode() === '23000') { 
+            if ($e->getCode() === '23000') {
                 return redirect()->route('departments.index')->with('danger', 'Tidak dapat menghapus department karena terkait dengan data lain.');
             }
             return redirect()->route('departments.index')->with('danger', 'Terjadi kesalahan saat menghapus department.');
