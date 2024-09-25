@@ -27,7 +27,7 @@ class KanbanBoardController extends Controller
             ->latest()
             ->get();
 
-        $commentCount = Comment::count();
+        $commentCount = Comment::where('project_id', $kanbanboardID)->count();
 
         // Ambil KanbanBoard yang terkait
         $kanbanboard = KanbanBoard::find($kanbanboardID);
