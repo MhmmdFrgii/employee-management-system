@@ -54,6 +54,7 @@ Route::middleware('auth')->group(function () {
             Route::get('dashboard', [DashboardController::class, 'index'])->name('manager.dashboard');
 
             Route::resource('project-assignments', ProjectAssignmentController::class);
+            Route::post('department/restore/{id}', [DepartmentController::class, 'restore'])->name('departments.restore');
             Route::resource('departments', DepartmentController::class);
             Route::resource('salaries', SalaryController::class);
 

@@ -19,7 +19,10 @@ class DepartmentController extends Controller
         // Ambil company_id dari user yang sedang login
         $companyId = Auth::user()->company_id;
 
-        $query = Department::query();
+        $query = Department::query()->withTrashed();
+
+        // order by deleted at
+        $query->orderByRaw('deleted_at IS NOT NULL');
 
         // Filter berdasarkan company_id
         $query->where('company_id', $companyId);
@@ -86,6 +89,16 @@ class DepartmentController extends Controller
             return redirect()->route('departments.index')->with('danger', 'Terjadi kesalahan saat menghapus department.');
         } catch (Exception $e) {
             return redirect()->route('departments.index')->with('danger', 'Terjadi kesalahan tak terduga.');
+        }
+    }
+
+    public function restore($id)
+    {
+        $department = Department::withTrashed()->find($id);
+
+        if ($department) {
+            $department->restore();
+            return redirect()->route('departments.index')->with('success', 'Department Berhasil dipulihkan!');
         }
     }
 }
