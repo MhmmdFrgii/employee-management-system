@@ -239,7 +239,8 @@
                                                 <input type="hidden" name="project_id" value="{{ $kanbanboard->id }}">
                                                 <textarea class="form-control mb-2" name="comment" rows="2">{{ $reply->comment }}</textarea>
                                                 <div class="d-flex justify-content-end">
-                                                    <button class="btn btn-primary btn-sm" type="submit">Simpan</button>
+                                                    <button class="btn
+                                                    btn-primary btn-sm" type="submit">Simpan</button>
                                                 </div>
                                             </form>
                                         </div>
