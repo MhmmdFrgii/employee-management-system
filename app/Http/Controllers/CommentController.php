@@ -34,10 +34,11 @@ class CommentController extends Controller
 
     public function reply(Comment $comment, Request $request)
     {
+        $userId = Auth::id();
 
         Comment::create([
             'project_id' => $comment->project_id,
-            'user_id' => $comment->user_id,
+            'user_id' => $userId,
             'comment' => $request->comment,
             'parent_id' => $comment->id
         ]);
@@ -51,16 +52,27 @@ class CommentController extends Controller
      */
     public function update(CommentRequest $request, Comment $comment)
     {
-        $comment->update($request->validated());
-        return view();
+        $user = Auth::user();
+        $validateData = $request->validated();
+
+        $validateData['project_id'] = $comment->project_id;
+
+        if ($comment->user_id != $user->id) {
+            return redirect()->back()->with('success', ' Gagal Update Komentar!');
+        }
+
+        $comment->update($validateData);
+        return redirect()->back()->with('success', 'Update komentar berhasil!');
     }
 
+
+   
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Comment $comment)
     {
         $comment->delete();
-        return redirect();
+        return redirect()->back()->with('success', 'Berhasil Hapus Komentar!');
     }
 }
