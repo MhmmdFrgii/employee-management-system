@@ -58,13 +58,21 @@
                                         <button class="btn btn-info btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#detaildepartmentsModal{{ $department->id }}"
                                             type="button">Detail</button>
-                                        <button data-bs-target="#editModal{{ $department->id }}" data-bs-toggle="modal"
-                                            class="btn btn-warning btn-sm">Edit</button>
-                                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#vertical-center-modal{{ $department->id }}"
-                                            type="button">Hapus</button>
+                                        @if ($department->deleted_at == null)
+                                            <button data-bs-target="#editModal{{ $department->id }}" data-bs-toggle="modal"
+                                                class="btn btn-warning btn-sm">Edit</button>
+                                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#vertical-center-modal{{ $department->id }}"
+                                                type="button">Hapus</button>
+                                        @else
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modal-restore-{{ $department->id }}">
+                                                Pulihkan
+                                            </button>
+                                        @endif
                                     </td>
                                 </tr>
+                                @include('department.partial.restore-modal')
                                 @include('department.partial.edit-modal')
                                 @include('department.partial.delete-modal')
                                 @include('department.partial.detail-modal')
