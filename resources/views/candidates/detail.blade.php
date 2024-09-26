@@ -45,7 +45,7 @@
                                         <div class="col-md-6">
                                             <h5 class="card-title">Curriculum Vitae (CV)</h5>
                                             @if ($applicant->cv)
-                                                <a href="{{ asset('storage/' . $applicant->cv) }}"
+                                                <a href="{{ route('candidates.cv', $applicant->id) }}"
                                                     class="btn btn-secondary mt-2" target="_blank">
                                                     Lihat CV
                                                 </a>

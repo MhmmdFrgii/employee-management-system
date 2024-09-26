@@ -52,25 +52,25 @@ class CompanyController extends Controller
             'checkin_tolerance' => 'required|integer|min:0',
             // checkout_tolerance tidak ada lagi
         ], [
-            'checkin_start.required' => 'Waktu check-in awal harus diisi.',
-            'checkin_start.date_format' => 'Format waktu check-in awal harus dalam format jam:menit (HH:mm).',
-            'checkin_start.before' => 'Waktu check-in awal harus sebelum waktu check-in akhir.',
+            'checkin_start.required' => 'Waktu absen masuk awal harus diisi.',
+            'checkin_start.date_format' => 'Format waktu absen masuk awal harus dalam format jam:menit (HH:mm).',
+            'checkin_start.before' => 'Waktu absen masuk awal harus sebelum waktu absen masuk akhir.',
 
-            'checkin_end.required' => 'Waktu check-in akhir harus diisi.',
-            'checkin_end.date_format' => 'Format waktu check-in akhir harus dalam format jam:menit (HH:mm).',
-            'checkin_end.after' => 'Waktu check-in akhir harus setelah waktu check-in awal.',
+            'checkin_end.required' => 'Waktu absen masuk akhir harus diisi.',
+            'checkin_end.date_format' => 'Format waktu absen masuk akhir harus dalam format jam:menit (HH:mm).',
+            'checkin_end.after' => 'Waktu absen masuk akhir harus setelah waktu absen masuk awal.',
 
-            'checkout_start.required' => 'Waktu check-out awal harus diisi.',
-            'checkout_start.date_format' => 'Format waktu check-out awal harus dalam format jam:menit (HH:mm).',
-            'checkout_start.after' => 'Waktu check-out awal harus setelah waktu check-in akhir.',
+            'checkout_start.required' => 'Waktu absen keluar awal harus diisi.',
+            'checkout_start.date_format' => 'Format waktu absen keluar awal harus dalam format jam:menit (HH:mm).',
+            'checkout_start.after' => 'Waktu absen keluar awal harus setelah waktu absen masuk akhir.',
 
-            'checkout_end.required' => 'Waktu check-out akhir harus diisi.',
-            'checkout_end.date_format' => 'Format waktu check-out akhir harus dalam format jam:menit (HH:mm).',
-            'checkout_end.after' => 'Waktu check-out akhir harus setelah waktu check-out awal.',
+            'checkout_end.required' => 'Waktu absen keluar akhir harus diisi.',
+            'checkout_end.date_format' => 'Format waktu absen keluar akhir harus dalam format jam:menit (HH:mm).',
+            'checkout_end.after' => 'Waktu absen keluar akhir harus setelah waktu absen keluar awal.',
 
-            'checkin_tolerance.required' => 'Menit toleransi check-in harus diisi.',
-            'checkin_tolerance.integer' => 'Menit toleransi check-in harus berupa angka.',
-            'checkin_tolerance.min' => 'Menit toleransi check-in tidak boleh kurang dari 0.',
+            'checkin_tolerance.required' => 'Menit toleransi absen masuk harus diisi.',
+            'checkin_tolerance.integer' => 'Menit toleransi absen masuk harus berupa angka.',
+            'checkin_tolerance.min' => 'Menit toleransi absen masuk tidak boleh kurang dari 0.',
         ]);
 
         $company = Auth::user()->company;

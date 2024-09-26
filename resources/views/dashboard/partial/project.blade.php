@@ -5,7 +5,7 @@
         // Chart untuk Jumlah Proyek Selesai
         var projectCompletedOptions = {
             series: [{
-                name: 'Jumlah Proyek Selesai',
+                name: 'Project yang didapatkan',
                 data: projectData.map(function(data) {
                     return {
                         x: data[0],

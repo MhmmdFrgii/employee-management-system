@@ -81,6 +81,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/candidates', [UserController::class, 'index'])->name('candidates.index');
             Route::patch('/invite/{company}', [CompanyController::class, 'reset_invite'])->name('invited.reset');
 
+            Route::get('/candidates/cv/{applicant}', [UserController::class, 'cv'])->name('candidates.cv');
             Route::get('/candidates/detail/{applicant}', [UserController::class, 'detail'])->name('candidates.detail');
             Route::patch('/candidates/reject/{applicant}', [UserController::class, 'reject'])->name('candidates.reject');
             Route::patch('/candidates/update/{applicant}', [UserController::class, 'update'])->name('candidates.update');

@@ -87,6 +87,19 @@ class UserController extends Controller
         return redirect()->route('candidates.index')->with('success', 'Kandidat disetujui.');
     }
 
+    public function cv(EmployeeDetail $applicant)
+    {
+        // Cek apakah CV tersedia
+        if ($applicant->cv) {
+            // Jika CV ada, kirim URL CV ke view
+            $cvUrl = asset('storage/' . $applicant->cv);
+            return view('candidates.partial.cv', compact('cvUrl'));
+        } else {
+            // Jika tidak ada CV, arahkan ke halaman dengan pesan error atau kembali ke halaman sebelumnya
+            return redirect()->back()->with('error', 'No CV uploaded.');
+        }
+    }
+
     public function reject(EmployeeDetail $applicant)
     {
         // Update status menjadi 'rejected'
