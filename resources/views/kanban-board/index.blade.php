@@ -99,42 +99,154 @@
                     @foreach ($comments as $comment)
                         <div class="p-4 rounded-2 bg-light mb-3">
                             <div class="d-flex align-items-center gap-3">
-                                <img src="{{ asset('dist/images/profile/user-4.jpg') }}" alt=""
-                                    class="rounded-circle" width="33" height="33">
+
+                                @if ($comment->user->hasRole('manager'))
+                                    <img src="{{ asset('dist/images/profile/user-4.jpg') }}" alt=""
+                                        class="rounded-circle" width="40" height="40">
+                                @else
+                                    <div
+                                        class="btn btn-primary round rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="ti ti-user fs-6"></i>
+                                    </div>
+                                @endif
+
+
                                 <h6 class="fw-semibold mb-0 fs-4">{{ $comment->user->name }}</h6>
                                 <span class="p-1 bg-light-dark rounded-circle d-inline-block"></span>
                                 <span>{{ $comment->created_at->diffForHumans() }}</span>
                             </div>
+
+                            @if (Auth::user()->id == $comment->user_id)
+                                <div class="d-flex align-items-end">
+                                    <div class="ms-auto">
+                                        <div class="dropdown">
+                                            <a class="" href="javascript:void(0)" id="m1"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-dots-vertical fs-4"></i>
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="m1">
+                                                <li>
+                                                    <a class="dropdown-item" onclick="showUpdateForm({{ $comment->id }})">
+                                                        <i class="ti ti-pencil text-muted me-1 fs-4"></i>Edit </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" role="button" data-bs-toggle="modal"
+                                                        data-bs-target="#vertical-center-modal{{ $comment->id }}">
+                                                        <i class="ti ti-trash text-muted me-1 fs-4"></i>Hapus </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                            @include('kanban-board.partial.delate-comment')
+
                             <p class="my-3">{{ $comment->comment }}</p>
 
                             <!-- Button for Reply -->
-                            <div class="d-flex align-items-center gap-2">
+                            <div class="d-flex align-items-center gap-2 mb-1">
                                 <button class="btn text-secondary"
                                     onclick="showReplyForm({{ $comment->id }})">Balas</button>
                             </div>
 
+
+
+                            <!-- Update Form (Hidden by Default) -->
+                            <div id="update-form-{{ $comment->id }}" style="display: none; margin-left: 20px;"
+                                class="mb-3">
+                                <form action="{{ route('comments.update', $comment->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="project_id" value="{{ $kanbanboard->id }}">
+                                    <textarea class="form-control mb-2" name="comment" rows="2">{{ $comment->comment }}</textarea>
+
+                                    <div class="d-flex justify-content-end">
+                                        <button class="btn btn-primary btn-sm" type="submit">Simpan</button>
+                                    </div>
+                                </form>
+                            </div>
+
                             <!-- Reply Form (Hidden by Default) -->
-                            <div id="reply-form-{{ $comment->id }}" style="display: none; margin-left: 20px;">
+                            <div id="reply-form-{{ $comment->id }}" style="display: none; margin-left: 20px;"
+                                class="mb-3">
                                 <form action="{{ route('comments.reply', $comment->id) }}" method="POST">
                                     @csrf
                                     <textarea class="form-control mb-2" name="comment" rows="2" placeholder="Tulis balasan..."></textarea>
-                                    <button class="btn btn-primary btn-sm" type="submit">Kirim Balasan</button>
+
+                                    <div class="d-flex justify-content-end">
+                                        <button class="btn btn-primary btn-sm" type="submit">Kirim Balasan</button>
+                                    </div>
                                 </form>
                             </div>
 
                             <!-- Display Replies -->
                             @if ($comment->replies && $comment->replies->count() > 0)
                                 @foreach ($comment->replies as $reply)
-                                    <div class="p-4 rounded-2 bg-light mb-3 ms-7">
+                                    <div class="p-1 rounded-2 bg-light mb-3 ms-7">
                                         <div class="d-flex align-items-center gap-3">
-                                            <img src="{{ asset('dist/images/profile/user-3.jpg') }}" alt=""
-                                                class="rounded-circle" width="40" height="40">
+
+                                            @if ($reply->user->hasRole('manager'))
+                                                <img src="{{ asset('dist/images/profile/user-4.jpg') }}" alt=""
+                                                    class="rounded-circle" width="40" height="40">
+                                            @else
+                                                <div
+                                                    class="btn btn-primary round rounded-circle d-flex align-items-center justify-content-center">
+                                                    <i class="ti ti-user fs-6"></i>
+                                                </div>
+                                            @endif
+
                                             <h6 class="fw-semibold mb-0 fs-4">{{ $reply->user->name }}</h6>
                                             <span class="p-1 bg-light-dark rounded-circle d-inline-block"></span>
                                             <span>{{ $comment->created_at->diffForHumans() }}</span>
                                         </div>
+
+                                        @if (Auth::user()->id == $reply->user_id)
+                                            <div class="d-flex align-items-end">
+                                                <div class="ms-auto">
+                                                    <div class="dropdown">
+                                                        <a class="" href="javascript:void(0)" id="m1"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="ti ti-dots-vertical fs-4"></i>
+                                                        </a>
+                                                        <ul class="dropdown-menu" aria-labelledby="m1">
+                                                            <li>
+                                                                <a class="dropdown-item"
+                                                                    onclick="showUpdateReply({{ $reply->id }})">
+                                                                    <i class="ti ti-pencil text-muted me-1 fs-4"></i>Edit
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item" role="button"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#reply-delete-{{ $reply->id }}">
+                                                                    <i class="ti ti-trash text-muted me-1 fs-4"></i>Hapus
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
                                         <p class="my-3">{{ $reply->comment }}</p>
+
+                                        <!-- Update Form (Hidden by Default) -->
+                                        <div id="update-reply-{{ $reply->id }}"
+                                            style="display: none; margin-left: 20px;" class="mb-3">
+                                            <form action="{{ route('comments.update', $reply->id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="hidden" name="project_id" value="{{ $kanbanboard->id }}">
+                                                <textarea class="form-control mb-2" name="comment" rows="2">{{ $reply->comment }}</textarea>
+                                                <div class="d-flex justify-content-end">
+                                                    <button class="btn
+                                                    btn-primary btn-sm" type="submit">Simpan</button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
+
+                                    @include('kanban-board.partial.reply-delete-modal')
                                 @endforeach
                             @endif
                         </div>
@@ -145,54 +257,51 @@
     </div>
 
 
+
+
 @endsection
 <script>
+    function hideAllForms() {
+        var replyForms = document.querySelectorAll('[id^="reply-form-"]');
+        var updateForms = document.querySelectorAll('[id^="update-form-"]');
+        var updateReply = document.querySelectorAll('[id^="update-reply-"]');
+
+        replyForms.forEach(function(form) {
+            form.style.display = "none";
+        });
+
+        updateForms.forEach(function(form) {
+            form.style.display = "none";
+        });
+
+        updateReply.forEach(function(form) {
+            form.style.display = "none";
+        });
+    }
+
     function showReplyForm(commentId) {
-        // Toggle visibility of the reply form
+        hideAllForms();
+
         var replyForm = document.getElementById('reply-form-' + commentId);
-        if (replyForm.style.display === "none") {
-            replyForm.style.display = "block";
-        } else {
-            replyForm.style.display = "none";
-        }
+        replyForm.style.display = "block";
+    }
+
+    function showUpdateForm(commentId) {
+        hideAllForms();
+
+        var updateForm = document.getElementById('update-form-' + commentId);
+        updateForm.style.display = "block";
+    }
+
+
+    function showUpdateReply(commentId) {
+        hideAllForms();
+
+        var updateReply = document.getElementById('update-reply-' + commentId);
+        updateReply.style.display = "block";
     }
 </script>
-{{--
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        ['todo', 'progress', 'done'].forEach(function(status) {
-            let el = document.querySelector(`.kanban-${status}`);
 
-            new Sortable(el, {
-                group: 'kanban',
-                animation: 150,
-                onEnd: function(evt) {
-                    // Ambil ID tugas yang dipindahkan dan status baru
-                    let taskId = evt.item.dataset.taskId;
-                    let newStatus = evt.to.dataset.status;
-
-                    // Kirim perubahan urutan ke server
-                    $.ajax({
-                        url: '{{ route('kanban-tasks.update-order') }}', // Tambahkan route untuk update order
-                        method: 'POST',
-                        data: {
-                            taskId: taskId,
-                            newStatus: newStatus,
-                            newOrder: evt.newIndex, // Posisi baru
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(response) {
-                            console.log('Order updated successfully');
-                        },
-                        error: function(xhr) {
-                            console.error('Error updating order:', xhr);
-                        }
-                    });
-                }
-            });
-        });
-    });
-</script> --}}
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

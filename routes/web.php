@@ -124,8 +124,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('comment', [CommentController::class, 'store'])->name('comment.store');
     Route::post('comments/{comment}/reply', [CommentController::class, 'reply'])->name('comments.reply');
-    Route::put('comment/{comment}', [CommentController::class, 'update'])->name('comment.update');
-    Route::delete('comment/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
+    Route::put('comment/{comment}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('comment/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
 require __DIR__ . '/auth.php';

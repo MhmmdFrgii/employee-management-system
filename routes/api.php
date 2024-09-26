@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Controllers\Api\AttendanceController;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\KanbanController;
-use App\Http\Controllers\Api\LeaveRequestController;
-use App\Http\Controllers\Api\ProjectController;
+use Whoops\Run;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Whoops\Run;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\KanbanController;
+use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\AttendanceController;
+use App\Http\Controllers\Api\LeaveRequestController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -36,5 +37,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
         route::get('leave-request', [LeaveRequestController::class, 'index']);
         route::post('leave-request', [LeaveRequestController::class, 'store']);
+
+        Route::post('comment', [CommentController::class, 'store'])->name('store.comment');
+        Route::post('comments/{comment}/reply', [CommentController::class, 'reply'])->name('reply.comment');
+        Route::put('comment/{comment}', [CommentController::class, 'update'])->name('update.comment');
+        Route::delete('comment/{comment}', [CommentController::class, 'destroy'])->name('destroy.comment');
     });
 });

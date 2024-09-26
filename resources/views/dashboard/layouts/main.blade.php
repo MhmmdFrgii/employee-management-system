@@ -259,7 +259,7 @@
 
                                                         @else
                                                             {{ asset('assets/images/no-profile.jpeg') }} @endif"
-                                                        class="rounded-circle" width="80" height="80"
+                                                        class="rounded-circle" width="80       " height="80"
                                                         alt="" />
                                                 @endif
                                                 <div class="ms-3">
