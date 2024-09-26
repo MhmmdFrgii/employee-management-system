@@ -19,7 +19,9 @@ class UniqueEmail implements ValidationRule
 
         $employeeExists = DB::table('employee_details')->where('email', $value)->exists();
 
-        if ($userExists || $employeeExists) {
+        $companyExist = DB::table('companies')->where('contact_email', $value)->exists();
+
+        if ($userExists || $employeeExists || $companyExist) {
             $fail('Email Sudah digunakan.');
         }
     }

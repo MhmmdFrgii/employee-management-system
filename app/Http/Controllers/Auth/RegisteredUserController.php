@@ -85,7 +85,7 @@ class RegisteredUserController extends Controller
         $validator = Validator::make($request->all(), [
             'company_name' => 'required|string|max:255',
             'company_address' => 'required|string|max:500',
-            'contact_email' => 'required|email|unique:companies,contact_email',
+            'contact_email' => ['required', 'email', 'unique:companies,contact_email', new UniqueEmail],
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', 'unique:users,email', new UniqueEmail],
             'password' => 'required|string|min:8|confirmed',
