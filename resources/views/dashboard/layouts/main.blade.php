@@ -392,6 +392,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             flatpickr("[data-provider='flatpickr']", {
+                mode: "range",
                 dateFormat: "Y-m-d",
                 altInput: true,
                 altFormat: "F j, Y",
