@@ -135,75 +135,86 @@ class AttendanceController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        $sortBy = $request->input('sortBy', 'name'); // Default sort by employee_id
-        $sortDirection = $request->input('sortDirection', 'asc'); // Default ascending
+{
+    $sortBy = $request->input('sortBy', 'name'); // Default sort by employee_id
+    $sortDirection = $request->input('sortDirection', 'asc'); // Default ascending
 
-        $user = Auth::user();
-        $startDate = $request->has('start_date') ? Carbon::parse($request->start_date) : Carbon::today();
-        $endDate = $request->has('end_date') ? Carbon::parse($request->end_date) : Carbon::today();
-        $searchQuery = $request->input('search');
+    $user = Auth::user();
+    $dateRange = $request->input('date_range');
 
-        $employees = EmployeeDetail::where('company_id', $user->company_id)
-            ->where('status', 'approved')
-            ->when($searchQuery, function ($query) use ($searchQuery) {
-                $query->where('name', 'like', '%' . $searchQuery . '%')
-                    ->orWhereHas('department', function ($q) use ($searchQuery) {
-                        $q->where('name', 'like', '%' . $searchQuery . '%');
-                    });
-            })
-            ->with(['attendances' => function ($query) use ($startDate, $endDate) {
-                $query->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]);
-            }])
-            ->get();
-
-        $attendanceData = [];
-
-        // Create date range
-        $dates = [];
-        for ($date = $startDate->copy(); $date->lte($endDate); $date->addDay()) {
-            $dates[] = $date->copy()->format('Y-m-d');
-        }
-
-        foreach ($employees as $employee) {
-            $attendances = $employee->attendances->keyBy('date'); // Use date as key
-
-            foreach ($dates as $date) {
-                if (isset($attendances[$date])) {
-                    $attendance = $attendances[$date];
-                    $attendanceData[] = [
-                        'employee_id' => $employee->id,
-                        'name' => $employee->name,
-                        'department_name' => $employee->department->name,
-                        'attendance_status' => $attendance->status,
-                        'attendance_time' => $attendance->created_at->format('H:i'),
-                        'checkout_time' => $attendance->checkout_time ? \Carbon\Carbon::parse($attendance->checkout_time)->format('H:i') : '-',
-                        'date' => $date,
-                    ];
-                } else {
-                    $attendanceData[] = [
-                        'employee_id' => $employee->id,
-                        'name' => $employee->name,
-                        'department_name' => $employee->department->name,
-                        'attendance_status' => 'alpha',
-                        'attendance_time' => '-',
-                        'checkout_time' => '-',
-                        'date' => $date,
-                    ];
-                }
-            }
-        }
-
-        usort($attendanceData, function ($a, $b) use ($sortBy, $sortDirection) {
-            if ($sortBy === 'date') {
-                return $sortDirection === 'asc' ? $a['date'] <=> $b['date'] : $b['date'] <=> $a['date'];
-            } elseif ($sortBy === 'name') {
-                return $sortDirection === 'asc' ? $a['name'] <=> $b['name'] : $b['name'] <=> $a['name'];
-            }
-        });
-
-        return view('attendance.index', compact('attendanceData', 'startDate', 'endDate', 'searchQuery'));
+    // Default ke hari ini jika tidak ada date_range
+    if ($dateRange) {
+        $dates = explode(' to ', $dateRange); // Split berdasarkan range format dari flatpickr
+        $startDate = Carbon::parse($dates[0]);
+        $endDate = Carbon::parse($dates[1]);
+    } else {
+        $startDate = Carbon::today();
+        $endDate = Carbon::today();
     }
+
+    $searchQuery = $request->input('search');
+
+    $employees = EmployeeDetail::where('company_id', $user->company_id)
+        ->where('status', 'approved')
+        ->when($searchQuery, function ($query) use ($searchQuery) {
+            $query->where('name', 'like', '%' . $searchQuery . '%')
+                ->orWhereHas('department', function ($q) use ($searchQuery) {
+                    $q->where('name', 'like', '%' . $searchQuery . '%');
+                });
+        })
+        ->with(['attendances' => function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]);
+        }])
+        ->get();
+
+    $attendanceData = [];
+
+    // Buat date range
+    $dates = [];
+    for ($date = $startDate->copy(); $date->lte($endDate); $date->addDay()) {
+        $dates[] = $date->copy()->format('Y-m-d');
+    }
+
+    foreach ($employees as $employee) {
+        $attendances = $employee->attendances->keyBy('date'); // Gunakan tanggal sebagai kunci
+
+        foreach ($dates as $date) {
+            if (isset($attendances[$date])) {
+                $attendance = $attendances[$date];
+                $attendanceData[] = [
+                    'employee_id' => $employee->id,
+                    'name' => $employee->name,
+                    'department_name' => $employee->department->name,
+                    'attendance_status' => $attendance->status,
+                    'attendance_time' => $attendance->created_at->format('H:i'),
+                    'checkout_time' => $attendance->checkout_time ? \Carbon\Carbon::parse($attendance->checkout_time)->format('H:i') : '-',
+                    'date' => $date,
+                ];
+            } else {
+                $attendanceData[] = [
+                    'employee_id' => $employee->id,
+                    'name' => $employee->name,
+                    'department_name' => $employee->department->name,
+                    'attendance_status' => 'alpha',
+                    'attendance_time' => '-',
+                    'checkout_time' => '-',
+                    'date' => $date,
+                ];
+            }
+        }
+    }
+
+    usort($attendanceData, function ($a, $b) use ($sortBy, $sortDirection) {
+        if ($sortBy === 'date') {
+            return $sortDirection === 'asc' ? $a['date'] <=> $b['date'] : $b['date'] <=> $a['date'];
+        } elseif ($sortBy === 'name') {
+            return $sortDirection === 'asc' ? $a['name'] <=> $b['name'] : $b['name'] <=> $a['name'];
+        }
+    });
+
+    return view('attendance.index', compact('attendanceData', 'startDate', 'endDate', 'searchQuery'));
+}
+
 
     public function export(Request $request)
     {
