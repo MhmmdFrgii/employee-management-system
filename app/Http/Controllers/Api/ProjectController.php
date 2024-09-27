@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
+use function PHPSTORM_META\map;
+
 class ProjectController extends Controller
 {
     public function getAllProject()
@@ -55,6 +57,12 @@ class ProjectController extends Controller
     public function show($id)
     {
         $project = Project::find($id);
+        $assignedProjects = $project->projectAssignments->map(function ($employee) {
+            return [
+                'employee_id' => $employee->id,
+                'employee_name' => $employee->employe->name,
+            ];
+        });
 
         if (!$project) {
             return response()->json([
@@ -71,6 +79,7 @@ class ProjectController extends Controller
             'start_date' => $project->start_date,
             'end_date' => $project->end_date,
             'status' => $project->status,
+            'employee_assigned' => $assignedProjects,
             'completed_at' => $project->completed_at,
         ]);
     }

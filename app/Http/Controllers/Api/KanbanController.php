@@ -117,6 +117,41 @@ class KanbanController extends Controller
         }
     }
 
+    public function updateTaskStatus(Request $request)
+    {
+        // Validasi input
+        $validated = $request->validate([
+            'task_id' => 'required|exists:kanban_tasks,id',
+            'status' => 'required|in:todo,progress,done',
+        ]);
+
+        try {
+            $task = KanbanTask::findOrFail($validated['task_id']);
+
+            if ($task->status !== $validated['status']) {
+                $task->status = $validated['status'];
+                $task->save();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Status berhasil diperbarui.',
+                    'data' => $task
+                ], 200);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Status tidak berubah.',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memperbarui status. Silakan coba lagi.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function updateTask(KanbanTaskRequest $request, $id)
     {
         try {

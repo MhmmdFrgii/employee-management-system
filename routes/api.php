@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('kanban-board', [KanbanController::class, 'index']);
         Route::post('kanban-task', [KanbanController::class, 'storeTask']);
+        Route::patch('/kanban-task', [KanbanController::class, 'updateTaskStatus']);
         Route::put('/kanban-task/{id}', [KanbanController::class, 'updateTask']);
         Route::delete('/kanban-task/{id}', [KanbanController::class, 'destroyTask']);
 
@@ -42,5 +43,5 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('comments/{comment}/reply', [CommentController::class, 'reply'])->name('reply.comment');
         Route::put('comment/{comment}', [CommentController::class, 'update'])->name('update.comment');
         Route::delete('comment/{comment}', [CommentController::class, 'destroy'])->name('destroy.comment');
-    }); 
+    });
 });
