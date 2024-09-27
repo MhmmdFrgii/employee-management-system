@@ -44,10 +44,26 @@ class ProjectController extends Controller
         })->filter()->unique()->values(); // Remove null values and unique Kanban boards
 
         // Format Kanban boards and tasks for response
-        $formattedProjects = $projects->map(function ($kanbanBoard) {
+        $formattedProjects = $projects->map(function ($assignedProject) {
+            $project = Project::findOrFail($assignedProject->id);
+            $assignedProjects = $project->projectAssignments;
+
             return [
-                'id' => $kanbanBoard->id,
-                'name' => $kanbanBoard->name,
+                "id" => $project->id,
+                "company_id" => $project->company_id,
+                "name" => $project->name,
+                "price" => $project->price,
+                "description" => $project->description,
+                "start_date" => $project->start_date,
+                "end_date" => $project->end_date,
+                "status" => $project->status,
+                "assigned_projects" => $assignedProjects->map(function ($data) {
+                    return [
+                        "employee_id" => $data->employe->id,
+                        "employee_name" => $data->employe->name, // Changed from id to name
+                    ];
+                }),
+                "completed_at" => $project->completed_at,
             ];
         });
 
