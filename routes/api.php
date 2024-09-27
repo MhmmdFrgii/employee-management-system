@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\LeaveRequestController;
+use App\Http\Controllers\Api\NotificationController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -34,6 +35,10 @@ Route::middleware('auth:sanctum')->group(function () {
         route::get('user-attendance', [AttendanceController::class, 'userIndex']);
         route::get('company-location', [AttendanceController::class, 'companyLocation']);
         route::post('user-attendance', [AttendanceController::class, 'userAttendance']);
+
+        Route::get('notifications', [NotificationController::class, 'getNotifications'])->name('notifications.get');
+        Route::delete('notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.delete');
+        Route::patch('notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read');
 
 
         route::get('leave-request', [LeaveRequestController::class, 'index']);

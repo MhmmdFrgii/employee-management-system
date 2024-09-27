@@ -19,7 +19,7 @@ class LeaveRequestController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
+        $user = Auth::guard('sanctum')->user();
 
         $leaveRequests = LeaveRequest::where('employee_id', $user->employee_detail->id)->get();
 
