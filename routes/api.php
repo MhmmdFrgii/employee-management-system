@@ -44,9 +44,9 @@ Route::middleware('auth:sanctum')->group(function () {
         route::get('leave-request', [LeaveRequestController::class, 'index']);
         route::post('leave-request', [LeaveRequestController::class, 'store']);
 
-        Route::post('comment', [CommentController::class, 'store'])->name('store.comment');
+        Route::post('comments', [CommentController::class, 'store'])->name('store.comment');
         Route::post('comments/{comment}/reply', [CommentController::class, 'reply'])->name('reply.comment');
-        Route::put('comment/{comment}', [CommentController::class, 'update'])->name('update.comment');
+        Route::put('comments/{comment}', [CommentController::class, 'update'])->name('update.comment');
         Route::delete('comment/{comment}', [CommentController::class, 'destroy'])->name('destroy.comment');
     });
 });
