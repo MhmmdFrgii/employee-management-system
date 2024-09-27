@@ -21,79 +21,70 @@ class KanbanController extends Controller
         // Cek apakah user sudah terautentikasi
         if (!$user) {
             return response()->json([
-                'message' => 'Unauthenticated'
+                'success' => false,
+                'message' => 'Unauthenticated',
             ], 401);
         }
 
-        $kanbanboardID = $request->id;
+        $kanbanboardID = $request->id ?? 1; // Gunakan null coalescing operator
 
-        // Ambil semua komentar yang terkait dengan KanbanBoard tertentu
-        $comments = Comment::where('project_id', $kanbanboardID)->latest()->get();
+        // Ambil komentar, task, dan informasi pengguna
+        $comments = Comment::where('project_id', $kanbanboardID)
+            ->with(['replies.user'])
+            ->whereNull('parent_id')
+            ->latest()
+            ->get();
+
+        $commentCount = $comments->count(); // Hitung komentar
 
         $kanbanboard = KanbanBoard::find($kanbanboardID);
-        $projectID = $kanbanboard ? $kanbanboard->project_id : null;
+        $projectID = $kanbanboard->project_id ?? null;
 
-        $todo = KanbanTask::where('kanban_boards_id', $kanbanboardID)
-            ->where('status', 'todo')
-            ->get();
-        $progress = KanbanTask::where('kanban_boards_id', $kanbanboardID)
-            ->where('status', 'progress')
-            ->get();
-        $done = KanbanTask::where('kanban_boards_id', $kanbanboardID)
-            ->where('status', 'done')
-            ->get();
+        $tasks = KanbanTask::where('kanban_boards_id', $kanbanboardID)
+            ->get()
+            ->groupBy('status'); // Mengelompokkan task berdasarkan status
 
+        // Ambil pengguna yang terlibat dalam proyek
         $users = EmployeeDetail::whereHas('projects', function ($query) use ($projectID) {
             $query->where('project_id', $projectID);
         })->get();
 
+        // Format data respons
         $formattedKanban = [
-            'todo' => $todo->map(function ($task) {
-                return [
-                    'id' => $task->id,
-                    'title' => $task->title,
-                    'description' => $task->description,
-                    'assigned_to' => $task->employee ? $task->employee->name : null,
-                    'due_date' => $task->due_date,
-                    'status' => $task->status,
-                ];
-            }),
-            'progress' => $progress->map(function ($task) {
-                return [
-                    'id' => $task->id,
-                    'title' => $task->title,
-                    'description' => $task->description,
-                    'assigned_to' => $task->employee ? $task->employee->name : null,
-                    'due_date' => $task->due_date,
-                    'status' => $task->status,
-                ];
-            }),
-            'done' => $done->map(function ($task) {
-                return [
-                    'id' => $task->id,
-                    'title' => $task->title,
-                    'description' => $task->description,
-                    'assigned_to' => $task->employee ? $task->employee->name : null,
-                    'due_date' => $task->due_date,
-                    'status' => $task->status,
-                ];
-            }),
-            'comment' => $comments->map(function ($comment) {
-                return [
-                    'comment' => $comment->comment,
-                    'comment_time' => $comment->created_at,
-                ];
-            }),
-            'user' => $users->map(function ($user) {
-                return [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                ];
-            }),
+            'tasks' => [
+                'todo' => $tasks->get('todo', collect())->map(fn($task) => $this->formatTask($task)),
+                'progress' => $tasks->get('progress', collect())->map(fn($task) => $this->formatTask($task)),
+                'done' => $tasks->get('done', collect())->map(fn($task) => $this->formatTask($task)),
+            ],
+            'comments' => [
+                'data' => $comments,
+                'comment_count' => $commentCount,
+            ],
+            'users' => $users->map(fn($user) => [
+                'id' => $user->id,
+                'name' => $user->name,
+            ]),
         ];
 
-        return response()->json(['kanban_tasks' => $formattedKanban]);
+        return response()->json([
+            'success' => true,
+            'data' => $formattedKanban,
+            'message' => 'Kanban board retrieved successfully',
+        ]);
     }
+
+    private function formatTask($task)
+    {
+        return [
+            'id' => $task->id,
+            'title' => $task->title,
+            'description' => $task->description,
+            'assigned_to' => $task->employee ? $task->employee->name : null,
+            'due_date' => $task->due_date,
+            'status' => $task->status,
+        ];
+    }
+
 
     public function storeTask(KanbanTaskRequest $request)
     {

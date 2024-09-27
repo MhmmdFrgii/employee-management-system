@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -11,6 +12,7 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
+
         $rules = [
             'email' => 'required|email',
             'password' => 'required|min:8'
@@ -40,11 +42,15 @@ class AuthController extends Controller
             ], 403);
         }
 
-
         $token = Auth::user()->createToken('access_token')->plainTextToken;
 
+        $user = Auth::user()->load('company');
+
         return response()->json([
-            'user' => Auth::user(),
+            'user' => $user->only('id', 'name', 'email') + [
+                'roles' => $user->roles,
+                'company' => $user->company->only('name', 'address', 'contact_email')
+            ],
             'access_token' => $token
         ]);
     }
